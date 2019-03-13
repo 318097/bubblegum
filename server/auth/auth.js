@@ -4,8 +4,8 @@ var config = require('../config/config');
 var checkToken = expressJwt({ secret: 'gumball' });
 var User = require('../api/user/model');
 
-exports.decodeToken = function() {
-  return function(req, res, next) {
+exports.decodeToken = function () {
+  return function (req, res, next) {
     if (req.headers && req.headers.hasOwnProperty('authorization')) {
       req.headers.authorization = 'Bearer ' + req.headers.authorization;
     }
@@ -16,10 +16,10 @@ exports.decodeToken = function() {
   };
 };
 
-exports.getFreshUser = function() {
-  return function(req, res, next) {
+exports.getFreshUser = function () {
+  return function (req, res, next) {
     User.findById(req.user._id).then(
-      function(user) {
+      function (user) {
         if (!user) {
           // if no user is found it was not
           // it was a valid JWT but didn't decode
@@ -34,15 +34,15 @@ exports.getFreshUser = function() {
           next();
         }
       },
-      function(err) {
+      function (err) {
         next(err);
       }
     );
   };
 };
 
-exports.verifyUser = function() {
-  return function(req, res, next) {
+exports.verifyUser = function () {
+  return function (req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
 
@@ -55,7 +55,7 @@ exports.verifyUser = function() {
     // look user up in the DB so we can check
     // if the passwords match for the username
     User.findOne({ username: username }).then(
-      function(user) {
+      function (user) {
         if (!user) {
           res.status(401).send('No user with the given username');
         } else {
@@ -72,7 +72,7 @@ exports.verifyUser = function() {
           }
         }
       },
-      function(err) {
+      function (err) {
         next(err);
       }
     );
@@ -80,6 +80,6 @@ exports.verifyUser = function() {
 };
 
 // util method to sign tokens on signup
-exports.signToken = function(id) {
+exports.signToken = function (id) {
   return jwt.sign({ _id: id }, 'gumball');
 };

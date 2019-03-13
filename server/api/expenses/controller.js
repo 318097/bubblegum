@@ -2,6 +2,7 @@ const con = require('../../config/mysql');
 
 exports.getAll = (req, res, next) => {
   con.getConnection(er => {
+
     con.query(
       `SELECT * FROM expenses WHERE user_id = ${req.user._id}`,
       (err, result) => {
@@ -18,14 +19,14 @@ exports.getMonthlyExpense = (req, res, next) => {
       month[0] + '-' + (Number(month[1]) <= 9 ? '0' + month[1] : month[1]);
     con.query(
       `
-    SELECT expenses.id, expenses.user_id, expenses.amount, expenses.created_at, expense_types.name, expenses.message
-    FROM expenses
-    INNER JOIN expense_types
-    ON expenses.type_id = expense_types.id
-    WHERE expenses.user_id = '${req.user._id}' AND 
-    expenses.created_at
-    LIKE "${month}%" 
-    ORDER BY expenses.created_at DESC`,
+      SELECT expenses.id, expenses.user_id, expenses.amount, expenses.created_at, expense_types.name, expenses.message
+      FROM expenses
+      INNER JOIN expense_types
+      ON expenses.type_id = expense_types.id
+      WHERE expenses.user_id = '${req.user._id}' AND 
+      expenses.created_at
+      LIKE "${month}%" 
+      ORDER BY expenses.created_at DESC`,
       (err, result) => {
         res.send({ monthly_expenses: result });
       }
@@ -37,7 +38,7 @@ exports.getAllExpenseTypes = (req, res, next) => {
   con.getConnection(er => {
     con.query(
       `SELECT * FROM expense_types WHERE user_id = '${
-        req.user._id
+      req.user._id
       }' ORDER BY count DESC`,
       (err, result) => {
         res.send({ expense_types: result });
@@ -52,7 +53,7 @@ exports.create = (req, res, next) => {
     const sql = `INSERT into expenses (user_id, amount, type_id, created_at, message) 
   VALUES ('${req.user._id}', '${amount}', '${type_id}', '${date}', '${
       req.body.message
-    }')`;
+      }')`;
     con.query(sql, (err, res) => {
       con.query(`UPDATE expense_types
         SET count = count + 1
