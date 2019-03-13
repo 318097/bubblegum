@@ -6,7 +6,7 @@ const logger = require('./util/logger');
 const auth = require('./auth/routes');
 
 require('mongoose').connect(
-  'mongodb://localhost/bubblegum',
+  config.db_url,
   { useNewUrlParser: true }
 );
 
