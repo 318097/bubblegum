@@ -13,15 +13,27 @@ require('mongoose').connect(
   { useNewUrlParser: true }
 );
 
+io.on('connection', (socket) => {
+  console.log('an user connected');
+});
+
 // if (config.seed) {
 //   require('./server/util/seed');
 // }
-
 require('./server/middleware/appMiddleware')(app);
+
+// app.use(function (req, res, next) {
+//   console.log('URL:', req.url);
+//   if (/snake/.test(req.url)) {
+//     req.socket = io;
+//   }
+//   next();
+// });
+
 app.use('/api', api);
 app.use('/api/auth', auth);
 
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   // if error thrown from jwt validation check
   if (err.name === 'UnauthorizedError') {
     res.status(401).send('Invalid token');
