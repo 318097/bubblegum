@@ -1,7 +1,6 @@
 
 const statusCodes = require('./constants');
 module.exports = (io) => {
-  /* ------ Socket ------ */
   const createRoom = () => ({
     isFree: true,
     player1: { status: statusCodes.INITIAL },
@@ -22,7 +21,7 @@ module.exports = (io) => {
   }
 
   let game = createRoom();
-  io.on('connection', socket => {
+  io.on('connection', (socket) => {
     socket.on('join-game', playerId => {
       // game.players.push(playerId);
       if (game.isFree) {
@@ -43,7 +42,7 @@ module.exports = (io) => {
       io.emit('game-updates', updates);
     });
 
-    socket.on('player-dead', playerId => {
+    socket.on('player-dead', (playerId) => {
       const playerNo = game.player1.id === playerId ? 'player1' : game.player2.id === playerId ? 'player2' : null;
       if (playerNo) {
         game[playerNo]['status'] = statusCodes.DEAD;
@@ -60,5 +59,4 @@ module.exports = (io) => {
       game = createRoom();
     });
   });
-  /* ------ Socket ------ */
 };

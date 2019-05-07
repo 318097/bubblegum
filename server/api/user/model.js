@@ -24,10 +24,13 @@ const UserSchema = new Schema({
     type: String,
     required: false
   },
-  about: Schema.Types.Mixed
-});
+  about: Schema.Types.Mixed,
+  snakeGame: Schema.Types.Mixed,
+}, {
+    strict: false
+  });
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
   if (!this.isModified('password')) return next();
   this.password = this.encryptPassword(this.password);
   next();
@@ -35,11 +38,11 @@ UserSchema.pre('save', function(next) {
 
 UserSchema.methods = {
   // check the password on signin
-  authenticate: function(plainTextPassword) {
+  authenticate: function (plainTextPassword) {
     return bcrypt.compareSync(plainTextPassword, this.password);
   },
   // hash the passwords
-  encryptPassword: function(plainTextPassword) {
+  encryptPassword: function (plainTextPassword) {
     if (!plainTextPassword) {
       return '';
     } else {
@@ -47,7 +50,7 @@ UserSchema.methods = {
       return bcrypt.hashSync(plainTextPassword, salt);
     }
   },
-  toJson: function() {
+  toJson: function () {
     var obj = this.toObject();
     delete obj.password;
     return obj;
