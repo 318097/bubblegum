@@ -1,8 +1,8 @@
-var jwt = require('jsonwebtoken');
-var expressJwt = require('express-jwt');
-var config = require('../config/config');
-var checkToken = expressJwt({ secret: 'gumball' });
-var User = require('../api/user/model');
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
+const config = require('../config');
+const checkToken = expressJwt({ secret: 'gumball' });
+const User = require('../api/user/model');
 
 exports.decodeToken = function () {
   return function (req, res, next) {

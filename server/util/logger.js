@@ -1,9 +1,9 @@
 const _ = require('lodash');
-const config = require('../config/config');
+const config = require('../config');
 
 const logger = {
   log: (...args) => {
-    console.log('[LOG]', args);
+    console.log('[LOG]', ...args);
   }
 };
 

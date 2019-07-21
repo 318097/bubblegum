@@ -8,9 +8,7 @@ const snakeGameRoutes = require('./snake/routes');
 const auth = require('../auth/auth');
 const checkUser = [auth.decodeToken(), auth.getFreshUser()];
 
-router.get('/test', (req, res) => {
-  res.send('Test');
-});
+router.get('/test', (req, res) => res.send('Test'));
 
 router.use('/users', userRoutes);
 router.use('/posts', postRoutes);

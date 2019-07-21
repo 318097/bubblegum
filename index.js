@@ -3,10 +3,10 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-const config = require('./server/config/config');
+const config = require('./server/config');
 const logger = require('./server/util/logger');
 const auth = require('./server/auth/routes');
-const api = require('./server/api/api');
+const api = require('./server/api');
 
 require('mongoose').connect(
   config.db_url,
@@ -20,14 +20,6 @@ require('./server/api/snake/socket')(io);
 // }
 require('./server/middleware/appMiddleware')(app);
 
-// app.use(function (req, res, next) {
-//   console.log('URL:', req.url);
-//   if (/snake/.test(req.url)) {
-//     req.socket = io;
-//   }
-//   next();
-// });
-
 app.use('/api', api);
 app.use('/api/auth', auth);
 
@@ -40,5 +32,6 @@ app.use((err, req, res, next) => {
   console.log(err);
   res.status(500).send('Oops');
 });
+
 http.listen(config.port);
 logger.log(`Listening on PORT:${config.port}`);
