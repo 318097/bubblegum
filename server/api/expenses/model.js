@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
 const schemaName = 'expenses';
 
-const ExpenseSchema = Schema(
+const ExpenseSchema = new mongoose.Schema(
   {
     expenseTypeId: mongoose.Types.ObjectId,
     expense: Number,
