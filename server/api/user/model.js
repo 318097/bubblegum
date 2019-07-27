@@ -23,7 +23,6 @@ const UserSchema = new Schema(
     },
     mobile: {
       type: String,
-      required: false
     },
     about: Schema.Types.Mixed,
     snakeGame: Schema.Types.Mixed,
