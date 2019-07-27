@@ -5,8 +5,8 @@ const config = {
   test: 'testing',
   prod: 'production',
   port: process.env.PORT || 3001,
-  // db_url: 'mongodb://localhost/bubblegum',
-  db_url: 'mongodb://admin:#Password123@ds125945.mlab.com:25945/bubblegum',
+  db_url: 'mongodb://localhost/bubblegum',
+  // db_url: 'mongodb://admin:#Password123@ds125945.mlab.com:25945/bubblegum',
   expireTime: 24 * 60 * 10,
   secrets: {
     jwt: process.env.JWT || 'gumball'
