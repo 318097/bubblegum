@@ -1,34 +1,37 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
-const UserSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    required: false
-  },
-  mobile: {
-    type: String,
-    required: false
-  },
-  about: Schema.Types.Mixed,
-  snakeGame: Schema.Types.Mixed,
-}, {
+const UserSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true
+    },
+    username: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    password: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: false
+    },
+    mobile: {
+      type: String,
+      required: false
+    },
+    about: Schema.Types.Mixed,
+    snakeGame: Schema.Types.Mixed,
+  }, {
+    timestamps: true,
     strict: false
-  });
+  }
+);
 
 UserSchema.pre('save', function (next) {
   if (!this.isModified('password')) return next();
@@ -46,12 +49,12 @@ UserSchema.methods = {
     if (!plainTextPassword) {
       return '';
     } else {
-      let salt = bcrypt.genSaltSync(10);
+      const salt = bcrypt.genSaltSync(10);
       return bcrypt.hashSync(plainTextPassword, salt);
     }
   },
   toJson: function () {
-    var obj = this.toObject();
+    const obj = this.toObject();
     delete obj.password;
     return obj;
   }
