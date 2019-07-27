@@ -1,4 +1,5 @@
 const router = require('express').Router();
+
 const userRoutes = require('./user/routes');
 const todoRoutes = require('./todo/routes');
 const postRoutes = require('./post/routes');
@@ -12,7 +13,7 @@ const checkUser = [auth.decodeToken(), auth.getFreshUser()];
 router.get('/test', (req, res) => res.send('Test'));
 
 router.use('/users', userRoutes);
-router.use('/todos', todoRoutes);
+router.use('/todos', checkUser, todoRoutes);
 router.use('/posts', postRoutes);
 router.use('/expenses', checkUser, expenseRoutes);
 router.use('/diary', checkUser, diaryRoutes);
