@@ -1,14 +1,17 @@
 const router = require('express').Router();
 const controller = require('./controller');
 
-router
-  .route('/')
-  .get(controller.getAll)
-  .post(controller.create);
-
-router.get('/exp_types', controller.getAllExpenseTypes);
+router.get('/types', controller.getAllExpenseTypes);
+router.get('/', controller.getAllExpenses)
 router.get('/:month', controller.getMonthlyExpense);
-// router.put('/:id', controller.update);
-router.delete('/:id', controller.delete);
+
+router.post('/', controller.createExpense);
+router.post('/types', controller.createExpenseType);
+
+router.put('/types/:id', controller.updateExpenseType);
+router.put('/:id', controller.updateExpense);
+
+router.delete('/types/:id', controller.deleteExpenseType);
+router.delete('/:id', controller.deleteExpense);
 
 module.exports = router;

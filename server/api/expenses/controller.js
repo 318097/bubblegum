@@ -1,117 +1,171 @@
-const con = require('../../config/mysql');
+const mongoose = require('mongoose');
+const moment = require('moment');
 
-exports.getAll = (req, res, next) => {
-  con.getConnection(er => {
+const Model = require('./model');
+const UserModel = require('../user/model');
 
-    con.query(
-      `SELECT * FROM expenses WHERE user_id = ${req.user._id}`,
-      (err, result) => {
-        res.send({ expenses: result });
-      }
-    );
-  });
-};
+const { ObjectId } = mongoose.Types;
 
-exports.getMonthlyExpense = (req, res, next) => {
-  con.getConnection(er => {
-    let month = req.params.month.split('-');
-    month =
-      month[0] + '-' + (Number(month[1]) <= 9 ? '0' + month[1] : month[1]);
-    con.query(
-      `
-      SELECT expenses.id, expenses.user_id, expenses.amount, expenses.created_at, expense_types.name, expenses.message
-      FROM expenses
-      INNER JOIN expense_types
-      ON expenses.type_id = expense_types.id
-      WHERE expenses.user_id = '${req.user._id}' AND 
-      expenses.created_at
-      LIKE "${month}%" 
-      ORDER BY expenses.created_at DESC`,
-      (err, result) => {
-        res.send({ monthly_expenses: result });
-      }
-    );
-  });
-};
-
-exports.getAllExpenseTypes = (req, res, next) => {
-  con.getConnection(er => {
-    con.query(
-      `SELECT * FROM expense_types WHERE user_id = '${
-      req.user._id
-      }' ORDER BY count DESC`,
-      (err, result) => {
-        res.send({ expense_types: result });
-      }
-    );
-  });
-};
-
-exports.create = (req, res, next) => {
-  function insertExpense(type_id, amount) {
-    const date = getDate();
-    const sql = `INSERT into expenses (user_id, amount, type_id, created_at, message) 
-  VALUES ('${req.user._id}', '${amount}', '${type_id}', '${date}', '${
-      req.body.message
-      }')`;
-    con.query(sql, (err, res) => {
-      con.query(`UPDATE expense_types
-        SET count = count + 1
-        WHERE id = ${type_id}`);
-      console.log(res);
-    });
+const updateCount = async ({ userId, expenseTypeId, value }) => await UserModel.findOneAndUpdate(
+  {
+    _id: userId,
+    'expenseTypes._id': ObjectId(expenseTypeId)
+  }, {
+    $inc: {
+      'expenseTypes.$.count': value
+    }
   }
-  con.getConnection(er => {
-    let type_id;
-    if (+req.body['type_id'] <= 0) {
-      const date = getDate();
-      con.query(
-        `INSERT into expense_types (name, created_at) 
-        VALUES ('${req.body.name}', '${date}')`,
-        (e, r) => {
-          type_id = r.insertId;
-          insertExpense(type_id, req.body.amount);
+);
+
+exports.getAllExpenseTypes = async (req, res, next) => {
+  try {
+    res.send({ expenseTypes: req.user.expenseTypes })
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getAllExpenses = async (req, res, next) => {
+  try {
+    const result = await Model.find({ userId: req.user._id });
+    res.send({ expenses: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getMonthlyExpense = async (req, res, next) => {
+  try {
+    const { month } = req.params;
+    const { year = moment().year() } = req.query;
+
+    const monthStart = moment(`${month}-${year}`, 'MM-YYYY').startOf('month');
+    const monthEnd = moment(`${month}-${year}`, 'MM-YYYY').endOf('month');
+
+    const result = await Model.find(
+      {
+        userId: req.user._id,
+        createdAt: {
+          $gte: monthStart,
+          $lte: monthEnd
         }
-      );
-    } else {
-      type_id = req.body.type_id;
-      insertExpense(type_id, req.body.amount);
-    }
-    res.send();
-  });
+      },
+      null,
+      {
+        sort: { createdAt: -1 }
+      }
+    );
+    res.send({ monthly_expenses: result });
+  } catch (err) {
+    next(err);
+  }
 };
 
-// exports.update = (req, res, next) => {
-//   con.getConnection(er => {
-//     con.query(
-//       `SELECT * FROM expense WHERE id = ${req.params.id}`,
-//       (err, result) => {
-//         if (!result) {
-//           res.send({ message: 'Expense not found.' });
-//         } else {
-//           con.query(
-//             `UPDATE * FROM expenses WHERE id = ${req.params.id}`,
-//             (e, r) => {
-//               res.send({ expense_types: result });
-//             }
-//           );
-//         }
-//       }
-//     );
-//   });
-// };
-
-exports.delete = (req, res, next) => {
-  console.log(req.params);
-  con.query(
-    `DELETE FROM expenses WHERE id = ${parseInt(req.params.id)}`,
-    (err, result) => {
-      res.send({ message: result });
-    }
-  );
+exports.createExpenseType = async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    const result = await UserModel.findOneAndUpdate(
+      {
+        _id: req.user._id
+      }, {
+        $push: {
+          expenseTypes: {
+            name,
+            _id: new ObjectId(),
+            count: 0
+          }
+        }
+      }
+    );
+    res.send({ result });
+  } catch (err) {
+    next(err);
+  }
 };
 
-function getDate() {
-  let d = new Date().toISOString().split('T');
-  return `${d[0]} ${d[1].split('.')[0]}`;
-}
+exports.createExpense = async (req, res, next) => {
+  try {
+    const { expenseTypeId, expense, message } = req.body;
+    const result = await Model.create({
+      expenseTypeId, expense, message, userId: req.user._id
+    });
+    updateCount({ userId: req.user._id, expenseTypeId, value: 1 });
+    res.send({ result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.updateExpenseType = async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    const expenseTypeId = req.params.id;
+    const result = await UserModel.findOneAndUpdate(
+      {
+        _id: req.user._id,
+        'expenseTypes._id': expenseTypeId
+      }, {
+        $set: {
+          'expenseTypes.$.name': name
+        }
+      }
+    );
+    res.send({ result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.updateExpense = async (req, res, next) => {
+  try {
+    const { expenseTypeId, expense, message } = req.body;
+    const expenseId = req.params.id;
+    const result = await Model.findOneAndUpdate(
+      {
+      _id: expenseId
+    }, {
+        $set: {
+          expenseTypeId, expense, message, userId: req.user._id
+        }
+      }
+    );
+    res.send({ result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.deleteExpenseType = async (req, res, next) => {
+  try {
+    const expenseTypeId = req.params.id;
+    const result = await UserModel.findOneAndUpdate(
+      {
+        _id: req.user._id
+      }, {
+        $pull: {
+          expenseTypes: {
+            _id: ObjectId(expenseTypeId)
+          }
+        }
+      }
+    );
+    res.send({ result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.deleteExpense = async (req, res, next) => {
+  try {
+    const expenseId = req.params.id;
+    const result = await Model.findOneAndDelete(
+      {
+        _id: expenseId
+      }
+    );
+    updateCount({ userId: req.user._id, expenseTypeId: result.expenseTypeId, value: -1 });
+    res.send({ result });
+  } catch (err) {
+    next(err);
+  }
+};

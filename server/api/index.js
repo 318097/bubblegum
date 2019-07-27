@@ -12,7 +12,7 @@ router.get('/test', (req, res) => res.send('Test'));
 
 router.use('/users', userRoutes);
 router.use('/posts', postRoutes);
-router.use('/exp', checkUser, expenseRoutes);
+router.use('/expenses', checkUser, expenseRoutes);
 router.use('/diary', checkUser, diaryRoutes);
 router.use('/snake', snakeGameRoutes);
 

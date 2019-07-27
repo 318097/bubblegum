@@ -26,6 +26,9 @@ const UserSchema = new Schema(
     },
     about: Schema.Types.Mixed,
     snakeGame: Schema.Types.Mixed,
+    expenseTypes: {
+      type: Array
+    }
   }, {
     timestamps: true,
     strict: false
