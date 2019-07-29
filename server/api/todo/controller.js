@@ -3,6 +3,8 @@ const moment = require('moment');
 const Model = require('./model');
 const UserModel = require('../user/model');
 
+const { ObjectId } = require('mongoose').Types;
+
 exports.getAllTodos = async (req, res, next) => {
   try {
     const result = await Model.find({ userId: req.user._id });
@@ -23,9 +25,10 @@ exports.getTodoById = async (req, res, next) => {
 
 exports.createTodo = async (req, res, next) => {
   try {
+    const weekNo = moment().week();
     const { task, type, frequency } = req.body;
     const result = await Model.create({
-      task, type, frequency, userId: req.user._id
+      task, type, frequency, userId: req.user._id, stamps: { [`week-${weekNo}`]: [] }
     });
     res.send({ result });
   } catch (err) {
@@ -55,14 +58,16 @@ exports.updateTodo = async (req, res, next) => {
 exports.stampTodo = async (req, res, next) => {
   try {
     const { date } = req.body;
+    const weekNo = moment(date).week();
+    const week = `week-${weekNo}`;
     const todoId = req.params.id;
 
     const result = await Model.findOneAndUpdate(
       {
-        _id: todoId
+        _id: ObjectId(todoId)
       }, {
-        $push: {
-          stamps: date
+        $addToSet: {
+          [`stamps.${week}`]: moment(date)
         }
       }
     );

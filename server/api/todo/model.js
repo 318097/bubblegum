@@ -7,15 +7,13 @@ const TodosSchema = new mongoose.Schema(
     userId: { type: mongoose.Types.ObjectId, ref: 'user' },
     type: {
       type: String,
-      default: 'SINGLE_USE',
+      default: 'SINGLE',
       enum: [
-        'SINGLE_USE',
+        'SINGLE',
         'WEEKLY'
       ]
     },
-    stamps: {
-      type: Array
-    },
+    stamps: Object,
     frequency: Number,
     active: Boolean
   }, {
