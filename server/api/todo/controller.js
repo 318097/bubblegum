@@ -1,9 +1,16 @@
 const moment = require('moment');
+const Joi = require('@hapi/joi');
 
 const Model = require('./model');
 const UserModel = require('../user/model');
 
 const { ObjectId } = require('mongoose').Types;
+
+const TodoSchemaValidator = Joi.object().keys({
+  task: Joi.string().alphanum().min(3).required(),
+  type: Joi.string().regex(/^(SINGLE|WEEKLY)$/),
+  frequency: Joi.number(),
+});
 
 exports.getAllTodos = async (req, res, next) => {
   try {
@@ -27,6 +34,9 @@ exports.createTodo = async (req, res, next) => {
   try {
     const weekNo = moment().week();
     const { task, type, frequency } = req.body;
+    const { error } = Joi.validate({ task, type, frequency }, TodoSchemaValidator);
+    if (error) return res.status(400).send(error.details[0].message)
+
     const result = await Model.create({
       task, type, frequency, userId: req.user._id, stamps: { [`week-${weekNo}`]: [] }
     });
