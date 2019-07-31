@@ -35,7 +35,7 @@ exports.createTodo = async (req, res, next) => {
     const weekNo = moment().week();
     const { task, type, frequency } = req.body;
     const { error } = Joi.validate({ task, type, frequency }, TodoSchemaValidator);
-    if (error) return res.status(400).send(error.details[0].message)
+    if (error) return res.status(400).send(error.details[0].message);
 
     const result = await Model.create({
       task, type, frequency, userId: req.user._id, stamps: { [`week-${weekNo}`]: [] }

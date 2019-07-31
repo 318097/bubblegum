@@ -1,8 +1,8 @@
-var router = require('express').Router();
-var verifyUser = require('./auth').verifyUser;
-var controller = require('./controller');
+const router = require('express').Router();
+const verifyUser = require('./auth').verifyUser;
+const controller = require('./controller');
 
-router.post('/signin', verifyUser(), controller.signin);
-router.post('/signup', controller.signup);
+router.post('/login', verifyUser(), controller.login);
+router.post('/register', controller.register);
 
 module.exports = router;

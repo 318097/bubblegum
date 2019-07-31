@@ -1,15 +1,28 @@
 const User = require('../api/user/model');
 const signToken = require('./auth').signToken;
+const Joi = require('joi');
+const _ = require('lodash');
 
-exports.signin = (req, res, next) => {
-  var token = signToken(req.user._id);
-  res.json({ token: token });
+const RegisterSchemaValidator = Joi.object().keys({
+  name: Joi.string().required(),
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
+  mobile: Joi.number(),
+});
+
+exports.login = (req, res, next) => {
+  const token = signToken(req.user._id);
+  res.json({ token });
 };
 
-exports.signup = async (req, res, next) => {
+exports.register = async (req, res, next) => {
   try {
-    const { name, username, password, email, mobile } = req.body;
-    const result = await User.create({ name, username, password, email, mobile });
+    const data = _.pick(req.body, [name, username, password, email, mobile]);
+    const { error } = Joi.validate(data, RegisterSchemaValidator);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const result = await User.create(data);
     res.send({ result })
   } catch (err) {
     next(err)
