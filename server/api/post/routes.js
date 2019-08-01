@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const controller = require('./controller');
-const auth = require('../../auth/auth');
-const checkUser = [auth.decodeToken(), auth.getFreshUser()];
+const { private } = require('../../auth/auth');
+// // // const private = [private.decodeToken, private.getFreshUser];
 
 router.param('id', controller.findById);
 

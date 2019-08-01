@@ -17,155 +17,117 @@ const updateCount = async ({ userId, expenseTypeId, value }) => await UserModel.
   }
 );
 
-exports.getAllExpenseTypes = async (req, res, next) => {
-  try {
-    res.send({ expenseTypes: req.user.expenseTypes })
-  } catch (err) {
-    next(err);
-  }
-};
+exports.getAllExpenseTypes = async (req, res, next) => res.send({ expenseTypes: req.user.expenseTypes })
 
 exports.getAllExpenses = async (req, res, next) => {
-  try {
-    const result = await Model.find({ userId: req.user._id });
-    res.send({ expenses: result });
-  } catch (err) {
-    next(err);
-  }
+  const result = await Model.find({ userId: req.user._id });
+  res.send({ expenses: result });
 };
 
 exports.getMonthlyExpense = async (req, res, next) => {
-  try {
-    const { month } = req.params;
-    const { year = moment().year() } = req.query;
+  const { month } = req.params;
+  const { year = moment().year() } = req.query;
 
-    const monthStart = moment(`${month}-${year}`, 'MM-YYYY').startOf('month');
-    const monthEnd = moment(`${month}-${year}`, 'MM-YYYY').endOf('month');
+  const monthStart = moment(`${month}-${year}`, 'MM-YYYY').startOf('month');
+  const monthEnd = moment(`${month}-${year}`, 'MM-YYYY').endOf('month');
 
-    const result = await Model.find(
-      {
-        userId: req.user._id,
-        createdAt: {
-          $gte: monthStart,
-          $lte: monthEnd
-        }
-      },
-      null,
-      {
-        sort: { createdAt: -1 }
+  const result = await Model.find(
+    {
+      userId: req.user._id,
+      createdAt: {
+        $gte: monthStart,
+        $lte: monthEnd
       }
-    );
-    res.send({ monthly_expenses: result });
-  } catch (err) {
-    next(err);
-  }
+    },
+    null,
+    {
+      sort: { createdAt: -1 }
+    }
+  );
+  res.send({ monthly_expenses: result });
 };
 
 exports.createExpenseType = async (req, res, next) => {
-  try {
-    const { name } = req.body;
-    const result = await UserModel.findOneAndUpdate(
-      {
-        _id: req.user._id
-      }, {
-        $push: {
-          expenseTypes: {
-            name,
-            _id: new ObjectId(),
-            count: 0
-          }
+  const { name } = req.body;
+  const result = await UserModel.findOneAndUpdate(
+    {
+      _id: req.user._id
+    }, {
+      $push: {
+        expenseTypes: {
+          name,
+          _id: new ObjectId(),
+          count: 0
         }
       }
-    );
-    res.send({ result });
-  } catch (err) {
-    next(err);
-  }
+    }
+  );
+  res.send({ result });
 };
 
 exports.createExpense = async (req, res, next) => {
-  try {
-    const { expenseTypeId, expense, message } = req.body;
-    const result = await Model.create({
-      expenseTypeId, expense, message, userId: req.user._id
-    });
-    updateCount({ userId: req.user._id, expenseTypeId, value: 1 });
-    res.send({ result });
-  } catch (err) {
-    next(err);
-  }
+  const { expenseTypeId, expense, message } = req.body;
+  const result = await Model.create({
+    expenseTypeId, expense, message, userId: req.user._id
+  });
+  updateCount({ userId: req.user._id, expenseTypeId, value: 1 });
+  res.send({ result });
 };
 
 exports.updateExpenseType = async (req, res, next) => {
-  try {
-    const { name } = req.body;
-    const expenseTypeId = req.params.id;
-    const result = await UserModel.findOneAndUpdate(
-      {
-        _id: req.user._id,
-        'expenseTypes._id': expenseTypeId
-      }, {
-        $set: {
-          'expenseTypes.$.name': name
-        }
+  const { name } = req.body;
+  const expenseTypeId = req.params.id;
+  const result = await UserModel.findOneAndUpdate(
+    {
+      _id: req.user._id,
+      'expenseTypes._id': expenseTypeId
+    }, {
+      $set: {
+        'expenseTypes.$.name': name
       }
-    );
-    res.send({ result });
-  } catch (err) {
-    next(err);
-  }
+    }
+  );
+  res.send({ result });
 };
 
 exports.updateExpense = async (req, res, next) => {
-  try {
-    const { expenseTypeId, expense, message } = req.body;
-    const expenseId = req.params.id;
-    const result = await Model.findOneAndUpdate(
-      {
+  const { expenseTypeId, expense, message } = req.body;
+  const expenseId = req.params.id;
+  const result = await Model.findOneAndUpdate(
+    {
       _id: expenseId
     }, {
-        $set: {
-          expenseTypeId, expense, message, userId: req.user._id
-        }
+      $set: {
+        expenseTypeId, expense, message, userId: req.user._id
       }
-    );
-    res.send({ result });
-  } catch (err) {
-    next(err);
-  }
+    }
+  );
+  res.send({ result });
 };
 
 exports.deleteExpenseType = async (req, res, next) => {
-  try {
-    const expenseTypeId = req.params.id;
-    const result = await UserModel.findOneAndUpdate(
-      {
-        _id: req.user._id
-      }, {
-        $pull: {
-          expenseTypes: {
-            _id: ObjectId(expenseTypeId)
-          }
+  const expenseTypeId = req.params.id;
+  const result = await UserModel.findOneAndUpdate(
+    {
+      _id: req.user._id
+    }, {
+      $pull: {
+        expenseTypes: {
+          _id: ObjectId(expenseTypeId)
         }
       }
-    );
-    res.send({ result });
-  } catch (err) {
-    next(err);
-  }
+    }
+  );
+  res.send({ result });
 };
 
 exports.deleteExpense = async (req, res, next) => {
-  try {
-    const expenseId = req.params.id;
-    const result = await Model.findOneAndDelete(
-      {
-        _id: expenseId
-      }
-    );
-    updateCount({ userId: req.user._id, expenseTypeId: result.expenseTypeId, value: -1 });
-    res.send({ result });
-  } catch (err) {
-    next(err);
-  }
+  const expenseId = req.params.id;
+  const result = await Model.findOneAndDelete(
+    {
+      _id: expenseId
+    }
+  );
+  updateCount({ userId: req.user._id, expenseTypeId: result.expenseTypeId, value: -1 });
+  res.send({ result });
 };

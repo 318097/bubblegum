@@ -1,11 +1,12 @@
 const router = require('express').Router();
 const controller = require('./controller');
+const asyncMiddleware = require('../../middleware/async');
 
-router.get('/', controller.getAllTodos);
-router.get('/:id', controller.getTodoById);
-router.post('/', controller.createTodo);
-router.put('/:id', controller.updateTodo);
-router.put('/:id/stamp', controller.stampTodo);
-router.delete('/:id', controller.deleteTodo);
+router.get('/', asyncMiddleware(controller.getAllTodos));
+router.get('/:id', asyncMiddleware(controller.getTodoById));
+router.post('/', asyncMiddleware(controller.createTodo));
+router.put('/:id', asyncMiddleware(controller.updateTodo));
+router.put('/:id/stamp', asyncMiddleware(controller.stampTodo));
+router.delete('/:id', asyncMiddleware(controller.deleteTodo));
 
 module.exports = router;

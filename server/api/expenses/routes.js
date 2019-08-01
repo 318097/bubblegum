@@ -1,17 +1,18 @@
 const router = require('express').Router();
 const controller = require('./controller');
+const asyncMiddleware = require('../../middleware/async');
 
-router.get('/types', controller.getAllExpenseTypes);
-router.get('/', controller.getAllExpenses)
-router.get('/:month', controller.getMonthlyExpense);
+router.get('/types', asyncMiddleware(controller.getAllExpenseTypes));
+router.get('/', asyncMiddleware(controller.getAllExpenses))
+router.get('/:month', asyncMiddleware(controller.getMonthlyExpense));
 
-router.post('/', controller.createExpense);
-router.post('/types', controller.createExpenseType);
+router.post('/', asyncMiddleware(controller.createExpense));
+router.post('/types', asyncMiddleware(controller.createExpenseType));
 
-router.put('/types/:id', controller.updateExpenseType);
-router.put('/:id', controller.updateExpense);
+router.put('/types/:id', asyncMiddleware(controller.updateExpenseType));
+router.put('/:id', asyncMiddleware(controller.updateExpense));
 
-router.delete('/types/:id', controller.deleteExpenseType);
-router.delete('/:id', controller.deleteExpense);
+router.delete('/types/:id', asyncMiddleware(controller.deleteExpenseType));
+router.delete('/:id', asyncMiddleware(controller.deleteExpense));
 
 module.exports = router;

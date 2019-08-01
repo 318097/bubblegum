@@ -1,12 +1,11 @@
 const router = require('express').Router();
 const controller = require('./controller');
-const auth = require('../../auth/auth');
-const checkUser = [auth.decodeToken(), auth.getFreshUser()];
+const { private } = require('../../auth/auth');
 
 router.param('id', controller.findById);
-router.get('/me', checkUser, controller.me);
+router.get('/me', private(), controller.me);
 router.get('/:username/resume', controller.getResume);
-router.put('/resume', checkUser, controller.updateResume);
+router.put('/resume', private(), controller.updateResume);
 
 router
   .route('/')
@@ -15,8 +14,8 @@ router
 
 router
   .route('/:id')
-  .get(checkUser, controller.getOne)
-  .put(checkUser, controller.update)
-  .delete(checkUser, controller.delete);
+  .get(private(), controller.getOne)
+  .put(private(), controller.update)
+  .delete(private(), controller.delete);
 
 module.exports = router;
