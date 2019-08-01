@@ -4,6 +4,7 @@ module.exports = (handler) => {
     try {
       await handler(req, res, next);
     } catch (err) {
+      console.log('Error: ', err);
       next(err);
     }
   };

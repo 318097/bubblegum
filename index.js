@@ -29,8 +29,7 @@ app.use((err, req, res, next) => {
     res.status(401).send('Invalid token');
     return;
   }
-  console.log(err);
-  res.status(500).send('Oops');
+  res.status(500).send(err);
 });
 
 http.listen(config.port);
