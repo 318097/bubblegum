@@ -124,9 +124,7 @@ exports.deleteExpenseType = async (req, res, next) => {
 exports.deleteExpense = async (req, res, next) => {
   const expenseId = req.params.id;
   const result = await Model.findOneAndDelete(
-    {
-      _id: expenseId
-    }
+    { _id: ObjectId(expenseId) }
   );
   updateCount({ userId: req.user._id, expenseTypeId: result.expenseTypeId, value: -1 });
   res.send({ result });
