@@ -20,7 +20,7 @@ const updateCount = async ({ userId, expenseTypeId, value }) => await UserModel.
 exports.getAllExpenseTypes = async (req, res, next) => res.send({ expenseTypes: req.user.expenseTypes })
 
 exports.getAllExpenses = async (req, res, next) => {
-  const result = await Model.find({ userId: req.user._id });
+  const result = await Model.find({ userId: req.user._id }, null, { sort: { createdAt: -1 } });
   res.send({ expenses: result });
 };
 
@@ -44,7 +44,7 @@ exports.getMonthlyExpense = async (req, res, next) => {
       sort: { createdAt: -1 }
     }
   );
-  res.send({ monthly_expenses: result });
+  res.send({ expenses: result });
 };
 
 exports.createExpenseType = async (req, res, next) => {
@@ -66,9 +66,9 @@ exports.createExpenseType = async (req, res, next) => {
 };
 
 exports.createExpense = async (req, res, next) => {
-  const { expenseTypeId, expense, message } = req.body;
+  const { expenseTypeId, amount, message } = req.body;
   const result = await Model.create({
-    expenseTypeId, expense, message, userId: req.user._id
+    expenseTypeId, amount, message, userId: req.user._id
   });
   updateCount({ userId: req.user._id, expenseTypeId, value: 1 });
   res.send({ result });
@@ -91,14 +91,14 @@ exports.updateExpenseType = async (req, res, next) => {
 };
 
 exports.updateExpense = async (req, res, next) => {
-  const { expenseTypeId, expense, message } = req.body;
+  const { expenseTypeId, amount, message } = req.body;
   const expenseId = req.params.id;
   const result = await Model.findOneAndUpdate(
     {
       _id: expenseId
     }, {
       $set: {
-        expenseTypeId, expense, message, userId: req.user._id
+        expenseTypeId, amount, message, userId: req.user._id
       }
     }
   );

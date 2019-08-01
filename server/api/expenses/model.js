@@ -4,7 +4,7 @@ const schemaName = 'expenses';
 const ExpenseSchema = new mongoose.Schema(
   {
     expenseTypeId: mongoose.Types.ObjectId,
-    expense: Number,
+    amount: Number,
     message: String,
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
   },
