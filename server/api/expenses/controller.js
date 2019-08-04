@@ -28,22 +28,52 @@ exports.getMonthlyExpense = async (req, res, next) => {
   const { month } = req.params;
   const { year = moment().year() } = req.query;
 
-  const monthStart = moment(`${month}-${year}`, 'MM-YYYY').startOf('month');
-  const monthEnd = moment(`${month}-${year}`, 'MM-YYYY').endOf('month');
+  const monthStart = moment(`${month}-${year}`, 'MM-YYYY').startOf('month').toDate();
+  const monthEnd = moment(`${month}-${year}`, 'MM-YYYY').endOf('month').toDate();
 
-  const result = await Model.find(
+  const result = await UserModel.aggregate([
     {
-      userId: req.user._id,
-      createdAt: {
-        $gte: monthStart,
-        $lte: monthEnd
+      $match: {
+        _id: ObjectId(req.user._id),
       }
     },
-    null,
     {
-      sort: { createdAt: -1 }
+      $unwind: { path: '$expenseTypes', preserveNullAndEmptyArrays: true }
+    },
+    {
+      $lookup: {
+        from: 'expenses',
+        localField: 'expenseTypes._id',
+        foreignField: 'expenseTypeId',
+        as: 'expense'
+      }
+    },
+    {
+      $unwind: { path: '$expense', preserveNullAndEmptyArrays: true }
+    },
+    {
+      $project: {
+        _id: '$expense._id',
+        expenseTypeId: '$expense.expenseTypeId',
+        amount: '$expense.amount',
+        userId: '$expense.userId',
+        createdAt: '$expense.createdAt',
+        expenseType: '$expenseTypes.name'
+      }
+    },
+    {
+      $match: {
+        userId: ObjectId(req.user._id),
+        createdAt: {
+          $gte: monthStart,
+          $lte: monthEnd
+        }
+      }
+    },
+    {
+      $sort: { createdAt: -1 }
     }
-  );
+  ]);
   res.send({ expenses: result });
 };
 
