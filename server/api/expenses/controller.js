@@ -58,7 +58,8 @@ exports.getMonthlyExpense = async (req, res, next) => {
         amount: '$expense.amount',
         userId: '$expense.userId',
         createdAt: '$expense.createdAt',
-        expenseType: '$expenseTypes.name'
+        expenseType: '$expenseTypes.name',
+        expenseGroup: '$expense.expenseGroup',
       }
     },
     {
@@ -96,9 +97,9 @@ exports.createExpenseType = async (req, res, next) => {
 };
 
 exports.createExpense = async (req, res, next) => {
-  const { expenseTypeId, amount, message } = req.body;
+  const { expenseTypeId, amount, message, expenseGroup } = req.body;
   const result = await Model.create({
-    expenseTypeId, amount, message, userId: req.user._id
+    expenseTypeId, amount, message, expenseGroup, userId: req.user._id
   });
   updateCount({ userId: req.user._id, expenseTypeId, value: 1 });
   res.send({ result });
