@@ -8,7 +8,9 @@ const logger = require("./server/util/logger");
 const auth = require("./server/auth/routes");
 const api = require("./server/api");
 
-require("mongoose").connect(config.DB_URL, { useNewUrlParser: true });
+require("mongoose")
+  .connect(config.DB_URL, { useNewUrlParser: true })
+  .then(() => logger.log(`Connected to DB...`));
 
 require("./server/api/snake/socket")(io);
 
@@ -25,5 +27,5 @@ app.use((err, req, res, next) => {
   res.status(500).send(err);
 });
 
-http.listen(config.port);
+http.listen(config.PORT);
 logger.log(`Listening on :${config.PORT}`);
