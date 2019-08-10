@@ -7,13 +7,19 @@ const UserModel = require('../user/model');
 const { ObjectId } = require('mongoose').Types;
 
 const TodoSchemaValidator = Joi.object().keys({
-  task: Joi.string().alphanum().min(3).required(),
+  task: Joi.string().min(3).required(),
   type: Joi.string().regex(/^(SINGLE|WEEKLY)$/),
   frequency: Joi.number(),
 });
 
 exports.getAllTodos = async (req, res, next) => {
-  const result = await Model.find({ userId: req.user._id });
+  const result = await Model.aggregate([
+    { $match: { userId: req.user._id } },
+    // {
+    //   $group: { _id: '$type', 'todos': { $push: '$$ROOT' } }
+    // },
+    // { $replaceRoot: { newRoot: { $arrayToObject: [[{ k: '$_id', v: '$todos' }]] } } },
+  ]);
   res.send({ todos: result });
 };
 
