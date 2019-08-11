@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const config = require("../../config");
-const checkToken = expressJwt({ secret: "gumball" });
 const User = require("../api/user/model");
+
+const checkToken = expressJwt({ secret: config.JWT });
 
 const decodeToken = (req, res, next) => {
   if (req.headers && req.headers.hasOwnProperty("authorization")) {
