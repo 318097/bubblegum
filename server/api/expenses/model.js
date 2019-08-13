@@ -7,7 +7,14 @@ const ExpenseSchema = new mongoose.Schema(
     amount: Number,
     message: String,
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
-    expenseGroup: String
+    expenseGroup: {
+      type: String,
+      enum: [
+        "PERSONAL",
+        "HOME"
+      ],
+      default: "PERSONAL"
+    }
   },
   {
     timestamps: true
