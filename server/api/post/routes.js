@@ -1,17 +1,11 @@
 const router = require('express').Router();
 const controller = require('./controller');
-const { private } = require('../../auth/auth');
-// // // const private = [private.decodeToken, private.getFreshUser];
+const asyncMiddleware = require('../../middleware/async');
 
-router.param('id', controller.findById);
-
-router.route('/').get(controller.getAll);
-// .post(controller.create);
-
-router
-  .route('/:id')
-  .get(controller.findById)
-  // .put(controller.update)
-  .delete(controller.delete);
+router.get('/', asyncMiddleware(controller.getAllPosts))
+router.get('/:id', asyncMiddleware(controller.gePostById));
+router.post('/', asyncMiddleware(controller.createPost));
+router.put('/:id', asyncMiddleware(controller.updatePost));
+router.delete('/:id', asyncMiddleware(controller.deletePost));
 
 module.exports = router;
