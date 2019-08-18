@@ -1,18 +1,12 @@
-const router = require('express').Router();
-const controller = require('./controller');
+const router = require("express").Router();
+const controller = require("./controller");
 
-/* For all routes, which has a param named 'id', run the findById() controller */
-router.param('id', controller.findById);
+const asyncMiddleware = require("../../middleware/async");
 
-router
-  .route('/')
-  .get(controller.getAll)
-  .post(controller.create);
-
-router
-  .route('/:id')
-  .get(controller.getOne)
-  .put(controller.update)
-  .delete(controller.delete);
+router.get("/", asyncMiddleware(controller.getAllNotes));
+router.get("/:id", asyncMiddleware(controller.geNoteById));
+router.post("/", asyncMiddleware(controller.createNote));
+router.put("/:id", asyncMiddleware(controller.updateNote));
+router.delete("/:id", asyncMiddleware(controller.deleteNote));
 
 module.exports = router;

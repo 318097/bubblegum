@@ -1,20 +1,24 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const schemaName = "diary";
 
-const DiarySchema = new Schema({
-  title: {
-    type: String,
-    required: true
+const DiarySchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true
+    },
+    content: {
+      type: String,
+      required: false
+    },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "user"
+    }
   },
-  body: {
-    type: String,
-    required: false
-  },
-  user_id: {
-    type: Schema.Types.ObjectId,
-    ref: 'user'
-  },
-  createdOn: Schema.Types.Date
-});
+  {
+    timestamps: true
+  }
+);
 
-module.exports = mongoose.model('diary', DiarySchema);
+module.exports = mongoose.model(schemaName, DiarySchema);
