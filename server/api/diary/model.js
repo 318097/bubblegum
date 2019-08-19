@@ -12,7 +12,7 @@ const DiarySchema = new mongoose.Schema(
       required: false
     },
     userId: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "user"
     }
   },
