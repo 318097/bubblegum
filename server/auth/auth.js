@@ -31,21 +31,8 @@ const getFreshUser = async (req, res, next) => {
   next();
 };
 
-const verifyUser = async (req, res, next) => {
-  const { username, password } = req.body;
-  if (!username || !password)
-    return res.status(400).send("Username & Password is required");
-
-  const user = await User.findOne({ username });
-  if (!user) return res.status(401).send("User not found");
-  if (!user.authenticate(password))
-    return res.status(401).send("Invalid username/password");
-  req.user = user;
-  next();
-};
-
 const signToken = _id => jwt.sign({ _id }, config.JWT);
 
 const private = () => [decodeToken, getFreshUser];
 
-module.exports = { decodeToken, getFreshUser, verifyUser, signToken, private };
+module.exports = { decodeToken, getFreshUser, signToken, private };
