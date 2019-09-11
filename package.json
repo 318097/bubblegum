@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "serve": "./node_modules/nodemon/bin/nodemon.js index.js",
+    "client": "cd ../atom && yarn start",
+    "dev": "concurrently \"yarn serve\" \"yarn client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,6 +16,7 @@
     "@hapi/joi": "^15.1.0",
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
+    "concurrently": "^4.1.2",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
