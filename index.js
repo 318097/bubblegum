@@ -8,6 +8,8 @@ const logger = require("./server/util/logger");
 const auth = require("./server/auth/routes");
 const api = require("./server/api");
 
+console.log(`Running in ${process.env.NODE_ENV} mode.`);
+
 require("mongoose")
   .connect(config.DB_URL, { useNewUrlParser: true })
   .then(() => logger.log(`Connected to DB...`));
