@@ -1,7 +1,5 @@
 const Model = require("./model");
 
-const { ObjectId } = require("mongoose").Types;
-
 exports.getTimeline = async (req, res, next) => {
   const result = await Model.aggregate([
     { $match: { userId: req.user._id } },
@@ -12,14 +10,13 @@ exports.getTimeline = async (req, res, next) => {
 
 exports.getPostById = async (req, res, next) => {
   const result = await Model.find({ _id: req.params.id });
-  res.send({ note: result });
+  res.send({ post: result });
 };
 
 exports.createPost = async (req, res, next) => {
-  const { title, content, type, date } = req.body;
+  const { content, type, date } = req.body;
 
   const result = await Model.create({
-    title,
     content,
     type,
     date,
@@ -29,7 +26,7 @@ exports.createPost = async (req, res, next) => {
 };
 
 exports.updatePost = async (req, res, next) => {
-  const { title, content, type } = req.body;
+  const { content, type } = req.body;
   const PostId = req.params.id;
   const result = await Model.findOneAndUpdate(
     {
@@ -37,7 +34,6 @@ exports.updatePost = async (req, res, next) => {
     },
     {
       $set: {
-        title,
         content,
         type
       }
@@ -47,7 +43,7 @@ exports.updatePost = async (req, res, next) => {
 };
 
 exports.deletePost = async (req, res, next) => {
-  const PostId = req.params.id;
+  const { id: PostId } = req.params;
   const result = await Model.findOneAndDelete({
     _id: PostId
   });
