@@ -1,6 +1,7 @@
 const Model = require("./model");
 
 exports.getTimeline = async (req, res, next) => {
+  const { page } = req.query;
   const result = await Model.aggregate([
     { $match: { userId: req.user._id } },
     { $sort: { date: -1 } }
@@ -14,11 +15,10 @@ exports.getPostById = async (req, res, next) => {
 };
 
 exports.createPost = async (req, res, next) => {
-  const { content, type, date } = req.body;
+  const { content, date } = req.body;
 
   const result = await Model.create({
     content,
-    type,
     date,
     userId: req.user._id
   });
