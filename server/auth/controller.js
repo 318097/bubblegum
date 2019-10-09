@@ -1,5 +1,5 @@
 const User = require("../api/user/model");
-const { signToken } = require("./auth");
+const { signToken, validateToken } = require("./auth");
 const Joi = require("@hapi/joi");
 const _ = require("lodash");
 const { OAuth2Client } = require("google-auth-library");
@@ -67,4 +67,10 @@ exports.register = async (req, res) => {
   const result = await User.create(data);
 
   res.send({ result });
+};
+
+exports.checkAccountStatus = async (req, res) => {
+  const { token } = req.body;
+  validateToken(token);
+  res.send("ok");
 };
