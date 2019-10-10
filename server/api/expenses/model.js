@@ -1,18 +1,16 @@
-const mongoose = require('mongoose');
-const schemaName = 'expenses';
+const mongoose = require("mongoose");
+const schemaName = "expenses";
 
 const ExpenseSchema = new mongoose.Schema(
   {
+    date: Date,
     expenseTypeId: mongoose.Types.ObjectId,
     amount: Number,
     message: String,
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     expenseGroup: {
       type: String,
-      enum: [
-        "PERSONAL",
-        "HOME"
-      ],
+      enum: ["PERSONAL", "HOME"],
       default: "PERSONAL"
     }
   },

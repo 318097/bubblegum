@@ -24,7 +24,7 @@ exports.getAllExpenseTypes = async (req, res, next) =>
 
 exports.getAllExpenses = async (req, res, next) => {
   const result = await Model.find({ userId: req.user._id }, null, {
-    sort: { createdAt: -1 }
+    sort: { date: -1 }
   });
   res.send({ expenses: result });
 };
@@ -33,12 +33,9 @@ exports.getMonthlyExpense = async (req, res, next) => {
   const { month } = req.params;
   const { year = moment().year() } = req.query;
 
-  const monthStart = moment(`${month}-${year}`, "MM-YYYY")
-    .startOf("month")
-    .toDate();
-  const monthEnd = moment(`${month}-${year}`, "MM-YYYY")
-    .endOf("month")
-    .toDate();
+  const monthObject = moment(`${month}-${year}`, "MM-YYYY");
+  const monthStart = monthObject.startOf("month").toDate();
+  const monthEnd = monthObject.endOf("month").toDate();
 
   const result = await UserModel.aggregate([
     {
@@ -66,7 +63,7 @@ exports.getMonthlyExpense = async (req, res, next) => {
         expenseTypeId: "$expense.expenseTypeId",
         amount: "$expense.amount",
         userId: "$expense.userId",
-        createdAt: "$expense.createdAt",
+        date: "$expense.date",
         expenseType: "$expenseTypes.name",
         expenseGroup: "$expense.expenseGroup",
         message: "$expense.message"
@@ -75,14 +72,14 @@ exports.getMonthlyExpense = async (req, res, next) => {
     {
       $match: {
         userId: ObjectId(req.user._id),
-        createdAt: {
+        date: {
           $gte: monthStart,
           $lte: monthEnd
         }
       }
     },
     {
-      $sort: { createdAt: -1 }
+      $sort: { date: -1 }
     }
   ]);
   res.send({ expenses: result });
@@ -108,13 +105,20 @@ exports.createExpenseType = async (req, res, next) => {
 };
 
 exports.createExpense = async (req, res, next) => {
-  const { expenseTypeId, amount, message, expenseGroup } = req.body;
+  const {
+    expenseTypeId,
+    amount,
+    message,
+    expenseGroup,
+    date = moment().toString()
+  } = req.body;
   const result = await Model.create({
     expenseTypeId,
     amount,
     message,
     expenseGroup,
-    userId: req.user._id
+    userId: req.user._id,
+    date
   });
   updateCount({ userId: req.user._id, expenseTypeId, value: 1 });
   res.send({ result });
@@ -138,20 +142,11 @@ exports.updateExpenseType = async (req, res, next) => {
 };
 
 exports.updateExpense = async (req, res, next) => {
-  const { expenseTypeId, amount, message } = req.body;
-  const expenseId = req.params.id;
+  const { ...expense } = req.body;
+  const { id: expenseId } = req.params;
   const result = await Model.findOneAndUpdate(
-    {
-      _id: expenseId
-    },
-    {
-      $set: {
-        expenseTypeId,
-        amount,
-        message,
-        userId: req.user._id
-      }
-    }
+    { _id: expenseId },
+    { $set: expense }
   );
   res.send({ result });
 };
