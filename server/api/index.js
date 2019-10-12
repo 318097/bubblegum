@@ -14,7 +14,7 @@ router.get("/test", (req, res) => res.send("Test"));
 
 router.use("/users", userRoutes);
 router.use("/todos", private(), todoRoutes);
-router.use("/posts", postRoutes);
+router.use("/posts", private(), postRoutes);
 router.use("/expenses", private(), expenseRoutes);
 router.use("/diary", private(), diaryRoutes);
 router.use("/snake", snakeGameRoutes);

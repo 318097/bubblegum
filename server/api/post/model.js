@@ -4,13 +4,33 @@ const schemaName = "posts";
 const PostsSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Types.ObjectId, ref: "user" },
-    title: String,
-    content: String,
+    title: {
+      type: String,
+      required: true
+    },
+    content: {
+      type: String,
+      required: true
+    },
+    tags: {
+      type: Array
+    },
     type: {
-      type: String
+      required: true,
+      type: String,
+      enum: ["POST", "DROP"]
     },
     status: String,
-    active: Boolean
+    // should it be displayed
+    active: {
+      type: Boolean,
+      default: false
+    },
+    // live on the site or not
+    posted: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     timestamps: true

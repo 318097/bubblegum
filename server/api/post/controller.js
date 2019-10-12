@@ -3,9 +3,7 @@ const Model = require("./model");
 const { ObjectId } = require("mongoose").Types;
 
 exports.getAllPosts = async (req, res, next) => {
-  const result = await Model.aggregate([
-    { $match: { userId: req.user._id } }
-  ]);
+  const result = await Model.find({});
   res.send({ posts: result });
 };
 
@@ -15,13 +13,11 @@ exports.getPostById = async (req, res, next) => {
 };
 
 exports.createPost = async (req, res, next) => {
-  const {title, content, type } = req.body;
-
+  const { ...post } = req.body;
+  console.log(post);
   const result = await Model.create({
-    title,
-    content,
-    type,
-    userId: req.user._id,
+    ...post,
+    userId: req.user._id
   });
   res.send({ result });
 };
