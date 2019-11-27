@@ -1,20 +1,33 @@
 const Model = require("./model");
 
-const { ObjectId } = require("mongoose").Types;
+const admin = require('firebase-admin');
+const serviceAccount = require('../../../notes-5211e-3465767e96c6.json');
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+const firestore = admin.firestore();
+const notesRef = firestore.collection('notes');
 
 exports.getAllPosts = async (req, res, next) => {
-  const result = await Model.find({});
+  // const result = await Model.find({});
+
+  const querySnapshot = await notesRef.get();
+
+  const result = [];
+  querySnapshot.forEach(doc => result.push({ ...doc.data(), _id: doc.id }));
+
   res.send({ posts: result });
 };
 
 exports.getPostById = async (req, res, next) => {
-  const result = await Model.find({ _id: req.params.id });
+  // const result = await Model.find({ _id: req.params.id });
+  const docRef = await notesRef.doc(req.params.id).get();
+  const result = docRef.data();
   res.send({ post: result });
 };
 
 exports.createPost = async (req, res, next) => {
   const { ...post } = req.body;
-  console.log(post);
   const result = await Model.create({
     ...post,
     userId: req.user._id
