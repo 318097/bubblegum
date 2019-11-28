@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const controller = require("./controller");
-const asyncMiddleware = require("../middleware/async");
+const errorHandlingWrapper = require("../middleware/errorHandling");
 
-router.post("/login", asyncMiddleware(controller.login));
-router.post("/register", asyncMiddleware(controller.register));
-router.post("/account-status", asyncMiddleware(controller.checkAccountStatus));
+router.post("/login", errorHandlingWrapper(controller.login));
+router.post("/register", errorHandlingWrapper(controller.register));
+router.post("/account-status", errorHandlingWrapper(controller.checkAccountStatus));
 
 module.exports = router;

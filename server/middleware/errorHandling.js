@@ -1,4 +1,4 @@
-/* Async middleware to wrap the controller into a try-catch block */
+/* Error handling middleware to wrap the controller into a try-catch block */
 module.exports = handler => {
   return async (req, res, next) => {
     try {
