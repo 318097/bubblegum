@@ -8,16 +8,16 @@ const diaryRoutes = require("./diary/routes");
 const snakeGameRoutes = require("./snake/routes");
 const timelineRoutes = require("./timeline/routes");
 
-const { private } = require("../auth/auth");
+const { protected } = require("../auth/auth");
 
 router.get("/test", (req, res) => res.send("Test"));
 
 router.use("/users", userRoutes);
-router.use("/todos", private(), todoRoutes);
-router.use("/posts", private(), postRoutes);
-router.use("/expenses", private(), expenseRoutes);
-router.use("/diary", private(), diaryRoutes);
+router.use("/todos", protected, todoRoutes);
+router.use("/posts", postRoutes);
+router.use("/expenses", protected, expenseRoutes);
+router.use("/diary", protected, diaryRoutes);
 router.use("/snake", snakeGameRoutes);
-router.use("/timeline", private(), timelineRoutes);
+router.use("/timeline", protected, timelineRoutes);
 
 module.exports = router;

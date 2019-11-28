@@ -14,16 +14,16 @@ const decodeToken = (req, res, next) => {
   checkToken(req, res, next);
 };
 
-const getFreshUser = async (req, res, next) => {
+const extractUser = async (req, res, next) => {
   const user = await User.findById(req.user._id);
-  if (!user) {
-    // if no user is found it was not
-    // it was a valid JWT but didn't decode
-    // to a real user in our DB. Either the user was deleted
-    // since the client got the JWT, or
-    // it was a JWT from some other source
-    return res.status(401).send("Unauthorized");
-  }
+
+  // if no user is found it was not
+  // it was a valid JWT but didn't decode
+  // to a real user in our DB. Either the user was deleted
+  // since the client got the JWT, or
+  // it was a JWT from some other source
+  if (!user) return res.status(401).send("Unauthorized");
+
   // update req.user with fresh user from
   // stale token data
   req.user = user;
@@ -34,6 +34,6 @@ const signToken = _id => jwt.sign({ _id }, config.JWT);
 
 const validateToken = token => jwt.verify(token, config.JWT);
 
-const private = () => [decodeToken, getFreshUser];
+const protected = [decodeToken, extractUser];
 
-module.exports = { decodeToken, getFreshUser, signToken, validateToken, private };
+module.exports = { signToken, validateToken, protected };
