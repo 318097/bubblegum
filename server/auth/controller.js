@@ -17,7 +17,7 @@ const RegisterSchemaValidator = Joi.object().keys({
   mobile: Joi.number()
 });
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   const {
     username,
     password,
@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
   res.json({ token });
 };
 
-exports.register = async (req, res) => {
+const register = async (req, res) => {
   const data = _.pick(req.body, [
     "name",
     "username",
@@ -69,8 +69,10 @@ exports.register = async (req, res) => {
   res.send({ result });
 };
 
-exports.checkAccountStatus = async (req, res) => {
+const checkAccountStatus = async (req, res) => {
   const { token } = req.body;
   validateToken(token);
   res.send("ok");
 };
+
+module.exports = { login, register, checkAccountStatus };
