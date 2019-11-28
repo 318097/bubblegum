@@ -3,7 +3,8 @@ const schemaName = "posts";
 
 const PostsSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Types.ObjectId, ref: "user" },
+    // userId: { type: mongoose.Types.ObjectId, ref: "user" },
+    userId: { type: String },
     title: {
       type: String,
       required: true
@@ -16,7 +17,8 @@ const PostsSchema = new mongoose.Schema(
       type: Array
     },
     type: {
-      required: true,
+      required: false,
+      default: 'POST',
       type: String,
       enum: ["POST", "DROP"]
     },

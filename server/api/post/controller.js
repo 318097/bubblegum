@@ -27,10 +27,10 @@ exports.getPostById = async (req, res, next) => {
 };
 
 exports.createPost = async (req, res, next) => {
-  const { ...post } = req.body;
+  const { userId, ...post } = req.body;
   const result = await Model.create({
     ...post,
-    userId: req.user._id
+    userId: userId || 'admin'
   });
   res.send({ result });
 };

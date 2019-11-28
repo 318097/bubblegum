@@ -30,10 +30,21 @@ const extractUser = async (req, res, next) => {
   next();
 };
 
+const externalAccess = (req, res, next) => {
+  if (!req.headers || !req.headers.hasOwnProperty('external-source'))
+    return res.status(401).send("Unauthorized Access.");
+
+  const source = req.headers['external-source'];
+  const allowedSource = ['NOTES_APP'];
+  if (!allowedSource.includes(source))
+    return res.status(401).send("Unauthorized: Invalid source.");
+  next();
+};
+
 const signToken = _id => jwt.sign({ _id }, config.JWT);
 
 const validateToken = token => jwt.verify(token, config.JWT);
 
 const protected = [decodeToken, extractUser];
 
-module.exports = { signToken, validateToken, protected };
+module.exports = { signToken, validateToken, externalAccess, protected };
