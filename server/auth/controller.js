@@ -36,17 +36,17 @@ const login = async (req, res) => {
     matchQuery["email"] = payload.email;
   } else {
     if (!username || !password)
-      return res.status(400).send("Username & Password is required");
+      return res.status(400).send("Username & Password is required.");
 
     matchQuery["username"] = username;
   }
 
   const user = await User.findOne(matchQuery);
 
-  if (!user) return res.status(401).send("User not found");
+  if (!user) return res.status(401).send("User not found.");
 
   if (!isGoogleAuth && !user.authenticate(password))
-    return res.status(401).send("Invalid username/password");
+    return res.status(401).send("Invalid username/password.");
 
   const token = signToken(user._id);
   res.json({ token });

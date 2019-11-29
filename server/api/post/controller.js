@@ -28,11 +28,9 @@ exports.getPostById = async (req, res, next) => {
 };
 
 exports.createPost = async (req, res, next) => {
-  const { userId, ...post } = req.body;
-  const result = await Model.create({
-    ...post,
-    userId: userId || 'admin'
-  });
+  const { userId, data } = req.body;
+  const posts = [].concat(data).map(item => ({ ...item, userId: userId || 'admin' }));
+  const result = await Model.create(posts);
   res.send({ result });
 };
 
