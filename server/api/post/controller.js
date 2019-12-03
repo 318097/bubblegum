@@ -9,13 +9,32 @@ const Model = require("./model");
 // const notesRef = firestore.collection('notes');
 
 exports.getAllPosts = async (req, res, next) => {
-  const result = await Model.find({});
+  const { search, limit = 10, page, tags = [], type } = req.query;
+  const aggregation = {};
+
+  if (tags.length)
+    aggregation['tags'] = { $in: [].concat(tags) };
+
+  if (search) {
+    const regex = new RegExp(search, 'gi');
+    aggregation['title'] = { $regex: regex }
+  }
+
+  const result = await Model.aggregate([
+    { $match: aggregation },
+    { $skip: (page - 1) * Number(limit) },
+    { $limit: Number(limit) }
+  ]);
+
+  const count = await Model
+    .find(aggregation)
+    .count();
 
   // const querySnapshot = await notesRef.get();
   // const result = [];
   // querySnapshot.forEach(doc => result.push({ ...doc.data(), _id: doc.id }));
 
-  res.send({ posts: result });
+  res.send({ posts: result, meta: { count } });
 };
 
 exports.getPostById = async (req, res, next) => {
