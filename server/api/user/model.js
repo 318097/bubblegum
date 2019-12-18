@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 const UserSchema = new Schema(
   {
@@ -22,44 +22,48 @@ const UserSchema = new Schema(
       required: false
     },
     mobile: {
-      type: String,
+      type: String
+    },
+    contactList: {
+      type: Array
     },
     about: Schema.Types.Mixed,
     snakeGame: Schema.Types.Mixed,
     expenseTypes: {
       type: Array
     }
-  }, {
+  },
+  {
     timestamps: true,
     strict: false
   }
 );
 
-UserSchema.pre('save', function (next) {
-  if (!this.isModified('password')) return next();
+UserSchema.pre("save", function(next) {
+  if (!this.isModified("password")) return next();
   this.password = this.encryptPassword(this.password);
   next();
 });
 
 UserSchema.methods = {
   // check the password on signin
-  authenticate: function (plainTextPassword) {
+  authenticate: function(plainTextPassword) {
     return bcrypt.compareSync(plainTextPassword, this.password);
   },
   // hash the passwords
-  encryptPassword: function (plainTextPassword) {
+  encryptPassword: function(plainTextPassword) {
     if (!plainTextPassword) {
-      return '';
+      return "";
     } else {
       const salt = bcrypt.genSaltSync(10);
       return bcrypt.hashSync(plainTextPassword, salt);
     }
   },
-  toJson: function () {
+  toJson: function() {
     const obj = this.toObject();
     delete obj.password;
     return obj;
   }
 };
 
-module.exports = mongoose.model('user', UserSchema);
+module.exports = mongoose.model("user", UserSchema);

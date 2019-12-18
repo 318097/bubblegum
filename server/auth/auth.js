@@ -30,14 +30,18 @@ const extractUser = async (req, res, next) => {
   next();
 };
 
-const externalAccess = (req, res, next) => {
-  if (!req.headers || !req.headers.hasOwnProperty('external-source'))
+const externalAccess = async (req, res, next) => {
+  if (!req.headers || !req.headers.hasOwnProperty("external-source"))
     return res.status(401).send("Unauthorized Access.");
 
-  const source = req.headers['external-source'];
-  const allowedSource = ['NOTES_APP'];
+  const source = req.headers["external-source"];
+  const allowedSource = ["NOTES_APP", "CHAT_APP"];
   if (!allowedSource.includes(source))
     return res.status(401).send("Unauthorized: Invalid source.");
+
+  const user = await User.findOne({ email: "318097@gmail.com" });
+  req.user = user;
+
   next();
 };
 

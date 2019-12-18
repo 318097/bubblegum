@@ -7,8 +7,9 @@ const expenseRoutes = require("./expenses/routes");
 const diaryRoutes = require("./diary/routes");
 const snakeGameRoutes = require("./snake/routes");
 const timelineRoutes = require("./timeline/routes");
+const chatRoutes = require("./chat/routes");
 
-const { protected } = require("../auth/auth");
+const { protected, externalAccess } = require("../auth/auth");
 
 router.get("/test", (req, res) => res.send("Test"));
 
@@ -19,5 +20,6 @@ router.use("/expenses", protected, expenseRoutes);
 router.use("/diary", protected, diaryRoutes);
 router.use("/snake", snakeGameRoutes);
 router.use("/timeline", protected, timelineRoutes);
+router.use("/chat", externalAccess, chatRoutes);
 
 module.exports = router;
