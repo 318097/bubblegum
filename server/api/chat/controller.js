@@ -1,6 +1,8 @@
 const Model = require("./model");
 const UserModel = require("../user/model");
 
+const { ObjectId } = require("mongoose").Types;
+
 exports.getContactList = async (req, res, next) => {
   const { contactList = [] } = req.user;
   const results = await UserModel.aggregate([
@@ -21,8 +23,11 @@ exports.getUserChat = async (req, res, next) => {
   const { receiverId: receiver } = req.params;
 
   const chat = await Model.aggregate([
-    { $match: { sender, receiver } },
-    { $sort: { createdAt: -1 } }
+    { $match: { sender, receiver: ObjectId(receiver) } },
+    { $sort: { createdAt: 1 } },
+    { $limit: 50 }
   ]);
   res.send({ chat });
 };
+
+exports.createMessage = async message => await Model.create(message);

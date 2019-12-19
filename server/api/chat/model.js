@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
+
 const schemaName = "chat";
+const { ObjectId } = mongoose.Schema.Types;
 
 const ChatSchema = new mongoose.Schema(
   {
@@ -8,21 +10,21 @@ const ChatSchema = new mongoose.Schema(
       required: true
     },
     sender: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       required: true
     },
-    reciever: {
-      type: mongoose.Schema.Types.ObjectId,
+    receiver: {
+      type: ObjectId,
       ref: "user"
+    },
+    delivered: {
+      type: Boolean,
+      default: false
     },
     messageType: {
       type: String,
-      default: 'NORMAL',
-      enum: [
-        'NORMAL',
-        'CONFESS',
-        'FUTURE'
-      ]
+      default: "NORMAL",
+      enum: ["NORMAL", "CONFESS", "FUTURE"]
     }
   },
   {

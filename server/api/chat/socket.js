@@ -1,4 +1,5 @@
-const uuid = require("uuid");
+const { createMessage } = require("./controller");
+
 const {
   CONNECTION,
   USER_INFO,
@@ -12,7 +13,7 @@ let connections = [];
 module.exports = io => {
   io.of("/chat").on(CONNECTION, socket => {
     connections.push({ socketId: socket.id });
-    console.log("New connection..", connections);
+    console.log("New connection..");
 
     socket.on(USER_INFO, ({ userId }) => {
       connections = connections.map(user =>
@@ -25,14 +26,18 @@ module.exports = io => {
       );
     });
 
-    socket.on(MESSAGE, message => {
+    socket.on(MESSAGE, async message => {
       const matchedUser = connections.find(
         user => user.userId === message.receiver
       );
+
+      message.delivered = matchedUser ? true : false;
+      const result = createMessage(message);
+
       if (matchedUser) {
         socket
           .to(matchedUser.socketId)
-          .emit(NEW_MESSAGE, { ...message, _id: Math.random() });
+          .emit(NEW_MESSAGE, { ...message, _id: result._id });
       }
     });
 
