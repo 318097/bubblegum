@@ -9,23 +9,17 @@ const decodeToken = (req, res, next) => {
   if (req.headers && req.headers.hasOwnProperty("authorization")) {
     req.headers.authorization = "Bearer " + req.headers.authorization;
   }
-  // this will call next if token is valid and send error if its not.
-  // It will attached the decoded token to req.user
+  /* this will call next() if token is valid or send error.& attached the decoded token to `req.user` */
   checkToken(req, res, next);
 };
 
 const extractUser = async (req, res, next) => {
   const user = await User.findById(req.user._id);
 
-  // if no user is found it was not
-  // it was a valid JWT but didn't decode
-  // to a real user in our DB. Either the user was deleted
-  // since the client got the JWT, or
-  // it was a JWT from some other source
+  /* if no user is found, it was a valid JWT but didn't decode to a real user in DB
+  Either the user was deleted or it was a JWT from some other source */
   if (!user) return res.status(401).send("Unauthorized");
 
-  // update req.user with fresh user from
-  // stale token data
   req.user = user;
   next();
 };
@@ -39,10 +33,15 @@ const externalAccess = async (req, res, next) => {
   if (!allowedSource.includes(source))
     return res.status(401).send("Unauthorized: Invalid source.");
 
-  const user = await User.findOne({ email: "318097@gmail.com" });
-  req.user = user;
-
-  next();
+  if (req.headers["authorization"]) {
+    const decoded = jwt.verify(req.headers.authorization, config.JWT);
+    req.user = decoded;
+    extractUser(req, res, next);
+  } else {
+    const user = await User.findOne({ email: "318097@gmail.com" });
+    req.user = user;
+    next();
+  }
 };
 
 const signToken = _id => jwt.sign({ _id }, config.JWT);
