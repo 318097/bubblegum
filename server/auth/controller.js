@@ -48,8 +48,11 @@ const login = async (req, res) => {
   if (!isGoogleAuth && !user.authenticate(password))
     return res.status(401).send("Invalid username/password.");
 
+  delete user.password;
   const token = signToken(user._id);
-  res.json({ token });
+  const { name, email, _id: userId } = user;
+
+  res.json({ token, user: { name, email, userId } });
 };
 
 const register = async (req, res) => {

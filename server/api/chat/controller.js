@@ -23,7 +23,12 @@ exports.getUserChat = async (req, res, next) => {
   const { receiverId: receiver } = req.params;
 
   const chat = await Model.aggregate([
-    { $match: { sender, receiver: ObjectId(receiver) } },
+    {
+      $match: {
+        sender: { $in: [sender, ObjectId(receiver)] },
+        receiver: { $in: [sender, ObjectId(receiver)] }
+      }
+    },
     { $sort: { createdAt: 1 } },
     { $limit: 50 }
   ]);
