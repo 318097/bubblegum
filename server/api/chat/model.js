@@ -25,7 +25,9 @@ const ChatSchema = new mongoose.Schema(
       type: String,
       default: "NORMAL",
       enum: ["NORMAL", "CONFESS", "FUTURE"]
-    }
+    },
+    tempId: String,
+    metaInfo: Object
   },
   {
     timestamps: true

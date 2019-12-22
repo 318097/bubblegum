@@ -36,3 +36,15 @@ exports.getUserChat = async (req, res, next) => {
 };
 
 exports.createMessage = async message => await Model.create(message);
+
+exports.updateMessage = async (tempId, _id, messageUpdate) => {
+  const aggregation = [];
+  if (tempId) aggregation.push({ tempId });
+  if (_id) aggregation.push({ _id: Object(_id) });
+
+  return await Model.findOneAndUpdate(
+    { $or: aggregation },
+    { $set: messageUpdate },
+    { new: true }
+  );
+};
