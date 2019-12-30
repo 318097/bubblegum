@@ -12,7 +12,8 @@ logger.log(`Running in ${process.env.NODE_ENV} mode.`);
 
 require("mongoose")
   .connect(config.DB_URL, { useNewUrlParser: true })
-  .then(() => logger.log(`Connected to DB...`));
+  .then(() => logger.log(`Connected to DB...`))
+  .catch(err => logger.log("Error in connecting to MongoDb.", err));
 
 require("./server/api/snake/socket")(io);
 require("./server/api/chat/socket")(io);
