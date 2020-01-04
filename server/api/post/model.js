@@ -13,23 +13,24 @@ const PostsSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    slug: String,
     tags: {
       type: Array
     },
+    tempId: String,
     type: {
       required: false,
-      default: 'POST',
+      default: "POST",
       type: String,
       enum: ["POST", "DROP"]
     },
-    status: String,
-    // should it be displayed
-    active: {
-      type: Boolean,
-      default: false
+    status: {
+      type: String,
+      enum: ["DRAFT", "READY", "POSTED"],
+      required: true,
+      default: "DRAFT"
     },
-    // live on the site or not
-    posted: {
+    visible: {
       type: Boolean,
       default: false
     }

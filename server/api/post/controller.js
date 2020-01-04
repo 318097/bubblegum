@@ -9,16 +9,27 @@ const Model = require("./model");
 // const notesRef = firestore.collection('notes');
 
 exports.getAllPosts = async (req, res, next) => {
-  const { search, limit = 10, page, tags = [], type } = req.query;
+  const {
+    search,
+    limit = 10,
+    page,
+    tags = [],
+    type,
+    status,
+    visible
+  } = req.query;
   const aggregation = {};
 
-  if (tags.length)
-    aggregation['tags'] = { $in: [].concat(tags) };
+  if (tags.length) aggregation["tags"] = { $in: [].concat(tags) };
 
   if (search) {
-    const regex = new RegExp(search, 'gi');
-    aggregation['title'] = { $regex: regex }
+    const regex = new RegExp(search, "gi");
+    aggregation["title"] = { $regex: regex };
   }
+
+  if (status && status !== "ALL") aggregation["status"] = status;
+
+  if (visible) aggregation["visible"] = visible;
 
   const result = await Model.aggregate([
     { $match: aggregation },
@@ -26,9 +37,7 @@ exports.getAllPosts = async (req, res, next) => {
     { $limit: Number(limit) }
   ]);
 
-  const count = await Model
-    .find(aggregation)
-    .count();
+  const count = await Model.find(aggregation).count();
 
   // const querySnapshot = await notesRef.get();
   // const result = [];
@@ -48,13 +57,14 @@ exports.getPostById = async (req, res, next) => {
 
 exports.createPost = async (req, res, next) => {
   const { userId, data } = req.body;
-  const posts = [].concat(data).map(item => ({ ...item, userId: userId || 'admin' }));
+  const posts = []
+    .concat(data)
+    .map(item => ({ ...item, userId: userId || "admin" }));
   const result = await Model.create(posts);
   res.send({ result });
 };
 
 exports.updatePost = async (req, res, next) => {
-  const { title, content, type } = req.body;
   const postId = req.params.id;
   const result = await Model.findOneAndUpdate(
     {
@@ -62,9 +72,7 @@ exports.updatePost = async (req, res, next) => {
     },
     {
       $set: {
-        title,
-        content,
-        type
+        ...req.body
       }
     }
   );
