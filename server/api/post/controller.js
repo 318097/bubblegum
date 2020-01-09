@@ -27,9 +27,17 @@ exports.getAllPosts = async (req, res, next) => {
     aggregation["title"] = { $regex: regex };
   }
 
-  if (status && status !== "ALL") aggregation["status"] = status;
+  if (
+    req.headers.hasOwnProperty("external-source") &&
+    req.headers["external-source"] === "NOTES_APP"
+  ) {
+    if (status && status !== "ALL") aggregation["status"] = status;
 
-  if (visible) aggregation["visible"] = visible;
+    if (visible) aggregation["visible"] = visible;
+  } else {
+    aggregation.status = "POSTED";
+    aggregation.visible = true;
+  }
 
   const result = await Model.aggregate([
     { $match: aggregation },
