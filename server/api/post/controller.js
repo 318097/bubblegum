@@ -1,13 +1,5 @@
 const Model = require("./model");
 
-// const admin = require('firebase-admin');
-// const serviceAccount = require('../../../notes-5211e-3465767e96c6.json');
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount)
-// });
-// const firestore = admin.firestore();
-// const notesRef = firestore.collection('notes');
-
 exports.getAllPosts = async (req, res, next) => {
   const {
     search,
@@ -25,6 +17,7 @@ exports.getAllPosts = async (req, res, next) => {
   if (search) {
     const regex = new RegExp(search, "gi");
     aggregation["title"] = { $regex: regex };
+    aggregation["content"] = { $regex: regex };
   }
 
   if (
@@ -47,18 +40,11 @@ exports.getAllPosts = async (req, res, next) => {
 
   const count = await Model.find(aggregation).count();
 
-  // const querySnapshot = await notesRef.get();
-  // const result = [];
-  // querySnapshot.forEach(doc => result.push({ ...doc.data(), _id: doc.id }));
-
   res.send({ posts: result, meta: { count } });
 };
 
 exports.getPostById = async (req, res, next) => {
   const result = await Model.findOne({ _id: req.params.id });
-
-  // const docRef = await notesRef.doc(req.params.id).get();
-  // const result = docRef.data();
 
   res.send({ post: result });
 };
