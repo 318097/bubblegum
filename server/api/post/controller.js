@@ -12,7 +12,7 @@ exports.getAllPosts = async (req, res, next) => {
   const {
     search,
     limit = 10,
-    page,
+    page = 1,
     tags = [],
     type,
     status,
