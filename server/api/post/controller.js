@@ -1,4 +1,4 @@
-const Model = require("./model");
+const { Posts: Model, TagsModel } = require("./model");
 
 exports.getAllPosts = async (req, res, next) => {
   const {
@@ -79,4 +79,30 @@ exports.deletePost = async (req, res, next) => {
     _id: postId
   });
   res.send({ result });
+};
+
+exports.getAllTags = async (req, res, next) => {
+  const result = await TagsModel.find({});
+  res.send({ tags: result });
+};
+
+exports.createTag = async (req, res, next) => {
+  const { name, color } = req.body;
+  const result = await TagsModel.create({ name, color });
+  res.send({ tag: result });
+};
+
+exports.updateTag = async (req, res, next) => {
+  const { id } = req.params;
+  const result = await TagsModel.findOneAndUpdate(
+    { _id: id },
+    { $set: { ...req.body } }
+  );
+  res.send({ tags: result });
+};
+
+exports.deleteTag = async (req, res, next) => {
+  const { id } = req.params;
+  const result = await TagsModel.findOneAndDelete({ _id: id });
+  res.send({ tags: result });
 };
