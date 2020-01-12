@@ -8,6 +8,7 @@ exports.getAllPosts = async (req, res, next) => {
     tags = [],
     type,
     status,
+    socialStatus,
     visible
   } = req.query;
   const aggregation = {};
@@ -25,6 +26,9 @@ exports.getAllPosts = async (req, res, next) => {
     req.headers["external-source"] === "NOTES_APP"
   ) {
     if (status && status !== "ALL") aggregation["status"] = status;
+
+    if (socialStatus && socialStatus !== "ALL")
+      aggregation["socialStatus"] = socialStatus;
 
     if (visible) aggregation["visible"] = visible;
   } else {
