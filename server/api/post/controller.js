@@ -38,6 +38,7 @@ exports.getAllPosts = async (req, res, next) => {
 
   const result = await Model.aggregate([
     { $match: aggregation },
+    { $sort: { createdAt: -1 } },
     { $skip: (page - 1) * Number(limit) },
     { $limit: Number(limit) }
   ]);
