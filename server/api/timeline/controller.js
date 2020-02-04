@@ -26,7 +26,6 @@ exports.createPost = async (req, res, next) => {
 };
 
 exports.updatePost = async (req, res, next) => {
-  const { content, type } = req.body;
   const PostId = req.params.id;
   const result = await Model.findOneAndUpdate(
     {
@@ -34,8 +33,7 @@ exports.updatePost = async (req, res, next) => {
     },
     {
       $set: {
-        content,
-        type
+        ...req.body
       }
     }
   );
