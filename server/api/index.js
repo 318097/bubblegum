@@ -8,6 +8,7 @@ const diaryRoutes = require("./diary/routes");
 const snakeGameRoutes = require("./snake/routes");
 const timelineRoutes = require("./timeline/routes");
 const chatRoutes = require("./chat/routes");
+const goalsRoutes = require("./goals/routes");
 
 const { protected, externalAccess } = require("../auth/auth");
 
@@ -21,5 +22,6 @@ router.use("/diary", protected, diaryRoutes);
 router.use("/snake", snakeGameRoutes);
 router.use("/timeline", protected, timelineRoutes);
 router.use("/chat", externalAccess, chatRoutes);
+router.use("/goals", protected, goalsRoutes);
 
 module.exports = router;
