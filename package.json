@@ -16,6 +16,7 @@
     "@hapi/joi": "^15.1.0",
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
+    "chalk": "^3.0.0",
     "concurrently": "^4.1.2",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
