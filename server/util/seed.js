@@ -1,23 +1,23 @@
-var User = require('../api/user/userModel');
-var Post = require('../api/post/postModel');
-var Category = require('../api/category/categoryModel');
-var _ = require('lodash');
-var logger = require('./logger');
+var User = require("../api/user/userModel");
+var Post = require("../api/post/postModel");
+var Category = require("../api/category/categoryModel");
+var _ = require("lodash");
+const logger = require("./logger");
 
-logger.log('Seeding the Database');
+logger.log("Seeding the Database");
 
 var users = [
-  { username: 'Jimmylo', password: 'test' },
-  { username: 'Xoko', password: 'test' },
-  { username: 'katamon', password: 'test' }
+  { username: "Jimmylo", password: "test" },
+  { username: "Xoko", password: "test" },
+  { username: "katamon", password: "test" }
 ];
 
-var categories = [{ name: 'intros' }, { name: 'angular' }, { name: 'UI/UX' }];
+var categories = [{ name: "intros" }, { name: "angular" }, { name: "UI/UX" }];
 
 var posts = [
-  { title: 'Learn angular 2 today', text: 'Angular to is so dope' },
-  { title: '10 reasons you should love IE7', text: 'IE7 is so amazing' },
-  { title: 'Why we switched to Go', text: 'go is dope' }
+  { title: "Learn angular 2 today", text: "Angular to is so dope" },
+  { title: "10 reasons you should love IE7", text: "IE7 is so amazing" },
+  { title: "Why we switched to Go", text: "go is dope" }
 ];
 
 var createDoc = function(model, doc) {
@@ -29,7 +29,7 @@ var createDoc = function(model, doc) {
 };
 
 var cleanDB = function() {
-  logger.log('... cleaning the DB');
+  logger.log("... cleaning the DB");
   var cleanPromises = [User, Category, Post].map(function(model) {
     return model.remove().exec();
   });
@@ -81,7 +81,7 @@ var createPosts = function(data) {
       );
     })
     .then(function() {
-      return 'Seeded DB with 3 Posts, 3 Users, 3 Categories';
+      return "Seeded DB with 3 Posts, 3 Users, 3 Categories";
     });
 };
 
