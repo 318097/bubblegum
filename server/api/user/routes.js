@@ -1,21 +1,28 @@
-const router = require('express').Router();
-const controller = require('./controller');
-const { protected } = require('../../auth/auth');
+const router = require("express").Router();
+const controller = require("./controller");
+const { protected } = require("../../auth/auth");
+const errorHandlingWrapper = require("../../middleware/errorHandling");
 
-router.param('id', controller.findById);
-router.get('/me', protected, controller.me);
-router.get('/:username/resume', controller.getResume);
-router.put('/resume', protected, controller.updateResume);
+// router.param("id", (req, res, next) => {
+// Middleware for routes which contain id param.
+// console.log("param route...");
+// next();
+// });
 
-router
-  .route('/')
-  .get(controller.getAll)
-  .post(controller.create);
+router.get("/me", protected, controller.me);
+router.get("/:username/resume", controller.getResume);
+router.get("/", controller.getAll);
+router.get("/:id", protected, controller.getOne);
 
-router
-  .route('/:id')
-  .get(protected, controller.getOne)
-  .put(protected, controller.update)
-  .delete(protected, controller.delete);
+router.put(
+  "/:id/settings",
+  protected,
+  errorHandlingWrapper(controller.updateSettings)
+);
+router.put("/resume", protected, controller.updateResume);
+router.put("/:id", protected, controller.update);
+
+router.post("/", controller.create);
+router.delete("/:id", protected, controller.delete);
 
 module.exports = router;

@@ -1,15 +1,15 @@
-const Model = require('./model');
-const _ = require('lodash');
-const signToken = require('../../auth/auth').signToken;
+const Model = require("./model");
+const _ = require("lodash");
+const signToken = require("../../auth/auth").signToken;
 
 exports.findById = (req, res, next, id) => {
   Model.findById(id)
-    .select('-password')
+    .select("-password")
     .exec()
     .then(
       user => {
         if (!user) {
-          next(new Error('No user found'));
+          next(new Error("No user found"));
         } else {
           req.user = user;
         }
@@ -21,7 +21,7 @@ exports.findById = (req, res, next, id) => {
 exports.create = (req, res, next) => {
   const newUser = new Model(req.body);
 
-  newUser.save(function (err, user) {
+  newUser.save(function(err, user) {
     if (err) {
       return next(err);
     }
@@ -33,12 +33,12 @@ exports.create = (req, res, next) => {
 
 exports.getAll = (req, res, next) => {
   Model.find({})
-    .select('-password')
+    .select("-password")
     .exec()
     .then(users => res.send(users));
 };
 
-exports.getOne = function (req, res, next) {
+exports.getOne = function(req, res, next) {
   const user = req.user;
   res.json(user);
 };
@@ -50,13 +50,29 @@ exports.update = (req, res, next) => {
 
   _.merge(user, update);
 
-  user.save(function (err, saved) {
+  user.save(function(err, saved) {
     if (err) {
       next(err);
     } else {
       res.json(saved.toJson());
     }
   });
+};
+
+exports.updateSettings = async (req, res, next) => {
+  const { user, source = "atom" } = req;
+  const [setting] = Object.entries(req.body);
+  const [settingKey, value] = setting;
+  const key = `settings.${source}.${settingKey}`;
+  const result = await Model.findByIdAndUpdate(
+    { _id: user._id },
+    {
+      $set: {
+        [key]: value
+      }
+    }
+  );
+  res.send(result);
 };
 
 exports.delete = (req, res, next) => {
@@ -69,7 +85,7 @@ exports.delete = (req, res, next) => {
   });
 };
 
-exports.me = function (req, res) {
+exports.me = function(req, res) {
   res.json(req.user.toJson());
 };
 
@@ -77,12 +93,12 @@ exports.getResume = async (req, res) => {
   const { username } = req.params;
   const user = await Model.findOne({ username });
 
-  if (!user) res.send({ message: 'No user found.' });
+  if (!user) res.send({ message: "No user found." });
 
   res.json(user.about ? user.about : {});
 };
 
-exports.updateResume = function (req, res) {
+exports.updateResume = function(req, res) {
   let user = req.user;
   user.about = req.body;
   user.save((err, saved) => {
