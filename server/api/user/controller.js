@@ -59,6 +59,12 @@ exports.update = (req, res, next) => {
   });
 };
 
+exports.getSettings = async (req, res, next) => {
+  const { user, source = "atom" } = req;
+  const settings = _.get(user, `settings.${source}`, {});
+  res.send({ settings });
+};
+
 exports.updateSettings = async (req, res, next) => {
   const { user, source = "atom" } = req;
   const [setting] = Object.entries(req.body);

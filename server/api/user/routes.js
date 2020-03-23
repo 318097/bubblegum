@@ -13,6 +13,11 @@ router.get("/me", protected, controller.me);
 router.get("/:username/resume", controller.getResume);
 router.get("/", controller.getAll);
 router.get("/:id", protected, controller.getOne);
+router.get(
+  "/:id/settings",
+  protected,
+  errorHandlingWrapper(controller.getSettings)
+);
 
 router.put(
   "/:id/settings",
