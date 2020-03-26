@@ -7,11 +7,11 @@ const PostsSchema = new mongoose.Schema(
     userId: { type: String },
     title: {
       type: String,
-      required: true
+      required: false
     },
     content: {
       type: String,
-      required: true
+      required: false
     },
     slug: String,
     tags: {
