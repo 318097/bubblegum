@@ -21,10 +21,7 @@ exports.getAllPosts = async (req, res, next) => {
     aggregation["content"] = { $regex: regex };
   }
 
-  if (
-    req.headers.hasOwnProperty("external-source") &&
-    req.headers["external-source"] === "NOTES_APP"
-  ) {
+  if (req.source === "NOTES_APP") {
     if (status && status !== "ALL") aggregation["status"] = status;
 
     if (socialStatus && socialStatus !== "ALL")
@@ -38,8 +35,8 @@ exports.getAllPosts = async (req, res, next) => {
 
   const result = await Model.aggregate([
     { $match: aggregation },
-    { $sort: { createdAt: -1 } },
-    { $skip: (page - 1) * Number(limit) },
+    { $sort: { createdAt: -1, _id: 1 } }, // need to sort by _id because when bulk creation is done, all the post have same timestamp and during fetching it results in different sort order if its only sorted by `createdAt`
+    { $skip: (Number(page) - 1) * Number(limit) },
     { $limit: Number(limit) }
   ]);
 
