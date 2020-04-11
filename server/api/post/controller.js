@@ -9,7 +9,7 @@ exports.getAllPosts = async (req, res, next) => {
     type,
     status,
     socialStatus,
-    visible
+    visible,
   } = req.query;
   const aggregation = {};
 
@@ -35,9 +35,9 @@ exports.getAllPosts = async (req, res, next) => {
 
   const result = await Model.aggregate([
     { $match: aggregation },
-    { $sort: { createdAt: -1, _id: 1 } }, // need to sort by _id because when bulk creation is done, all the post have same timestamp and during fetching it results in different sort order if its only sorted by `createdAt`
+    { $sort: { _id: 1, createdAt: -1 } }, // need to sort by _id because when bulk creation is done, all the post have same timestamp and during fetching it results in different sort order if its only sorted by `createdAt`
     { $skip: (Number(page) - 1) * Number(limit) },
-    { $limit: Number(limit) }
+    { $limit: Number(limit) },
   ]);
 
   const count = await Model.find(aggregation).count();
@@ -55,7 +55,7 @@ exports.createPost = async (req, res, next) => {
   const { userId, data } = req.body;
   const posts = []
     .concat(data)
-    .map(item => ({ ...item, userId: userId || "admin" }));
+    .map((item) => ({ ...item, userId: userId || "admin" }));
   const result = await Model.create(posts);
   res.send({ result });
 };
@@ -64,12 +64,12 @@ exports.updatePost = async (req, res, next) => {
   const postId = req.params.id;
   const result = await Model.findOneAndUpdate(
     {
-      _id: postId
+      _id: postId,
     },
     {
       $set: {
-        ...req.body
-      }
+        ...req.body,
+      },
     }
   );
   res.send({ result });
@@ -78,7 +78,7 @@ exports.updatePost = async (req, res, next) => {
 exports.deletePost = async (req, res, next) => {
   const postId = req.params.id;
   const result = await Model.findOneAndDelete({
-    _id: postId
+    _id: postId,
   });
   res.send({ result });
 };
