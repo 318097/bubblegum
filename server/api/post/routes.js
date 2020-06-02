@@ -10,6 +10,7 @@ router.put("/tags/:id", errorHandlingWrapper(controller.updateTag));
 router.delete("/tags/:id", errorHandlingWrapper(controller.deleteTag));
 
 router.get("/", errorHandlingWrapper(controller.getAllPosts));
+router.get("/random", errorHandlingWrapper(controller.getRelatedPosts));
 router.get("/:id", errorHandlingWrapper(controller.getPostById));
 router.post("/", externalAccess, errorHandlingWrapper(controller.createPost));
 router.put("/:id", externalAccess, errorHandlingWrapper(controller.updatePost));

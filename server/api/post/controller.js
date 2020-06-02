@@ -1,5 +1,14 @@
 const { Posts: Model, TagsModel } = require("./model");
 
+exports.getRelatedPosts = async (req, res, next) => {
+  const { tags = [] } = req.params;
+  const posts = await Model.aggregate([
+    { $match: { status: "POSTED", visible: true } },
+    { $sample: { size: 5 } },
+  ]);
+  res.send({ posts });
+};
+
 exports.getAllPosts = async (req, res, next) => {
   const {
     search,
