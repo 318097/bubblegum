@@ -3,12 +3,6 @@ const controller = require("./controller");
 const { protected } = require("../../auth/auth");
 const errorHandlingWrapper = require("../../middleware/errorHandling");
 
-// router.param("id", (req, res, next) => {
-// Middleware for routes which contain id param.
-// console.log("param route...");
-// next();
-// });
-
 router.get("/me", protected, controller.me);
 router.get("/:username/resume", controller.getResume);
 router.get("/", controller.getAll);

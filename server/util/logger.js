@@ -6,7 +6,7 @@ const chalkLog = chalk.green;
 
 const logger = {
   log: (...args) => console.log(chalkLog("[LOG]:", ...args)),
-  error: (...error) => console.log(chalkError("[ERROR]:", ...error))
+  error: (...error) => console.log(chalkError("[ERROR]:", ...error)),
 };
 
 module.exports = logger;
