@@ -8,13 +8,11 @@ const config = require("../../config");
 const client = new OAuth2Client(config.GOOGLE_LOGIN_CLIENT_ID);
 
 const RegisterSchemaValidator = Joi.object().keys({
-  name: Joi.string().required(),
-  username: Joi.string().required(),
+  name: Joi.string(),
+  username: Joi.string(),
   password: Joi.string().required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2 })
-    .required(),
-  mobile: Joi.number()
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
+  mobile: Joi.number(),
 });
 
 const login = async (req, res) => {
@@ -22,14 +20,14 @@ const login = async (req, res) => {
     username,
     password,
     isGoogleAuth,
-    goggleAuthToken = false
+    goggleAuthToken = false,
   } = req.body;
   const matchQuery = {};
 
   if (isGoogleAuth) {
     const ticket = await client.verifyIdToken({
       idToken: goggleAuthToken,
-      audience: config.GOOGLE_LOGIN_CLIENT_ID
+      audience: config.GOOGLE_LOGIN_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
@@ -61,21 +59,24 @@ const register = async (req, res) => {
     "username",
     "password",
     "email",
-    "mobile"
+    "mobile",
   ]);
   const { error } = Joi.validate(data, RegisterSchemaValidator);
 
   if (error) return res.status(400).send(error.details[0].message);
 
-  const result = await User.create(data);
+  const result = await User.create(req.body);
 
   res.send({ result });
 };
 
 const checkAccountStatus = async (req, res) => {
-  const { token } = req.body;
-  validateToken(token);
-  res.send("ok");
+  // const { token } = req.body;
+  // validateToken(token);
+  const userInfo = { ..._.get(req, "user._doc", {}) };
+  delete userInfo.password;
+  // const data = _.pick(req.user, ["username", "email", "type", "email"]);
+  res.send({ status: "ok", ...userInfo });
 };
 
 module.exports = { login, register, checkAccountStatus };
