@@ -12,8 +12,7 @@ router.get(
   errorHandlingWrapper(controller.showAllBookingsForBuyer)
 );
 router.post("/booking", errorHandlingWrapper(controller.createBooking));
-// router.put('/:id', errorHandlingWrapper(controller.updateBooking));
-router.put("/booking/:id/stamp", errorHandlingWrapper(controller.stampBooking));
+router.put("/booking/:id", errorHandlingWrapper(controller.updateBooking));
 // router.delete('/:id', errorHandlingWrapper(controller.cancelBooking));
 
 module.exports = router;
