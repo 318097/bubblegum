@@ -1,71 +1,40 @@
-const Model = require("./model");
 const _ = require("lodash");
+const Model = require("./model");
 const signToken = require("../../auth/auth").signToken;
 
-exports.findById = (req, res, next, id) => {
-  Model.findById(id)
-    .select("-password")
-    .exec()
-    .then(
-      user => {
-        if (!user) {
-          next(new Error("No user found"));
-        } else {
-          req.user = user;
-        }
-      },
-      err => next(err)
-    );
+exports.createUser = async (req, res) => {
+  const user = await Model.create({ ...req.body });
+  res.send(user);
 };
 
-exports.create = (req, res, next) => {
-  const newUser = new Model(req.body);
-
-  newUser.save(function(err, user) {
-    if (err) {
-      return next(err);
-    }
-
-    const token = signToken(user._id);
-    res.json({ token: token });
-  });
+exports.getAll = async (req, res) => {
+  const users = await Model.find({}).select("-password").exec();
+  res.send(users);
 };
 
-exports.getAll = (req, res, next) => {
-  Model.find({})
-    .select("-password")
-    .exec()
-    .then(users => res.send(users));
+exports.updateUser = async (req, res) => {
+  const userId = req.params.id;
+  const data = req.body;
+  const update = await Model.findOneAndUpdate(
+    { _id: userId },
+    { $set: data },
+    { new: true }
+  );
+  res.send(update);
 };
 
-exports.getOne = function(req, res, next) {
-  const user = req.user;
-  res.json(user);
+exports.deleteUser = async (req, res) => {
+  const result = await Model.findByIdAndDelete({ _id: req.params.id });
+  res.send(result);
 };
 
-exports.update = (req, res, next) => {
-  const user = req.user;
-
-  const update = req.body;
-
-  _.merge(user, update);
-
-  user.save(function(err, saved) {
-    if (err) {
-      next(err);
-    } else {
-      res.json(saved.toJson());
-    }
-  });
-};
-
-exports.getSettings = async (req, res, next) => {
+exports.getSettings = async (req, res) => {
   const { user, source = "atom" } = req;
   const settings = _.get(user, `settings.${source}`, {});
   res.send({ settings });
 };
 
-exports.updateSettings = async (req, res, next) => {
+exports.updateSettings = async (req, res) => {
   const { user, source = "atom" } = req;
   const [setting] = Object.entries(req.body);
   const [settingKey, value] = setting;
@@ -74,44 +43,9 @@ exports.updateSettings = async (req, res, next) => {
     { _id: user._id },
     {
       $set: {
-        [key]: value
-      }
+        [key]: value,
+      },
     }
   );
   res.send(result);
-};
-
-exports.delete = (req, res, next) => {
-  req.user.remove((err, removed) => {
-    if (err) {
-      next(err);
-    } else {
-      res.json(removed);
-    }
-  });
-};
-
-exports.me = function(req, res) {
-  res.json(req.user.toJson());
-};
-
-exports.getResume = async (req, res) => {
-  const { username } = req.params;
-  const user = await Model.findOne({ username });
-
-  if (!user) res.send({ message: "No user found." });
-
-  res.json(user.about ? user.about : {});
-};
-
-exports.updateResume = function(req, res) {
-  let user = req.user;
-  user.about = req.body;
-  user.save((err, saved) => {
-    if (err) {
-      next(err);
-    } else {
-      res.json(saved.toJson());
-    }
-  });
 };
