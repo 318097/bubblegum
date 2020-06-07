@@ -29,22 +29,23 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.getSettings = async (req, res) => {
-  const { user, source = "atom" } = req;
+  const { user, source = "DEFAULT" } = req;
   const settings = _.get(user, `settings.${source}`, {});
   res.send({ settings });
 };
 
 exports.updateSettings = async (req, res) => {
-  const { user, source = "atom" } = req;
-  const [setting] = Object.entries(req.body);
-  const [settingKey, value] = setting;
-  const key = `settings.${source}.${settingKey}`;
+  const { user, source = "DEFAULT" } = req;
+  const key = `settings.${source}`;
   const result = await Model.findByIdAndUpdate(
     { _id: user._id },
     {
       $set: {
-        [key]: value,
+        [key]: req.body,
       },
+    },
+    {
+      new: true,
     }
   );
   res.send(result);
