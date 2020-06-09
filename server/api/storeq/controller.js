@@ -1,6 +1,7 @@
 const moment = require("moment");
 const Joi = require("@hapi/joi");
-var admin = require("firebase-admin");
+const admin = require("firebase-admin");
+const _ = require("lodash");
 
 const { ObjectId } = require("mongoose").Types;
 
@@ -93,7 +94,8 @@ const removeFromQueue = ({ bookingId, storeId }) => {
   }
 };
 
-const getWaitingNo = (storeId) => (cache[storeId] ? cache[storeId].length : 1);
+const getWaitingNo = (storeId) =>
+  cache[storeId] ? cache[storeId].length + 1 : 1;
 
 exports.getAllStores = async (req, res, next) => {
   const result = await UserModel.find({ type: "SELLER" });
