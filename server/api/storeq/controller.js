@@ -130,7 +130,7 @@ exports.createBooking = async (req, res, next) => {
     status: "WAITING",
     waitingNo,
   });
-  const booking = { ...result.toObject(), ...req.user.toObject() };
+  const booking = { ...result.toObject(), ...req.user };
   addToCache({ booking, storeId });
   res.send({ booking });
 };
