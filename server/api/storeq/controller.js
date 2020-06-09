@@ -20,15 +20,15 @@ const sendNotificaiton = async (userList = []) => {
     console.log("notify::", userList);
     const fcm = []
       .concat(userList)
-      .filter((userList) => !!userList.token)
+      .filter((userList) => !!userList.clientToken)
       .map((user) => {
-        const { message, token } = user;
+        const { message, clientToken } = user;
         const messageObj = {
           notification: {
             title: "StoreQ",
             body: message,
           },
-          token,
+          token: clientToken,
         };
 
         return admin.messaging().send(messageObj);
@@ -41,6 +41,9 @@ const sendNotificaiton = async (userList = []) => {
 };
 
 const cache = {};
+
+const logCache = () =>
+  logger.test("[CACHE]: ", JSON.stringify(cache, undefined, 2));
 
 const initializeCache = async () => {
   const waitingList = await Model.aggregate([
@@ -63,16 +66,15 @@ const initializeCache = async () => {
         storeId: 1,
         waitingNo: 1,
         userId: 1,
-        token: "$user.token",
+        clientToken: "$user.clientToken",
       },
     },
   ]);
   waitingList.forEach((booking) => {
-    cache[booking.storeId] = cache[booking.storeId]
-      ? [...cache[booking.storeId], booking]
-      : [booking];
+    const storeId = String(booking.storeId);
+    cache[storeId] = cache[storeId] ? [...cache[storeId], booking] : [booking];
   });
-  logger.test("cache", JSON.stringify(cache, undefined, 2));
+  logCache();
 };
 
 setTimeout(initializeCache, 1000);
@@ -83,7 +85,10 @@ const addToCache = ({ booking, storeId }) =>
 const removeFromQueue = ({ bookingId, storeId }) => {
   if (cache[storeId]) {
     const removed = cache[storeId].shift();
-    sendNotificaiton({ token: removed.token, message: "Completed" });
+    sendNotificaiton({
+      clientToken: removed.clientToken,
+      message: "Completed",
+    });
     return removed._id === bookingId;
   }
 };
@@ -130,8 +135,12 @@ exports.createBooking = async (req, res, next) => {
     status: "WAITING",
     waitingNo,
   });
-  const booking = { ...result.toObject(), ...req.user };
+  const booking = {
+    ...result.toObject(),
+    clientToken: _.get(req, "user.clientToken", ""),
+  };
   addToCache({ booking, storeId });
+  logCache();
   res.send({ booking });
 };
 
@@ -155,8 +164,11 @@ exports.updateBooking = async (req, res) => {
   );
   removeFromQueue({ bookingId, storeId });
 
+  const userIdsToUpdate = cache[storeId].map((booking) =>
+    String(booking.userId)
+  );
   await Model.updateMany(
-    { _id: { $in: [cache[storeId]] } },
+    { _id: { $in: [userIdsToUpdate] } },
     {
       $inc: {
         waitingNo: -1,
@@ -164,15 +176,15 @@ exports.updateBooking = async (req, res) => {
     }
   );
 
-  // const userList = cache[storeId].map((booking) => {
-  //   return {
-  //     token: booking.token,
-  //     message: `You waiting list is ${Number(booking.waitingNo) - 1}`,
-  //   };
-  // });
+  const userList = cache[storeId].map((booking) => {
+    return {
+      clientToken: booking.clientToken,
+      message: `You waiting list is ${Number(booking.waitingNo) - 1}`,
+    };
+  });
 
-  // await sendNotificaiton(userList);
-
+  await sendNotificaiton(userList);
+  logCache();
   res.send({ result });
 };
 
