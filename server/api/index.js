@@ -9,7 +9,7 @@ const snakeGameRoutes = require("./snake/routes");
 const timelineRoutes = require("./timeline/routes");
 const chatRoutes = require("./chat/routes");
 const goalsRoutes = require("./goals/routes");
-const storeqRoutes = require("./storeq/routes");
+// const storeqRoutes = require("./storeq/routes");
 
 const { protected, externalAccess } = require("../auth/auth");
 
@@ -24,6 +24,6 @@ router.use("/snake", snakeGameRoutes);
 router.use("/timeline", protected, timelineRoutes);
 router.use("/chat", externalAccess, chatRoutes);
 router.use("/goals", protected, goalsRoutes);
-router.use("/storeq", protected, storeqRoutes);
+// router.use("/storeq", protected, storeqRoutes);
 
 module.exports = router;
