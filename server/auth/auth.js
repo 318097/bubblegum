@@ -14,7 +14,7 @@ const decodeToken = (req, res, next) => {
 };
 
 const extractUser = async (req, res, next) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user._id).lean();
 
   /* if no user is found, it was a valid JWT but didn't decode to a real user in DB
   Either the user was deleted or it was a JWT from some other source */
@@ -44,9 +44,9 @@ const externalAccess = async (req, res, next) => {
   }
 };
 
-const signToken = _id => jwt.sign({ _id }, config.JWT);
+const signToken = (_id) => jwt.sign({ _id }, config.JWT);
 
-const validateToken = token => jwt.verify(token, config.JWT);
+const validateToken = (token) => jwt.verify(token, config.JWT);
 
 const protected = [decodeToken, extractUser];
 

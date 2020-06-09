@@ -19,8 +19,8 @@ const login = async (req, res) => {
   const {
     username,
     password,
-    isGoogleAuth,
-    goggleAuthToken = false,
+    isGoogleAuth = false,
+    goggleAuthToken,
   } = req.body;
   const matchQuery = {};
 
@@ -39,18 +39,19 @@ const login = async (req, res) => {
     matchQuery["username"] = username;
   }
 
-  const user = await User.findOne(matchQuery);
+  let user = await User.findOne(matchQuery);
 
   if (!user) return res.status(401).send("User not found.");
 
   if (!isGoogleAuth && !user.authenticate(password))
     return res.status(401).send("Invalid username/password.");
 
+  user = user.toObject();
   delete user.password;
-  const token = signToken(user._id);
-  const { name, email, _id: userId } = user;
 
-  res.json({ token, user: { name, email, userId } });
+  const token = signToken(user._id);
+
+  res.send({ token, ...user });
 };
 
 const register = async (req, res) => {
@@ -71,12 +72,11 @@ const register = async (req, res) => {
 };
 
 const checkAccountStatus = async (req, res) => {
+  const { user } = req;
   // const { token } = req.body;
   // validateToken(token);
-  const userInfo = { ..._.get(req, "user._doc", {}) };
-  delete userInfo.password;
-  // const data = _.pick(req.user, ["username", "email", "type", "email"]);
-  res.send({ status: "ok", ...userInfo });
+  delete user.password;
+  res.send({ status: "ok", ...user });
 };
 
 module.exports = { login, register, checkAccountStatus };
