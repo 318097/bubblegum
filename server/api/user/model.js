@@ -6,53 +6,54 @@ const UserSchema = new Schema(
   {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     username: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
     },
     password: {
       type: String,
-      required: true
+      required: true,
     },
     email: {
       type: String,
-      required: false
+      required: false,
     },
     mobile: {
-      type: String
+      type: String,
     },
     contactList: {
-      type: Array
+      type: Array,
     },
     about: Schema.Types.Mixed,
     snakeGame: Schema.Types.Mixed,
     expenseTypes: {
-      type: Array
+      type: Array,
     },
-    settings: Schema.Types.Mixed
+    settings: Schema.Types.Mixed,
   },
   {
     timestamps: true,
-    strict: false
+    strict: false,
   }
 );
 
-UserSchema.pre("save", function(next) {
+UserSchema.pre("save", function (next) {
   if (!this.isModified("password")) return next();
-  this.password = this.encryptPassword(this.password);
+  // this.password = this.encryptPassword(this.password);
   next();
 });
 
 UserSchema.methods = {
   // check the password on signin
-  authenticate: function(plainTextPassword) {
-    return bcrypt.compareSync(plainTextPassword, this.password);
+  authenticate: function (plainTextPassword) {
+    return plainTextPassword === this.password;
+    // return bcrypt.compareSync(plainTextPassword, this.password);
   },
   // hash the passwords
-  encryptPassword: function(plainTextPassword) {
+  encryptPassword: function (plainTextPassword) {
     if (!plainTextPassword) {
       return "";
     } else {
@@ -60,11 +61,11 @@ UserSchema.methods = {
       return bcrypt.hashSync(plainTextPassword, salt);
     }
   },
-  toJson: function() {
+  toJson: function () {
     const obj = this.toObject();
     delete obj.password;
     return obj;
-  }
+  },
 };
 
 module.exports = mongoose.model("user", UserSchema);
