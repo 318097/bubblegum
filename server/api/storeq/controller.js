@@ -16,18 +16,19 @@ admin.initializeApp({
   databaseURL: "https://storeq-d518c.firebaseio.com",
 });
 
-const sendNotificaiton = async (userList = []) => {
+const sendNotificaiton = async (notifyList = []) => {
   try {
-    console.log("notify::", userList);
+    console.log("notify::", notifyList);
     const fcm = []
-      .concat(userList)
-      .filter((userList) => !!userList.clientToken)
-      .map((user) => {
-        const { message, clientToken } = user;
+      .concat(notifyList)
+      .filter((notifyList) => !!notifyList.clientToken)
+      .map((item) => {
+        const { message, clientToken, action } = item;
         const messageObj = {
           notification: {
             title: "StoreQ",
             body: message,
+            action,
           },
           token: clientToken,
         };
@@ -88,7 +89,9 @@ const removeFromQueue = ({ bookingId, storeId }) => {
     const removed = cache[storeId].shift();
     sendNotificaiton({
       clientToken: removed.clientToken,
-      message: "Completed",
+      message: "Completed Q",
+      title: removed.storeName,
+      action: "SUCCESS",
     });
     return removed._id === bookingId;
   }
@@ -121,13 +124,13 @@ exports.showAllBookingsForStore = async (req, res, next) => {
   res.send({ bookings: result });
 };
 
-exports.showAllBookingsForBuyer = async (req, res, next) => {
+exports.showAllBookingsForBuyer = async (req, res) => {
   const userId = req.params.id;
   const result = await Model.find({ userId: ObjectId(userId) });
   res.send({ orders: result });
 };
 
-exports.createBooking = async (req, res, next) => {
+exports.createBooking = async (req, res) => {
   const { storeId, userId } = req.body;
   const waitingNo = getWaitingNo(storeId);
 
@@ -178,7 +181,7 @@ exports.updateBooking = async (req, res) => {
     }
   );
 
-  const userList = cache[storeId].map((booking) => {
+  const userList = _.get(cache, storeId, []).map((booking) => {
     return {
       clientToken: booking.clientToken,
       message: `You waiting list is ${Number(booking.waitingNo) - 1}`,
