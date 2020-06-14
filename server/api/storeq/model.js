@@ -7,12 +7,21 @@ const StoreqSchema = new mongoose.Schema(
     userId: { type: mongoose.Types.ObjectId, ref: "user" },
     status: {
       type: String,
-      enum: ["INITIATE", "WAITING", "ACTIVE", "COMPLETE", "CANCELLED"],
+      enum: [
+        "INITIATE",
+        "ACTIVE",
+        "WAITING",
+        "COMPLETE",
+        "CANCELLED",
+        "SKIPPED",
+      ],
       default: "INITIATE",
     },
     completedOn: Date,
-    active: Boolean,
     waitingNo: Number,
+    initialWaitingNo: Number,
+    ttf: Number,
+    startedOn: Date,
   },
   {
     timestamps: true,

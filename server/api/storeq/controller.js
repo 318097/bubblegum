@@ -1,111 +1,28 @@
 const moment = require("moment");
-const Joi = require("@hapi/joi");
-const admin = require("firebase-admin");
 const _ = require("lodash");
 
 const { ObjectId } = require("mongoose").Types;
 
-const logger = require("../../util/logger");
 const Model = require("./model");
 const UserModel = require("../user/model");
+const {
+  sendNotificaiton,
+  getCurrentDate,
+  getWaitingInfo,
+  addToCache,
+  updateInCache,
+  getFromCache,
+  cache,
+  logCache,
+  removeFromCache,
+} = require("./utils");
 
-const serviceAccount = require("../../../storeq-d518c-firebase-adminsdk-cv2ze-0b870f5cf0.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://storeq-d518c.firebaseio.com",
-});
-
-const sendNotificaiton = async (notifyList = []) => {
-  try {
-    console.log("notify::", notifyList);
-    const fcm = []
-      .concat(notifyList)
-      .filter((notifyList) => !!notifyList.clientToken)
-      .map((item) => {
-        const { message, clientToken, action } = item;
-        const messageObj = {
-          notification: {
-            title: "StoreQ",
-            body: message,
-            action,
-          },
-          token: clientToken,
-        };
-
-        return admin.messaging().send(messageObj);
-      });
-
-    return await Promise.all(fcm);
-  } catch (error) {
-    console.log("Error sending message:", error);
-  }
-};
-
-const cache = {};
-
-const logCache = () =>
-  logger.test("[CACHE]: ", JSON.stringify(cache, undefined, 2));
-
-const initializeCache = async () => {
-  const waitingList = await Model.aggregate([
-    { $match: { status: "WAITING" } },
-    {
-      $lookup: {
-        from: "users",
-        localField: "userId",
-        foreignField: "_id",
-        as: "user",
-      },
-    },
-    {
-      $unwind: { path: "$user", preserveNullAndEmptyArrays: true },
-    },
-    {
-      $project: {
-        _id: 1,
-        status: 1,
-        storeId: 1,
-        waitingNo: 1,
-        userId: 1,
-        clientToken: "$user.clientToken",
-      },
-    },
-  ]);
-  waitingList.forEach((booking) => {
-    const storeId = String(booking.storeId);
-    cache[storeId] = cache[storeId] ? [...cache[storeId], booking] : [booking];
-  });
-  logCache();
-};
-
-setTimeout(initializeCache, 1000);
-
-const addToCache = ({ booking, storeId }) =>
-  (cache[storeId] = cache[storeId] ? [...cache[storeId], booking] : [booking]);
-
-const removeFromQueue = ({ bookingId, storeId }) => {
-  if (cache[storeId]) {
-    const removed = cache[storeId].shift();
-    sendNotificaiton({
-      clientToken: removed.clientToken,
-      message: "Completed Q",
-      title: removed.storeName,
-      action: "SUCCESS",
-    });
-    return removed._id === bookingId;
-  }
-};
-
-const getWaitingNo = (storeId) =>
-  cache[storeId] ? cache[storeId].length + 1 : 1;
-
-exports.getAllStores = async (req, res, next) => {
+exports.getAllStores = async (req, res) => {
   const result = await UserModel.find({ type: "SELLER" });
   res.send({ stores: result });
 };
 
-exports.showAllBookingsForStore = async (req, res, next) => {
+exports.showAllBookingsForStore = async (req, res) => {
   const storeId = req.params.id;
   const result = await Model.aggregate([
     { $match: { storeId: ObjectId(storeId) } },
@@ -132,16 +49,19 @@ exports.showAllBookingsForBuyer = async (req, res) => {
 
 exports.createBooking = async (req, res) => {
   const { storeId, userId } = req.body;
-  const waitingNo = getWaitingNo(storeId);
+  const { waitingNo, avgTime, status, startedOn } = getWaitingInfo(storeId);
 
   const result = await Model.create({
     storeId,
     userId,
-    status: "WAITING",
+    status,
+    startedOn,
     waitingNo,
+    initialWaitingNo: waitingNo,
   });
   const booking = {
     ...result.toObject(),
+    avgTime,
     clientToken: _.get(req, "user.clientToken", ""),
   };
   addToCache({ booking, storeId });
@@ -150,53 +70,67 @@ exports.createBooking = async (req, res) => {
 };
 
 exports.updateBooking = async (req, res) => {
-  const { status, storeId } = req.body;
-  const bookingId = req.params.id;
-  const updatedData = {
-    status,
-  };
-
-  if (status === "COMPLETE") updatedData["waitingNo"] = 0;
-
-  const result = await Model.findOneAndUpdate(
-    {
-      _id: ObjectId(bookingId),
-    },
-    updatedData,
-    {
-      new: true,
-    }
-  );
-  removeFromQueue({ bookingId, storeId });
-
-  const userIdsToUpdate = cache[storeId].map((booking) =>
-    String(booking.userId)
-  );
-  await Model.updateMany(
-    { _id: { $in: [userIdsToUpdate] } },
-    {
-      $inc: {
-        waitingNo: -1,
-      },
-    }
-  );
-
-  const userList = _.get(cache, storeId, []).map((booking) => {
-    return {
-      clientToken: booking.clientToken,
-      message: `You waiting list is ${Number(booking.waitingNo) - 1}`,
+  try {
+    const { status, storeId } = req.body;
+    const bookingId = req.params.id;
+    const updatedData = {
+      status,
     };
-  });
 
-  await sendNotificaiton(userList);
-  logCache();
-  res.send({ result });
+    const booking = removeFromCache({ storeId });
+    if (status === "COMPLETE") {
+      updatedData["waitingNo"] = null;
+      updatedData["ttf"] = moment().diff(moment(booking.startedOn), "minutes");
+      updatedData["completedOn"] = getCurrentDate();
+    }
+
+    const result = await Model.findOneAndUpdate(
+      {
+        _id: ObjectId(bookingId),
+      },
+      updatedData,
+      {
+        new: true,
+      }
+    );
+
+    const updatedBooking = { ...booking, ...result.toObject() };
+    const [nextActiveBooking, ...restOfBookings] = updateInCache({
+      storeId,
+      booking: updatedBooking,
+    });
+
+    if (nextActiveBooking) {
+      await Model.updateMany(
+        { _id: nextActiveBooking },
+        {
+          $set: {
+            waitingNo: 1,
+            status: "ACTIVE",
+            startedOn: getCurrentDate(),
+          },
+        }
+      );
+    }
+
+    await Model.updateMany(
+      { _id: { $in: [restOfBookings] } },
+      {
+        $inc: {
+          waitingNo: -1,
+        },
+      }
+    );
+
+    const userList = _.get(cache, [storeId, "bookings"], []).map((booking) => ({
+      clientToken: booking.clientToken,
+      message: `You waiting list is ${booking.waitingNo}`,
+    }));
+
+    await sendNotificaiton(userList);
+    logCache();
+    res.send({ result });
+  } catch (err) {
+    console.log(err);
+  }
 };
-
-// exports.cancelBooking = async (req, res, next) => {
-//   const todoId = req.params.id;
-//   const result = await Model.findOneAndDelete({
-//     _id: todoId
-//   });
-//   res.send({ result });
-// };
