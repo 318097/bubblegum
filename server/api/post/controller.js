@@ -63,12 +63,18 @@ exports.getPostById = async (req, res, next) => {
 };
 
 exports.createPost = async (req, res, next) => {
-  const { userId, data } = req.body;
+  const { data } = req.body;
+  const { _id, userType } = req.user;
   let index = _.get(req, "user.settings.notesIndex", 1);
 
   const posts = []
     .concat(data)
-    .map((item) => ({ ...item, userId: userId || "admin", index: index++ }));
+    .map((item) => ({
+      ...item,
+      userId: _id,
+      isAdmin: userType === "ADMIN",
+      index: index++,
+    }));
   const result = await Model.create(posts);
   await UserModel.findOneAndUpdate(
     { _id: _.get(req, "user._id") },
