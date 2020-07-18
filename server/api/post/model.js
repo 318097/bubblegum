@@ -7,51 +7,55 @@ const PostsSchema = new mongoose.Schema(
     userId: { type: String },
     title: {
       type: String,
-      required: false
+      required: false,
     },
     content: {
       type: String,
-      required: false
+      required: false,
     },
     slug: String,
     tags: {
-      type: Array
+      type: Array,
     },
     tempId: String,
+    resources: {
+      type: Array,
+      default: [],
+    },
     type: {
       required: false,
       default: "POST",
       type: String,
-      enum: ["POST", "DROP"]
+      enum: ["POST", "DROP"],
     },
     status: {
       type: String,
       enum: ["DRAFT", "READY", "POSTED"],
       required: true,
-      default: "DRAFT"
+      default: "DRAFT",
     },
     socialStatus: {
       type: String,
       enum: ["NONE", "READY", "POSTED"],
       required: true,
-      default: "NONE"
+      default: "NONE",
     },
     visible: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
 const TagsSchema = new mongoose.Schema({
   name: String,
-  color: String
+  color: String,
 });
 
 module.exports = {
   Posts: mongoose.model(schemaName, PostsSchema),
-  TagsModel: mongoose.model("tags", TagsSchema)
+  TagsModel: mongoose.model("tags", TagsSchema),
 };

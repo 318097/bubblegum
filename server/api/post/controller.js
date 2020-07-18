@@ -71,15 +71,28 @@ exports.createPost = async (req, res, next) => {
 
 exports.updatePost = async (req, res, next) => {
   const postId = req.params.id;
+  const { action, value } = req.query;
+  let query;
+
+  if (action === "CREATE_RESOURCE") {
+    query = {
+      $push: {
+        resources: value,
+      },
+    };
+  } else {
+    query = {
+      $set: {
+        ...req.body,
+      },
+    };
+  }
+
   const result = await Model.findOneAndUpdate(
     {
       _id: postId,
     },
-    {
-      $set: {
-        ...req.body,
-      },
-    }
+    query
   );
   res.send({ result });
 };
