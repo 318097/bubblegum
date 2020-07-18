@@ -5,6 +5,7 @@ const PostsSchema = new mongoose.Schema(
   {
     // userId: { type: mongoose.Types.ObjectId, ref: "user" },
     userId: { type: String },
+    index: Number,
     title: {
       type: String,
       required: false,

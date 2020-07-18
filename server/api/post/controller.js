@@ -1,4 +1,6 @@
+const _ = require("lodash");
 const { Posts: Model, TagsModel } = require("./model");
+const UserModel = require("../user/model");
 
 exports.getRelatedPosts = async (req, res, next) => {
   const { tags = [] } = req.params;
@@ -62,10 +64,16 @@ exports.getPostById = async (req, res, next) => {
 
 exports.createPost = async (req, res, next) => {
   const { userId, data } = req.body;
+  let index = _.get(req, "user.settings.notesIndex", 1);
+
   const posts = []
     .concat(data)
-    .map((item) => ({ ...item, userId: userId || "admin" }));
+    .map((item) => ({ ...item, userId: userId || "admin", index: index++ }));
   const result = await Model.create(posts);
+  await UserModel.findOneAndUpdate(
+    { _id: _.get(req, "user._id") },
+    { $set: { "settings.notesIndex": index } }
+  );
   res.send({ result });
 };
 

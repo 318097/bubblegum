@@ -33,6 +33,7 @@ const UserSchema = new Schema(
       type: Array,
     },
     settings: Schema.Types.Mixed,
+    notesApp: [],
   },
   {
     timestamps: true,
