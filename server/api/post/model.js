@@ -49,6 +49,7 @@ const PostsSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    fileName: String,
   },
   {
     timestamps: true,
