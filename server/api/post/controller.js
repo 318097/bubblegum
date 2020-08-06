@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const { Posts: Model, TagsModel } = require("./model");
+const Model = require("./model");
 const UserModel = require("../user/model");
 
 exports.getRelatedPosts = async (req, res, next) => {
@@ -67,14 +67,12 @@ exports.createPost = async (req, res, next) => {
   const { _id, userType } = req.user;
   let index = _.get(req, "user.settings.notesIndex", 1);
 
-  const posts = []
-    .concat(data)
-    .map((item) => ({
-      ...item,
-      userId: _id,
-      isAdmin: userType === "ADMIN",
-      index: index++,
-    }));
+  const posts = [].concat(data).map((item) => ({
+    ...item,
+    userId: _id,
+    isAdmin: userType === "ADMIN",
+    index: index++,
+  }));
   const result = await Model.create(posts);
   await UserModel.findOneAndUpdate(
     { _id: _.get(req, "user._id") },
@@ -117,30 +115,4 @@ exports.deletePost = async (req, res, next) => {
     _id: postId,
   });
   res.send({ result });
-};
-
-exports.getAllTags = async (req, res, next) => {
-  const result = await TagsModel.find({});
-  res.send({ tags: result });
-};
-
-exports.createTag = async (req, res, next) => {
-  const { name, color } = req.body;
-  const result = await TagsModel.create({ name, color });
-  res.send({ tag: result });
-};
-
-exports.updateTag = async (req, res, next) => {
-  const { id } = req.params;
-  const result = await TagsModel.findOneAndUpdate(
-    { _id: id },
-    { $set: { ...req.body } }
-  );
-  res.send({ tags: result });
-};
-
-exports.deleteTag = async (req, res, next) => {
-  const { id } = req.params;
-  const result = await TagsModel.findOneAndDelete({ _id: id });
-  res.send({ tags: result });
 };

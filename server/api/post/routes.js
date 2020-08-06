@@ -4,11 +4,6 @@ const errorHandlingWrapper = require("../../middleware/errorHandling");
 
 const { externalAccess } = require("../../auth/auth");
 
-router.get("/tags", errorHandlingWrapper(controller.getAllTags));
-router.post("/tags", errorHandlingWrapper(controller.createTag));
-router.put("/tags/:id", errorHandlingWrapper(controller.updateTag));
-router.delete("/tags/:id", errorHandlingWrapper(controller.deleteTag));
-
 router.get("/", errorHandlingWrapper(controller.getAllPosts));
 router.get("/random", errorHandlingWrapper(controller.getRelatedPosts));
 router.get("/:id", errorHandlingWrapper(controller.getPostById));

@@ -56,12 +56,6 @@ const PostsSchema = new mongoose.Schema(
   }
 );
 
-const TagsSchema = new mongoose.Schema({
-  name: String,
-  color: String,
-});
 
-module.exports = {
-  Posts: mongoose.model(schemaName, PostsSchema),
-  TagsModel: mongoose.model("tags", TagsSchema),
-};
+
+module.exports =  mongoose.model(schemaName, PostsSchema),
