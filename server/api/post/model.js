@@ -50,12 +50,12 @@ const PostsSchema = new mongoose.Schema(
       default: false,
     },
     fileName: String,
+    collectionId: String, // collection id to which the note belongs
+    liveId: Number,
   },
   {
     timestamps: true,
   }
 );
 
-
-
-module.exports =  mongoose.model(schemaName, PostsSchema),
+module.exports = mongoose.model(schemaName, PostsSchema);

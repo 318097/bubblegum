@@ -21,8 +21,11 @@ exports.getAllPosts = async (req, res, next) => {
     status,
     socialStatus,
     visible,
+    collectionId,
   } = req.query;
-  const aggregation = {};
+  const aggregation = {
+    collectionId,
+  };
 
   if (tags.length) aggregation["tags"] = { $in: [].concat(tags) };
 
@@ -64,27 +67,48 @@ exports.getPostById = async (req, res, next) => {
 
 exports.createPost = async (req, res, next) => {
   const { data } = req.body;
+  const { collectionId } = req.query;
   const { _id, userType } = req.user;
-  let index = _.get(req, "user.settings.notesIndex", 1);
+  const currentCollection = _.get(req, ["user.notesApp", collectionId], {});
+  let index = _.get(currentCollection, "index", 1);
 
   const posts = [].concat(data).map((item) => ({
     ...item,
     userId: _id,
     isAdmin: userType === "ADMIN",
     index: index++,
+    collectionId,
   }));
   const result = await Model.create(posts);
   await UserModel.findOneAndUpdate(
     { _id: _.get(req, "user._id") },
-    { $set: { "settings.notesIndex": index } }
+    { $set: { [`notesApp.${collectionId}.index`]: index } }
   );
   res.send({ result });
 };
 
 exports.updatePost = async (req, res, next) => {
   const postId = req.params.id;
-  const { action, value } = req.query;
+  const { action, value, collectionId } = req.query;
+  const { status } = req.body;
+  const { user } = req;
   let query;
+  const updatedData = {
+    ...req.body,
+  };
+
+  if (status === "POSTED") {
+    const collectionLiveIndex = _.get(
+      user,
+      ["notesApp", collectionId, "liveId"],
+      0
+    );
+    updatedData["liveId"] = collectionLiveIndex;
+    await UserModel.findOneAndUpdate(
+      { _id: _.get(req, "user._id") },
+      { $set: { [`notesApp.${collectionId}.liveId`]: collectionLiveIndex + 1 } }
+    );
+  }
 
   if (action === "CREATE_RESOURCE") {
     query = {
@@ -95,7 +119,7 @@ exports.updatePost = async (req, res, next) => {
   } else {
     query = {
       $set: {
-        ...req.body,
+        ...updatedData,
       },
     };
   }
@@ -104,8 +128,10 @@ exports.updatePost = async (req, res, next) => {
     {
       _id: postId,
     },
-    query
+    query,
+    { new: true }
   );
+
   res.send({ result });
 };
 
