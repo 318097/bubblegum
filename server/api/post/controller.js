@@ -17,22 +17,35 @@ exports.getAllPosts = async (req, res, next) => {
     limit = 10,
     page = 1,
     tags = [],
-    type,
     status,
     socialStatus,
     visible,
     collectionId,
+    sortOrder,
+    sortFilter,
   } = req.query;
   const aggregation = {
     collectionId,
   };
+  // need to sort by _id because when bulk creation is done, all the post have same timestamp and during fetching it results in different sort order if its only sorted by `createdAt`
+  let sort = {
+    _id: 1,
+    createdAt: -1,
+  };
 
-  if (tags.length) aggregation["tags"] = { $in: [].concat(tags) };
+  if (tags.length)
+    aggregation["tags"] = {
+      $in: [].concat(tags),
+    };
 
   if (search) {
     const regex = new RegExp(search, "gi");
-    aggregation["title"] = { $regex: regex };
-    aggregation["content"] = { $regex: regex };
+    aggregation["title"] = {
+      $regex: regex,
+    };
+    aggregation["content"] = {
+      $regex: regex,
+    };
   }
 
   if (req.source === "NOTES_APP") {
@@ -42,6 +55,12 @@ exports.getAllPosts = async (req, res, next) => {
       aggregation["socialStatus"] = socialStatus;
 
     if (visible) aggregation["visible"] = visible;
+
+    if (sortOrder) {
+      sort = {
+        [sortFilter]: sortOrder === "ASC" ? 1 : -1,
+      };
+    }
   } else {
     aggregation.status = "POSTED";
     aggregation.visible = true;
@@ -49,14 +68,19 @@ exports.getAllPosts = async (req, res, next) => {
 
   const result = await Model.aggregate([
     { $match: aggregation },
-    { $sort: { _id: 1, createdAt: -1 } }, // need to sort by _id because when bulk creation is done, all the post have same timestamp and during fetching it results in different sort order if its only sorted by `createdAt`
-    { $skip: (Number(page) - 1) * Number(limit) },
+    { $sort: sort },
+    {
+      $skip: (Number(page) - 1) * Number(limit),
+    },
     { $limit: Number(limit) },
   ]);
 
   const count = await Model.find(aggregation).count();
 
-  res.send({ posts: result, meta: { count } });
+  res.send({
+    posts: result,
+    meta: { count },
+  });
 };
 
 exports.getPostById = async (req, res, next) => {
