@@ -29,7 +29,7 @@ exports.getAllPosts = async (req, res, next) => {
   };
   // need to sort by _id because when bulk creation is done, all the post have same timestamp and during fetching it results in different sort order if its only sorted by `createdAt`
   let sort = {
-    _id: 1,
+    _id: -1,
     createdAt: -1,
   };
 
