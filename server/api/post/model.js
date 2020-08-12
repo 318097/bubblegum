@@ -52,6 +52,10 @@ const PostsSchema = new mongoose.Schema(
     fileName: String,
     collectionId: String, // collection id to which the note belongs
     liveId: Number,
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

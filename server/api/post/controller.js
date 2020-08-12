@@ -24,8 +24,10 @@ exports.getAllPosts = async (req, res, next) => {
     sortOrder,
     sortFilter,
   } = req.query;
+
   const aggregation = {
     collectionId,
+    deleted: false,
   };
   // need to sort by _id because when bulk creation is done, all the post have same timestamp and during fetching it results in different sort order if its only sorted by `createdAt`
   let sort = {
@@ -49,6 +51,9 @@ exports.getAllPosts = async (req, res, next) => {
   }
 
   if (req.source === "NOTES_APP") {
+    // const { _id } = req.user;
+    // aggregation["userId"] = _id;
+
     if (status && status !== "ALL") aggregation["status"] = status;
 
     if (socialStatus && socialStatus !== "ALL")
@@ -62,6 +67,7 @@ exports.getAllPosts = async (req, res, next) => {
       };
     }
   } else {
+    aggregation.isAdmin = true;
     aggregation.status = "POSTED";
     aggregation.visible = true;
   }
@@ -161,8 +167,11 @@ exports.updatePost = async (req, res, next) => {
 
 exports.deletePost = async (req, res, next) => {
   const postId = req.params.id;
-  const result = await Model.findOneAndDelete({
-    _id: postId,
-  });
+  const result = await Model.findOneAndUpdate(
+    {
+      _id: postId,
+    },
+    { $set: { deleted: true } }
+  );
   res.send({ result });
 };
