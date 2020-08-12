@@ -114,14 +114,14 @@ exports.createPost = async (req, res, next) => {
 exports.updatePost = async (req, res, next) => {
   const postId = req.params.id;
   const { action, value, collectionId } = req.query;
-  const { status } = req.body;
+  const { status, liveId } = req.body;
   const { user } = req;
   let query;
   const updatedData = {
     ...req.body,
   };
 
-  if (status === "POSTED") {
+  if (!liveId && status === "POSTED") {
     const collectionLiveIndex = _.get(
       user,
       ["notesApp", collectionId, "liveId"],
