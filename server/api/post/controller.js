@@ -56,7 +56,7 @@ exports.getAllPosts = async (req, res, next) => {
 
     if (visible) aggregation["visible"] = visible;
 
-    if (sortOrder) {
+    if (sortFilter) {
       sort = {
         [sortFilter]: sortOrder === "ASC" ? 1 : -1,
       };
