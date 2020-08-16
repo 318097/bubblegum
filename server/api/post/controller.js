@@ -19,7 +19,7 @@ exports.getAllPosts = async (req, res, next) => {
     tags = [],
     status,
     socialStatus,
-    visible,
+    visibility,
     collectionId,
     sortOrder,
     sortFilter,
@@ -59,7 +59,8 @@ exports.getAllPosts = async (req, res, next) => {
     if (socialStatus && socialStatus !== "ALL")
       aggregation["socialStatus"] = socialStatus;
 
-    if (visible) aggregation["visible"] = visible;
+    if (visibility && visibility !== "ALL")
+      aggregation["visible"] = visibility === "visible";
 
     if (sortFilter) {
       sort = {
