@@ -27,7 +27,7 @@ const PostsSchema = new mongoose.Schema(
       required: false,
       default: "POST",
       type: String,
-      enum: ["POST", "DROP"],
+      enum: ["POST", "DROP", "QUIZ"],
     },
     status: {
       type: String,
@@ -56,6 +56,7 @@ const PostsSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    solution: String,
   },
   {
     timestamps: true,
