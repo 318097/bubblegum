@@ -100,7 +100,7 @@ exports.createPost = async (req, res, next) => {
   const { data } = req.body;
   const { collectionId } = req.query;
   const { _id, userType } = req.user;
-  const currentCollection = _.get(req, ["user.notesApp", collectionId], {});
+  const currentCollection = _.get(req, ["user", "notesApp", collectionId], {});
   let index = _.get(currentCollection, "index", 1);
 
   const posts = [].concat(data).map((item) => ({
@@ -110,11 +110,14 @@ exports.createPost = async (req, res, next) => {
     index: index++,
     collectionId,
   }));
+
   const result = await Model.create(posts);
+
   await UserModel.findOneAndUpdate(
-    { _id: _.get(req, "user._id") },
+    { _id },
     { $set: { [`notesApp.${collectionId}.index`]: index } }
   );
+
   res.send({ result });
 };
 
