@@ -26,7 +26,7 @@ exports.getPosts = functions.https.onRequest(async (request, response) => {
       page = 1,
       tags = [],
       collectionId,
-    } = request.params;
+    } = request.query;
 
     const aggregation = {
       // collectionId,
@@ -87,3 +87,39 @@ exports.getPosts = functions.https.onRequest(async (request, response) => {
     response.send("error");
   }
 });
+
+exports.getPostById = functions.https.onRequest(async (request, response) => {
+  try {
+    const db = await connectToDb();
+    const collection = db.collection("posts");
+    const id = request.params["0"];
+    // console.log(request.params, request.query);
+    const post = await collection.find({ _id: id }).toArray();
+
+    response.send(JSON.stringify({ post }, undefined, 2));
+  } catch (err) {
+    console.log(err);
+    response.send("error");
+  }
+});
+
+exports.getRandomPosts = functions.https.onRequest(
+  async (request, response) => {
+    try {
+      const db = await connectToDb();
+      const collection = db.collection("posts");
+
+      const posts = await collection
+        .aggregate([
+          { $match: { status: "POSTED", visible: true } },
+          { $sample: { size: 5 } },
+        ])
+        .toArray();
+
+      response.send(JSON.stringify({ posts }, undefined, 2));
+    } catch (err) {
+      console.log(err);
+      response.send("error");
+    }
+  }
+);
