@@ -2,6 +2,9 @@ const _ = require("lodash");
 const Model = require("./model");
 const UserModel = require("../user/model");
 
+const getKey = (id) =>
+  /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id) ? "_id" : "slug";
+
 exports.getRelatedPosts = async (req, res, next) => {
   const { tags = [] } = req.params;
   const posts = await Model.aggregate([
@@ -91,7 +94,9 @@ exports.getAllPosts = async (req, res, next) => {
 };
 
 exports.getPostById = async (req, res, next) => {
-  const result = await Model.findOne({ _id: req.params.id });
+  const { id } = req.params;
+  const key = getKey(id);
+  const result = await Model.findOne({ [key]: id });
 
   res.send({ post: result });
 };
@@ -122,7 +127,8 @@ exports.createPost = async (req, res, next) => {
 };
 
 exports.updatePost = async (req, res, next) => {
-  const postId = req.params.id;
+  const { id } = req.params;
+  const key = getKey(id);
   const { action, value, collectionId } = req.query;
   const { status, liveId } = req.body;
   const { user } = req;
@@ -160,7 +166,7 @@ exports.updatePost = async (req, res, next) => {
 
   const result = await Model.findOneAndUpdate(
     {
-      _id: postId,
+      [key]: id,
     },
     query,
     { new: true }
@@ -170,10 +176,12 @@ exports.updatePost = async (req, res, next) => {
 };
 
 exports.deletePost = async (req, res, next) => {
-  const postId = req.params.id;
+  const { id } = req.params;
+  const key = getKey(id);
+
   const result = await Model.findOneAndUpdate(
     {
-      _id: postId,
+      [key]: id,
     },
     { $set: { deleted: true } }
   );
