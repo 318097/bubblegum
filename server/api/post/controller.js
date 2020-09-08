@@ -74,6 +74,9 @@ exports.getAllPosts = async (req, res, next) => {
     aggregation.isAdmin = true;
     aggregation.status = "POSTED";
     aggregation.visible = true;
+    sort = {
+      postId: -1,
+    };
   }
 
   const result = await Model.aggregate([
