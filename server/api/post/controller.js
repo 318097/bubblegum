@@ -75,7 +75,7 @@ exports.getAllPosts = async (req, res, next) => {
     aggregation.status = "POSTED";
     aggregation.visible = true;
     sort = {
-      postId: -1,
+      liveId: -1,
     };
   }
 
