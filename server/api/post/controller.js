@@ -190,3 +190,42 @@ exports.deletePost = async (req, res, next) => {
   );
   res.send({ result });
 };
+
+exports.getStats = async (req, res, next) => {
+  const result = await Model.find({
+    visible: true,
+    deleted: false,
+  });
+
+  const stats = {
+    total: result.length,
+    types: {
+      POST: 0,
+      DROP: 0,
+      QUIZ: 0,
+    },
+    tags: {
+      uncategorized: 0,
+    },
+    status: {
+      DRAFT: 0,
+      READY: 0,
+      POSTED: 0,
+    },
+    created: [],
+  };
+
+  result.forEach(({ tags = [], type, status }) => {
+    stats.types[type] = stats.types[type] + 1;
+    stats.status[status] = stats.status[status] + 1;
+
+    if (!tags.length)
+      stats.tags["uncategorized"] = stats.tags["uncategorized"] + 1;
+    else
+      tags.forEach((tag) => {
+        stats.tags[tag] = stats.tags[tag] ? stats.tags[tag] + 1 : 1;
+      });
+  });
+
+  res.send({ stats });
+};

@@ -6,6 +6,7 @@ const { externalAccess } = require("../../auth/auth");
 
 router.get("/", errorHandlingWrapper(controller.getAllPosts));
 router.get("/random", errorHandlingWrapper(controller.getRelatedPosts));
+router.get("/stats", errorHandlingWrapper(controller.getStats));
 router.get("/:id", errorHandlingWrapper(controller.getPostById));
 router.post("/", externalAccess, errorHandlingWrapper(controller.createPost));
 router.put("/:id", externalAccess, errorHandlingWrapper(controller.updatePost));
