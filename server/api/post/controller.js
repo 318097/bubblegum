@@ -192,9 +192,11 @@ exports.deletePost = async (req, res, next) => {
 };
 
 exports.getStats = async (req, res, next) => {
+  const { collectionId } = req.query;
   const result = await Model.find({
     visible: true,
     deleted: false,
+    collectionId,
   });
 
   const stats = {
