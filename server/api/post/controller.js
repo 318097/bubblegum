@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const moment = require("moment");
 const Model = require("./model");
 const UserModel = require("../user/model");
 
@@ -214,10 +215,10 @@ exports.getStats = async (req, res, next) => {
       READY: 0,
       POSTED: 0,
     },
-    created: [],
+    created: {},
   };
 
-  result.forEach(({ tags = [], type, status }) => {
+  result.forEach(({ tags = [], type, status, createdAt }) => {
     stats.types[type] = stats.types[type] + 1;
     stats.status[status] = stats.status[status] + 1;
 
@@ -227,6 +228,12 @@ exports.getStats = async (req, res, next) => {
       tags.forEach((tag) => {
         stats.tags[tag] = stats.tags[tag] ? stats.tags[tag] + 1 : 1;
       });
+
+    const [day, month, year] = moment(createdAt).format("DD-MMM-YY").split("-");
+    const createdKey = `${month}-${year}`;
+    stats.created[createdKey] = stats.created[createdKey]
+      ? stats.created[createdKey] + 1
+      : 1;
   });
 
   res.send({ stats });
