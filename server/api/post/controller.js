@@ -222,12 +222,14 @@ exports.getStats = async (req, res, next) => {
     stats.types[type] = stats.types[type] + 1;
     stats.status[status] = stats.status[status] + 1;
 
-    if (!tags.length)
-      stats.tags["uncategorized"] = stats.tags["uncategorized"] + 1;
-    else
-      tags.forEach((tag) => {
-        stats.tags[tag] = stats.tags[tag] ? stats.tags[tag] + 1 : 1;
-      });
+    if (type !== "QUIZ") {
+      if (!tags.length)
+        stats.tags["uncategorized"] = stats.tags["uncategorized"] + 1;
+      else
+        tags.forEach((tag) => {
+          stats.tags[tag] = stats.tags[tag] ? stats.tags[tag] + 1 : 1;
+        });
+    }
 
     const [day, month, year] = moment(createdAt).format("DD-MMM-YY").split("-");
     const createdKey = `${month}-${year}`;
