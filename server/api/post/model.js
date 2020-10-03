@@ -31,7 +31,7 @@ const PostsSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["DRAFT", "READY", "POSTED"],
+      enum: ["QUICK_ADD", "DRAFT", "READY", "POSTED"],
       required: true,
       default: "DRAFT",
     },
