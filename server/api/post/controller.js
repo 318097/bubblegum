@@ -46,12 +46,18 @@ exports.getAllPosts = async (req, res, next) => {
 
   if (search) {
     const regex = new RegExp(search, "gi");
-    aggregation["title"] = {
-      $regex: regex,
-    };
-    aggregation["content"] = {
-      $regex: regex,
-    };
+    aggregation["$or"] = [
+      {
+        title: {
+          $regex: regex,
+        },
+      },
+      {
+        content: {
+          $regex: regex,
+        },
+      },
+    ];
   }
 
   if (req.source === "NOTES_APP") {
