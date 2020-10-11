@@ -204,7 +204,7 @@ exports.getStats = async (req, res, next) => {
     visible: true,
     deleted: false,
     collectionId,
-  });
+  }).sort({ createdAt: 1 });
 
   const stats = {
     total: result.length,
