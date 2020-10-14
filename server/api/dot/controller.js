@@ -1,11 +1,39 @@
 const moment = require("moment");
 const Model = require("./model");
 const UserModel = require("../user/model");
+const _ = require("lodash");
 
 const { ObjectId } = require("mongoose").Types;
 
 exports.getAllTodos = async (req, res, next) => {
-  const result = await Model.aggregate([{ $match: { userId: req.user._id } }]);
+  const settings = _.get(req, "user.DOT", []);
+  const topicIds = _.map(
+    _.filter(settings, (setting) => setting.visible, "content")
+  );
+
+  const result = await Model.aggregate([
+    { $match: { userId: req.user._id, topicIds: { $in: topicIds } } },
+  ]);
+  res.send({ todos: result });
+};
+
+exports.getCompletedTodos = async (req, res, next) => {
+  const { page = 1, limit = 5, type = "TODAY" } = req.params;
+  let aggregation = { userId: req.user._id, marked: true };
+
+  if (type === "TODAY") {
+    aggregation = {
+      ...aggregation,
+      completedOn: { $gte: moment().startOf("day") },
+    };
+  } else {
+    // type === 'TIMELINE'
+  }
+
+  const result = await Model.aggregate([
+    { $match: aggregation },
+    { $sort: { completedOn: -1 } },
+  ]);
   res.send({ todos: result });
 };
 

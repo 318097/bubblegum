@@ -29,7 +29,7 @@ const externalAccess = async (req, res, next) => {
     return res.status(401).send("Unauthorized Access.");
 
   const source = req.headers["external-source"];
-  const allowedSource = ["NOTES_APP", "CHAT_APP"];
+  const allowedSource = ["NOTES_APP", "CHAT_APP", "DOT"];
   if (!allowedSource.includes(source))
     return res.status(401).send("Unauthorized: Invalid source.");
 

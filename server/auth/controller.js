@@ -76,7 +76,7 @@ const checkAccountStatus = async (req, res) => {
   // const { token } = req.body;
   // validateToken(token);
   delete user.password;
-  res.send({ status: "ok", ...user });
+  res.send({ status: "ok", ...user.toObject() });
 };
 
 module.exports = { login, register, checkAccountStatus };
