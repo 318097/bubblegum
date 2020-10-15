@@ -38,7 +38,7 @@ const externalAccess = async (req, res, next) => {
     req.user = decoded;
     extractUser(req, res, next);
   } else {
-    const user = await User.findOne({ email: "318097@gmail.com" });
+    const user = await User.findOne({ email: "318097@gmail.com" }).lean();
     req.user = user;
     next();
   }
