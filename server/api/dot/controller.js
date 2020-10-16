@@ -2,14 +2,16 @@ const moment = require("moment");
 const Model = require("./model");
 const UserModel = require("../user/model");
 const _ = require("lodash");
+const uuid = require("uuid");
 
 const { ObjectId } = require("mongoose").Types;
 
 exports.getAllTodos = async (req, res, next) => {
-  const settings = _.get(req, "user.DOT", []);
-  const topicIds = _.map(
-    _.filter(settings, (setting) => setting.visible, "content")
-  );
+  const settings = _.get(req, "user.dot", []);
+  // const topicIds = _.map(
+  //   _.filter(settings, (setting) => setting.visible, "content")
+  // );
+  const topicIds = _.map(settings, "id");
 
   const result = await Model.aggregate([
     { $match: { userId: req.user._id, topicIds: { $in: topicIds } } },
@@ -43,13 +45,42 @@ exports.getTodoById = async (req, res, next) => {
 };
 
 exports.createTodo = async (req, res, next) => {
-  const { topicId, content } = req.body;
+  const { topicId = "others", content, itemType } = req.body;
+  const userId = req.user._id;
 
-  const result = await Model.create({
-    topicId,
-    content,
-    userId: req.user._id,
-  });
+  let result;
+  if (itemType === "TOPIC") {
+    const newTopic = {
+      _id: uuid(),
+      content,
+      createdAt: new Date().toISOString(),
+      todos: [],
+      visible: true,
+    };
+    await UserModel.findOneAndUpdate(
+      { _id: userId },
+      {
+        $push: {
+          dot: newTopic,
+        },
+      }
+    );
+    result = newTopic;
+  } else {
+    result = await Model.create({
+      topicId,
+      content,
+      userId,
+    });
+    await UserModel.findOneAndUpdate(
+      { _id: userId, "dot._id": topicId },
+      {
+        $push: {
+          [`dot.$.todos`]: result._id,
+        },
+      }
+    );
+  }
   res.send({ result });
 };
 

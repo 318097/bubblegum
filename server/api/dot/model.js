@@ -4,7 +4,7 @@ const schemaName = "dot";
 const DotSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-    topicId: mongoose.Types.ObjectId,
+    topicId: String,
     content: String,
     marked: { type: Boolean, default: false },
     completedOn: Date,
