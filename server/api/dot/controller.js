@@ -8,13 +8,10 @@ const { ObjectId } = require("mongoose").Types;
 
 exports.getAllTodos = async (req, res, next) => {
   const settings = _.get(req, "user.dot", []);
-  // const topicIds = _.map(
-  //   _.filter(settings, (setting) => setting.visible, "content")
-  // );
-  const topicIds = _.map(settings, "id");
+  const visibleTopics = _.map(_.filter(settings, "visible"), "_id");
 
   const result = await Model.aggregate([
-    { $match: { userId: req.user._id, topicIds: { $in: topicIds } } },
+    { $match: { userId: req.user._id, topicId: { $in: visibleTopics } } },
   ]);
   res.send({ todos: result });
 };
