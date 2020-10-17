@@ -85,19 +85,15 @@ exports.createTodo = async (req, res, next) => {
 };
 
 exports.updateTodo = async (req, res, next) => {
-  const { content, topicId } = req.body;
-  const todoId = req.params.id;
+  const { id: todoId } = req.params;
   const result = await Model.findOneAndUpdate(
     {
       _id: todoId,
     },
     {
-      $set: {
-        content,
-        topicId,
-        userId: req.user._id,
-      },
-    }
+      $set: req.body,
+    },
+    { new: true }
   );
   res.send({ result });
 };
