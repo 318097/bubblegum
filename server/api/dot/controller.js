@@ -116,9 +116,22 @@ exports.stampTodo = async (req, res, next) => {
 };
 
 exports.deleteTodo = async (req, res, next) => {
-  const todoId = req.params.id;
+  const { id: todoId } = req.params;
   const result = await Model.findOneAndDelete({
     _id: todoId,
   });
+  const { topicId } = result;
+  const currentItem = _.find(
+    _.get(req, "user.dot"),
+    (item) => item._id === topicId
+  );
+  const updatedTodos = _.filter(
+    _.get(currentItem, "todos", []),
+    (id) => String(id) !== todoId
+  );
+  await UserModel.findOneAndUpdate(
+    { _id: req.user._id, "dot._id": topicId },
+    { $set: { [`dot.$.todos`]: updatedTodos } }
+  );
   res.send({ result });
 };
