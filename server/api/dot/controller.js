@@ -99,17 +99,19 @@ exports.updateTodo = async (req, res, next) => {
 };
 
 exports.stampTodo = async (req, res, next) => {
-  const todoId = req.params.id;
-
+  const { id: todoId } = req.params;
   const result = await Model.findOneAndUpdate(
     {
-      _id: ObjectId(todoId),
+      _id: todoId,
     },
     {
       $set: {
         marked: true,
         completedOn: moment().toDate(),
       },
+    },
+    {
+      new: true,
     }
   );
   res.send({ result });
