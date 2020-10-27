@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const schemaName = "dot";
+const schemaName = "dot-todos";
 
 const DotSchema = new mongoose.Schema(
   {
+    topicId: { type: mongoose.Schema.Types.ObjectId, ref: "dot-topics" },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-    topicId: String,
     content: String,
     marked: { type: Boolean, default: false },
     completedOn: Date,

@@ -1,19 +1,22 @@
 const moment = require("moment");
 const Model = require("./model");
+const TopicsModel = require("./topicModel");
 const UserModel = require("../user/model");
 const _ = require("lodash");
 const uuid = require("uuid");
 
-const { ObjectId } = require("mongoose").Types;
-
 exports.getAllTodos = async (req, res, next) => {
-  const settings = _.get(req, "user.dot", []);
-  const visibleTopics = _.map(_.filter(settings, "visible"), "_id");
+  const projectId = req.params.id;
 
-  const result = await Model.aggregate([
+  const topics = await TopicsModel.aggregate([
+    { $match: { userId: req.user._id, visible: true } },
+  ]);
+  const visibleTopics = _.map(topics, (topic) => topic._id);
+
+  const todos = await Model.aggregate([
     { $match: { userId: req.user._id, topicId: { $in: visibleTopics } } },
   ]);
-  res.send({ todos: result });
+  res.send({ todos, topics });
 };
 
 exports.getCompletedTodos = async (req, res, next) => {
@@ -42,43 +45,32 @@ exports.getTodoById = async (req, res, next) => {
 };
 
 exports.createTodo = async (req, res, next) => {
-  const { topicId = "others", content, itemType } = req.body;
+  const { topicId, content, itemType, projectId } = req.body;
   const userId = req.user._id;
 
-  let result;
   if (itemType === "TOPIC") {
-    const newTopic = {
-      _id: uuid(),
+    const result = await TopicsModel.create({
       content,
-      createdAt: new Date().toISOString(),
-      todos: [],
-      visible: true,
-    };
-    await UserModel.findOneAndUpdate(
-      { _id: userId },
-      {
-        $push: {
-          dot: newTopic,
-        },
-      }
-    );
-    result = newTopic;
+      projectId,
+      userId,
+    });
+    res.send({ result });
   } else {
-    result = await Model.create({
+    const result = await Model.create({
       topicId,
       content,
       userId,
     });
-    await UserModel.findOneAndUpdate(
-      { _id: userId, "dot._id": topicId },
+    await TopicsModel.findOneAndUpdate(
+      { _id: topicId },
       {
         $push: {
-          [`dot.$.todos`]: result._id,
+          [`todos`]: result._id,
         },
       }
     );
+    res.send({ result });
   }
-  res.send({ result });
 };
 
 exports.updateTodo = async (req, res, next) => {
@@ -120,17 +112,10 @@ exports.deleteTodo = async (req, res, next) => {
     _id: todoId,
   });
   const { topicId } = result;
-  const currentItem = _.find(
-    _.get(req, "user.dot"),
-    (item) => item._id === topicId
-  );
-  const updatedTodos = _.filter(
-    _.get(currentItem, "todos", []),
-    (id) => String(id) !== todoId
-  );
-  await UserModel.findOneAndUpdate(
-    { _id: req.user._id, "dot._id": topicId },
-    { $set: { [`dot.$.todos`]: updatedTodos } }
+
+  await TopicsModel.findOneAndUpdate(
+    { _id: topicId },
+    { $pull: { todos: result._id } }
   );
   res.send({ result });
 };
