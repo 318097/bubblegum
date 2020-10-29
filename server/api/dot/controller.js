@@ -6,10 +6,9 @@ const _ = require("lodash");
 const uuid = require("uuid");
 
 exports.getAllTodos = async (req, res, next) => {
-  const projectId = req.params.id;
-
+  const { projectId } = req.query;
   const topics = await TopicsModel.aggregate([
-    { $match: { userId: req.user._id, visible: true } },
+    { $match: { userId: req.user._id, projectId, visible: true } },
   ]);
   const visibleTopics = _.map(topics, (topic) => topic._id);
 
@@ -20,7 +19,7 @@ exports.getAllTodos = async (req, res, next) => {
 };
 
 exports.getCompletedTodos = async (req, res, next) => {
-  const { page = 1, limit = 5, type = "TODAY" } = req.params;
+  const { page = 1, limit = 5, type = "TODAY" } = req.query;
   let aggregation = { userId: req.user._id, marked: true };
 
   if (type === "TODAY") {
@@ -44,6 +43,31 @@ exports.getTodoById = async (req, res, next) => {
   res.send({ todo: result });
 };
 
+exports.createProject = async (req, res, next) => {
+  const { name } = req.body;
+  const userId = req.user._id;
+  const projectId = uuid();
+
+  const newProject = {
+    name,
+    _id: projectId,
+    createdAt: new Date().toISOString(),
+  };
+  const result = await UserModel.findByIdAndUpdate(
+    { _id: userId },
+    { $push: { dot: newProject } },
+    { new: true }
+  ).lean();
+
+  await TopicsModel.create({
+    content: "others",
+    projectId,
+    userId,
+  });
+
+  res.send({ ...result });
+};
+
 exports.createTodo = async (req, res, next) => {
   const { topicId, content, itemType, projectId } = req.body;
   const userId = req.user._id;
@@ -55,7 +79,7 @@ exports.createTodo = async (req, res, next) => {
       userId,
     });
     res.send({ result });
-  } else {
+  } else if (itemType === "TODO") {
     const result = await Model.create({
       topicId,
       content,
