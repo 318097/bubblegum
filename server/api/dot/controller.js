@@ -19,21 +19,23 @@ exports.getAllTodos = async (req, res, next) => {
 };
 
 exports.getCompletedTodos = async (req, res, next) => {
-  const { page = 1, limit = 5, type = "TODAY" } = req.query;
-  let aggregation = { userId: req.user._id, marked: true };
+  const { page = 1, limit = 15, type = "TIMELINE", projectId } = req.query;
+  let aggregation = { userId: req.user._id, marked: true, projectId };
 
-  if (type === "TODAY") {
-    aggregation = {
-      ...aggregation,
-      completedOn: { $gte: moment().startOf("day") },
-    };
-  } else {
-    // type === 'TIMELINE'
-  }
+  // if (type === "TODAY") {
+  //   aggregation = {
+  //     ...aggregation,
+  //     completedOn: { $gte: moment().startOf("day") },
+  //   };
+  // } else {
+  //   // type === 'TIMELINE'
+  // }
 
   const result = await Model.aggregate([
     { $match: aggregation },
     { $sort: { completedOn: -1 } },
+    { $skip: (Number(page) - 1) * Number(limit) },
+    { $limit: Number(limit) },
   ]);
   res.send({ todos: result });
 };
