@@ -86,6 +86,7 @@ exports.createTodo = async (req, res, next) => {
       topicId,
       content,
       userId,
+      projectId,
     });
     await TopicsModel.findOneAndUpdate(
       { _id: topicId },

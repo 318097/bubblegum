@@ -8,6 +8,7 @@ const DotSchema = new mongoose.Schema(
     content: String,
     marked: { type: Boolean, default: false },
     completedOn: Date,
+    projectId: String,
   },
   {
     timestamps: true,
