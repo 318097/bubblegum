@@ -34,6 +34,13 @@ exports.getCompletedTodos = async (req, res, next) => {
   const result = await Model.aggregate([
     { $match: aggregation },
     { $sort: { completedOn: -1 } },
+    {
+      $group: {
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$completedOn" } },
+        todos: { $push: "$$ROOT" },
+      },
+    },
+
     { $skip: (Number(page) - 1) * Number(limit) },
     { $limit: Number(limit) },
   ]);
