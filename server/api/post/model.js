@@ -57,6 +57,7 @@ const PostsSchema = new mongoose.Schema(
       default: false,
     },
     solution: String,
+    url: String,
   },
   {
     timestamps: true,
