@@ -161,7 +161,7 @@ exports.updatePost = async (req, res, next) => {
   }
 
   if (action === "CREATE_RESOURCE") {
-    const newResourceId = generateNewResourceId(note);
+    const newResourceId = generateNewResourceId(updatedData);
     query = {
       $push: {
         resources: newResourceId,
