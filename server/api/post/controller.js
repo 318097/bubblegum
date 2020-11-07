@@ -139,7 +139,7 @@ exports.createPost = async (req, res, next) => {
 exports.updatePost = async (req, res, next) => {
   const { id } = req.params;
   const key = getKey(id);
-  const { action, value, collectionId } = req.query;
+  const { action, collectionId } = req.query;
   const { status, liveId } = req.body;
   const { user } = req;
   let query;
@@ -154,6 +154,7 @@ exports.updatePost = async (req, res, next) => {
       0
     );
     updatedData["liveId"] = collectionLiveIndex;
+    updatedData["publishedAt"] = moment().toISOString();
     await UserModel.findOneAndUpdate(
       { _id: _.get(req, "user._id") },
       { $set: { [`notesApp.${collectionId}.liveId`]: collectionLiveIndex + 1 } }
