@@ -57,6 +57,10 @@ const PostsSchema = new mongoose.Schema(
     },
     solution: String,
     url: String,
+    rating: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
