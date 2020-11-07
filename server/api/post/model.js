@@ -38,7 +38,6 @@ const PostsSchema = new mongoose.Schema(
     socialStatus: {
       type: String,
       enum: ["NONE", "READY", "POSTED"],
-      required: true,
       default: "NONE",
     },
     visible: {

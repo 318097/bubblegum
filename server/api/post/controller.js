@@ -2,9 +2,7 @@ const _ = require("lodash");
 const moment = require("moment");
 const Model = require("./model");
 const UserModel = require("../user/model");
-
-const getKey = (id) =>
-  /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id) ? "_id" : "slug";
+const { getKey, generateNewResourceId, generateSlug } = require("./utils");
 
 exports.getRelatedPosts = async (req, res, next) => {
   const { tags = [] } = req.params;
@@ -124,6 +122,8 @@ exports.createPost = async (req, res, next) => {
     isAdmin: userType === "ADMIN",
     index: index++,
     collectionId,
+    slug: generateSlug({ title: item.title }),
+    resources: [],
   }));
 
   const result = await Model.create(posts);
@@ -161,9 +161,10 @@ exports.updatePost = async (req, res, next) => {
   }
 
   if (action === "CREATE_RESOURCE") {
+    const newResourceId = generateNewResourceId(note);
     query = {
       $push: {
-        resources: value,
+        resources: newResourceId,
       },
     };
   } else {
