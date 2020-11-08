@@ -62,6 +62,10 @@ const PostsSchema = new mongoose.Schema(
       default: 0,
     },
     publishedAt: Date,
+    notes: {
+      type: Array,
+      default: [],
+    },
   },
   {
     timestamps: true,
