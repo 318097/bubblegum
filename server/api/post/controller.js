@@ -118,15 +118,20 @@ exports.createPost = async (req, res, next) => {
   const currentCollection = _.get(req, ["user", "notesApp", collectionId], {});
   let index = _.get(currentCollection, "index", 1);
 
-  const posts = [].concat(data).map((item) => ({
-    ...item,
-    userId: _id,
-    isAdmin: userType === "ADMIN",
-    index: index++,
-    collectionId,
-    slug: generateSlug({ title: item.title }),
-    resources: [],
-  }));
+  const posts = [].concat(data).map((item) => {
+    const slug = generateSlug({ title: item.title });
+    index++;
+    const resourceId = generateNewResourceId({ slug, index });
+    return {
+      ...item,
+      userId: _id,
+      isAdmin: userType === "ADMIN",
+      index,
+      collectionId,
+      slug,
+      resources: [resourceId],
+    };
+  });
 
   const result = await Model.create(posts);
 
