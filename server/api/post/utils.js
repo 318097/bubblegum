@@ -22,4 +22,6 @@ const generateNewResourceId = (note, index) =>
     _.get(note, "resources.length", 0) + 1
   }`;
 
-module.exports = { getKey, generateNewResourceId, generateSlug };
+const isSearchId = (search) => /^\d+$/.test(search.trim());
+
+module.exports = { getKey, generateNewResourceId, generateSlug, isSearchId };

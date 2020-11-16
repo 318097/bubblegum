@@ -2,7 +2,12 @@ const _ = require("lodash");
 const moment = require("moment");
 const Model = require("./model");
 const UserModel = require("../user/model");
-const { getKey, generateNewResourceId, generateSlug } = require("./utils");
+const {
+  getKey,
+  generateNewResourceId,
+  generateSlug,
+  isSearchId,
+} = require("./utils");
 
 exports.getRelatedPosts = async (req, res, next) => {
   const { tags = [] } = req.params;
@@ -45,19 +50,26 @@ exports.getAllPosts = async (req, res, next) => {
     };
 
   if (search) {
-    const regex = new RegExp(search, "gi");
-    aggregation["$or"] = [
-      {
-        title: {
-          $regex: regex,
+    const searchTypeIsId = isSearchId(search);
+    if (searchTypeIsId) {
+      const key = status === "POSTED" ? "liveId" : "index";
+      aggregation[key] = Number(search.trim());
+      console.log(aggregation);
+    } else {
+      const regex = new RegExp(search, "gi");
+      aggregation["$or"] = [
+        {
+          title: {
+            $regex: regex,
+          },
         },
-      },
-      {
-        content: {
-          $regex: regex,
+        {
+          content: {
+            $regex: regex,
+          },
         },
-      },
-    ];
+      ];
+    }
   }
 
   if (req.source === "NOTES_APP") {
