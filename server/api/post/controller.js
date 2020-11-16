@@ -26,6 +26,7 @@ exports.getAllPosts = async (req, res, next) => {
     sortOrder,
     sortFilter,
     rating,
+    type,
   } = req.query;
 
   const aggregation = {
@@ -65,6 +66,7 @@ exports.getAllPosts = async (req, res, next) => {
 
     if (status && status !== "ALL") aggregation["status"] = status;
     if (rating && rating !== "ALL") aggregation["rating"] = Number(rating);
+    if (type && type !== "ALL") aggregation["type"] = type;
 
     if (socialStatus && socialStatus !== "ALL")
       aggregation["socialStatus"] = socialStatus;
