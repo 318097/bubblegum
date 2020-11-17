@@ -76,15 +76,13 @@ exports.getAllPosts = async (req, res, next) => {
     // const { _id } = req.user;
     // aggregation["userId"] = _id;
 
-    if (status && status !== "ALL") aggregation["status"] = status;
-    if (rating && rating !== "ALL") aggregation["rating"] = Number(rating);
-    if (type && type !== "ALL") aggregation["type"] = type;
+    if (status) aggregation["status"] = status;
+    if (rating) aggregation["rating"] = Number(rating);
+    if (type) aggregation["type"] = type;
 
-    if (socialStatus && socialStatus !== "ALL")
-      aggregation["socialStatus"] = socialStatus;
+    if (socialStatus) aggregation["socialStatus"] = socialStatus;
 
-    if (visibility && visibility !== "ALL")
-      aggregation["visible"] = visibility === "visible";
+    if (visibility) aggregation["visible"] = visibility === "visible";
 
     if (sortFilter) {
       sort = {
