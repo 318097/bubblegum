@@ -27,7 +27,7 @@ const PostsSchema = new mongoose.Schema(
       required: false,
       default: "POST",
       type: String,
-      enum: ["POST", "DROP", "QUIZ"],
+      enum: ["POST", "DROP", "QUIZ", "CHAIN"],
     },
     status: {
       type: String,
@@ -66,6 +66,8 @@ const PostsSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    chainedTo: [],
+    chainedItems: [],
   },
   {
     timestamps: true,

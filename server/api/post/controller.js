@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const mongoose = require("mongoose");
 const moment = require("moment");
 const Model = require("./model");
 const UserModel = require("../user/model");
@@ -9,6 +10,8 @@ const {
   isSearchId,
 } = require("./utils");
 
+const { ObjectId } = mongoose.Types;
+
 exports.getRelatedPosts = async (req, res, next) => {
   const { tags = [] } = req.params;
   const posts = await Model.aggregate([
@@ -16,6 +19,15 @@ exports.getRelatedPosts = async (req, res, next) => {
     { $sample: { size: 5 } },
   ]);
   res.send({ posts });
+};
+
+exports.getChains = async (req, res, next) => {
+  // const { _id } = req.user;
+  const { collectionId } = req.query;
+  const chains = await Model.aggregate([
+    { $match: { type: "CHAIN", collectionId } },
+  ]);
+  res.send({ chains });
 };
 
 exports.getAllPosts = async (req, res, next) => {
@@ -100,6 +112,14 @@ exports.getAllPosts = async (req, res, next) => {
 
   const result = await Model.aggregate([
     { $match: aggregation },
+    {
+      $lookup: {
+        from: "posts",
+        localField: "chainedItems",
+        foreignField: "_id",
+        as: "chainedPosts",
+      },
+    },
     { $sort: sort },
     {
       $skip: (Number(page) - 1) * Number(limit),
@@ -118,8 +138,18 @@ exports.getAllPosts = async (req, res, next) => {
 exports.getPostById = async (req, res, next) => {
   const { id } = req.params;
   const key = getKey(id);
-  const result = await Model.findOne({ [key]: id });
-
+  const aggregation = { [key]: key === "_id" ? ObjectId(id) : id };
+  const [result] = await Model.aggregate([
+    { $match: aggregation },
+    {
+      $lookup: {
+        from: "posts",
+        localField: "chainedItems",
+        foreignField: "_id",
+        as: "chainedPosts",
+      },
+    },
+  ]);
   res.send({ post: result });
 };
 
@@ -159,11 +189,12 @@ exports.updatePost = async (req, res, next) => {
   const { id } = req.params;
   const key = getKey(id);
   const { action, collectionId } = req.query;
-  const { status, liveId } = req.body;
+  const { status, liveId, chainedTo, updatedChainedTo } = req.body;
   const { user } = req;
   let query;
   const updatedData = {
     ...req.body,
+    chainedTo: updatedChainedTo,
   };
 
   if (!liveId && status === "POSTED") {
@@ -202,6 +233,22 @@ exports.updatePost = async (req, res, next) => {
     query,
     { new: true }
   );
+
+  if (updatedChainedTo) {
+    const added = _.difference(updatedChainedTo, chainedTo);
+    if (added.length)
+      await Model.findOneAndUpdate(
+        { _id: added[0] },
+        { $push: { chainedItems: ObjectId(id) } }
+      );
+
+    const removed = _.difference(chainedTo, updatedChainedTo);
+    if (removed.length)
+      await Model.findOneAndUpdate(
+        { _id: removed[0] },
+        { $pull: { chainedItems: ObjectId(id) } }
+      );
+  }
 
   res.send({ result });
 };
