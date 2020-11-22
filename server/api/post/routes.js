@@ -2,19 +2,15 @@ const router = require("express").Router();
 const controller = require("./controller");
 const errorHandlingWrapper = require("../../middleware/errorHandling");
 
-const { externalAccess } = require("../../auth/auth");
+const { transparent, protected } = require("../../auth/auth");
 
-router.get("/", errorHandlingWrapper(controller.getAllPosts));
+router.get("/", transparent, errorHandlingWrapper(controller.getAllPosts));
 router.get("/random", errorHandlingWrapper(controller.getRelatedPosts));
-router.get("/stats", errorHandlingWrapper(controller.getStats));
-router.get("/chains", errorHandlingWrapper(controller.getChains));
+router.get("/stats", protected, errorHandlingWrapper(controller.getStats));
+router.get("/chains", protected, errorHandlingWrapper(controller.getChains));
 router.get("/:id", errorHandlingWrapper(controller.getPostById));
-router.post("/", externalAccess, errorHandlingWrapper(controller.createPost));
-router.put("/:id", externalAccess, errorHandlingWrapper(controller.updatePost));
-router.delete(
-  "/:id",
-  externalAccess,
-  errorHandlingWrapper(controller.deletePost)
-);
+router.post("/", protected, errorHandlingWrapper(controller.createPost));
+router.put("/:id", protected, errorHandlingWrapper(controller.updatePost));
+router.delete("/:id", protected, errorHandlingWrapper(controller.deletePost));
 
 module.exports = router;

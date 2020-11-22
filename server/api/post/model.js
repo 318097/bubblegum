@@ -3,8 +3,7 @@ const schemaName = "posts";
 
 const PostsSchema = new mongoose.Schema(
   {
-    // userId: { type: mongoose.Types.ObjectId, ref: "user" },
-    userId: { type: String },
+    userId: { type: mongoose.Types.ObjectId, ref: "user" },
     index: Number,
     title: {
       type: String,
@@ -49,7 +48,7 @@ const PostsSchema = new mongoose.Schema(
       default: false,
     },
     fileName: String,
-    collectionId: String, // collection id to which the note belongs
+    collectionId: String,
     liveId: Number,
     deleted: {
       type: Boolean,
@@ -66,8 +65,8 @@ const PostsSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    chainedTo: [],
-    chainedItems: [],
+    chainedTo: [], // which all posts is it chained to
+    chainedItems: [], // items linked in a chain
   },
   {
     timestamps: true,

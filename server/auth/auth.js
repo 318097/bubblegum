@@ -44,10 +44,26 @@ const externalAccess = async (req, res, next) => {
   }
 };
 
+const transparent = async (req, res, next) => {
+  const token = req.headers.authorization || "";
+  if (token) {
+    const decoded = validateToken(token);
+    const user = await User.findOne({ _id: decoded._id });
+    req.user = user;
+  }
+  next();
+};
+
 const signToken = (_id) => jwt.sign({ _id }, config.JWT);
 
 const validateToken = (token) => jwt.verify(token, config.JWT);
 
 const protected = [decodeToken, extractUser];
 
-module.exports = { signToken, validateToken, externalAccess, protected };
+module.exports = {
+  signToken,
+  validateToken,
+  externalAccess,
+  protected,
+  transparent,
+};

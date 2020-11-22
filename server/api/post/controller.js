@@ -13,19 +13,38 @@ const {
 const { ObjectId } = mongoose.Types;
 
 exports.getRelatedPosts = async (req, res, next) => {
-  const { tags = [] } = req.params;
+  const { collectionId, tags = [], postId } = req.query;
+  const aggregation = {
+    status: "POSTED",
+    visible: true,
+    isAdmin: true,
+    deleted: false,
+    collectionId,
+    _id: { $ne: ObjectId(postId) },
+  };
+  if (tags.length) aggregation["tags"] = { $in: tags };
+
   const posts = await Model.aggregate([
-    { $match: { status: "POSTED", visible: true } },
-    { $sample: { size: 5 } },
+    {
+      $match: aggregation,
+    },
+    { $sample: { size: 3 } },
   ]);
   res.send({ posts });
 };
 
 exports.getChains = async (req, res, next) => {
-  // const { _id } = req.user;
+  const { _id } = req.user;
   const { collectionId } = req.query;
   const chains = await Model.aggregate([
-    { $match: { type: "CHAIN", collectionId } },
+    {
+      $match: {
+        type: "CHAIN",
+        collectionId,
+        userId: _id,
+        status: { $nin: ["POSTED"] },
+      },
+    },
   ]);
   res.send({ chains });
 };
@@ -66,7 +85,6 @@ exports.getAllPosts = async (req, res, next) => {
     if (searchTypeIsId) {
       const key = status === "POSTED" ? "liveId" : "index";
       aggregation[key] = Number(search.trim());
-      console.log(aggregation);
     } else {
       const regex = new RegExp(search, "gi");
       aggregation["$or"] = [
@@ -85,22 +103,18 @@ exports.getAllPosts = async (req, res, next) => {
   }
 
   if (req.source === "NOTES_APP") {
-    // const { _id } = req.user;
-    // aggregation["userId"] = _id;
+    const { _id } = req.user;
+    aggregation["userId"] = _id;
 
     if (status) aggregation["status"] = status;
     if (rating) aggregation["rating"] = Number(rating);
     if (type) aggregation["type"] = type;
-
     if (socialStatus) aggregation["socialStatus"] = socialStatus;
-
     if (visibility) aggregation["visible"] = visibility === "visible";
-
-    if (sortFilter) {
+    if (sortFilter)
       sort = {
         [sortFilter]: sortOrder === "ASC" ? 1 : -1,
       };
-    }
   } else {
     aggregation.isAdmin = true;
     aggregation.status = "POSTED";
@@ -128,7 +142,6 @@ exports.getAllPosts = async (req, res, next) => {
   ]);
 
   const count = await Model.find(aggregation).count();
-
   res.send({
     posts: result,
     meta: { count },
@@ -137,8 +150,22 @@ exports.getAllPosts = async (req, res, next) => {
 
 exports.getPostById = async (req, res, next) => {
   const { id } = req.params;
+  const { collectionId } = req.query;
   const key = getKey(id);
-  const aggregation = { [key]: key === "_id" ? ObjectId(id) : id };
+  const aggregation = {
+    [key]: key === "_id" ? ObjectId(id) : id,
+    collectionId,
+  };
+
+  if (req.source === "NOTES_APP") {
+    const { _id } = req.user;
+    aggregation["userId"] = _id;
+  } else {
+    aggregation.isAdmin = true;
+    aggregation.status = "POSTED";
+    aggregation.visible = true;
+  }
+
   const [result] = await Model.aggregate([
     { $match: aggregation },
     {
@@ -191,6 +218,7 @@ exports.updatePost = async (req, res, next) => {
   const { action, collectionId } = req.query;
   const { status, liveId, chainedTo, updatedChainedTo } = req.body;
   const { user } = req;
+  const { _id: userId } = user;
   let query;
   const updatedData = {
     ...req.body,
@@ -205,8 +233,9 @@ exports.updatePost = async (req, res, next) => {
     );
     updatedData["liveId"] = collectionLiveIndex;
     updatedData["publishedAt"] = moment().toISOString();
+
     await UserModel.findOneAndUpdate(
-      { _id: _.get(req, "user._id") },
+      { _id: userId },
       { $set: { [`notesApp.${collectionId}.liveId`]: collectionLiveIndex + 1 } }
     );
   }
@@ -229,6 +258,7 @@ exports.updatePost = async (req, res, next) => {
   const result = await Model.findOneAndUpdate(
     {
       [key]: id,
+      userId,
     },
     query,
     { new: true }
@@ -238,14 +268,14 @@ exports.updatePost = async (req, res, next) => {
     const added = _.difference(updatedChainedTo, chainedTo);
     if (added.length)
       await Model.findOneAndUpdate(
-        { _id: added[0] },
+        { _id: added[0], userId },
         { $push: { chainedItems: ObjectId(id) } }
       );
 
     const removed = _.difference(chainedTo, updatedChainedTo);
     if (removed.length)
       await Model.findOneAndUpdate(
-        { _id: removed[0] },
+        { _id: removed[0], userId },
         { $pull: { chainedItems: ObjectId(id) } }
       );
   }
@@ -256,10 +286,12 @@ exports.updatePost = async (req, res, next) => {
 exports.deletePost = async (req, res, next) => {
   const { id } = req.params;
   const key = getKey(id);
+  const { _id: userId } = req.user;
 
   const result = await Model.findOneAndUpdate(
     {
       [key]: id,
+      userId,
     },
     { $set: { deleted: true } }
   );
@@ -268,10 +300,12 @@ exports.deletePost = async (req, res, next) => {
 
 exports.getStats = async (req, res, next) => {
   const { collectionId } = req.query;
+  const { _id: userId } = req.user;
   const result = await Model.find({
     visible: true,
     deleted: false,
     collectionId,
+    userId,
   }).sort({ createdAt: 1 });
 
   const stats = {
