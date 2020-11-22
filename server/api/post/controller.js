@@ -243,7 +243,7 @@ exports.updatePost = async (req, res, next) => {
   if (action === "CREATE_RESOURCE") {
     const newResourceId = generateNewResourceId(updatedData);
     query = {
-      $push: {
+      $addToSet: {
         resources: newResourceId,
       },
     };
@@ -269,7 +269,7 @@ exports.updatePost = async (req, res, next) => {
     if (added.length)
       await Model.findOneAndUpdate(
         { _id: added[0], userId },
-        { $push: { chainedItems: ObjectId(id) } }
+        { $addToSet: { chainedItems: ObjectId(id) } }
       );
 
     const removed = _.difference(chainedTo, updatedChainedTo);

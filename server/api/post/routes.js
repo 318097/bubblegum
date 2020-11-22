@@ -8,7 +8,7 @@ router.get("/", transparent, errorHandlingWrapper(controller.getAllPosts));
 router.get("/random", errorHandlingWrapper(controller.getRelatedPosts));
 router.get("/stats", protected, errorHandlingWrapper(controller.getStats));
 router.get("/chains", protected, errorHandlingWrapper(controller.getChains));
-router.get("/:id", errorHandlingWrapper(controller.getPostById));
+router.get("/:id", transparent, errorHandlingWrapper(controller.getPostById));
 router.post("/", protected, errorHandlingWrapper(controller.createPost));
 router.put("/:id", protected, errorHandlingWrapper(controller.updatePost));
 router.delete("/:id", protected, errorHandlingWrapper(controller.deletePost));
