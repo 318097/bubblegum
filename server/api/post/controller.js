@@ -269,14 +269,14 @@ exports.updatePost = async (req, res, next) => {
     if (added.length)
       await Model.findOneAndUpdate(
         { _id: added[0], userId },
-        { $addToSet: { chainedItems: ObjectId(id) } }
+        { $addToSet: { chainedItems: id } }
       );
 
     const removed = _.difference(chainedTo, updatedChainedTo);
     if (removed.length)
       await Model.findOneAndUpdate(
         { _id: removed[0], userId },
-        { $pull: { chainedItems: ObjectId(id) } }
+        { $pull: { chainedItems: id } }
       );
   }
 

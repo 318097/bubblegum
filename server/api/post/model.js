@@ -65,8 +65,8 @@ const PostsSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    chainedTo: [], // which all posts is it chained to
-    chainedItems: [], // items linked in a chain
+    chainedTo: [mongoose.Types.ObjectId], // which all posts is it chained to
+    chainedItems: [mongoose.Types.ObjectId], // items linked in a chain
   },
   {
     timestamps: true,
