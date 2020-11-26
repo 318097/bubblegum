@@ -42,8 +42,6 @@ exports.getChains = async (req, res, next) => {
         type: "CHAIN",
         collectionId,
         userId: _id,
-        status: { $nin: ["POSTED"] },
-        visible: true,
       },
     },
   ]);
