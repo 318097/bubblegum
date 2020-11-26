@@ -79,7 +79,7 @@ exports.createProject = async (req, res, next) => {
 };
 
 exports.createTodo = async (req, res, next) => {
-  const { topicId, content, itemType, projectId } = req.body;
+  const { topicId, content, itemType, projectId, marked } = req.body;
   const userId = req.user._id;
 
   if (itemType === "TOPIC") {
@@ -90,12 +90,15 @@ exports.createTodo = async (req, res, next) => {
     });
     res.send({ result });
   } else if (itemType === "TODO") {
-    const result = await Model.create({
+    const data = {
       topicId,
       content,
       userId,
       projectId,
-    });
+      marked,
+    };
+    if (marked) data["completedOn"] = moment().toDate();
+    const result = await Model.create(data);
     await TopicsModel.findOneAndUpdate(
       { _id: topicId },
       {
