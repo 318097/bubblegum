@@ -7,8 +7,10 @@ const getKey = (id) =>
 const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
   const slug = title
     .trim()
-    .replace(/\s+/gi, seperator)
+    .replace(/\//, "-")
+    .replace(/&/, "and")
     .replace(/[^a-zA-Z0-9\-\s]/gi, "")
+    .replace(/\s+/gi, seperator)
     .toLowerCase();
   const timestamp = prevSlug
     ? prevSlug.split(seperator).pop()

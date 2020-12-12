@@ -44,6 +44,11 @@ exports.getChains = async (req, res, next) => {
         userId: _id,
       },
     },
+    {
+      $sort: {
+        _id: -1,
+      },
+    },
   ]);
   res.send({ chains });
 };
