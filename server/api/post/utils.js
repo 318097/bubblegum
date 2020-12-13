@@ -7,6 +7,7 @@ const getKey = (id) =>
 const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
   const slug = title
     .trim()
+    .replace(/-/, " ")
     .replace(/\//, "-")
     .replace(/&/, "and")
     .replace(/[^a-zA-Z0-9\-\s]/gi, "")
