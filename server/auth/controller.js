@@ -66,7 +66,7 @@ const register = async (req, res) => {
 
   if (error) return res.status(400).send(error.details[0].message);
 
-  const result = await User.create(req.body);
+  const result = await User.create({ ...req.body, source: req.source });
 
   res.send({ result });
 };

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const config = require("../../config");
+const { APP_LIST } = require("../../constants");
 const User = require("../api/user/model");
 
 const checkToken = expressJwt({ secret: config.JWT });
@@ -29,8 +30,7 @@ const externalAccess = async (req, res, next) => {
     return res.status(401).send("Unauthorized Access.");
 
   const source = req.headers["external-source"];
-  const allowedSource = ["NOTES_APP", "CHAT_APP", "DOT"];
-  if (!allowedSource.includes(source))
+  if (!APP_LIST.includes(source))
     return res.status(401).send("Unauthorized: Invalid source.");
 
   if (req.headers["authorization"]) {
