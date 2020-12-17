@@ -3,7 +3,7 @@ const Model = require("./model");
 const signToken = require("../../auth/auth").signToken;
 
 exports.createUser = async (req, res) => {
-  const user = await Model.create({ ...req.body });
+  const user = await Model.create({ ...req.body, source: req.source });
   res.send(user);
 };
 

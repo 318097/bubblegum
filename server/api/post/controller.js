@@ -44,6 +44,11 @@ exports.getChains = async (req, res, next) => {
         userId: _id,
       },
     },
+    {
+      $sort: {
+        _id: -1,
+      },
+    },
   ]);
   res.send({ chains });
 };
@@ -221,8 +226,9 @@ exports.updatePost = async (req, res, next) => {
   let query;
   const updatedData = {
     ...req.body,
-    chainedTo: updatedChainedTo,
   };
+
+  if (updatedChainedTo) updatedData["chainedTo"] = updatedChainedTo;
 
   if (!liveId && status === "POSTED") {
     const collectionLiveIndex = _.get(
