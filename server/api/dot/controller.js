@@ -8,9 +8,9 @@ const uuid = require("uuid");
 exports.getAllTodos = async (req, res, next) => {
   const { projectId } = req.query;
   const topics = await TopicsModel.aggregate([
-    { $match: { userId: req.user._id, projectId, visible: true } },
+    { $match: { userId: req.user._id, projectId } },
   ]);
-  const visibleTopics = _.map(topics, (topic) => topic._id);
+  const visibleTopics = _.map(_.filter(topics, "visible"), "_id");
 
   const todos = await Model.aggregate([
     { $match: { userId: req.user._id, topicId: { $in: visibleTopics } } },
@@ -53,31 +53,6 @@ exports.getTodoById = async (req, res, next) => {
   res.send({ todo: result });
 };
 
-exports.createProject = async (req, res, next) => {
-  const { name } = req.body;
-  const userId = req.user._id;
-  const projectId = uuid();
-
-  const newProject = {
-    name,
-    _id: projectId,
-    createdAt: new Date().toISOString(),
-  };
-  const result = await UserModel.findByIdAndUpdate(
-    { _id: userId },
-    { $push: { dot: newProject } },
-    { new: true }
-  ).lean();
-
-  await TopicsModel.create({
-    content: "others",
-    projectId,
-    userId,
-  });
-
-  res.send({ ...result });
-};
-
 exports.createTodo = async (req, res, next) => {
   const { topicId, content, projectId, marked } = req.body;
   const userId = req.user._id;
@@ -99,18 +74,6 @@ exports.createTodo = async (req, res, next) => {
       },
     }
   );
-  res.send({ result });
-};
-
-exports.createTopic = async (req, res, next) => {
-  const { content, projectId } = req.body;
-  const userId = req.user._id;
-
-  const result = await TopicsModel.create({
-    content,
-    projectId,
-    userId,
-  });
   res.send({ result });
 };
 
@@ -159,4 +122,56 @@ exports.deleteTodo = async (req, res, next) => {
     { $pull: { todos: result._id } }
   );
   res.send({ result });
+};
+
+exports.createTopic = async (req, res, next) => {
+  const { content, projectId } = req.body;
+  const userId = req.user._id;
+
+  const result = await TopicsModel.create({
+    content,
+    projectId,
+    userId,
+  });
+  res.send({ result });
+};
+
+exports.updateTopic = async (req, res, next) => {
+  const { id: topicId } = req.params;
+  const result = await TopicsModel.findOneAndUpdate(
+    {
+      _id: topicId,
+    },
+    {
+      $set: req.body,
+    },
+    { new: true }
+  );
+  res.send({ result });
+};
+
+exports.createProject = async (req, res, next) => {
+  const { name } = req.body;
+  const userId = req.user._id;
+  const projectId = uuid();
+
+  const newProject = {
+    name,
+    _id: projectId,
+    createdAt: new Date().toISOString(),
+  };
+  const result = await UserModel.findByIdAndUpdate(
+    { _id: userId },
+    { $push: { dot: newProject } },
+    { new: true }
+  ).lean();
+
+  await TopicsModel.create({
+    content: "others",
+    projectId,
+    isDefault: true,
+    userId,
+  });
+
+  res.send({ ...result });
 };

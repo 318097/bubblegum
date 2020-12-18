@@ -14,6 +14,7 @@ router.put("/todos/:id/stamp", errorHandlingWrapper(controller.stampTodo));
 router.delete("/todos/:id", errorHandlingWrapper(controller.deleteTodo));
 
 router.post("/topics", errorHandlingWrapper(controller.createTopic));
+router.put("/topics/:id", errorHandlingWrapper(controller.updateTopic));
 
 router.post("/projects", errorHandlingWrapper(controller.createProject));
 
