@@ -79,36 +79,39 @@ exports.createProject = async (req, res, next) => {
 };
 
 exports.createTodo = async (req, res, next) => {
-  const { topicId, content, itemType, projectId, marked } = req.body;
+  const { topicId, content, projectId, marked } = req.body;
   const userId = req.user._id;
 
-  if (itemType === "TOPIC") {
-    const result = await TopicsModel.create({
-      content,
-      projectId,
-      userId,
-    });
-    res.send({ result });
-  } else if (itemType === "TODO") {
-    const data = {
-      topicId,
-      content,
-      userId,
-      projectId,
-      marked,
-    };
-    if (marked) data["completedOn"] = moment().toDate();
-    const result = await Model.create(data);
-    await TopicsModel.findOneAndUpdate(
-      { _id: topicId },
-      {
-        $push: {
-          [`todos`]: result._id,
-        },
-      }
-    );
-    res.send({ result });
-  }
+  const data = {
+    topicId,
+    content,
+    userId,
+    projectId,
+    marked,
+  };
+  if (marked) data["completedOn"] = moment().toDate();
+  const result = await Model.create(data);
+  await TopicsModel.findOneAndUpdate(
+    { _id: topicId },
+    {
+      $push: {
+        [`todos`]: result._id,
+      },
+    }
+  );
+  res.send({ result });
+};
+
+exports.createTopic = async (req, res, next) => {
+  const { content, projectId } = req.body;
+  const userId = req.user._id;
+
+  const result = await TopicsModel.create({
+    content,
+    projectId,
+    userId,
+  });
+  res.send({ result });
 };
 
 exports.updateTodo = async (req, res, next) => {
