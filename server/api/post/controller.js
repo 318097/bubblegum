@@ -192,7 +192,7 @@ exports.createPost = async (req, res, next) => {
   let index = _.get(currentCollection, "index", 1);
 
   const posts = [].concat(data).map((item) => {
-    const slug = generateSlug({ title: item.title });
+    const slug = item.slug ? item.slug : generateSlug({ title: item.title });
     const postIndex = index;
     index++;
 
