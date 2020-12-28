@@ -193,13 +193,15 @@ exports.createPost = async (req, res, next) => {
 
   const posts = [].concat(data).map((item) => {
     const slug = generateSlug({ title: item.title });
+    const postIndex = index;
     index++;
-    const resourceId = generateNewResourceId({ slug, index });
+
+    const resourceId = generateNewResourceId({ slug, index: postIndex });
     return {
       ...item,
       userId: _id,
       isAdmin: userType === "ADMIN",
-      index,
+      index: postIndex,
       collectionId,
       slug,
       resources: [resourceId],
