@@ -12,48 +12,7 @@ const {
 
 const { ObjectId } = mongoose.Types;
 
-exports.getRelatedPosts = async (req, res, next) => {
-  const { collectionId, tags = [], postId } = req.query;
-  const aggregation = {
-    status: "POSTED",
-    visible: true,
-    isAdmin: true,
-    deleted: false,
-    collectionId,
-    _id: { $ne: ObjectId(postId) },
-  };
-  if (tags.length) aggregation["tags"] = { $in: tags };
-
-  const posts = await Model.aggregate([
-    {
-      $match: aggregation,
-    },
-    { $sample: { size: 3 } },
-  ]);
-  res.send({ posts });
-};
-
-exports.getChains = async (req, res, next) => {
-  const { _id } = req.user;
-  const { collectionId } = req.query;
-  const chains = await Model.aggregate([
-    {
-      $match: {
-        type: "CHAIN",
-        collectionId,
-        userId: _id,
-      },
-    },
-    {
-      $sort: {
-        _id: -1,
-      },
-    },
-  ]);
-  res.send({ chains });
-};
-
-exports.getAllPosts = async (req, res, next) => {
+const getAggregationFilters = (req) => {
   const {
     search,
     limit = 10,
@@ -128,6 +87,53 @@ exports.getAllPosts = async (req, res, next) => {
     };
   }
 
+  return { aggregation, sort, page, limit };
+};
+
+exports.getRelatedPosts = async (req, res, next) => {
+  const { collectionId, tags = [], postId } = req.query;
+  const aggregation = {
+    status: "POSTED",
+    visible: true,
+    isAdmin: true,
+    deleted: false,
+    collectionId,
+    _id: { $ne: ObjectId(postId) },
+  };
+  if (tags.length) aggregation["tags"] = { $in: tags };
+
+  const posts = await Model.aggregate([
+    {
+      $match: aggregation,
+    },
+    { $sample: { size: 3 } },
+  ]);
+  res.send({ posts });
+};
+
+exports.getChains = async (req, res, next) => {
+  const { _id } = req.user;
+  const { collectionId } = req.query;
+  const chains = await Model.aggregate([
+    {
+      $match: {
+        type: "CHAIN",
+        collectionId,
+        userId: _id,
+      },
+    },
+    {
+      $sort: {
+        _id: -1,
+      },
+    },
+  ]);
+  res.send({ chains });
+};
+
+exports.getAllPosts = async (req, res, next) => {
+  const { aggregation, sort, page, limit } = getAggregationFilters(req);
+
   const result = await Model.aggregate([
     { $match: aggregation },
     {
@@ -146,6 +152,7 @@ exports.getAllPosts = async (req, res, next) => {
   ]);
 
   const count = await Model.find(aggregation).count();
+
   res.send({
     posts: result,
     meta: { count },
@@ -306,14 +313,8 @@ exports.deletePost = async (req, res, next) => {
 };
 
 exports.getStats = async (req, res, next) => {
-  const { collectionId } = req.query;
-  const { _id: userId } = req.user;
-  const result = await Model.find({
-    visible: true,
-    deleted: false,
-    collectionId,
-    userId,
-  }).sort({ createdAt: 1 });
+  const { aggregation } = getAggregationFilters(req);
+  const result = await Model.find(aggregation).sort({ createdAt: 1 });
 
   const stats = {
     total: result.length,
