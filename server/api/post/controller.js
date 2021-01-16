@@ -356,3 +356,49 @@ exports.getStats = async (req, res, next) => {
 
   res.send({ stats });
 };
+
+exports.getBookmarks = async (req, res, next) => {
+  const { aggregation } = getAggregationFilters(req);
+  const result = await Model.aggregate([
+    {
+      $match: {
+        ...aggregation,
+        _id: { $in: _.get(req, "user.bookmarkedPosts", []) },
+      },
+    },
+    {
+      $lookup: {
+        from: "posts",
+        localField: "chainedItems",
+        foreignField: "_id",
+        as: "chainedPosts",
+      },
+    },
+  ]);
+
+  res.send({
+    bookmarks: result,
+  });
+};
+
+exports.toggleBookmark = async (req, res, next) => {
+  const { status } = req.body;
+  const { id } = req.params;
+
+  const updatedData = {
+    [status ? "$addToSet" : "$removeFromSet"]: {
+      bookmarkedPosts: ObjectId(id),
+    },
+  };
+  console.log(status, id, updatedData);
+  const result = await UserModel.findOneAndUpdate(
+    {
+      _id: req.user._id,
+    },
+    updatedData
+  );
+
+  res.send({
+    result,
+  });
+};

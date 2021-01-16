@@ -40,6 +40,9 @@ const UserSchema = new Schema(
       enum: APP_LIST,
       required: true,
     },
+    bookmarkedPosts: {
+      type: Array,
+    },
   },
   {
     timestamps: true,
