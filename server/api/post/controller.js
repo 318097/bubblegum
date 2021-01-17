@@ -386,11 +386,10 @@ exports.toggleBookmark = async (req, res, next) => {
   const { id } = req.params;
 
   const updatedData = {
-    [status ? "$addToSet" : "$removeFromSet"]: {
+    [status ? "$addToSet" : "$pull"]: {
       bookmarkedPosts: ObjectId(id),
     },
   };
-  console.log(status, id, updatedData);
   const result = await UserModel.findOneAndUpdate(
     {
       _id: req.user._id,
