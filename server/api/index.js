@@ -11,8 +11,9 @@ const chatRoutes = require("./chat/routes");
 const goalsRoutes = require("./goals/routes");
 const storeqRoutes = require("./storeq/routes");
 const dotRoutes = require("./dot/routes");
+const feedbackRoutes = require("./feedback/routes");
 
-const { protected, externalAccess } = require("../auth/auth");
+const { protected, externalAccess, transparent } = require("../auth/auth");
 
 router.get("/test", (req, res) => res.send("Test"));
 
@@ -27,5 +28,6 @@ router.use("/chat", externalAccess, chatRoutes);
 router.use("/goals", protected, goalsRoutes);
 router.use("/storeq", protected, storeqRoutes);
 router.use("/dot", externalAccess, dotRoutes);
+router.use("/feedback", transparent, feedbackRoutes);
 
 module.exports = router;
