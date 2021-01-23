@@ -5,19 +5,23 @@ const TimelineSchema = new mongoose.Schema(
   {
     content: {
       type: String,
-      required: true
+      required: true,
     },
     date: {
       type: Date,
-      required: true
+      required: true,
+    },
+    groupId: {
+      type: String,
+      required: true,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user"
-    }
+      ref: "user",
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

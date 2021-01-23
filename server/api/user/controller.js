@@ -1,6 +1,6 @@
 const _ = require("lodash");
 const Model = require("./model");
-const signToken = require("../../auth/auth").signToken;
+const { ObjectId } = require("mongoose").Types;
 
 exports.createUser = async (req, res) => {
   const user = await Model.create({ ...req.body, source: req.source });
@@ -49,4 +49,29 @@ exports.updateSettings = async (req, res) => {
     }
   );
   res.send(result);
+};
+
+exports.updateAppData = async (req, res) => {
+  const { user, query, body } = req;
+  const { action } = query;
+  let data;
+  switch (action) {
+    case "CREATE_TIMELINE_GROUP":
+      const projectId = new ObjectId();
+      const timeline = {
+        ...body,
+        _id: projectId,
+        createdAt: new Date().toISOString(),
+      };
+      data = {
+        $push: { timeline },
+      };
+      break;
+  }
+
+  const result = await Model.findByIdAndUpdate({ _id: user._id }, data, {
+    new: true,
+  }).lean();
+
+  res.send({ result });
 };

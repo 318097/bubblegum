@@ -17,7 +17,7 @@ const { protected, externalAccess, transparent } = require("../auth/auth");
 
 router.get("/test", (req, res) => res.send("Test"));
 
-router.use("/users", userRoutes);
+router.use("/users", protected, userRoutes);
 router.use("/todos", protected, todoRoutes);
 router.use("/posts", postRoutes);
 router.use("/expenses", protected, expenseRoutes);

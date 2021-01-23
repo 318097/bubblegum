@@ -43,6 +43,9 @@ const UserSchema = new Schema(
     bookmarkedPosts: {
       type: Array,
     },
+    timeline: {
+      type: Array,
+    },
   },
   {
     timestamps: true,

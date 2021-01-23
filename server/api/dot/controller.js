@@ -3,7 +3,7 @@ const Model = require("./model");
 const TopicsModel = require("./topicModel");
 const UserModel = require("../user/model");
 const _ = require("lodash");
-const uuid = require("uuid");
+const { ObjectId } = require("mongoose").Types;
 
 exports.getAllTodos = async (req, res, next) => {
   const { projectId } = req.query;
@@ -153,7 +153,7 @@ exports.updateTopic = async (req, res, next) => {
 exports.createProject = async (req, res, next) => {
   const { name } = req.body;
   const userId = req.user._id;
-  const projectId = uuid();
+  const projectId = new ObjectId();
 
   const newProject = {
     name,

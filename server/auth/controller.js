@@ -4,6 +4,7 @@ const Joi = require("@hapi/joi");
 const _ = require("lodash");
 const { OAuth2Client } = require("google-auth-library");
 const config = require("../../config");
+const { ObjectId } = require("mongoose").Types;
 
 const client = new OAuth2Client(config.GOOGLE_LOGIN_CLIENT_ID);
 
@@ -66,7 +67,20 @@ const register = async (req, res) => {
 
   if (error) return res.status(400).send(error.details[0].message);
 
-  const result = await User.create({ ...req.body, source: req.source });
+  const projectId = new ObjectId();
+  const defaultState = {
+    timeline: {
+      name: "Default",
+      _id: projectId,
+      createdAt: new Date().toISOString(),
+    },
+  };
+
+  const result = await User.create({
+    ...req.body,
+    ...defaultState,
+    source: req.source,
+  });
 
   res.send({ result });
 };
