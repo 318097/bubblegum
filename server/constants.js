@@ -1,4 +1,12 @@
-const APP_LIST = ["NOTES_APP", "DOT", "ATOM", "SNAKE", "CHAT_APP", "STOREQ"];
+const APP_LIST = [
+  "NOTES_APP",
+  "DOT",
+  "ATOM",
+  "SNAKE",
+  "CHAT_APP",
+  "STOREQ",
+  "CODEDROPS",
+];
 
 // const APP_TO_KEYS_MAPPING = {
 //   NOTES_APP: {
