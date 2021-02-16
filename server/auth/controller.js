@@ -76,6 +76,10 @@ const register = async (req, res) => {
     },
   };
 
+  const { email, username } = req.body;
+  const userExists = await User.findOne({ $or: [{ email }, { username }] });
+  if (userExists) throw new Error("Email/Username already exists.");
+
   const result = await User.create({
     ...req.body,
     ...defaultState,
