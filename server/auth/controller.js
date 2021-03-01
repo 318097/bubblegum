@@ -71,6 +71,7 @@ const register = async (req, res) => {
   const defaultState = {
     timeline: {
       name: "Default",
+      default: true,
       _id: projectId,
       createdAt: new Date().toISOString(),
     },

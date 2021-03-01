@@ -12,7 +12,7 @@ const TimelineSchema = new mongoose.Schema(
       required: true,
     },
     groupId: {
-      type: String,
+      type: Array,
       required: true,
     },
     userId: {
