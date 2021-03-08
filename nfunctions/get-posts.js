@@ -1,4 +1,5 @@
 const { connectToDb } = require("./common/db");
+const { headers } = require("./common/helpers");
 
 exports.handler = async (event, context) => {
   try {
@@ -7,7 +8,7 @@ exports.handler = async (event, context) => {
 
     const {
       search,
-      limit = 10,
+      limit = 50,
       page = 1,
       tags = [],
       collectionId,
@@ -69,20 +70,8 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 200,
       body: JSON.stringify({ posts, meta: { count } }, undefined, 2),
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
+      headers,
     };
-
-    // const subject = event.queryStringParameters.name || "World";
-    // return {
-    //   statusCode: 200,
-    //   body: JSON.stringify({ message: "rlts" }),
-    //   // // more keys you can return:
-    //   // headers: { "headerName": "headerValue", ... },
-    //   // isBase64Encoded: true,
-    // };
   } catch (err) {
     return { statusCode: 500, body: err.toString() };
   }

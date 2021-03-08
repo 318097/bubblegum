@@ -5,12 +5,14 @@ const { getUser } = require("./common/middlewares");
 
 exports.handler = async (event, context) => {
   try {
-    const user = getUser(event);
     const db = await connectToDb();
+
+    const user = getUser(event);
 
     const { _id, userType } = user;
     const { data = [] } = JSON.parse(event.body);
     const { collectionId } = event.queryStringParameters;
+
     const currentCollection = _.get(user, ["notesApp", collectionId], {});
     let index = _.get(currentCollection, "index", 1);
 
@@ -45,7 +47,7 @@ exports.handler = async (event, context) => {
       headers,
     };
   } catch (err) {
-    console.log("error block.", err);
+    console.log(err);
     return {
       statusCode: 200,
       body: "Error",
