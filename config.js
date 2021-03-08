@@ -10,6 +10,7 @@ const config = {
       : env === "staging"
       ? process.env.STAGING_DB_URL
       : "mongodb://localhost/bubblegum",
+  NETLIFY_DB_URL: process.env.NETLIFY_DB_URL,
   JWT: process.env.JWT || "brainbox",
   GOOGLE_LOGIN_CLIENT_ID: process.env.GOOGLE_LOGIN_CLIENT_ID,
 };

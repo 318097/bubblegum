@@ -54,7 +54,7 @@ const transparent = async (req, res, next) => {
   next();
 };
 
-const signToken = (_id) => jwt.sign({ _id }, config.JWT);
+const signToken = (_id, email) => jwt.sign({ _id, email }, config.JWT);
 
 const validateToken = (token) => jwt.verify(token, config.JWT);
 

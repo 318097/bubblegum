@@ -50,7 +50,7 @@ const login = async (req, res) => {
   user = user.toObject();
   delete user.password;
 
-  const token = signToken(user._id);
+  const token = signToken(user._id, user.email);
 
   res.send({ token, ...user });
 };

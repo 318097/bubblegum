@@ -6,6 +6,7 @@ const APP_LIST = [
   "CHAT_APP",
   "STOREQ",
   "CODEDROPS",
+  "FLASH",
 ];
 
 // const APP_TO_KEYS_MAPPING = {
