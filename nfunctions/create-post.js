@@ -29,6 +29,7 @@ exports.handler = async (event, context) => {
         index: postIndex,
         collectionId,
         slug,
+        source: event["multiValueHeaders"]["external-source"],
       };
     });
 
