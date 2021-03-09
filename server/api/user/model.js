@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const { APP_LIST } = require("../../constants");
 
 const UserSchema = new Schema(
@@ -70,8 +70,9 @@ UserSchema.methods = {
     if (!plainTextPassword) {
       return "";
     } else {
-      const salt = bcrypt.genSaltSync(10);
-      return bcrypt.hashSync(plainTextPassword, salt);
+      // const salt = bcrypt.genSaltSync(10);
+      // return bcrypt.hashSync(plainTextPassword, salt);
+      return plainTextPassword;
     }
   },
   toJson: function () {

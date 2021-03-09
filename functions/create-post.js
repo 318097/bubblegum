@@ -3,7 +3,7 @@ const { connectToDb, ObjectID } = require("./common/db");
 const { generateSlug, headers } = require("./common/helpers");
 const { getUser } = require("./common/middlewares");
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   try {
     const db = await connectToDb();
 

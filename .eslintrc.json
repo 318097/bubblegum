@@ -17,6 +17,7 @@
     "ecmaVersion": 2019
   },
   "rules": {
-    "import/no-unresolved": "warn"
+    "import/no-unresolved": "warn",
+    "no-unused-vars": "warn"
   }
 }

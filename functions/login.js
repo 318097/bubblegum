@@ -1,7 +1,8 @@
 const User = require("../server/api/user/model");
 const connectToDb = require("../db");
 const { headers } = require("./common/helpers");
-const { signToken } = require("../server/auth/auth");
+const jwt = require("jsonwebtoken");
+const config = require("../config");
 
 exports.handler = async (event) => {
   try {
@@ -35,7 +36,7 @@ exports.handler = async (event) => {
     user = user.toObject();
     delete user.password;
 
-    const token = signToken(user._id, user.email);
+    const token = jwt.sign({ _id: user._id, email: user.email }, config.JWT);
 
     return {
       statusCode: 200,
