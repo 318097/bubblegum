@@ -1,12 +1,9 @@
-const _ = require("lodash");
-const expressJwt = require("express-jwt");
 const User = require("../server/api/user/model");
-const { connectToDb, ObjectID, connectToMongoose } = require("./common/db");
-const { generateSlug, headers } = require("./common/helpers");
-const { getUser } = require("./common/middlewares");
+const { connectToMongoose } = require("./common/db");
+const { headers } = require("./common/helpers");
 const { signToken } = require("../server/auth/auth");
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   try {
     await connectToMongoose();
     const matchQuery = {};
@@ -46,8 +43,8 @@ exports.handler = async (event, context) => {
   } catch (err) {
     console.log(err);
     return {
-      statusCode: 200,
-      body: "Error",
+      statusCode: 400,
+      body: err.message,
       headers,
     };
   }

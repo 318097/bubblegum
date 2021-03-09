@@ -9,5 +9,5 @@
 - [ ] Forgot password
 - [ ] Netlify functions
   - [ ] Account status
-  - [ ] login
+  - [x] login
   - [ ] bookmarks
