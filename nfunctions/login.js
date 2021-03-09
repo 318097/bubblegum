@@ -1,11 +1,11 @@
 const User = require("../server/api/user/model");
-const { connectToMongoose } = require("./common/db");
+const { connectToDb } = require("../db");
 const { headers } = require("./common/helpers");
 const { signToken } = require("../server/auth/auth");
 
 exports.handler = async (event) => {
   try {
-    await connectToMongoose();
+    await connectToDb();
     const matchQuery = {};
     const { username, password } = JSON.parse(event.body);
 

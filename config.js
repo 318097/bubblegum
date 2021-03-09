@@ -1,18 +1,26 @@
 require("dotenv").config();
 
-const env = process.env.NODE_ENV;
+const {
+  NODE_ENV,
+  PORT,
+  DB_URL,
+  STAGING_DB_URL,
+  NETLIFY_DB_URL,
+  JWT,
+  GOOGLE_LOGIN_CLIENT_ID,
+} = process.env;
 
 const config = {
-  PORT: process.env.PORT || 7000,
+  PORT: PORT || 7000,
+  JWT: JWT || "brainbox",
   DB_URL:
-    env === "production"
-      ? process.env.DB_URL
-      : env === "staging"
-      ? process.env.STAGING_DB_URL
+    NODE_ENV === "production"
+      ? DB_URL
+      : NODE_ENV === "staging"
+      ? STAGING_DB_URL
       : "mongodb://localhost/bubblegum",
-  NETLIFY_DB_URL: process.env.NETLIFY_DB_URL,
-  JWT: process.env.JWT || "brainbox",
-  GOOGLE_LOGIN_CLIENT_ID: process.env.GOOGLE_LOGIN_CLIENT_ID,
+  NETLIFY_DB_URL,
+  GOOGLE_LOGIN_CLIENT_ID,
 };
 
 module.exports = config;

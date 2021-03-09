@@ -3,6 +3,7 @@ const app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
 
+const connectToDb = require("./db");
 const config = require("./config");
 const logger = require("./server/util/logger");
 const authRoutes = require("./server/auth/routes");
@@ -10,10 +11,7 @@ const api = require("./server/api");
 
 logger.log(`Running in ${process.env.NODE_ENV} mode.`);
 
-require("mongoose")
-  .connect(config.DB_URL, { useNewUrlParser: true })
-  .then(() => logger.log(`Connected to DB...`))
-  .catch(err => logger.log("Error in connecting to MongoDb.", err));
+connectToDb();
 
 require("./server/api/snake/socket")(io);
 require("./server/api/chat/socket")(io);
@@ -31,5 +29,4 @@ app.use((err, req, res, next) => {
   res.status(500).send(err);
 });
 
-http.listen(config.PORT);
-logger.log(`Listening on :${config.PORT}`);
+http.listen(config.PORT, () => logger.log(`Listening on :${config.PORT}`));
