@@ -1,5 +1,5 @@
 const User = require("../server/api/user/model");
-const { connectToDb } = require("../db");
+const connectToDb = require("../db");
 const { headers } = require("./common/helpers");
 const { signToken } = require("../server/auth/auth");
 
@@ -31,6 +31,7 @@ exports.handler = async (event) => {
     user = user.toObject();
     delete user.password;
 
+    console.log(user._id, user.email);
     const token = signToken(user._id, user.email);
 
     return {
