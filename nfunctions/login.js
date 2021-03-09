@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const expressJwt = require("express-jwt");
 const User = require("../server/api/user/model");
 const { connectToDb, ObjectID, connectToMongoose } = require("./common/db");
 const { generateSlug, headers } = require("./common/helpers");
