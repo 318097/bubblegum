@@ -10,7 +10,11 @@ exports.handler = async (event) => {
     const { username, password } = JSON.parse(event.body);
 
     if (!username || !password)
-      return res.status(400).send("Username & Password is required.");
+      return {
+        statusCode: 401,
+        body: "Username & Password is required.",
+        headers,
+      };
 
     let user = await User.findOne({ username });
 

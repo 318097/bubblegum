@@ -1,7 +1,7 @@
 const { connectToDb } = require("./common/db");
 const { headers } = require("./common/helpers");
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   try {
     const db = await connectToDb();
     const collection = db.collection("posts");
