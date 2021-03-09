@@ -6,15 +6,13 @@ const { signToken } = require("../server/auth/auth");
 exports.handler = async (event) => {
   try {
     await connectToDb();
-    const matchQuery = {};
+
     const { username, password } = JSON.parse(event.body);
 
     if (!username || !password)
       return res.status(400).send("Username & Password is required.");
 
-    matchQuery["username"] = username;
-
-    let user = await User.findOne(matchQuery);
+    let user = await User.findOne({ username });
 
     if (!user)
       return {
@@ -41,7 +39,7 @@ exports.handler = async (event) => {
       headers,
     };
   } catch (err) {
-    console.log(err);
+    console.log("errr::::", err, err.message);
     return {
       statusCode: 400,
       body: err.message,
