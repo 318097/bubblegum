@@ -1,5 +1,5 @@
 const User = require("../api/user/model");
-const { signToken, validateToken } = require("./auth");
+const { signToken } = require("./auth");
 const Joi = require("@hapi/joi");
 const _ = require("lodash");
 const { OAuth2Client } = require("google-auth-library");
@@ -93,7 +93,6 @@ const register = async (req, res) => {
 const checkAccountStatus = async (req, res) => {
   const { user } = req;
   // const { token } = req.body;
-  // validateToken(token);
   delete user.password;
   res.send({ status: "ok", ...user });
 };

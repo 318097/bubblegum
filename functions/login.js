@@ -35,7 +35,6 @@ exports.handler = async (event) => {
     user = user.toObject();
     delete user.password;
 
-    console.log(user._id, user.email);
     const token = signToken(user._id, user.email);
 
     return {
@@ -44,7 +43,7 @@ exports.handler = async (event) => {
       headers,
     };
   } catch (err) {
-    console.log("errr::::", err, err.message);
+    console.log(err);
     return {
       statusCode: 400,
       body: err.message,
