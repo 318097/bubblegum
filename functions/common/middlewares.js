@@ -20,7 +20,9 @@ const getUser = async (event) => {
 };
 
 const getUserV2 = async (event) => {
-  const token = event["multiValueHeaders"]["Authorization"];
+  const token =
+    event["multiValueHeaders"]["Authorization"] ||
+    event["multiValueHeaders"]["authorization"];
 
   if (!token) throw new Error("No JWT");
 

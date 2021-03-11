@@ -3,7 +3,7 @@ const { generateSlug, headers } = require("./common/helpers");
 const { getUserV2 } = require("./common/middlewares");
 const connectToDb = require("../db");
 const User = require("../server/api/user/model");
-const Model = require("../server/api/post/model");
+const PostModel = require("../server/api/post/model");
 
 exports.handler = async (event) => {
   try {
@@ -35,7 +35,7 @@ exports.handler = async (event) => {
       };
     });
 
-    const result = await Model.create(posts);
+    const result = await PostModel.create(posts);
 
     await User.findOneAndUpdate(
       { _id },
