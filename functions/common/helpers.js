@@ -1,8 +1,10 @@
 const headers = {
-  "Access-Control-Allow-Methods": "GET,HEAD,POST,PUT",
+  "Access-Control-Allow-Methods": "*",
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "*",
-  "Access-Control-Allow-Credentials": true,
+  "Access-Control-Allow-Credentials": "true",
+  "Content-Type": "application/json",
+  "Access-Control-Max-Age": "2592000",
 };
 
 const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
