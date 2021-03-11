@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const { connectToDb } = require("./db");
 const config = require("../../config");
 const ObjectID = require("mongodb").ObjectID;
+const User = require("../../server/api/user/model");
 
 const getUser = async (event) => {
   const token = event["multiValueHeaders"]["authorization"];
@@ -18,4 +19,18 @@ const getUser = async (event) => {
   return user;
 };
 
-module.exports = { getUser };
+const getUserV2 = async (event) => {
+  const token = event["multiValueHeaders"]["Authorization"];
+
+  if (!token) throw new Error("No JWT");
+
+  const decoded = jwt.verify(token[0], config.JWT);
+
+  const user = await User.findOne({ _id: decoded._id });
+
+  if (!user) throw new Error("Invalid user");
+
+  return user;
+};
+
+module.exports = { getUser, getUserV2 };
