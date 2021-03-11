@@ -46,7 +46,7 @@ exports.handler = async (event) => {
   } catch (err) {
     console.log(err);
     return {
-      statusCode: 200,
+      statusCode: 500,
       body: err.message,
       headers,
     };

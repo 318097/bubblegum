@@ -17,8 +17,6 @@ exports.handler = async (event) => {
     const aggregation = {
       collectionId,
       deleted: false,
-      isAdmin: true,
-      status: "POSTED",
       visible: true,
     };
 
