@@ -3,17 +3,17 @@ const schemaName = "posts";
 
 const PostsSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Types.ObjectId, ref: "user" },
-    index: Number,
+    userId: { type: mongoose.Types.ObjectId, ref: "user", required: true },
+    index: { type: Number, required: true },
     title: {
       type: String,
-      required: false,
+      required: true,
     },
     content: {
       type: String,
       required: false,
     },
-    slug: String,
+    slug: { type: String, required: true },
     tags: {
       type: Array,
     },
@@ -24,7 +24,7 @@ const PostsSchema = new mongoose.Schema(
     },
     type: {
       required: false,
-      default: "POST",
+      default: "DROP",
       type: String,
       enum: ["POST", "DROP", "QUIZ", "CHAIN"],
     },
@@ -48,7 +48,7 @@ const PostsSchema = new mongoose.Schema(
       default: false,
     },
     fileName: String,
-    collectionId: String,
+    collectionId: { type: String, required: true },
     liveId: Number,
     deleted: {
       type: Boolean,
