@@ -1,11 +1,11 @@
 const Model = require("./model");
 
 exports.getTimeline = async (req, res, next) => {
-  const { page, groupId, showAll } = req.query;
+  const { page, groupId } = req.query;
 
   const aggregation = { userId: req.user._id };
 
-  if (showAll !== "true") aggregation["groupId"] = groupId;
+  if (groupId) aggregation["groupId"] = groupId;
 
   const result = await Model.aggregate([
     { $match: aggregation },

@@ -56,7 +56,7 @@ exports.updateAppData = async (req, res) => {
   const { action } = query;
   let data;
   switch (action) {
-    case "CREATE_TIMELINE_GROUP":
+    case "CREATE_TIMELINE_GROUP": {
       const projectId = new ObjectId();
       const timeline = {
         ...body,
@@ -67,6 +67,7 @@ exports.updateAppData = async (req, res) => {
         $push: { timeline },
       };
       break;
+    }
   }
 
   const result = await Model.findByIdAndUpdate({ _id: user._id }, data, {
