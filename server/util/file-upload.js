@@ -14,6 +14,7 @@ exports.fileUpload = async (req, { file, filename, folder } = {}) => {
   const baseName = req.source ? req.source.toLowerCase() : "uncategorized";
   let path = baseName;
 
+  if (!config.IS_PROD) path = `${config.NODE_ENV}/${baseName}`;
   if (folder) path += `/${folder}`;
 
   const options = { folder: path };
