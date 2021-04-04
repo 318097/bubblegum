@@ -12,10 +12,15 @@ const storeqRoutes = require("./storeq/routes");
 const dotRoutes = require("./dot/routes");
 const feedbackRoutes = require("./feedback/routes");
 const scratchPadRoutes = require("./scratch-pad/routes");
+const controller = require("./controller");
+
+const fileStorage = require("../../storage");
 
 const { protected, externalAccess, transparent } = require("../auth/auth");
 
 router.get("/test", (req, res) => res.send("Test"));
+
+router.post("/upload", protected, fileStorage, controller.fileUploadHandler);
 
 router.use("/users", protected, userRoutes);
 router.use("/todos", protected, todoRoutes);

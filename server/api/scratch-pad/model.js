@@ -31,6 +31,9 @@ const ScratchPadSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    media: {
+      type: Array,
+    },
   },
   {
     timestamps: true,

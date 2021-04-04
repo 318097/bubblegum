@@ -1,4 +1,5 @@
 const Model = require("./model");
+const { fileUpload } = require("../../util/file-upload");
 const { ObjectId } = require("mongoose").Types;
 
 exports.getAllItems = async (req, res, next) => {
@@ -20,9 +21,13 @@ exports.getItemById = async (req, res, next) => {
 };
 
 exports.createItem = async (req, res, next) => {
+  const fileResult = await fileUpload(req);
+  console.log("fileResult::-", fileResult);
+
   const result = await Model.create({
     ...req.body,
     userId: req.user._id,
+    media: fileResult ? [{ url: fileResult.url }] : [],
   });
   res.send({ result });
 };

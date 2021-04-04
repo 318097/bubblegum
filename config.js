@@ -8,6 +8,7 @@ const {
   NETLIFY_DB_URL,
   JWT,
   GOOGLE_LOGIN_CLIENT_ID,
+  CLOUDINARY_API_SECRET,
 } = process.env;
 
 const config = {
@@ -21,6 +22,7 @@ const config = {
       : "mongodb://localhost/bubblegum",
   NETLIFY_DB_URL,
   GOOGLE_LOGIN_CLIENT_ID,
+  CLOUDINARY_API_SECRET,
 };
 
 module.exports = config;
