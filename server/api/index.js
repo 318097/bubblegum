@@ -20,6 +20,8 @@ const { protected, externalAccess, transparent } = require("../auth/auth");
 
 router.get("/test", (req, res) => res.send("Test"));
 
+router.get("/rssfeed", controller.rssFeedParser);
+
 router.post("/upload", protected, fileStorage, controller.fileUploadHandler);
 
 router.use("/users", protected, userRoutes);

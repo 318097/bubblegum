@@ -26,6 +26,7 @@ const config = {
   CLOUDINARY_API_SECRET,
   NODE_ENV: NODE_ENV || "development",
   IS_PROD,
+  MEDIUM_RSS_FEED: "https://medium.com/feed/@318097",
 };
 
 module.exports = config;
