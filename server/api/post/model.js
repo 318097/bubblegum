@@ -39,6 +39,10 @@ const PostsSchema = new mongoose.Schema(
       enum: ["NONE", "READY", "POSTED"],
       default: "NONE",
     },
+    socialPlatforms: {
+      type: Array,
+      default: [],
+    },
     visible: {
       type: Boolean,
       default: true,
