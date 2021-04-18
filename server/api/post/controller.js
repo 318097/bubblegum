@@ -106,7 +106,7 @@ exports.getRelatedPosts = async (req, res, next) => {
     {
       $match: aggregation,
     },
-    { $sample: { size: 3 } },
+    { $sample: { size: 4 } },
   ]);
   res.send({ posts });
 };
