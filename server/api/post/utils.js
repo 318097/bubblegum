@@ -23,7 +23,7 @@ const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
 const generateNewResourceId = (note, index) =>
   `R${note.index || index}-${note.slug}-${
     _.get(note, "resources.length", 0) + 1
-  }`;
+  }${note.suffix ? `_${note.suffix}` : ""}`;
 
 const isSearchId = (search) => /^\d+$/.test(search.trim());
 
