@@ -25,12 +25,13 @@ exports.fileUpload = async (req, { exactFileName = true, folder } = {}) => {
 
         if (exactFileName)
           extra = {
-            use_filename: true,
             unique_filename: false,
           };
 
         const options = {
+          resource_type: "auto",
           folder: folderPath,
+          use_filename: true,
           filename: path.basename(path.resolve(file.originalname)),
           ...extra,
         };
