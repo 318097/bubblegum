@@ -22,12 +22,11 @@ exports.getItemById = async (req, res, next) => {
 
 exports.createItem = async (req, res, next) => {
   const fileResult = await fileUpload(req);
-  console.log("fileResult::-", fileResult);
 
   const result = await Model.create({
     ...req.body,
     userId: req.user._id,
-    media: fileResult ? [{ url: fileResult.url }] : [],
+    media: fileResult || [],
   });
   res.send({ result });
 };
