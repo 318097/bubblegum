@@ -13,6 +13,7 @@ const dotRoutes = require("./dot/routes");
 const feedbackRoutes = require("./feedback/routes");
 const scratchPadRoutes = require("./scratch-pad/routes");
 const controller = require("./controller");
+const errorHandlingWrapper = require("../middleware/errorHandling");
 
 const fileStorage = require("../../storage");
 
@@ -22,7 +23,12 @@ router.get("/test", (req, res) => res.send("Test"));
 
 router.get("/rssfeed", controller.rssFeedParser);
 
-router.post("/upload", protected, fileStorage, controller.fileUploadHandler);
+router.post(
+  "/upload",
+  protected,
+  fileStorage,
+  errorHandlingWrapper(controller.fileUploadHandler)
+);
 
 router.use("/users", protected, userRoutes);
 router.use("/todos", protected, todoRoutes);
