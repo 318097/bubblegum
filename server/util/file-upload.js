@@ -5,7 +5,7 @@ const streamifier = require("streamifier");
 const config = require("../../config");
 
 exports.fileUpload = async (req, { exactFileName = true, folder } = {}) => {
-  if (!req.files) return null;
+  if (_.isEmpty(req.files)) throw new Error("No files received.");
 
   cloudinary.config({
     cloud_name: "codedropstech",

@@ -203,7 +203,7 @@ exports.createPost = async (req, res, next) => {
     const postIndex = index;
     index++;
 
-    const resourceId = generateNewResourceId({ slug, index: postIndex });
+    // const resourceId = generateNewResourceId({ slug, index: postIndex });
     return {
       ...item,
       userId: _id,
@@ -211,7 +211,7 @@ exports.createPost = async (req, res, next) => {
       index: postIndex,
       collectionId,
       slug,
-      resources: [resourceId],
+      resources: [],
     };
   });
 

@@ -3,8 +3,6 @@ const { fileUpload } = require("../util/file-upload");
 const Parser = require("rss-parser");
 const TransactionSchema = require("./model");
 
-const parser = new Parser({});
-
 exports.fileUploadHandler = async (req, res) => {
   const result = await fileUpload(req, {
     exactFileName: req.body.storeExactFileName === "TRUE",
@@ -26,6 +24,7 @@ exports.fileUploadHandler = async (req, res) => {
 };
 
 exports.rssFeedParser = async (req, res) => {
+  const parser = new Parser({});
   const feed = await parser.parseURL(config.MEDIUM_RSS_FEED);
   const result = feed.items
     .map(({ title, link, categories, isoDate }) => ({
