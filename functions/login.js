@@ -12,7 +12,7 @@ exports.handler = async (event) => {
 
     if (!username || !password)
       return {
-        statusCode: 401,
+        statusCode: 500,
         body: "Username & Password is required.",
         headers,
       };
@@ -21,14 +21,14 @@ exports.handler = async (event) => {
 
     if (!user)
       return {
-        statusCode: 401,
+        statusCode: 500,
         body: "User not found.",
         headers,
       };
 
     if (!user.authenticate(password))
       return {
-        statusCode: 401,
+        statusCode: 500,
         body: "Invalid username/password.",
         headers,
       };
