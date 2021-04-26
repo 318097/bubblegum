@@ -5,6 +5,14 @@ const jwt = require("jsonwebtoken");
 const config = require("../config");
 
 exports.handler = async (event) => {
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 200,
+      headers,
+      body: "This was not a POST request!",
+    };
+  }
+
   try {
     await connectToDb();
 
@@ -46,7 +54,7 @@ exports.handler = async (event) => {
   } catch (err) {
     console.log(err);
     return {
-      statusCode: 200,
+      statusCode: 500,
       body: err.message,
       headers,
     };
