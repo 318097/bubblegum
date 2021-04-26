@@ -17,7 +17,7 @@ const errorHandlingWrapper = require("../middleware/errorHandling");
 
 const fileStorage = require("../../storage");
 
-const { protected, externalAccess, transparent } = require("../auth/auth");
+const { protectedRoute, externalAccess, transparent } = require("../auth/auth");
 
 router.get("/test", (req, res) => res.send("Test"));
 
@@ -25,22 +25,22 @@ router.get("/rssfeed", controller.rssFeedParser);
 
 router.post(
   "/upload",
-  protected,
+  protectedRoute,
   fileStorage,
   errorHandlingWrapper(controller.fileUploadHandler)
 );
 
-router.use("/users", protected, userRoutes);
-router.use("/todos", protected, todoRoutes);
+router.use("/users", protectedRoute, userRoutes);
+router.use("/todos", protectedRoute, todoRoutes);
 router.use("/posts", postRoutes);
-router.use("/expenses", protected, expenseRoutes);
+router.use("/expenses", protectedRoute, expenseRoutes);
 router.use("/snake", snakeGameRoutes);
-router.use("/timeline", protected, timelineRoutes);
+router.use("/timeline", protectedRoute, timelineRoutes);
 router.use("/chat", externalAccess, chatRoutes);
-router.use("/goals", protected, goalsRoutes);
-router.use("/storeq", protected, storeqRoutes);
+router.use("/goals", protectedRoute, goalsRoutes);
+router.use("/storeq", protectedRoute, storeqRoutes);
 router.use("/dot", externalAccess, dotRoutes);
 router.use("/feedback", transparent, feedbackRoutes);
-router.use("/scratch-pad", protected, scratchPadRoutes);
+router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
 
 module.exports = router;

@@ -58,12 +58,12 @@ const signToken = (_id, email) => jwt.sign({ _id, email }, config.JWT);
 
 const validateToken = (token) => jwt.verify(token, config.JWT);
 
-const protected = [decodeToken, extractUser];
+const protectedRoute = [decodeToken, extractUser];
 
 module.exports = {
   signToken,
   validateToken,
   externalAccess,
-  protected,
+  protectedRoute,
   transparent,
 };
