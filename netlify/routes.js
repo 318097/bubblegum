@@ -1,4 +1,4 @@
-const router = require("express").Router();
+const apiRouter = require("express").Router();
 
 const userRoutes = require("../server/api/user/routes");
 const todoRoutes = require("../server/api/todo/routes");
@@ -9,6 +9,8 @@ const goalsRoutes = require("../server/api/goals/routes");
 const dotRoutes = require("../server/api/dot/routes");
 const feedbackRoutes = require("../server/api/feedback/routes");
 const scratchPadRoutes = require("../server/api/scratch-pad/routes");
+const authRouter = require("../server/auth/routes");
+
 // const controller = require("../server/api/controller");
 // const errorHandlingWrapper = require(".../server/api/middleware/errorHandling");
 
@@ -20,25 +22,26 @@ const {
   transparent,
 } = require("../server/auth/auth");
 
-router.get("/test", (req, res) => res.send("Test"));
+apiRouter.get("/test", (req, res) => res.send("Test"));
 
-// router.get("/rssfeed", controller.rssFeedParser);
+// apiRouter.get("/rssfeed", controller.rssFeedParser);
 
-// router.post(
+// apiRouter.post(
 //   "/upload",
 //   protectedRoute,
 //   fileStorage,
 //   errorHandlingWrapper(controller.fileUploadHandler)
 // );
 
-router.use("/users", protectedRoute, userRoutes);
-router.use("/todos", protectedRoute, todoRoutes);
-router.use("/posts", postRoutes);
-router.use("/expenses", protectedRoute, expenseRoutes);
-router.use("/timeline", protectedRoute, timelineRoutes);
-router.use("/goals", protectedRoute, goalsRoutes);
-router.use("/dot", externalAccess, dotRoutes);
-router.use("/feedback", transparent, feedbackRoutes);
-router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
+apiRouter.use("/users", protectedRoute, userRoutes);
+apiRouter.use("/todos", protectedRoute, todoRoutes);
+apiRouter.use("/posts", postRoutes);
+apiRouter.use("/expenses", protectedRoute, expenseRoutes);
+apiRouter.use("/timeline", protectedRoute, timelineRoutes);
+apiRouter.use("/goals", protectedRoute, goalsRoutes);
+apiRouter.use("/dot", externalAccess, dotRoutes);
+apiRouter.use("/feedback", transparent, feedbackRoutes);
+apiRouter.use("/scratch-pad", protectedRoute, scratchPadRoutes);
+apiRouter.use("/auth", authRouter);
 
-module.exports = router;
+module.exports = apiRouter;

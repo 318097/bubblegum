@@ -7,7 +7,4 @@
 - [ ] Login using encoded string
 - [ ] Reset password
 - [ ] Forgot password
-- [ ] Netlify functions
-  - [ ] Account status
-  - [x] login
-  - [ ] bookmarks
+- [x] Netlify-Express lambda
