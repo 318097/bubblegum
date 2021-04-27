@@ -11,7 +11,7 @@ const {
   CLOUDINARY_API_SECRET,
 } = process.env;
 
-const IS_PROD = ["production", "production-netlify-express"].includes(NODE_ENV);
+const IS_PROD = ["production", "express-lambda-production"].includes(NODE_ENV);
 
 const config = {
   PORT: PORT || 7000,
