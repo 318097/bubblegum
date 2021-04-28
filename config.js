@@ -15,7 +15,7 @@ const IS_PROD = ["production", "express-lambda-production"].includes(NODE_ENV);
 
 const config = {
   PORT: PORT || 7000,
-  JWT: JWT || "brainbox",
+  JWT: JWT || "bubblegum-server",
   DB_URL: IS_PROD
     ? DB_URL
     : NODE_ENV === "staging"
