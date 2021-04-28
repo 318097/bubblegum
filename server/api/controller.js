@@ -2,6 +2,7 @@ const config = require("../../config");
 const { fileUpload } = require("../util/file-upload");
 const Parser = require("rss-parser");
 const TransactionSchema = require("./model");
+const PostsSchema = require("./post/model");
 
 exports.fileUploadHandler = async (req, res) => {
   const result = await fileUpload(req, {
@@ -37,14 +38,25 @@ exports.rssFeedParser = async (req, res) => {
   res.send(result);
 };
 
-// const updateResources = () => {
-//   db.getCollection("posts")
-//     .find({})
-//     .forEach((item) => {
-//       const newValues = item.resources
-//         ? item.resources.map((label) => ({ label }))
-//         : [];
-//       item.resources = newValues;
-//       db.posts.save(item);
-//     });
-// }
+exports.mongoDbTest = async (req, res) => {
+  // const updateResources = () => {
+  //   db.getCollection("posts")
+  //     .find({})
+  //     .forEach((item) => {
+  //       const newValues = item.resources
+  //         ? item.resources.map((label) => ({ label }))
+  //         : [];
+  //       item.resources = newValues;
+  //       db.posts.save(item);
+  //     });
+  // }
+
+  let result = await PostsSchema.aggregate([
+    { $sort: { _id: 1 } },
+    { $project: { _id: 1, resources: 1, title: 1 } },
+  ]);
+  result = result
+    .filter((item) => item.resources.length)
+    .map((item) => item._id);
+  res.send({ result, count: result.length });
+};

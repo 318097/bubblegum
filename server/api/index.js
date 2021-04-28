@@ -22,6 +22,7 @@ const { protectedRoute, externalAccess, transparent } = require("../auth/auth");
 router.get("/test", (req, res) => res.send("Test"));
 
 router.get("/rssfeed", controller.rssFeedParser);
+// router.get("/mongo", controller.mongoDbTest);
 
 router.post(
   "/upload",
