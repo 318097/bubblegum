@@ -36,3 +36,11 @@ exports.rssFeedParser = async (req, res) => {
     .slice(0, -1);
   res.send(result);
 };
+
+// db.getCollection("posts")
+//   .find({})
+//   .forEach((item) => {
+//     const newValues = item.resources.map((label) => ({ label }));
+//     item.resources = newValues;
+//     db.posts.save(item);
+//   });

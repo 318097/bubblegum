@@ -258,7 +258,10 @@ exports.updatePost = async (req, res, next) => {
     const newResourceId = generateNewResourceId(updatedData);
     query = {
       $addToSet: {
-        resources: newResourceId,
+        resources: {
+          // ..._.get(body, "resourceData", {}),
+          label: newResourceId,
+        },
       },
     };
   } else {
