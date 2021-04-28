@@ -200,7 +200,7 @@ exports.createPost = async (req, res, next) => {
 
   const posts = [].concat(data).map((item) => {
     const slug = item.slug ? item.slug : generateSlug({ title: item.title });
-    const postIndex = index;
+    const postIndex = Number(index);
     index++;
 
     // const resourceId = generateNewResourceId({ slug, index: postIndex });
@@ -212,6 +212,7 @@ exports.createPost = async (req, res, next) => {
       collectionId,
       slug,
       resources: [],
+      source: req.source,
     };
   });
 

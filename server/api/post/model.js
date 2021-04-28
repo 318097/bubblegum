@@ -51,7 +51,6 @@ const PostsSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    fileName: String,
     collectionId: { type: String, required: true },
     liveId: Number,
     deleted: {
@@ -60,6 +59,8 @@ const PostsSchema = new mongoose.Schema(
     },
     solution: String,
     url: String,
+    domain: String,
+    source: String,
     rating: {
       type: Number,
       default: 0,
