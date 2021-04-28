@@ -37,10 +37,14 @@ exports.rssFeedParser = async (req, res) => {
   res.send(result);
 };
 
-// db.getCollection("posts")
-//   .find({})
-//   .forEach((item) => {
-//     const newValues = item.resources.map((label) => ({ label }));
-//     item.resources = newValues;
-//     db.posts.save(item);
-//   });
+// const updateResources = () => {
+//   db.getCollection("posts")
+//     .find({})
+//     .forEach((item) => {
+//       const newValues = item.resources
+//         ? item.resources.map((label) => ({ label }))
+//         : [];
+//       item.resources = newValues;
+//       db.posts.save(item);
+//     });
+// }
