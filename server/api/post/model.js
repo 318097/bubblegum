@@ -22,6 +22,10 @@ const PostsSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    fileNames: {
+      type: Array,
+      default: [],
+    },
     type: {
       required: false,
       default: "DROP",

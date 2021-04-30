@@ -20,11 +20,29 @@ const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
   return slug ? `${slug}${seperator}${timestamp}` : "";
 };
 
-const generateNewResourceId = (note, index) =>
-  `R${note.index || index}-${note.slug}-${
-    _.get(note, "resources.length", 0) + 1
-  }${note.suffix ? `_${note.suffix}` : ""}`;
+const generateName = ({
+  index,
+  slug,
+  resources = [],
+  fileNames = [],
+  suffix,
+  action,
+}) => {
+  let prefix = "",
+    input;
+  if (action === "CREATE_RESOURCE") {
+    prefix = "R";
+    input = resources;
+  } else {
+    input = fileNames;
+  }
+
+  const nextId = _.get(input, "length", 0) + 1;
+  const _suffix = suffix ? `_${suffix}` : "";
+
+  return `${prefix}${index}-${slug}-${nextId}${_suffix}`;
+};
 
 const isSearchId = (search) => /^\d+$/.test(search.trim());
 
-module.exports = { getKey, generateNewResourceId, generateSlug, isSearchId };
+module.exports = { getKey, generateName, generateSlug, isSearchId };

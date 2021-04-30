@@ -3,12 +3,7 @@ const mongoose = require("mongoose");
 const moment = require("moment");
 const Model = require("./model");
 const UserModel = require("../user/model");
-const {
-  getKey,
-  generateNewResourceId,
-  generateSlug,
-  isSearchId,
-} = require("./utils");
+const { getKey, generateName, generateSlug, isSearchId } = require("./utils");
 
 const { ObjectId } = mongoose.Types;
 
@@ -203,7 +198,7 @@ exports.createPost = async (req, res, next) => {
     const postIndex = Number(index);
     index++;
 
-    // const resourceId = generateNewResourceId({ slug, index: postIndex });
+    // const resourceId = generateName({ slug, index: postIndex });
     return {
       ...item,
       userId: _id,
@@ -255,13 +250,14 @@ exports.updatePost = async (req, res, next) => {
     );
   }
 
-  if (action === "CREATE_RESOURCE") {
-    const newResourceId = generateNewResourceId(updatedData);
+  if (["CREATE_RESOURCE", "CREATE_FILENAME"].includes(action)) {
+    const key = action === "CREATE_RESOURCE" ? "resources" : "fileNames";
+    const id = generateName({ ...updatedData, action });
     query = {
       $addToSet: {
-        resources: {
+        [key]: {
           // ..._.get(body, "resourceData", {}),
-          label: newResourceId,
+          label: id,
         },
       },
     };
