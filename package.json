@@ -7,8 +7,6 @@
     "start": "node index.js",
     "serve": "nodemon",
     "serve:netlify": "netlify-lambda -c ./webpack.functions.js serve netlify",
-    "client": "cd ../atom && npm run start",
-    "dev": "concurrently \"npm run serve\" \"npm run client\"",
     "build:netlify": "netlify-lambda build netlify"
   },
   "author": "",
@@ -30,7 +28,6 @@
     "lodash": "^4.17.15",
     "method-override": "^3.0.0",
     "moment": "^2.24.0",
-    "mongodb": "^2.2.33",
     "mongoose": "^5.12.3",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
