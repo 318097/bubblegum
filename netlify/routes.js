@@ -11,7 +11,7 @@ const feedbackRoutes = require("../server/api/feedback/routes");
 const scratchPadRoutes = require("../server/api/scratch-pad/routes");
 const authRouter = require("../server/auth/routes");
 
-// const controller = require("../server/api/controller");
+const controller = require("../server/api/controller");
 // const errorHandlingWrapper = require(".../server/api/middleware/errorHandling");
 
 // const fileStorage = require(".../server/api/.../server/api/storage");
@@ -24,7 +24,7 @@ const {
 
 apiRouter.get("/test", (req, res) => res.send("Test"));
 
-// apiRouter.get("/rssfeed", controller.rssFeedParser);
+apiRouter.get("/rssfeed", controller.rssFeedParser);
 
 // apiRouter.post(
 //   "/upload",
