@@ -22,6 +22,7 @@ const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
 
 const generateName = ({
   index,
+  liveId,
   slug,
   resources = [],
   fileNames = [],
@@ -29,18 +30,21 @@ const generateName = ({
   action,
 }) => {
   let prefix = "",
-    input;
+    input,
+    id;
   if (action === "CREATE_RESOURCE") {
     prefix = "R";
     input = resources;
+    id = index;
   } else {
     input = fileNames;
+    id = liveId;
   }
 
   const nextId = _.get(input, "length", 0) + 1;
   const _suffix = suffix ? `_${suffix}` : "";
 
-  return `${prefix}${index}-${slug}-${nextId}${_suffix}`;
+  return `${prefix}${id}-${slug}-${nextId}${_suffix}`;
 };
 
 const isSearchId = (search) => /^\d+$/.test(search.trim());

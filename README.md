@@ -6,5 +6,6 @@
 - [ ] Reset password
 - [ ] Forgot password
 - [x] Netlify-Express lambda
-- [x] Enable encrypt password
+- [ ] Enable encrypt password
 - [ ] Advance search for posts
+- [ ] Change the project structure architecture for DOT
