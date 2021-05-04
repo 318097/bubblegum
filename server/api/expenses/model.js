@@ -10,12 +10,10 @@ const ExpenseSchema = new mongoose.Schema(
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     expenseGroup: {
       type: String,
-      enum: ["PERSONAL", "HOME"],
-      default: "PERSONAL"
-    }
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
