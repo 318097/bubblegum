@@ -6,19 +6,6 @@ const UserModel = require("../user/model");
 
 const { ObjectId } = mongoose.Types;
 
-// const updateCount = async ({ userId, expenseSubTypeId, value }) =>
-//   await UserModel.findOneAndUpdate(
-//     {
-//       _id: userId,
-//       "expenseTypes._id": ObjectId(expenseSubTypeId)
-//     },
-//     {
-//       $inc: {
-//         "expenseTypes.$.count": value
-//       }
-//     }
-//   );
-
 exports.getAllExpenseTypes = async (req, res, next) =>
   res.send({ expenseTypes: req.user.expenseTypes });
 
@@ -37,38 +24,7 @@ exports.getMonthlyExpense = async (req, res, next) => {
   const monthStart = monthObject.startOf("month").toDate();
   const monthEnd = monthObject.endOf("month").toDate();
 
-  const result = await UserModel.aggregate([
-    {
-      $match: {
-        _id: ObjectId(req.user._id),
-      },
-    },
-    {
-      $unwind: { path: "$expenseTypes", preserveNullAndEmptyArrays: true },
-    },
-    {
-      $lookup: {
-        from: "expenses",
-        localField: "expenseTypes._id",
-        foreignField: "expenseSubTypeId",
-        as: "expense",
-      },
-    },
-    {
-      $unwind: { path: "$expense", preserveNullAndEmptyArrays: true },
-    },
-    {
-      $project: {
-        _id: "$expense._id",
-        expenseSubTypeId: "$expense.expenseSubTypeId",
-        amount: "$expense.amount",
-        userId: "$expense.userId",
-        date: "$expense.date",
-        expenseType: "$expenseTypes.name",
-        expenseTypeId: "$expense.expenseTypeId",
-        message: "$expense.message",
-      },
-    },
+  const result = await Model.aggregate([
     {
       $match: {
         userId: ObjectId(req.user._id),
@@ -78,6 +34,33 @@ exports.getMonthlyExpense = async (req, res, next) => {
         },
       },
     },
+
+    // {
+    //   $unwind: { path: "$expenseTypes", preserveNullAndEmptyArrays: true },
+    // },
+    // {
+    //   $lookup: {
+    //     from: "expenses",
+    //     localField: "expenseTypes._id",
+    //     foreignField: "expenseSubTypeId",
+    //     as: "expense",
+    //   },
+    // },
+    // {
+    //   $unwind: { path: "$expense", preserveNullAndEmptyArrays: true },
+    // },
+    // {
+    //   $project: {
+    //     _id: "$expense._id",
+    //     expenseSubTypeId: "$expense.expenseSubTypeId",
+    //     amount: "$expense.amount",
+    //     userId: "$expense.userId",
+    //     date: "$expense.date",
+    //     expenseType: "$expenseTypes.name",
+    //     expenseTypeId: "$expense.expenseTypeId",
+    //     message: "$expense.message",
+    //   },
+    // },
     {
       $sort: { date: -1 },
     },
