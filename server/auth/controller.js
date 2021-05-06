@@ -75,6 +75,13 @@ const register = async (req, res) => {
       _id: projectId,
       createdAt: new Date().toISOString(),
     },
+    expenseTypes: [
+      { _id: new ObjectId(), key: "EXPENSE", label: "Expense" },
+      { _id: new ObjectId(), key: "BILLS", label: "Bills" },
+      { _id: new ObjectId(), key: "LOAN", label: "Lend" },
+      { _id: new ObjectId(), key: "INVESTMENT", label: "Investment" },
+      { _id: new ObjectId(), key: "INCOME", label: "Income" },
+    ],
   };
 
   const { email, username } = req.body;

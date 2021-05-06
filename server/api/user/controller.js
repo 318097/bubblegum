@@ -1,7 +1,7 @@
 const _ = require("lodash");
 const Model = require("./model");
 const { ObjectId } = require("mongoose").Types;
-const { isObjectId } = require("../post/utils");
+const { processId } = require("../../helpers");
 
 exports.createUser = async (req, res) => {
   const user = await Model.create({ ...req.body, source: req.source });
@@ -56,9 +56,9 @@ exports.updateAppData = async (req, res) => {
   const { user, query, body } = req;
   const { action, key } = query;
 
-  if (!action) return new Error("'action' is required");
+  if (!action || !key) return new Error("'action' & 'key' are required");
 
-  const _id = isObjectId(body._id) ? ObjectId(body._id) : body._id;
+  const _id = processId(body._id);
 
   const queryObj = { _id: user._id };
   let dbObj;

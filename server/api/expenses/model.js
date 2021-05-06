@@ -3,14 +3,12 @@ const schemaName = "expenses";
 
 const ExpenseSchema = new mongoose.Schema(
   {
-    date: Date,
-    expenseTypeId: mongoose.Types.ObjectId,
-    amount: Number,
-    message: String,
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-    expenseGroup: {
-      type: String,
-    },
+    amount: Number,
+    date: Date,
+    message: String,
+    expenseTypeId: mongoose.Types.ObjectId,
+    expenseGroup: mongoose.Types.ObjectId,
   },
   {
     timestamps: true,

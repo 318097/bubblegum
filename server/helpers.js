@@ -1,7 +1,10 @@
+const { ObjectId } = require("mongoose").Types;
 const _ = require("lodash");
 const moment = require("moment");
 
 const isObjectId = (id) => /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id);
+
+const processId = (id) => (isObjectId(id) ? ObjectId(id) : id);
 
 const getKey = (id) => (isObjectId(id) ? "_id" : "slug");
 
@@ -50,4 +53,11 @@ const generateName = ({
 
 const isSearchId = (search) => /^\d+$/.test(search.trim());
 
-module.exports = { getKey, generateName, generateSlug, isSearchId, isObjectId };
+module.exports = {
+  getKey,
+  generateName,
+  generateSlug,
+  isSearchId,
+  isObjectId,
+  processId,
+};
