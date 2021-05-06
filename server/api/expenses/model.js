@@ -7,8 +7,8 @@ const ExpenseSchema = new mongoose.Schema(
     amount: Number,
     date: Date,
     message: String,
+    expenseSubTypeId: mongoose.Types.ObjectId,
     expenseTypeId: mongoose.Types.ObjectId,
-    expenseGroup: mongoose.Types.ObjectId,
   },
   {
     timestamps: true,

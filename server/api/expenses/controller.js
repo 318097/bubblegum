@@ -6,11 +6,11 @@ const UserModel = require("../user/model");
 
 const { ObjectId } = mongoose.Types;
 
-// const updateCount = async ({ userId, expenseTypeId, value }) =>
+// const updateCount = async ({ userId, expenseSubTypeId, value }) =>
 //   await UserModel.findOneAndUpdate(
 //     {
 //       _id: userId,
-//       "expenseTypes._id": ObjectId(expenseTypeId)
+//       "expenseTypes._id": ObjectId(expenseSubTypeId)
 //     },
 //     {
 //       $inc: {
@@ -50,7 +50,7 @@ exports.getMonthlyExpense = async (req, res, next) => {
       $lookup: {
         from: "expenses",
         localField: "expenseTypes._id",
-        foreignField: "expenseTypeId",
+        foreignField: "expenseSubTypeId",
         as: "expense",
       },
     },
@@ -60,12 +60,12 @@ exports.getMonthlyExpense = async (req, res, next) => {
     {
       $project: {
         _id: "$expense._id",
-        expenseTypeId: "$expense.expenseTypeId",
+        expenseSubTypeId: "$expense.expenseSubTypeId",
         amount: "$expense.amount",
         userId: "$expense.userId",
         date: "$expense.date",
         expenseType: "$expenseTypes.name",
-        expenseGroup: "$expense.expenseGroup",
+        expenseTypeId: "$expense.expenseTypeId",
         message: "$expense.message",
       },
     },
@@ -106,31 +106,31 @@ exports.createExpenseType = async (req, res, next) => {
 
 exports.createExpense = async (req, res, next) => {
   const {
-    expenseTypeId,
+    expenseSubTypeId,
     amount,
     message,
-    expenseGroup,
+    expenseTypeId,
     date = moment().toString(),
   } = req.body;
   const result = await Model.create({
-    expenseTypeId,
+    expenseSubTypeId,
     amount,
     message,
-    expenseGroup,
+    expenseTypeId,
     userId: req.user._id,
     date,
   });
-  // updateCount({ userId: req.user._id, expenseTypeId, value: 1 });
+  // updateCount({ userId: req.user._id, expenseSubTypeId, value: 1 });
   res.send({ result });
 };
 
 exports.updateExpenseType = async (req, res, next) => {
   const { name } = req.body;
-  const expenseTypeId = req.params.id;
+  const expenseSubTypeId = req.params.id;
   const result = await UserModel.findOneAndUpdate(
     {
       _id: req.user._id,
-      "expenseTypes._id": expenseTypeId,
+      "expenseTypes._id": expenseSubTypeId,
     },
     {
       $set: {
@@ -152,7 +152,7 @@ exports.updateExpense = async (req, res, next) => {
 };
 
 exports.deleteExpenseType = async (req, res, next) => {
-  const expenseTypeId = req.params.id;
+  const expenseSubTypeId = req.params.id;
   const result = await UserModel.findOneAndUpdate(
     {
       _id: req.user._id,
@@ -160,7 +160,7 @@ exports.deleteExpenseType = async (req, res, next) => {
     {
       $pull: {
         expenseTypes: {
-          _id: ObjectId(expenseTypeId),
+          _id: ObjectId(expenseSubTypeId),
         },
       },
     }
@@ -173,7 +173,7 @@ exports.deleteExpense = async (req, res, next) => {
   const result = await Model.findOneAndDelete({ _id: ObjectId(expenseId) });
   // updateCount({
   //   userId: req.user._id,
-  //   expenseTypeId: result.expenseTypeId,
+  //   expenseSubTypeId: result.expenseSubTypeId,
   //   value: -1
   // });
   res.send({ result });
