@@ -1,6 +1,7 @@
 const _ = require("lodash");
 const Model = require("./model");
 const { ObjectId } = require("mongoose").Types;
+const { isObjectId } = require("../post/utils");
 
 exports.createUser = async (req, res) => {
   const user = await Model.create({ ...req.body, source: req.source });
@@ -53,24 +54,46 @@ exports.updateSettings = async (req, res) => {
 
 exports.updateAppData = async (req, res) => {
   const { user, query, body } = req;
-  const { action } = query;
-  let data;
+  const { action, key } = query;
+
+  if (!action) return new Error("'action' is required");
+
+  const _id = isObjectId(body._id) ? ObjectId(body._id) : body._id;
+
+  const queryObj = { _id: user._id };
+  let dbObj;
+
+  const data = {
+    ...body,
+    _id: new ObjectId(),
+    createdAt: new Date().toISOString(),
+  };
+
   switch (action) {
-    case "CREATE_TIMELINE_GROUP": {
-      const projectId = new ObjectId();
-      const timeline = {
-        ...body,
-        _id: projectId,
-        createdAt: new Date().toISOString(),
-      };
-      data = {
-        $push: { timeline },
+    case "CREATE": {
+      dbObj = {
+        $push: { [key]: data },
       };
       break;
     }
+    case "UPDATE": {
+      queryObj[`${key}._id`] = _id;
+      dbObj = {
+        $set: { [key]: data },
+      };
+      break;
+    }
+    case "DELETE": {
+      dbObj = {
+        $pull: { [key]: { _id } },
+      };
+      break;
+    }
+    default:
+      throw new Error("Invalid 'action'");
   }
 
-  const result = await Model.findByIdAndUpdate({ _id: user._id }, data, {
+  const result = await Model.findByIdAndUpdate(queryObj, dbObj, {
     new: true,
   }).lean();
 

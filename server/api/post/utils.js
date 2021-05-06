@@ -1,8 +1,9 @@
 const _ = require("lodash");
 const moment = require("moment");
 
-const getKey = (id) =>
-  /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id) ? "_id" : "slug";
+const isObjectId = (id) => /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id);
+
+const getKey = (id) => (isObjectId(id) ? "_id" : "slug");
 
 const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
   const slug = title
@@ -49,4 +50,4 @@ const generateName = ({
 
 const isSearchId = (search) => /^\d+$/.test(search.trim());
 
-module.exports = { getKey, generateName, generateSlug, isSearchId };
+module.exports = { getKey, generateName, generateSlug, isSearchId, isObjectId };
