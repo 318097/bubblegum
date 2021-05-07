@@ -7,7 +7,8 @@
     "start": "node index.js",
     "serve": "nodemon",
     "serve:netlify": "netlify-lambda -c ./webpack.functions.js serve netlify",
-    "build:netlify": "netlify-lambda build netlify"
+    "build:netlify": "netlify-lambda build netlify",
+    "deploy": "git push heroku master && netlify deploy --prod"
   },
   "author": "",
   "license": "ISC",

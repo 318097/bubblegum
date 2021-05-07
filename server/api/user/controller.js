@@ -63,14 +63,13 @@ exports.updateAppData = async (req, res) => {
   const queryObj = { _id: user._id };
   let dbObj;
 
-  const data = {
-    ...body,
-    _id: new ObjectId(),
-    createdAt: new Date().toISOString(),
-  };
-
   switch (action) {
     case "CREATE": {
+      const data = {
+        ...body,
+        _id: new ObjectId(),
+        createdAt: new Date().toISOString(),
+      };
       dbObj = {
         $push: { [key]: data },
       };
@@ -78,8 +77,16 @@ exports.updateAppData = async (req, res) => {
     }
     case "UPDATE": {
       queryObj[`${key}._id`] = _id;
+      delete body._id;
+
+      const objUpdate = {};
+
+      Object.entries(body).forEach(([objKey, objValue]) => {
+        objUpdate[`${key}.$.${objKey}`] = objValue;
+      });
+
       dbObj = {
-        $set: { [key]: data },
+        $set: objUpdate,
       };
       break;
     }
@@ -93,7 +100,7 @@ exports.updateAppData = async (req, res) => {
       throw new Error("Invalid 'action'");
   }
 
-  const result = await Model.findByIdAndUpdate(queryObj, dbObj, {
+  const result = await Model.findOneAndUpdate(queryObj, dbObj, {
     new: true,
   }).lean();
 
