@@ -5,6 +5,7 @@ const _ = require("lodash");
 const { OAuth2Client } = require("google-auth-library");
 const config = require("../../config");
 const { ObjectId } = require("mongoose").Types;
+const { extractUserData } = require("../helpers");
 
 const client = new OAuth2Client(config.GOOGLE_LOGIN_CLIENT_ID);
 
@@ -48,11 +49,11 @@ const login = async (req, res) => {
     return res.status(401).send("Invalid username/password.");
 
   user = user.toObject();
-  delete user.password;
+  const userInfoToSend = await extractUserData({ user, source: req.source });
 
   const token = signToken(user._id, user.email);
 
-  res.send({ token, ...user });
+  res.send({ token, ...userInfoToSend });
 };
 
 const register = async (req, res) => {
@@ -98,10 +99,8 @@ const register = async (req, res) => {
 };
 
 const checkAccountStatus = async (req, res) => {
-  const { user } = req;
-  // const { token } = req.body;
-  delete user.password;
-  res.send({ status: "ok", ...user });
+  const result = await extractUserData(req);
+  res.send(result);
 };
 
 module.exports = { login, register, checkAccountStatus };

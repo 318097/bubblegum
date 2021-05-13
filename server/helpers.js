@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongoose").Types;
 const _ = require("lodash");
 const moment = require("moment");
+const DotProjectsModel = require("./api/dot/projectModel");
 
 const isObjectId = (id) => /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id);
 
@@ -53,6 +54,29 @@ const generateName = ({
 
 const isSearchId = (search) => /^\d+$/.test(search.trim());
 
+const extractUserData = async (req) => {
+  const { user, source } = req;
+  const basic = _.pick(user, ["name", "email", "_id", "username"]);
+  let result = {};
+  switch (source) {
+    case "DOT":
+      result["dotProjects"] = await DotProjectsModel.find({ userId: user._id });
+      break;
+    case "NOTES_APP":
+    case "FLASH":
+      result = _.pick(user, ["notesApp"]);
+      break;
+    case "ATOM":
+      result = _.pick(user, ["expenseTypes", "timeline"]);
+      break;
+    case "CODEDROPS":
+      result = _.pick(user, ["bookmarkedPosts"]);
+      break;
+  }
+
+  return { ...basic, ...result };
+};
+
 module.exports = {
   getKey,
   generateName,
@@ -60,4 +84,5 @@ module.exports = {
   isSearchId,
   isObjectId,
   processId,
+  extractUserData,
 };

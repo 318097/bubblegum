@@ -5,7 +5,7 @@ const DotTopicSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     content: String,
-    projectId: String,
+    projectId: { type: mongoose.Schema.Types.ObjectId, ref: "dot-projects" },
     isDefault: Boolean,
     todos: {
       type: Array,
