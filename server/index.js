@@ -5,18 +5,18 @@ const io = require("socket.io")(http);
 
 const connectToDb = require("./db");
 const config = require("./config");
-const logger = require("./server/util/logger");
-const authRoutes = require("./server/auth/routes");
-const api = require("./server/api");
+const logger = require("./util/logger");
+const authRoutes = require("./auth/routes");
+const api = require("./api");
 
 logger.log(`Running in ${process.env.NODE_ENV} mode.`);
 
 connectToDb();
 
-require("./server/api/snake/socket")(io);
-require("./server/api/chat/socket")(io);
+require("./api/snake/socket")(io);
+require("./api/chat/socket")(io);
 
-require("./server/middleware/appMiddleware")(app);
+require("./middleware/appMiddleware")(app);
 
 app.use("/api", api);
 app.use("/api/auth", authRoutes);

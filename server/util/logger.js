@@ -1,5 +1,4 @@
 const chalk = require("chalk");
-const config = require("../../config");
 
 const chalkError = chalk.red;
 const chalkLog = chalk.green;

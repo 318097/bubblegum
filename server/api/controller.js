@@ -1,4 +1,4 @@
-const config = require("../../config");
+const config = require("../config");
 const { fileUpload } = require("../util/file-upload");
 const Parser = require("rss-parser");
 const TransactionSchema = require("./model");

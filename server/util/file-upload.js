@@ -2,7 +2,7 @@ const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const _ = require("lodash");
 const streamifier = require("streamifier");
-const config = require("../../config");
+const config = require("../config");
 
 exports.fileUpload = async (req, { exactFileName = true, folder } = {}) => {
   if (_.isEmpty(req.files)) throw new Error("No files received.");

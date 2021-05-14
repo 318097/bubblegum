@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
-const config = require("../../config");
+const config = require("../config");
 const { APP_LIST } = require("../constants");
 const User = require("../api/user/model");
 

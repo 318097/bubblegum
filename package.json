@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "serve": "nodemon",
+    "start": "node server/index.js",
+    "serve": "nodemon server/index.js",
     "serve:netlify": "netlify-lambda -c ./webpack.functions.js serve netlify",
     "build:netlify": "netlify-lambda build netlify",
     "deploy": "git push heroku master && netlify deploy --prod"

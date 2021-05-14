@@ -15,7 +15,7 @@ const scratchPadRoutes = require("./scratch-pad/routes");
 const controller = require("./controller");
 const errorHandlingWrapper = require("../middleware/errorHandling");
 
-const fileStorage = require("../../storage");
+const fileStorage = require("../storage");
 
 const { protectedRoute, externalAccess, transparent } = require("../auth/auth");
 

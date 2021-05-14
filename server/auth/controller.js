@@ -3,7 +3,7 @@ const { signToken } = require("./auth");
 const Joi = require("@hapi/joi");
 const _ = require("lodash");
 const { OAuth2Client } = require("google-auth-library");
-const config = require("../../config");
+const config = require("../config");
 const { ObjectId } = require("mongoose").Types;
 const { extractUserData } = require("../helpers");
 

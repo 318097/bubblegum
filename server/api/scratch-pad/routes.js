@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const controller = require("./controller");
-const fileStorage = require("../../../storage");
+const fileStorage = require("../../storage");
 
 const errorHandlingWrapper = require("../../middleware/errorHandling");
 

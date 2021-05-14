@@ -4,7 +4,7 @@ require("encoding");
 
 const app = express();
 
-const connectToDb = require("../db");
+const connectToDb = require("../server/db");
 const api = require("./routes");
 
 app.use("/.netlify/functions/api", async (req, res, next) => {
