@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const controller = require("./user.controller");
-const errorHandlingWrapper = require("../../middleware/errorHandling");
+const errorHandlingWrapper = require("../../middleware/error-handling");
 
 // router.get("/", controller.getAll);
 router.put("/app-data", errorHandlingWrapper(controller.updateAppData));

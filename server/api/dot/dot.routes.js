@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const controller = require("./dot.controller");
-const errorHandlingWrapper = require("../../middleware/errorHandling");
+const errorHandlingWrapper = require("../../middleware/error-handling");
 
 router.post("/todos", errorHandlingWrapper(controller.createTodo));
 router.get("/todos", errorHandlingWrapper(controller.getAllTodos));

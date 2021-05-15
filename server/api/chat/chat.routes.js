@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const controller = require("./chat.controller");
 
-const errorHandlingWrapper = require("../../middleware/errorHandling");
+const errorHandlingWrapper = require("../../middleware/error-handling");
 
 router.get("/contact-list", errorHandlingWrapper(controller.getContactList));
 router.get(

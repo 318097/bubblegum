@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const controller = require("./storeq.controller");
-const errorHandlingWrapper = require("../../middleware/errorHandling");
+const errorHandlingWrapper = require("../../middleware/error-handling");
 
 router.get("/stores", errorHandlingWrapper(controller.getAllStores));
 router.get(

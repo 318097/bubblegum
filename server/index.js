@@ -16,7 +16,7 @@ connectToDb();
 require("./api/snake/snake.socket")(io);
 require("./api/chat/chat.socket")(io);
 
-require("./middleware/appMiddleware")(app);
+require("./middleware/app-middleware")(app);
 
 app.use("/api", api);
 app.use("/api/auth", authRoutes);

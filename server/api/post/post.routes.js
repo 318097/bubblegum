@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const controller = require("./post.controller");
-const errorHandlingWrapper = require("../../middleware/errorHandling");
+const errorHandlingWrapper = require("../../middleware/error-handling");
 
 const { transparent, protectedRoute } = require("../../utils/auth");
 

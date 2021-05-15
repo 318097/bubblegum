@@ -12,7 +12,7 @@ const scratchPadRoutes = require("../server/api/scratch-pad/scratch-pad.routes")
 const authRouter = require("../server/auth/auth.routes");
 
 const controller = require("../server/api/api.controller");
-// const errorHandlingWrapper = require(".../server/api/middleware/errorHandling");
+// const errorHandlingWrapper = require(".../server/api/middleware/error-handling");
 
 // const fileStorage = require(".../server/api/.../server/api/storage");
 

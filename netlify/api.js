@@ -12,7 +12,7 @@ app.use("/.netlify/functions/api", async (req, res, next) => {
   next();
 });
 
-require("../server/middleware/appMiddleware")(app);
+require("../server/middleware/app-middleware")(app);
 
 app.use("/.netlify/functions/api", api);
 

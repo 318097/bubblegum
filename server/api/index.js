@@ -13,7 +13,7 @@ const dotRoutes = require("./dot/dot.routes");
 const feedbackRoutes = require("./feedback/feedback.routes");
 const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
 const controller = require("./api.controller");
-const errorHandlingWrapper = require("../middleware/errorHandling");
+const errorHandlingWrapper = require("../middleware/error-handling");
 
 const fileStorage = require("../utils/storage");
 
