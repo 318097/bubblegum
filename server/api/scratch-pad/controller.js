@@ -1,5 +1,5 @@
 const Model = require("./model");
-const { fileUpload } = require("../../util/file-upload");
+const { fileUpload } = require("../../utils/file-upload");
 const { ObjectId } = require("mongoose").Types;
 
 exports.getAllItems = async (req, res, next) => {

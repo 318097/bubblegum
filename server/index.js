@@ -5,7 +5,7 @@ const io = require("socket.io")(http);
 
 const connectToDb = require("./db");
 const config = require("./config");
-const logger = require("./util/logger");
+const logger = require("./utils/logger");
 const authRoutes = require("./auth/routes");
 const api = require("./api");
 

@@ -20,7 +20,7 @@ const {
   protectedRoute,
   externalAccess,
   transparent,
-} = require("../server/auth/auth");
+} = require("../server/utils/auth");
 
 apiRouter.get("/test", (req, res) => res.send("Test"));
 

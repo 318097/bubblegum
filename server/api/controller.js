@@ -1,5 +1,5 @@
 const config = require("../config");
-const { fileUpload } = require("../util/file-upload");
+const { fileUpload } = require("../utils/file-upload");
 const Parser = require("rss-parser");
 const TransactionSchema = require("./model");
 const PostsSchema = require("./post/model");
