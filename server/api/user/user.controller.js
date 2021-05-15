@@ -1,7 +1,7 @@
 const _ = require("lodash");
 const Model = require("./user.model");
 const { ObjectId } = require("mongoose").Types;
-const { processId } = require("../../helpers");
+const { processId, generateDate } = require("../../helpers");
 
 exports.createUser = async (req, res) => {
   const user = await Model.create({ ...req.body, source: req.source });
@@ -68,7 +68,7 @@ exports.updateAppData = async (req, res) => {
       const data = {
         ...body,
         _id: new ObjectId(),
-        createdAt: new Date().toISOString(),
+        createdAt: generateDate(),
       };
       dbObj = {
         $push: { [key]: data },

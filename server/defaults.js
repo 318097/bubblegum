@@ -1,4 +1,5 @@
-const { generateObjectId } = require("./helpers");
+const { generateObjectId, generateDate } = require("./helpers");
+const { APP_INFO } = require("./constants");
 
 const generateDefaultState = (req) => {
   const defaultState = {
@@ -7,7 +8,7 @@ const generateDefaultState = (req) => {
       name: "Default",
       default: true,
       _id: generateObjectId(),
-      createdAt: new Date().toISOString(),
+      createdAt: generateDate(),
     },
     expenseTypes: [
       { _id: generateObjectId(), key: "EXPENSE", label: "Expense" },
@@ -16,6 +17,9 @@ const generateDefaultState = (req) => {
       { _id: generateObjectId(), key: "INVESTMENT", label: "Investment" },
       { _id: generateObjectId(), key: "INCOME", label: "Income" },
     ],
+    appStatus: Object.entries(APP_INFO)
+      .filter(([, { active }]) => active)
+      .map(([name]) => ({ [name]: { status: "INIT" } })),
   };
 
   return defaultState;

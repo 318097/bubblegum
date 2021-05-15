@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongoose").Types;
 const _ = require("lodash");
 const moment = require("moment");
+
 const DotProjectsModel = require("./api/dot/dot.project.model");
 
 const generateObjectId = () => new ObjectId();
@@ -8,6 +9,8 @@ const generateObjectId = () => new ObjectId();
 const isObjectId = (id) => /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id);
 
 const processId = (id) => (isObjectId(id) ? ObjectId(id) : id);
+
+const generateDate = () => new Date().toISOString();
 
 const getKey = (id) => (isObjectId(id) ? "_id" : "slug");
 
@@ -58,7 +61,7 @@ const isSearchId = (search) => /^\d+$/.test(search.trim());
 
 const extractUserData = async (req) => {
   const { user, source } = req;
-  const basic = _.pick(user, ["name", "email", "_id", "username"]);
+  const basic = _.pick(user, ["name", "email", "_id", "username", "appStatus"]);
   let result = {};
   switch (source) {
     case "DOT":
@@ -88,4 +91,5 @@ module.exports = {
   processId,
   extractUserData,
   generateObjectId,
+  generateDate,
 };

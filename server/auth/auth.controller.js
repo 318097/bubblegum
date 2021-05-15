@@ -4,7 +4,7 @@ const Joi = require("@hapi/joi");
 const _ = require("lodash");
 const { OAuth2Client } = require("google-auth-library");
 const config = require("../config");
-const { extractUserData } = require("../helpers");
+const { extractUserData, generateDate } = require("../helpers");
 const { generateDefaultState } = require("../defaults");
 
 const client = new OAuth2Client(config.GOOGLE_LOGIN_CLIENT_ID);
@@ -47,6 +47,22 @@ const login = async (req, res) => {
 
   if (!isGoogleAuth && !user.authenticate(password))
     return res.status(401).send("Invalid username/password.");
+
+  const appStatus = _.get(user, ["appStatus", [req.source], "status"]);
+  if (!appStatus || appStatus === "INIT") {
+    user = await User.findOneAndUpdate(
+      matchQuery,
+      {
+        $set: {
+          [`appStatus.${req.source}`]: {
+            status: "ACTIVE",
+            activatedOn: generateDate(),
+          },
+        },
+      },
+      { new: true }
+    );
+  }
 
   user = user.toObject();
   const userInfoToSend = await extractUserData({ user, source: req.source });

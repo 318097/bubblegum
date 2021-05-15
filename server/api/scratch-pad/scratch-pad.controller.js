@@ -1,6 +1,7 @@
 const Model = require("./scratch-pad.model");
 const { fileUpload } = require("../../utils/file-upload");
 const { ObjectId } = require("mongoose").Types;
+const { generateDate } = require("../../helpers");
 
 exports.getAllItems = async (req, res, next) => {
   const result = await Model.aggregate([
@@ -8,7 +9,7 @@ exports.getAllItems = async (req, res, next) => {
       $match: {
         userId: req.user._id,
         expired: false,
-        $and: [{ expires: true }, { expiresOn: { $gt: new Date() } }],
+        $and: [{ expires: true }, { expiresOn: { $gt: generateDate() } }],
       },
     },
   ]);

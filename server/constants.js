@@ -1,19 +1,15 @@
-const APP_LIST = [
-  "NOTES_APP",
-  "DOT",
-  "ATOM",
-  "SNAKE",
-  "CHAT_APP",
-  "STOREQ",
-  "CODEDROPS",
-  "FLASH",
-];
+const APP_INFO = {
+  NOTES_APP: { active: true },
+  DOT: { active: true },
+  ATOM: { active: true },
+  SNAKE: {},
+  CHAT_APP: {},
+  STOREQ: {},
+  CODEDROPS: { active: true },
+  FLASH: { active: true },
+};
 
-// const APP_TO_KEYS_MAPPING = {
-//   NOTES_APP: {
-
-// }
-// };
+const APP_LIST = Object.keys(APP_INFO);
 
 module.exports = {
   APP_LIST,

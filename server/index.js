@@ -21,6 +21,7 @@ require("./middleware/app-middleware")(app);
 app.use("/api", api);
 app.use("/api/auth", authRoutes);
 
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
     res.status(401).send("Invalid token");
