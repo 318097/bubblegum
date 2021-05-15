@@ -4,8 +4,8 @@ const Joi = require("@hapi/joi");
 const _ = require("lodash");
 const { OAuth2Client } = require("google-auth-library");
 const config = require("../config");
-const { ObjectId } = require("mongoose").Types;
 const { extractUserData } = require("../helpers");
+const { generateDefaultState } = require("../defaults");
 
 const client = new OAuth2Client(config.GOOGLE_LOGIN_CLIENT_ID);
 
@@ -65,34 +65,18 @@ const register = async (req, res) => {
     "mobile",
   ]);
   const { error } = Joi.validate(data, RegisterSchemaValidator);
-
   if (error) return res.status(400).send(error.details[0].message);
-
-  const projectId = new ObjectId();
-  const defaultState = {
-    timeline: {
-      name: "Default",
-      default: true,
-      _id: projectId,
-      createdAt: new Date().toISOString(),
-    },
-    expenseTypes: [
-      { _id: new ObjectId(), key: "EXPENSE", label: "Expense" },
-      { _id: new ObjectId(), key: "BILLS", label: "Bills" },
-      { _id: new ObjectId(), key: "LOAN", label: "Lend" },
-      { _id: new ObjectId(), key: "INVESTMENT", label: "Investment" },
-      { _id: new ObjectId(), key: "INCOME", label: "Income" },
-    ],
-  };
 
   const { email, username } = req.body;
   const userExists = await User.findOne({ $or: [{ email }, { username }] });
+
   if (userExists) throw new Error("Email/Username already exists.");
+
+  const defaultState = generateDefaultState(req);
 
   const result = await User.create({
     ...req.body,
     ...defaultState,
-    source: req.source,
   });
 
   res.send({ result });

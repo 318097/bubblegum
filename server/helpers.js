@@ -3,6 +3,8 @@ const _ = require("lodash");
 const moment = require("moment");
 const DotProjectsModel = require("./api/dot/projectModel");
 
+const generateObjectId = () => new ObjectId();
+
 const isObjectId = (id) => /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id);
 
 const processId = (id) => (isObjectId(id) ? ObjectId(id) : id);
@@ -85,4 +87,5 @@ module.exports = {
   isObjectId,
   processId,
   extractUserData,
+  generateObjectId,
 };
