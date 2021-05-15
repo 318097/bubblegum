@@ -1,4 +1,4 @@
-const { createMessage, updateMessage } = require("./controller");
+const { createMessage, updateMessage } = require("./chat.controller");
 
 const {
   CONNECTION,
@@ -7,31 +7,31 @@ const {
   DISCONNECT,
   NEW_MESSAGE,
   UPDATE_MESSAGE_REQUEST,
-  MESSAGE_UPDATE
-} = require("./constants");
+  MESSAGE_UPDATE,
+} = require("./chat.constants");
 
 let connections = [];
 
-const findConnectionByUserId = userId =>
-  connections.find(user => user.userId === userId.toString());
+const findConnectionByUserId = (userId) =>
+  connections.find((user) => user.userId === userId.toString());
 
-module.exports = io => {
-  io.of("/chat").on(CONNECTION, socket => {
+module.exports = (io) => {
+  io.of("/chat").on(CONNECTION, (socket) => {
     connections.push({ socketId: socket.id });
     console.log("New connection..");
 
     socket.on(USER_INFO, ({ userId }) => {
-      connections = connections.map(user =>
+      connections = connections.map((user) =>
         user.socketId === socket.id
           ? {
               ...user,
-              userId
+              userId,
             }
           : user
       );
     });
 
-    socket.on(MESSAGE, async message => {
+    socket.on(MESSAGE, async (message) => {
       const matchedUser = findConnectionByUserId(message.receiver);
 
       message.delivered = matchedUser ? true : false;
@@ -49,7 +49,7 @@ module.exports = io => {
       UPDATE_MESSAGE_REQUEST,
       async ({ tempId, _id: messageId, userId, message }) => {
         const updatedMessage = {
-          [`metaInfo.${userId}`]: message
+          [`metaInfo.${userId}`]: message,
         };
         const result = await updateMessage(tempId, messageId, updatedMessage);
         // console.log("Result:::", result);
@@ -57,11 +57,11 @@ module.exports = io => {
           metaInfo,
           _id,
           sender: senderId,
-          receiver: receiverId
+          receiver: receiverId,
         } = result;
 
         const ids = [senderId, receiverId];
-        ids.forEach(id => {
+        ids.forEach((id) => {
           if (id !== userId) {
             const receiver = findConnectionByUserId(id);
             if (receiver)
@@ -76,7 +76,7 @@ module.exports = io => {
     );
 
     socket.on(DISCONNECT, () => {
-      connections = connections.filter(user => user.socketId !== socket.id);
+      connections = connections.filter((user) => user.socketId !== socket.id);
       console.log("User disconnected..");
     });
   });

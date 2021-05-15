@@ -1,4 +1,4 @@
-const Model = require("./model");
+const Model = require("./timeline.model");
 
 exports.getTimeline = async (req, res, next) => {
   const { page, groupId } = req.query;

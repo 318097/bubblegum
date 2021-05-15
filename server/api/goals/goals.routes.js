@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const controller = require("./controller");
+const controller = require("./goals.controller");
 const errorHandlingWrapper = require("../../middleware/errorHandling");
 
 router.get("/", errorHandlingWrapper(controller.getAllGoals));

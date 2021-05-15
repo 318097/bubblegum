@@ -3,8 +3,8 @@ const _ = require("lodash");
 
 const { ObjectId } = require("mongoose").Types;
 
-const Model = require("./model");
-const UserModel = require("../user/model");
+const Model = require("./storeq.model");
+const UserModel = require("../user/user.model");
 const {
   sendNotificaiton,
   getCurrentDate,
@@ -15,7 +15,7 @@ const {
   cache,
   logCache,
   removeFromCache,
-} = require("./utils");
+} = require("./storeq.utils");
 
 exports.getAllStores = async (req, res) => {
   const result = await UserModel.find({ type: "SELLER" });

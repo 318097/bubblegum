@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const Model = require("./model");
+const Model = require("./user.model");
 const { ObjectId } = require("mongoose").Types;
 const { processId } = require("../../helpers");
 

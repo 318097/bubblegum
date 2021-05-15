@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const controller = require("./controller");
+const controller = require("./timeline.controller");
 
 const errorHandlingWrapper = require("../../middleware/errorHandling");
 

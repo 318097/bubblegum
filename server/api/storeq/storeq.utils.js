@@ -2,7 +2,7 @@ const Joi = require("@hapi/joi");
 const admin = require("firebase-admin");
 const moment = require("moment");
 const _ = require("lodash");
-const Model = require("./model");
+const Model = require("./storeq.model");
 
 const logger = require("../../utils/logger");
 const serviceAccount = require("../../../storeq-d518c-firebase-adminsdk-cv2ze-0b870f5cf0.json");

@@ -1,8 +1,8 @@
 const config = require("../config");
 const { fileUpload } = require("../utils/file-upload");
 const Parser = require("rss-parser");
-const TransactionSchema = require("./model");
-const PostsSchema = require("./post/model");
+const TransactionSchema = require("./api.model");
+const PostsSchema = require("./post/post.model");
 
 exports.fileUploadHandler = async (req, res) => {
   const result = await fileUpload(req, {

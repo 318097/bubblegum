@@ -6,15 +6,15 @@ const io = require("socket.io")(http);
 const connectToDb = require("./db");
 const config = require("./config");
 const logger = require("./utils/logger");
-const authRoutes = require("./auth/routes");
+const authRoutes = require("./auth/auth.routes");
 const api = require("./api");
 
 logger.log(`Running in ${process.env.NODE_ENV} mode.`);
 
 connectToDb();
 
-require("./api/snake/socket")(io);
-require("./api/chat/socket")(io);
+require("./api/snake/snake.socket")(io);
+require("./api/chat/chat.socket")(io);
 
 require("./middleware/appMiddleware")(app);
 

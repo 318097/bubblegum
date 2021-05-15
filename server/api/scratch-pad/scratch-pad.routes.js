@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const controller = require("./controller");
+const controller = require("./scratch-pad.controller");
 const fileStorage = require("../../utils/storage");
 
 const errorHandlingWrapper = require("../../middleware/errorHandling");

@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const moment = require("moment");
 
-const Model = require("./model");
-const UserModel = require("../user/model");
+const Model = require("./expenses.model");
+const UserModel = require("../user/user.model");
 
 const { ObjectId } = mongoose.Types;
 

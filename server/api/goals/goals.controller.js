@@ -1,16 +1,14 @@
 const moment = require("moment");
 const Joi = require("@hapi/joi");
 
-const Model = require("./model");
-const UserModel = require("../user/model");
+const Model = require("./goals.model");
+const UserModel = require("../user/user.model");
 
 const { ObjectId } = require("mongoose").Types;
 
 const GoalSchemaValidator = Joi.object().keys({
-  goal: Joi.string()
-    .min(3)
-    .required(),
-  type: Joi.string().regex(/^(DATE|MONTHLY)$/)
+  goal: Joi.string().min(3).required(),
+  type: Joi.string().regex(/^(DATE|MONTHLY)$/),
 });
 
 exports.getAllGoals = async (req, res, next) => {
@@ -32,7 +30,7 @@ exports.createGoal = async (req, res, next) => {
 
   const result = await Model.create({
     ...req.body,
-    userId: req.user._id
+    userId: req.user._id,
   });
   res.send({ result });
 };
@@ -41,12 +39,12 @@ exports.updateGoal = async (req, res, next) => {
   const goalId = req.params.id;
   const result = await Model.findOneAndUpdate(
     {
-      _id: goalId
+      _id: goalId,
     },
     {
       $set: {
-        ...req.body
-      }
+        ...req.body,
+      },
     }
   );
   res.send({ result });
@@ -58,10 +56,10 @@ exports.stampGoal = async (req, res, next) => {
 
   const result = await Model.findOneAndUpdate(
     {
-      _id: ObjectId(goalId)
+      _id: ObjectId(goalId),
     },
     {
-      $set: { finishedOn, status: "DONE" }
+      $set: { finishedOn, status: "DONE" },
     }
   );
   res.send({ result });
@@ -70,7 +68,7 @@ exports.stampGoal = async (req, res, next) => {
 exports.deleteGoal = async (req, res, next) => {
   const goalId = req.params.id;
   const result = await Model.findOneAndDelete({
-    _id: goalId
+    _id: goalId,
   });
   res.send({ result });
 };

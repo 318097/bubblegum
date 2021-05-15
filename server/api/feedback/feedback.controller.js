@@ -1,4 +1,4 @@
-const Model = require("./model");
+const Model = require("./feedback.model");
 
 exports.createFeedback = async (req, res, next) => {
   const { source } = req;

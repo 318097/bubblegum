@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongoose").Types;
 const _ = require("lodash");
 const moment = require("moment");
-const DotProjectsModel = require("./api/dot/projectModel");
+const DotProjectsModel = require("./api/dot/dot.project.model");
 
 const generateObjectId = () => new ObjectId();
 

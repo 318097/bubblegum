@@ -1,4 +1,4 @@
-const Model = require("./model");
+const Model = require("./scratch-pad.model");
 const { fileUpload } = require("../../utils/file-upload");
 const { ObjectId } = require("mongoose").Types;
 

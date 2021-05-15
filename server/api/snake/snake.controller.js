@@ -1,5 +1,5 @@
-const UserModel = require('../user/model');
-const SnakeGameModel = require('./model');
+const UserModel = require("../user/user.model");
+const SnakeGameModel = require("./snake.model");
 
 exports.storeGameResults = (req, res) => {
   // UserModel.findOne({ _id: req.body.userId }, (err, user) => {
@@ -11,9 +11,9 @@ exports.storeGameResults = (req, res) => {
   // });
   new SnakeGameModel(req.body)
     .save()
-    .then((result) => res.send({ message: 'ok' }));
+    .then((result) => res.send({ message: "ok" }));
 };
 
 exports.getProfile = (req, res) => {
-  res.send({ message: 'ok' });
-}
+  res.send({ message: "ok" });
+};

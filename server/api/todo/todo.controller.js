@@ -1,22 +1,20 @@
 const moment = require("moment");
 const Joi = require("@hapi/joi");
 
-const Model = require("./model");
-const UserModel = require("../user/model");
+const Model = require("./todo.model");
+const UserModel = require("../user/user.model");
 
 const { ObjectId } = require("mongoose").Types;
 
 const TodoSchemaValidator = Joi.object().keys({
-  task: Joi.string()
-    .min(3)
-    .required(),
+  task: Joi.string().min(3).required(),
   type: Joi.string().regex(/^(SINGLE|WEEKLY)$/),
-  frequency: Joi.number()
+  frequency: Joi.number(),
 });
 
 exports.getAllTodos = async (req, res, next) => {
   const result = await Model.aggregate([
-    { $match: { userId: req.user._id } }
+    { $match: { userId: req.user._id } },
     // {
     //   $group: { _id: '$type', 'todos': { $push: '$$ROOT' } }
     // },
@@ -43,7 +41,7 @@ exports.createTodo = async (req, res, next) => {
     const weekNo = moment().week();
     data = {
       stamps: { [`week-${weekNo}`]: [] },
-      frequency
+      frequency,
     };
   }
 
@@ -51,7 +49,7 @@ exports.createTodo = async (req, res, next) => {
     task,
     type,
     userId: req.user._id,
-    ...data
+    ...data,
   });
   res.send({ result });
 };
@@ -61,14 +59,14 @@ exports.updateTodo = async (req, res, next) => {
   const todoId = req.params.id;
   const result = await Model.findOneAndUpdate(
     {
-      _id: todoId
+      _id: todoId,
     },
     {
       $set: {
         task,
         type,
-        userId: req.user._id
-      }
+        userId: req.user._id,
+      },
     }
   );
   res.send({ result });
@@ -84,24 +82,24 @@ exports.stampTodo = async (req, res, next) => {
     const week = `week-${weekNo}`;
     expression = {
       $addToSet: {
-        [`stamps.${week}`]: moment(date).toDate()
-      }
+        [`stamps.${week}`]: moment(date).toDate(),
+      },
     };
   } else {
     expression = {
       $set: {
         status: "COMPLETE",
-        completionDate: date
-      }
+        completionDate: date,
+      },
     };
   }
 
   const result = await Model.findOneAndUpdate(
     {
-      _id: ObjectId(todoId)
+      _id: ObjectId(todoId),
     },
     {
-      ...expression
+      ...expression,
     }
   );
   res.send({ result });
@@ -110,7 +108,7 @@ exports.stampTodo = async (req, res, next) => {
 exports.deleteTodo = async (req, res, next) => {
   const todoId = req.params.id;
   const result = await Model.findOneAndDelete({
-    _id: todoId
+    _id: todoId,
   });
   res.send({ result });
 };

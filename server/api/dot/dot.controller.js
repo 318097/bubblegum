@@ -1,8 +1,8 @@
 const moment = require("moment");
-const TodoModel = require("./todoModel");
-const TopicModel = require("./topicModel");
-const ProjectModel = require("./projectModel");
-const UserModel = require("../user/model");
+const TodoModel = require("./dot.todo.model");
+const TopicModel = require("./dot.topic.model");
+const ProjectModel = require("./dot.project.model");
+const UserModel = require("../user/user.model");
 const _ = require("lodash");
 const { processId } = require("../../helpers");
 

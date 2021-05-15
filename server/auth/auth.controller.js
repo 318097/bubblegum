@@ -1,4 +1,4 @@
-const User = require("../api/user/model");
+const User = require("../api/user/user.model");
 const { signToken } = require("../utils/auth");
 const Joi = require("@hapi/joi");
 const _ = require("lodash");
