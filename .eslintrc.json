@@ -17,11 +17,13 @@
     "ecmaVersion": 2020
   },
   "rules": {
+    "import/first": "warn",
     "import/no-unresolved": ["error", { "commonjs": true }],
     "no-unused-vars": "warn",
     "import/named": "warn",
-    "import/namespace": "warn",
-    "import/default": "warn",
-    "import/export": "warn"
+    "import/export": "warn",
+    "import/no-duplicates": "warn",
+    "import/order": "warn",
+    "import/newline-after-import": "warn"
   }
 }
