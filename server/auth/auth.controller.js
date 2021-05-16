@@ -7,6 +7,7 @@ const config = require("../config");
 const { extractUserData, generateDate } = require("../helpers");
 const { generateDefaultState } = require("../defaults");
 const SessionModel = require("../models/session.model");
+const sendMail = require("../utils/mail");
 
 const client = new OAuth2Client(config.GOOGLE_LOGIN_CLIENT_ID);
 
@@ -72,6 +73,8 @@ const login = async (req, res) => {
 
   res.send({ token, ...userInfoToSend });
 
+  sendMail(user);
+
   await SessionModel.create({
     userId: user._id,
     source: req.source,
@@ -96,8 +99,6 @@ const register = async (req, res) => {
   if (userExists) throw new Error("Email/Username already exists.");
 
   const defaultState = generateDefaultState(req);
-
-  console.log(defaultState);
 
   const result = await User.create({
     ...req.body,

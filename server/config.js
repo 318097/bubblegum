@@ -9,6 +9,7 @@ const {
   JWT,
   GOOGLE_LOGIN_CLIENT_ID,
   CLOUDINARY_API_SECRET,
+  EMAIL_PASSWORD,
 } = process.env;
 
 const IS_PROD = ["production", "express-lambda-production"].includes(NODE_ENV);
@@ -27,6 +28,8 @@ const config = {
   NODE_ENV: NODE_ENV || "development",
   IS_PROD,
   MEDIUM_RSS_FEED: "https://medium.com/feed/@318097",
+  EMAIL_ID: "codedrops.tech@gmail.com",
+  EMAIL_PASSWORD,
 };
 
 module.exports = config;

@@ -16,3 +16,4 @@
 - [x] Add status & active date for all apps
 - [x] Add compound indexes for Posts
 - [ ] Activate account from email
+- [x] Add support for email
