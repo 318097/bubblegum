@@ -14,4 +14,4 @@
 - [ ] Track JWTs
 - [ ] Set expiry for JWT
 - [x] Add status & active date for all apps
-- [ ] Add compound indexes for Posts
+- [x] Add compound indexes for Posts

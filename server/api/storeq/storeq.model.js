@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
-const schemaName = "storeq";
+const { ObjectId } = mongoose.Schema.Types;
+const collectionName = "storeq";
 
 const StoreqSchema = new mongoose.Schema(
   {
-    storeId: { type: mongoose.Types.ObjectId, ref: "user" },
-    userId: { type: mongoose.Types.ObjectId, ref: "user" },
+    storeId: { type: ObjectId, ref: "user" },
+    userId: { type: ObjectId, ref: "user" },
     status: {
       type: String,
       enum: [
@@ -28,4 +29,4 @@ const StoreqSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(schemaName, StoreqSchema);
+module.exports = mongoose.model(collectionName, StoreqSchema);

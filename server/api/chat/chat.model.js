@@ -1,37 +1,37 @@
 const mongoose = require("mongoose");
 
-const schemaName = "chat";
+const collectionName = "chat";
 const { ObjectId } = mongoose.Schema.Types;
 
 const ChatSchema = new mongoose.Schema(
   {
     message: {
       type: String,
-      required: true
+      required: true,
     },
     sender: {
       type: ObjectId,
-      required: true
+      required: true,
     },
     receiver: {
       type: ObjectId,
-      ref: "user"
+      ref: "user",
     },
     delivered: {
       type: Boolean,
-      default: false
+      default: false,
     },
     messageType: {
       type: String,
       default: "NORMAL",
-      enum: ["NORMAL", "CONFESS", "FUTURE"]
+      enum: ["NORMAL", "CONFESS", "FUTURE"],
     },
     tempId: String,
-    metaInfo: Object
+    metaInfo: Object,
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-module.exports = mongoose.model(schemaName, ChatSchema);
+module.exports = mongoose.model(collectionName, ChatSchema);

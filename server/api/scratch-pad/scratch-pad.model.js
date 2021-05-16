@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const schemaName = "scratchPad";
+const { ObjectId } = mongoose.Schema.Types;
+const collectionName = "scratchPad";
 
 const ScratchPadSchema = new mongoose.Schema(
   {
@@ -12,7 +13,7 @@ const ScratchPadSchema = new mongoose.Schema(
       required: false,
     },
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "user",
       required: true,
     },
@@ -40,4 +41,4 @@ const ScratchPadSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(schemaName, ScratchPadSchema);
+module.exports = mongoose.model(collectionName, ScratchPadSchema);

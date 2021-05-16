@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
-const schemaName = "dot-topics";
+const { ObjectId } = mongoose.Schema.Types;
+const collectionName = "dot-topic";
 
 const DotTopicSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    userId: { type: ObjectId, ref: "user" },
     content: String,
-    projectId: { type: mongoose.Schema.Types.ObjectId, ref: "dot-projects" },
+    projectId: { type: ObjectId, ref: "dot-project" },
     isDefault: Boolean,
     todos: {
       type: Array,
@@ -17,4 +18,4 @@ const DotTopicSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(schemaName, DotTopicSchema);
+module.exports = mongoose.model(collectionName, DotTopicSchema);

@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
-const schemaName = "posts";
+const { ObjectId } = mongoose.Schema.Types;
+const collectionName = "post";
 
 const PostsSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Types.ObjectId, ref: "user", required: true },
+    userId: { type: ObjectId, ref: "user", required: true },
     index: { type: Number, required: true },
     title: {
       type: String,
@@ -74,8 +75,8 @@ const PostsSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    chainedTo: [mongoose.Types.ObjectId], // which all posts is it chained to
-    chainedItems: [mongoose.Types.ObjectId], // items linked in a chain
+    chainedTo: [ObjectId], // which all posts is it chained to
+    chainedItems: [ObjectId], // items linked in a chain
   },
   {
     timestamps: true,
@@ -83,4 +84,8 @@ const PostsSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(schemaName, PostsSchema);
+PostsSchema.index({ collectionId: 1, index: 1 }, { unique: true });
+PostsSchema.index({ collectionId: 1, liveId: 1 }, { unique: true });
+PostsSchema.index({ collectionId: 1, slug: 1 }, { unique: true });
+
+module.exports = mongoose.model(collectionName, PostsSchema);

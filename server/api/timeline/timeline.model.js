@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const schemaName = "timeline";
+const { ObjectId } = mongoose.Schema.Types;
+const collectionName = "timeline";
 
 const TimelineSchema = new mongoose.Schema(
   {
@@ -16,7 +17,7 @@ const TimelineSchema = new mongoose.Schema(
       required: true,
     },
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "user",
     },
   },
@@ -25,4 +26,4 @@ const TimelineSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(schemaName, TimelineSchema);
+module.exports = mongoose.model(collectionName, TimelineSchema);

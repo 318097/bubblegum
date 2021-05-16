@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
-const schemaName = "dot-todos";
+const { ObjectId } = mongoose.Schema.Types;
+const collectionName = "dot-todo";
 
 const DotTodoSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-    topicId: { type: mongoose.Schema.Types.ObjectId, ref: "dot-topics" },
-    projectId: { type: mongoose.Schema.Types.ObjectId, ref: "dot-projects" },
+    userId: { type: ObjectId, ref: "user" },
+    topicId: { type: ObjectId, ref: "dot-topic" },
+    projectId: { type: ObjectId, ref: "dot-project" },
     marked: { type: Boolean, default: false },
     content: String,
     completedOn: Date,
@@ -15,4 +16,4 @@ const DotTodoSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(schemaName, DotTodoSchema);
+module.exports = mongoose.model(collectionName, DotTodoSchema);

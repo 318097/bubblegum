@@ -1,18 +1,19 @@
 const mongoose = require("mongoose");
-const schemaName = "expenses";
+const { ObjectId } = mongoose.Schema.Types;
+const collectionName = "expense";
 
 const ExpenseSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    userId: { type: ObjectId, ref: "user" },
     amount: Number,
     date: Date,
     message: String,
-    expenseSubTypeId: mongoose.Types.ObjectId,
-    expenseTypeId: mongoose.Types.ObjectId,
+    expenseSubTypeId: ObjectId,
+    expenseTypeId: ObjectId,
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model(schemaName, ExpenseSchema);
+module.exports = mongoose.model(collectionName, ExpenseSchema);

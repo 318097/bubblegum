@@ -1,24 +1,25 @@
 const mongoose = require("mongoose");
-const schemaName = "todos";
+const { ObjectId } = mongoose.Schema.Types;
+const collectionName = "todo";
 
 const TodosSchema = new mongoose.Schema(
   {
     task: String,
-    userId: { type: mongoose.Types.ObjectId, ref: "user" },
+    userId: { type: ObjectId, ref: "user" },
     type: {
       type: String,
       default: "SINGLE",
-      enum: ["SINGLE", "WEEKLY"]
+      enum: ["SINGLE", "WEEKLY"],
     },
     status: String,
     frequency: Number,
     stamps: Object,
     completionDate: Date,
-    active: Boolean
+    active: Boolean,
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-module.exports = mongoose.model(schemaName, TodosSchema);
+module.exports = mongoose.model(collectionName, TodosSchema);

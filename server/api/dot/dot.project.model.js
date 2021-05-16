@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
-const schemaName = "dot-projects";
+const collectionName = "dot-project";
+const { ObjectId } = mongoose.Schema.Types;
 
 const DotProjectSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    userId: { type: ObjectId, ref: "user" },
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model(schemaName, DotProjectSchema);
+module.exports = mongoose.model(collectionName, DotProjectSchema);

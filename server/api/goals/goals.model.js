@@ -1,26 +1,27 @@
 const mongoose = require("mongoose");
-const schemaName = "goals";
+const { ObjectId } = mongoose.Schema.Types;
+const collectionName = "goal";
 
 const GoalsSchema = new mongoose.Schema(
   {
     goal: String,
-    userId: { type: mongoose.Types.ObjectId, ref: "user" },
+    userId: { type: ObjectId, ref: "user" },
     type: {
       type: String,
       default: "DATE",
-      enum: ["DATE", "MONTHLY"]
+      enum: ["DATE", "MONTHLY"],
     },
     status: {
       type: String,
       default: "OPEN",
-      enum: ["OPEN", "DONE"]
+      enum: ["OPEN", "DONE"],
     },
     deadline: Date,
-    finishedOn: Date
+    finishedOn: Date,
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-module.exports = mongoose.model(schemaName, GoalsSchema);
+module.exports = mongoose.model(collectionName, GoalsSchema);
