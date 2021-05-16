@@ -14,10 +14,14 @@
     "SharedArrayBuffer": "readonly"
   },
   "parserOptions": {
-    "ecmaVersion": 2019
+    "ecmaVersion": 2020
   },
   "rules": {
-    "import/no-unresolved": "warn",
-    "no-unused-vars": "warn"
+    "import/no-unresolved": ["error", { "commonjs": true }],
+    "no-unused-vars": "warn",
+    "import/named": "warn",
+    "import/namespace": "warn",
+    "import/default": "warn",
+    "import/export": "warn"
   }
 }
