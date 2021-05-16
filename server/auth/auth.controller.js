@@ -1,8 +1,10 @@
+const { OAuth2Client } = require("google-auth-library");
+const _ = require("lodash");
+const Joi = require("@hapi/joi");
+const { v4: uuidv4 } = require("uuid");
+const bcrypt = require("bcrypt");
 const User = require("../api/user/user.model");
 const { signToken } = require("../utils/auth");
-const Joi = require("@hapi/joi");
-const _ = require("lodash");
-const { OAuth2Client } = require("google-auth-library");
 const config = require("../config");
 const { extractUserData, generateDate } = require("../helpers");
 const { generateDefaultState } = require("../defaults");
@@ -113,4 +115,65 @@ const checkAccountStatus = async (req, res) => {
   res.send(result);
 };
 
-module.exports = { login, register, checkAccountStatus };
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) return res.status(404).send("Email is required");
+
+  const matchQuery = { email };
+
+  const user = await User.findOne(matchQuery);
+
+  if (!user) return res.status(401).send("Invalid email id");
+
+  const resetToken = uuidv4();
+
+  await sendMail(user, {
+    resetToken,
+    type: "RESET",
+  });
+
+  await User.findOneAndUpdate(matchQuery, {
+    $set: {
+      resetToken,
+    },
+  });
+
+  res.send("ok");
+};
+
+const resetPassword = async (req, res) => {
+  const { password, resetToken } = req.body;
+
+  const matchQuery = { resetToken };
+
+  const user = await User.findOne(matchQuery);
+
+  if (!user) return res.status(404).send("Invalid token");
+
+  const salt = bcrypt.genSaltSync(10);
+  const hashedPassword = bcrypt.hashSync(password, salt);
+
+  const updatedData = {
+    password: hashedPassword,
+    lastPasswordUpdated: generateDate(),
+    resetToken: null,
+  };
+
+  await User.findOneAndUpdate(
+    { _id: user._id },
+    {
+      $set: updatedData,
+    }
+  );
+
+  res.send("ok");
+};
+
+module.exports = {
+  login,
+  register,
+  checkAccountStatus,
+  forgotPassword,
+  resetPassword,
+};

@@ -1,18 +1,34 @@
 const nodemailer = require("nodemailer");
 const config = require("../config");
 
-const welcomeTemplate = (user, data) => `
-<html>
-  <body>
-   Hi ${user.name},
-   Welcome to ${data.productName}
-  </body>
-</html>
+const getContent = (user, data = {}) => {
+  let subject, content;
+
+  switch (data.type) {
+    case "RESET": {
+      subject = "Reset password";
+      content = `
+      Reset Password: ${data.url}?reset_token=${data.resetToken}
+      `;
+    }
+  }
+
+  const body = `
+  <html>
+    <body>
+      <p>
+        ${content}
+      </p>
+    </body>
+  </html>
 `;
 
+  return { subject, body };
+};
+
 const sendMail = async (user, data = {}) => {
-  const { subject = "" } = data;
-  const to = user.email;
+  const { email: to } = user;
+  const { subject, body } = getContent(user, data);
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -23,8 +39,6 @@ const sendMail = async (user, data = {}) => {
   });
 
   try {
-    let body = welcomeTemplate(user, data);
-
     const mailOptions = {
       from: '"Codedrops.tech" <codedrops.tech@gmail.com>',
       to,

@@ -6,6 +6,11 @@ const { protectedRoute, externalAccess } = require("../utils/auth");
 router.post("/login", errorHandlingWrapper(controller.login));
 router.post("/register", errorHandlingWrapper(controller.register));
 router.post(
+  "/forgot-password",
+  errorHandlingWrapper(controller.forgotPassword)
+);
+router.post("/reset-password", errorHandlingWrapper(controller.resetPassword));
+router.post(
   "/account-status",
   protectedRoute,
   errorHandlingWrapper(controller.checkAccountStatus)

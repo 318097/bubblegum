@@ -2,18 +2,18 @@
 
 #### Todo
 
-- [ ] Login using encoded string
-- [ ] Reset password
-- [ ] Forgot password
+- [x] Reset password
+- [x] Forgot password
 - [x] Netlify-Express lambda
 - [x] Enable encrypt password
-- [ ] Advance search for posts
-- [ ] Change the project structure architecture for DOT
-- [ ] Single command to deploy to heroku and netlify
-- [ ] Wrap all controllers in try..catch
 - [x] Track JWTs
-- [ ] Set expiry for JWT
 - [x] Add status & active date for all apps
 - [x] Add compound indexes for Posts
-- [ ] Activate account from email
 - [x] Add support for email
+- [ ] Change the project structure architecture for DOT
+- [ ] Change password
+- [ ] Activate account from email
+- [ ] Advance search for posts
+- [ ] Set expiry for JWT
+- [ ] Wrap all controllers in try..catch
+- [ ] Single command to deploy to heroku and netlify
