@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
+
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "expense";
 
 const ExpenseSchema = new mongoose.Schema(
   {
-    userId: { type: ObjectId, ref: "user" },
+    userId: { type: ObjectId, ref: "user", required: true },
     amount: Number,
     date: Date,
     message: String,

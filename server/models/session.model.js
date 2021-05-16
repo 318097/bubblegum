@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
+
+const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "session";
 
 const SessionSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "user",
       required: true,
     },

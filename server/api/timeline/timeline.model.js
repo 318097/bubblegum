@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "timeline";
 
@@ -19,6 +20,7 @@ const TimelineSchema = new mongoose.Schema(
     userId: {
       type: ObjectId,
       ref: "user",
+      required: true,
     },
   },
   {

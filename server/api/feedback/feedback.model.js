@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "feedback";
 
@@ -6,8 +7,8 @@ const FeedbackSchema = new mongoose.Schema(
   {
     name: String,
     email: String,
-    message: String,
-    userId: { type: ObjectId, ref: "user" },
+    message: { type: String, required: true },
+    userId: { type: ObjectId, ref: "user", required: true },
     source: String,
   },
   {

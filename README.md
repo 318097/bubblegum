@@ -17,3 +17,4 @@
 - [ ] Set expiry for JWT
 - [ ] Wrap all controllers in try..catch
 - [ ] Single command to deploy to heroku and netlify
+- [ ] All sessions should logout after password change/reset
