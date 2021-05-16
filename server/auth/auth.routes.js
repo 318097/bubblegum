@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const controller = require("./auth.controller");
 const errorHandlingWrapper = require("../middleware/error-handling");
 const { protectedRoute, externalAccess } = require("../utils/auth");
+const controller = require("./auth.controller");
 
 router.post("/login", errorHandlingWrapper(controller.login));
 router.post("/register", errorHandlingWrapper(controller.register));

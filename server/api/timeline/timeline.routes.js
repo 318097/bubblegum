@@ -1,7 +1,7 @@
 const router = require("express").Router();
+const errorHandlingWrapper = require("../../middleware/error-handling");
 const controller = require("./timeline.controller");
 
-const errorHandlingWrapper = require("../../middleware/error-handling");
 
 router.get("/", errorHandlingWrapper(controller.getTimeline));
 router.get("/:id", errorHandlingWrapper(controller.gePostById));

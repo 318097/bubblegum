@@ -1,4 +1,4 @@
-const UserModel = require("../user/user.model");
+// const UserModel = require("../user/user.model");
 const SnakeGameModel = require("./snake.model");
 
 exports.storeGameResults = (req, res) => {

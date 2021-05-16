@@ -1,9 +1,8 @@
-const Model = require("./chat.model");
-const UserModel = require("../user/user.model");
-
 const { ObjectId } = require("mongoose").Types;
+const UserModel = require("../user/user.model");
+const Model = require("./chat.model");
 
-exports.getContactList = async (req, res, next) => {
+exports.getContactList = async (req, res) => {
   const { contactList = [] } = req.user;
   const results = await UserModel.aggregate([
     { $match: { _id: { $in: contactList } } },
@@ -18,7 +17,7 @@ exports.getContactList = async (req, res, next) => {
   res.send({ contacts: results });
 };
 
-exports.getUserChat = async (req, res, next) => {
+exports.getUserChat = async (req, res) => {
   const sender = req.user._id;
   const { receiverId: receiver } = req.params;
 

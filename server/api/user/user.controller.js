@@ -1,7 +1,7 @@
 const _ = require("lodash");
-const Model = require("./user.model");
 const { ObjectId } = require("mongoose").Types;
 const { processId, generateDate } = require("../../helpers");
+const Model = require("./user.model");
 
 exports.createUser = async (req, res) => {
   const user = await Model.create({ ...req.body, source: req.source });

@@ -1,8 +1,8 @@
+const Parser = require("rss-parser");
+const bcrypt = require("bcrypt");
 const config = require("../config");
 const { fileUpload } = require("../utils/file-upload");
 const { processId } = require("../helpers");
-const Parser = require("rss-parser");
-const bcrypt = require("bcrypt");
 const TransactionModel = require("../models/transaction.model");
 const PostModel = require("./post/post.model");
 const UserModel = require("./user/user.model");

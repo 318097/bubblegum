@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const controller = require("./expenses.controller");
 const errorHandlingWrapper = require("../../middleware/error-handling");
+const controller = require("./expenses.controller");
 
 // router.get('/types', errorHandlingWrapper(controller.getAllExpenseTypes));
 router.get("/", errorHandlingWrapper(controller.getAllExpenses));

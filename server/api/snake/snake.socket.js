@@ -1,4 +1,5 @@
 const statusCodes = require("./snake.constants");
+
 module.exports = (io) => {
   const createRoom = () => ({
     isFree: true,

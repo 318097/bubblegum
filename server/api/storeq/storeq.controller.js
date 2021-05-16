@@ -3,15 +3,15 @@ const _ = require("lodash");
 
 const { ObjectId } = require("mongoose").Types;
 
-const Model = require("./storeq.model");
 const UserModel = require("../user/user.model");
+const Model = require("./storeq.model");
 const {
   sendNotificaiton,
   getCurrentDate,
   getWaitingInfo,
   addToCache,
   updateInCache,
-  getFromCache,
+  // getFromCache,
   cache,
   logCache,
   removeFromCache,

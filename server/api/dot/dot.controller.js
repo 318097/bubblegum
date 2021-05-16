@@ -1,12 +1,11 @@
 const moment = require("moment");
+const _ = require("lodash");
+const { processId } = require("../../helpers");
 const TodoModel = require("./dot.todo.model");
 const TopicModel = require("./dot.topic.model");
 const ProjectModel = require("./dot.project.model");
-const UserModel = require("../user/user.model");
-const _ = require("lodash");
-const { processId } = require("../../helpers");
 
-exports.getAllTodos = async (req, res, next) => {
+exports.getAllTodos = async (req, res) => {
   const { projectId } = req.query;
   const topics = await TopicModel.aggregate([
     { $match: { userId: req.user._id, projectId: processId(projectId) } },
@@ -19,7 +18,7 @@ exports.getAllTodos = async (req, res, next) => {
   res.send({ todos, topics });
 };
 
-exports.getCompletedTodos = async (req, res, next) => {
+exports.getCompletedTodos = async (req, res) => {
   const { page = 1, limit = 15, type = "TIMELINE", projectId } = req.query;
   let aggregation = {
     userId: req.user._id,
@@ -53,7 +52,7 @@ exports.getCompletedTodos = async (req, res, next) => {
   res.send({ todos: result });
 };
 
-exports.getTodoById = async (req, res, next) => {
+exports.getTodoById = async (req, res) => {
   const result = await TodoModel.find({
     userId: req.user._id,
     _id: req.params.id,
@@ -61,7 +60,7 @@ exports.getTodoById = async (req, res, next) => {
   res.send({ todo: result });
 };
 
-exports.createTodo = async (req, res, next) => {
+exports.createTodo = async (req, res) => {
   const { topicId, content, projectId, marked } = req.body;
   const userId = req.user._id;
 
@@ -85,7 +84,7 @@ exports.createTodo = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.updateTodo = async (req, res, next) => {
+exports.updateTodo = async (req, res) => {
   const { id: todoId } = req.params;
   const result = await TodoModel.findOneAndUpdate(
     {
@@ -99,7 +98,7 @@ exports.updateTodo = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.stampTodo = async (req, res, next) => {
+exports.stampTodo = async (req, res) => {
   const { id: todoId } = req.params;
   const result = await TodoModel.findOneAndUpdate(
     {
@@ -118,7 +117,7 @@ exports.stampTodo = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.deleteTodo = async (req, res, next) => {
+exports.deleteTodo = async (req, res) => {
   const { id: todoId } = req.params;
   const result = await TodoModel.findOneAndDelete({
     _id: todoId,
@@ -132,7 +131,7 @@ exports.deleteTodo = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.createTopic = async (req, res, next) => {
+exports.createTopic = async (req, res) => {
   const { content, projectId } = req.body;
   const userId = req.user._id;
 
@@ -144,7 +143,7 @@ exports.createTopic = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.updateTopic = async (req, res, next) => {
+exports.updateTopic = async (req, res) => {
   const { id: topicId } = req.params;
   const result = await TopicModel.findOneAndUpdate(
     {
@@ -158,7 +157,7 @@ exports.updateTopic = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.createProject = async (req, res, next) => {
+exports.createProject = async (req, res) => {
   const { name } = req.body;
   const userId = req.user._id;
 

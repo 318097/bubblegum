@@ -1,7 +1,6 @@
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const moment = require("moment");
-const Model = require("./post.model");
 const UserModel = require("../user/user.model");
 const {
   getKey,
@@ -9,6 +8,7 @@ const {
   generateSlug,
   isSearchId,
 } = require("../../helpers");
+const Model = require("./post.model");
 
 const { ObjectId } = mongoose.Types;
 
@@ -90,7 +90,7 @@ const getAggregationFilters = (req) => {
   return { aggregation, sort, page, limit };
 };
 
-exports.getRelatedPosts = async (req, res, next) => {
+exports.getRelatedPosts = async (req, res) => {
   const { collectionId, tags = [], postId } = req.query;
   const aggregation = {
     status: "POSTED",
@@ -111,7 +111,7 @@ exports.getRelatedPosts = async (req, res, next) => {
   res.send({ posts });
 };
 
-exports.getChains = async (req, res, next) => {
+exports.getChains = async (req, res) => {
   const { _id } = req.user;
   const { collectionId } = req.query;
   const chains = await Model.aggregate([
@@ -131,7 +131,7 @@ exports.getChains = async (req, res, next) => {
   res.send({ chains });
 };
 
-exports.getAllPosts = async (req, res, next) => {
+exports.getAllPosts = async (req, res) => {
   const { aggregation, sort, page, limit } = getAggregationFilters(req);
 
   const result = await Model.aggregate([
@@ -159,7 +159,7 @@ exports.getAllPosts = async (req, res, next) => {
   });
 };
 
-exports.getPostById = async (req, res, next) => {
+exports.getPostById = async (req, res) => {
   const { id } = req.params;
   const { collectionId } = req.query;
   const key = getKey(id);
@@ -191,7 +191,7 @@ exports.getPostById = async (req, res, next) => {
   res.send({ post: result });
 };
 
-exports.createPost = async (req, res, next) => {
+exports.createPost = async (req, res) => {
   const { data } = req.body;
   const { collectionId } = req.query;
   const { _id, userType } = req.user;
@@ -226,7 +226,7 @@ exports.createPost = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.updatePost = async (req, res, next) => {
+exports.updatePost = async (req, res) => {
   const { id } = req.params;
   const key = getKey(id);
   const { action, collectionId } = req.query;
@@ -302,7 +302,7 @@ exports.updatePost = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.deletePost = async (req, res, next) => {
+exports.deletePost = async (req, res) => {
   const { id } = req.params;
   const key = getKey(id);
   const { _id: userId } = req.user;
@@ -317,7 +317,7 @@ exports.deletePost = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.getStats = async (req, res, next) => {
+exports.getStats = async (req, res) => {
   const { aggregation } = getAggregationFilters(req);
   const result = await Model.find(aggregation).sort({ createdAt: 1 });
 
@@ -362,7 +362,7 @@ exports.getStats = async (req, res, next) => {
   res.send({ stats });
 };
 
-exports.getBookmarks = async (req, res, next) => {
+exports.getBookmarks = async (req, res) => {
   const { aggregation } = getAggregationFilters(req);
   const result = await Model.aggregate([
     {
@@ -386,7 +386,7 @@ exports.getBookmarks = async (req, res, next) => {
   });
 };
 
-exports.toggleBookmark = async (req, res, next) => {
+exports.toggleBookmark = async (req, res) => {
   const { status } = req.body;
   const { id } = req.params;
 

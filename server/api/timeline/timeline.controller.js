@@ -1,6 +1,6 @@
 const Model = require("./timeline.model");
 
-exports.getTimeline = async (req, res, next) => {
+exports.getTimeline = async (req, res) => {
   const { page, groupId } = req.query;
 
   const aggregation = { userId: req.user._id };
@@ -14,12 +14,12 @@ exports.getTimeline = async (req, res, next) => {
   res.send({ timeline: result });
 };
 
-exports.getPostById = async (req, res, next) => {
+exports.getPostById = async (req, res) => {
   const result = await Model.find({ _id: req.params.id });
   res.send({ post: result });
 };
 
-exports.createPost = async (req, res, next) => {
+exports.createPost = async (req, res) => {
   const { content, date, groupId } = req.body;
 
   const result = await Model.create({
@@ -31,7 +31,7 @@ exports.createPost = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.updatePost = async (req, res, next) => {
+exports.updatePost = async (req, res) => {
   const PostId = req.params.id;
   const result = await Model.findOneAndUpdate(
     {
@@ -46,7 +46,7 @@ exports.updatePost = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.deletePost = async (req, res, next) => {
+exports.deletePost = async (req, res) => {
   const { id: PostId } = req.params;
   const result = await Model.findOneAndDelete({
     _id: PostId,

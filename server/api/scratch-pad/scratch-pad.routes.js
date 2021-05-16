@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const controller = require("./scratch-pad.controller");
 const fileStorage = require("../../utils/storage");
 
 const errorHandlingWrapper = require("../../middleware/error-handling");
+const controller = require("./scratch-pad.controller");
 
 router.get("/", errorHandlingWrapper(controller.getAllItems));
 router.get("/:id", errorHandlingWrapper(controller.geItemById));

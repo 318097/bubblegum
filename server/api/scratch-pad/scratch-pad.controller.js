@@ -1,9 +1,9 @@
-const Model = require("./scratch-pad.model");
-const { fileUpload } = require("../../utils/file-upload");
-const { ObjectId } = require("mongoose").Types;
 const { generateDate } = require("../../helpers");
+const { fileUpload } = require("../../utils/file-upload");
+const Model = require("./scratch-pad.model");
+// const { ObjectId } = require("mongoose").Types;
 
-exports.getAllItems = async (req, res, next) => {
+exports.getAllItems = async (req, res) => {
   const result = await Model.aggregate([
     {
       $match: {
@@ -16,12 +16,12 @@ exports.getAllItems = async (req, res, next) => {
   res.send({ items: result });
 };
 
-exports.getItemById = async (req, res, next) => {
+exports.getItemById = async (req, res) => {
   const result = await Model.find({ _id: req.params.id });
   res.send({ item: result });
 };
 
-exports.createItem = async (req, res, next) => {
+exports.createItem = async (req, res) => {
   const fileResult = await fileUpload(req);
 
   const result = await Model.create({
@@ -32,7 +32,7 @@ exports.createItem = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.updateItem = async (req, res, next) => {
+exports.updateItem = async (req, res) => {
   const itemId = req.params.id;
   const result = await Model.findOneAndUpdate(
     {
@@ -47,7 +47,7 @@ exports.updateItem = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.deleteItem = async (req, res, next) => {
+exports.deleteItem = async (req, res) => {
   const itemId = req.params.id;
   const result = await Model.findOneAndDelete({
     _id: itemId,

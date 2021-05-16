@@ -1,4 +1,11 @@
 const router = require("express").Router();
+const errorHandlingWrapper = require("../middleware/error-handling");
+const fileStorage = require("../utils/storage");
+const {
+  protectedRoute,
+  externalAccess,
+  transparent,
+} = require("../utils/auth");
 const userRoutes = require("./user/user.routes");
 const todoRoutes = require("./todo/todo.routes");
 const postRoutes = require("./post/post.routes");
@@ -12,13 +19,6 @@ const dotRoutes = require("./dot/dot.routes");
 const feedbackRoutes = require("./feedback/feedback.routes");
 const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
 const controller = require("./api.controller");
-const errorHandlingWrapper = require("../middleware/error-handling");
-const fileStorage = require("../utils/storage");
-const {
-  protectedRoute,
-  externalAccess,
-  transparent,
-} = require("../utils/auth");
 
 router.get("/test", (req, res) => res.send("Test"));
 router.get("/encrypt-passwords", controller.encryptPasswords);

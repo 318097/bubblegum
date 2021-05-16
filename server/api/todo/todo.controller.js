@@ -1,10 +1,9 @@
 const moment = require("moment");
 const Joi = require("@hapi/joi");
-
-const Model = require("./todo.model");
-const UserModel = require("../user/user.model");
-
 const { ObjectId } = require("mongoose").Types;
+
+// const UserModel = require("../user/user.model");
+const Model = require("./todo.model");
 
 const TodoSchemaValidator = Joi.object().keys({
   task: Joi.string().min(3).required(),
@@ -12,7 +11,7 @@ const TodoSchemaValidator = Joi.object().keys({
   frequency: Joi.number(),
 });
 
-exports.getAllTodos = async (req, res, next) => {
+exports.getAllTodos = async (req, res) => {
   const result = await Model.aggregate([
     { $match: { userId: req.user._id } },
     // {
@@ -23,12 +22,12 @@ exports.getAllTodos = async (req, res, next) => {
   res.send({ todos: result });
 };
 
-exports.getTodoById = async (req, res, next) => {
+exports.getTodoById = async (req, res) => {
   const result = await Model.find({ userId: req.user._id, _id: req.params.id });
   res.send({ todo: result });
 };
 
-exports.createTodo = async (req, res, next) => {
+exports.createTodo = async (req, res) => {
   const { task, type, frequency } = req.body;
   const { error } = Joi.validate(
     { task, type, frequency },
@@ -54,7 +53,7 @@ exports.createTodo = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.updateTodo = async (req, res, next) => {
+exports.updateTodo = async (req, res) => {
   const { task, type } = req.body;
   const todoId = req.params.id;
   const result = await Model.findOneAndUpdate(
@@ -72,7 +71,7 @@ exports.updateTodo = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.stampTodo = async (req, res, next) => {
+exports.stampTodo = async (req, res) => {
   const { date, type } = req.body;
   const todoId = req.params.id;
 
@@ -105,7 +104,7 @@ exports.stampTodo = async (req, res, next) => {
   res.send({ result });
 };
 
-exports.deleteTodo = async (req, res, next) => {
+exports.deleteTodo = async (req, res) => {
   const todoId = req.params.id;
   const result = await Model.findOneAndDelete({
     _id: todoId,

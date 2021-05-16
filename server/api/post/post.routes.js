@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const controller = require("./post.controller");
 const errorHandlingWrapper = require("../../middleware/error-handling");
 
 const { transparent, protectedRoute } = require("../../utils/auth");
+const controller = require("./post.controller");
 
 router.get("/", transparent, errorHandlingWrapper(controller.getAllPosts));
 router.get("/random", errorHandlingWrapper(controller.getRelatedPosts));

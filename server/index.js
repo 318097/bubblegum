@@ -1,7 +1,9 @@
-const http = require("http").Server(app);
+/* eslint-disable import/newline-after-import */
 const express = require("express");
-
 const app = express();
+
+// eslint-disable-next-line import/order
+const http = require("http").Server(app);
 const io = require("socket.io")(http);
 
 const connectToDb = require("./db");
