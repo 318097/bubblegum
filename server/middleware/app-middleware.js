@@ -2,11 +2,10 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const override = require("method-override");
+const _ = require("lodash");
 
 const attachExternalSource = (req, res, next) => {
-  if (req.headers && req.headers.hasOwnProperty("external-source"))
-    req.source = req.headers["external-source"];
-
+  req.source = _.get(req, "headers.external-source");
   next();
 };
 

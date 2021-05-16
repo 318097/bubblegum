@@ -1,6 +1,7 @@
-const express = require("express");
-const app = express();
 const http = require("http").Server(app);
+const express = require("express");
+
+const app = express();
 const io = require("socket.io")(http);
 
 const connectToDb = require("./db");

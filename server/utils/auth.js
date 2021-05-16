@@ -1,16 +1,20 @@
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
+const _ = require("lodash");
 const config = require("../config");
 const { APP_LIST } = require("../constants");
 const User = require("../api/user/user.model");
 
-const checkToken = expressJwt({ secret: config.JWT });
+const signToken = (_id, email) => jwt.sign({ _id, email }, config.JWT);
+
+const validateToken = (token) => jwt.verify(token, config.JWT);
 
 const decodeToken = (req, res, next) => {
-  if (req.headers && req.headers.hasOwnProperty("authorization")) {
-    req.headers.authorization = "Bearer " + req.headers.authorization;
-  }
+  const token = _.get(req, "headers.authorization");
+  if (token) req.headers.authorization = `Bearer ${token}`;
+
   /* this will call next() if token is valid or send error.& attached the decoded token to `req.user` */
+  const checkToken = expressJwt({ secret: config.JWT });
   checkToken(req, res, next);
 };
 
@@ -26,37 +30,28 @@ const extractUser = async (req, res, next) => {
 };
 
 const externalAccess = async (req, res, next) => {
-  if (!req.headers || !req.headers.hasOwnProperty("external-source"))
-    return res.status(401).send("Unauthorized Access.");
+  if (!req.source) return res.status(401).send("Unauthorized Access.");
 
-  const source = req.headers["external-source"];
-  if (!APP_LIST.includes(source))
+  if (!APP_LIST.includes(req.source))
     return res.status(401).send("Unauthorized: Invalid source.");
 
   if (req.headers["authorization"]) {
-    const decoded = jwt.verify(req.headers.authorization, config.JWT);
-    req.user = decoded;
+    req.user = validateToken(req.headers.authorization);
     extractUser(req, res, next);
   } else {
-    const user = await User.findOne({ email: "318097@gmail.com" }).lean();
-    req.user = user;
+    req.user = await User.findOne({ email: "318097@gmail.com" }).lean();
     next();
   }
 };
 
 const transparent = async (req, res, next) => {
-  const token = req.headers.authorization || "";
+  const token = _.get(req, "headers.authorization");
   if (token) {
     const decoded = validateToken(token);
-    const user = await User.findOne({ _id: decoded._id });
-    req.user = user;
+    req.user = await User.findOne({ _id: decoded._id });
   }
   next();
 };
-
-const signToken = (_id, email) => jwt.sign({ _id, email }, config.JWT);
-
-const validateToken = (token) => jwt.verify(token, config.JWT);
 
 const protectedRoute = [decodeToken, extractUser];
 

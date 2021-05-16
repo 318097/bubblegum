@@ -75,8 +75,6 @@ const login = async (req, res) => {
 
   res.send({ token, ...userInfoToSend });
 
-  sendMail(user);
-
   await SessionModel.create({
     userId: user._id,
     source: req.source,

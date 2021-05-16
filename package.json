@@ -8,7 +8,8 @@
     "serve": "nodemon server/index.js",
     "serve:netlify": "netlify-lambda -c ./webpack.functions.js serve netlify",
     "build:netlify": "netlify-lambda build netlify",
-    "deploy": "git push heroku master && netlify deploy --prod"
+    "deploy": "git push heroku master && netlify deploy --prod",
+    "lint": "eslint server/**"
   },
   "author": "",
   "license": "ISC",
