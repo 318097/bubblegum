@@ -6,6 +6,7 @@ const { OAuth2Client } = require("google-auth-library");
 const config = require("../config");
 const { extractUserData, generateDate } = require("../helpers");
 const { generateDefaultState } = require("../defaults");
+const SessionModel = require("../models/session.model");
 
 const client = new OAuth2Client(config.GOOGLE_LOGIN_CLIENT_ID);
 
@@ -70,6 +71,12 @@ const login = async (req, res) => {
   const token = signToken(user._id, user.email);
 
   res.send({ token, ...userInfoToSend });
+
+  await SessionModel.create({
+    userId: user._id,
+    source: req.source,
+    token,
+  });
 };
 
 const register = async (req, res) => {

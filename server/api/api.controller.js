@@ -3,8 +3,8 @@ const { fileUpload } = require("../utils/file-upload");
 const { processId } = require("../helpers");
 const Parser = require("rss-parser");
 const bcrypt = require("bcrypt");
-const TransactionSchema = require("./api.model");
-const PostsSchema = require("./post/post.model");
+const TransactionModel = require("../models/transaction.model");
+const PostModel = require("./post/post.model");
 const UserModel = require("./user/user.model");
 
 exports.fileUploadHandler = async (req, res) => {
@@ -16,7 +16,7 @@ exports.fileUploadHandler = async (req, res) => {
   if (req.source === "NOTES_APP") {
     const { type, data } = req.body;
 
-    TransactionSchema.create({
+    TransactionModel.create({
       userId: req.user._id,
       source: req.source,
       type, // one of ['DROP', 'POST', 'TOBY', 'CHROME', 'RESOURCES']
@@ -54,7 +54,7 @@ exports.mongoDbTest = async (req, res) => {
   //     });
   // }
 
-  let result = await PostsSchema.aggregate([
+  let result = await PostModel.aggregate([
     { $sort: { _id: 1 } },
     { $project: { _id: 1, resources: 1, title: 1 } },
   ]);

@@ -11,7 +11,7 @@
 - [ ] Change the project structure architecture for DOT
 - [ ] Single command to deploy to heroku and netlify
 - [ ] Wrap all controllers in try..catch
-- [ ] Track JWTs
+- [x] Track JWTs
 - [ ] Set expiry for JWT
 - [x] Add status & active date for all apps
 - [x] Add compound indexes for Posts

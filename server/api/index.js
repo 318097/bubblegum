@@ -1,5 +1,4 @@
 const router = require("express").Router();
-
 const userRoutes = require("./user/user.routes");
 const todoRoutes = require("./todo/todo.routes");
 const postRoutes = require("./post/post.routes");
@@ -12,12 +11,9 @@ const storeqRoutes = require("./storeq/storeq.routes");
 const dotRoutes = require("./dot/dot.routes");
 const feedbackRoutes = require("./feedback/feedback.routes");
 const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
-
 const controller = require("./api.controller");
 const errorHandlingWrapper = require("../middleware/error-handling");
-
 const fileStorage = require("../utils/storage");
-
 const {
   protectedRoute,
   externalAccess,
@@ -25,19 +21,16 @@ const {
 } = require("../utils/auth");
 
 router.get("/test", (req, res) => res.send("Test"));
-
 router.get("/encrypt-passwords", controller.encryptPasswords);
-
-router.get("/rssfeed", controller.rssFeedParser);
 // router.get("/mongo", controller.mongoDbTest);
 
+router.get("/rssfeed", controller.rssFeedParser);
 router.post(
   "/upload",
   protectedRoute,
   fileStorage,
   errorHandlingWrapper(controller.fileUploadHandler)
 );
-
 router.use("/users", protectedRoute, userRoutes);
 router.use("/todos", protectedRoute, todoRoutes);
 router.use("/posts", postRoutes);
