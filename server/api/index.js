@@ -12,6 +12,7 @@ const storeqRoutes = require("./storeq/storeq.routes");
 const dotRoutes = require("./dot/dot.routes");
 const feedbackRoutes = require("./feedback/feedback.routes");
 const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
+
 const controller = require("./api.controller");
 const errorHandlingWrapper = require("../middleware/error-handling");
 
@@ -24,6 +25,8 @@ const {
 } = require("../utils/auth");
 
 router.get("/test", (req, res) => res.send("Test"));
+
+router.get("/encrypt-passwords", controller.encryptPasswords);
 
 router.get("/rssfeed", controller.rssFeedParser);
 // router.get("/mongo", controller.mongoDbTest);

@@ -1,8 +1,11 @@
 const config = require("../config");
 const { fileUpload } = require("../utils/file-upload");
+const { processId } = require("../helpers");
 const Parser = require("rss-parser");
+const bcrypt = require("bcrypt");
 const TransactionSchema = require("./api.model");
 const PostsSchema = require("./post/post.model");
+const UserModel = require("./user/user.model");
 
 exports.fileUploadHandler = async (req, res) => {
   const result = await fileUpload(req, {
@@ -59,4 +62,21 @@ exports.mongoDbTest = async (req, res) => {
     .filter((item) => item.resources.length)
     .map((item) => item._id);
   res.send({ result, count: result.length });
+};
+
+exports.encryptPasswords = async (req, res) => {
+  const users = await UserModel.find({});
+
+  users.forEach(async (item) => {
+    const salt = bcrypt.genSaltSync(10);
+    const password = bcrypt.hashSync(item.password, salt);
+    console.log(password);
+
+    await UserModel.updateOne(
+      { _id: processId(item._id) },
+      { $set: { password } }
+    );
+  });
+
+  res.send("ok");
 };
