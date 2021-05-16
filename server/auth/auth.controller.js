@@ -83,12 +83,14 @@ const register = async (req, res) => {
   const { error } = Joi.validate(data, RegisterSchemaValidator);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const { email, username } = req.body;
+  const { email, username } = data;
   const userExists = await User.findOne({ $or: [{ email }, { username }] });
 
   if (userExists) throw new Error("Email/Username already exists.");
 
   const defaultState = generateDefaultState(req);
+
+  console.log(defaultState);
 
   const result = await User.create({
     ...req.body,
