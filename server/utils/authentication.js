@@ -5,7 +5,8 @@ const config = require("../config");
 const { APP_LIST } = require("../constants");
 const User = require("../api/user/user.model");
 
-const signToken = (_id, email) => jwt.sign({ _id, email }, config.JWT);
+const signToken = (_id, email) =>
+  jwt.sign({ _id, email }, config.JWT, { expiresIn: "30d" });
 
 const validateToken = (token) => jwt.verify(token, config.JWT);
 
