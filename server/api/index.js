@@ -5,7 +5,7 @@ const {
   protectedRoute,
   externalAccess,
   transparent,
-} = require("../utils/auth");
+} = require("../utils/authentication");
 const userRoutes = require("./user/user.routes");
 const todoRoutes = require("./todo/todo.routes");
 const postRoutes = require("./post/post.routes");
