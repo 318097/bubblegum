@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const errorHandlingWrapper = require("../middleware/error-handling");
-const { protectedRoute, externalAccess } = require("../utils/authentication");
+const { protectedRoute } = require("../utils/authentication");
 const controller = require("./auth.controller");
 
 router.post("/login", errorHandlingWrapper(controller.login));
@@ -13,11 +13,6 @@ router.post("/reset-password", errorHandlingWrapper(controller.resetPassword));
 router.post(
   "/account-status",
   protectedRoute,
-  errorHandlingWrapper(controller.checkAccountStatus)
-);
-router.get(
-  "/account-status",
-  externalAccess,
   errorHandlingWrapper(controller.checkAccountStatus)
 );
 

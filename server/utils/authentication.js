@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const _ = require("lodash");
 const config = require("../config");
-const { APP_LIST } = require("../constants");
 const User = require("../api/user/user.model");
 
 const signToken = (_id, email) =>
@@ -31,13 +30,12 @@ const extractUser = async (req, res, next) => {
 };
 
 const externalAccess = async (req, res, next) => {
-  if (!req.source) return res.status(401).send("Unauthorized Access.");
-
-  if (!APP_LIST.includes(req.source))
+  if (!req.validSource)
     return res.status(401).send("Unauthorized: Invalid source.");
 
-  if (req.headers["authorization"]) {
-    req.user = validateToken(req.headers.authorization);
+  const token = _.get(req, "headers.authorization");
+  if (token) {
+    req.user = validateToken(token);
     extractUser(req, res, next);
   } else {
     req.user = await User.findOne({ email: "318097@gmail.com" }).lean();

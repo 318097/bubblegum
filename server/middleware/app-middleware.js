@@ -3,9 +3,12 @@ const morgan = require("morgan");
 const cors = require("cors");
 const override = require("method-override");
 const _ = require("lodash");
+const { APP_LIST } = require("../constants");
 
 const attachExternalSource = (req, res, next) => {
-  req.source = _.get(req, "headers.external-source");
+  const externalSource = _.get(req, "headers.external-source");
+  req.source = externalSource;
+  req.validSource = APP_LIST.includes(externalSource);
   next();
 };
 
