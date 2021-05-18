@@ -328,14 +328,16 @@ exports.getStats = async (req, res) => {
   const stats = {
     total: result.length,
     types: {
-      POST: 0,
       DROP: 0,
+      POST: 0,
       QUIZ: 0,
+      CHAIN: 0,
     },
     tags: {
       uncategorized: 0,
     },
     status: {
+      QUICK_ADD: 0,
       DRAFT: 0,
       READY: 0,
       POSTED: 0,
