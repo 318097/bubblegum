@@ -18,7 +18,7 @@ const getAggregationFilters = (req) => {
     limit = 10,
     page = 1,
     tags = [],
-    status,
+    status = [],
     socialStatus,
     visibility,
     collectionId,
@@ -41,6 +41,11 @@ const getAggregationFilters = (req) => {
   if (tags.length)
     aggregation["tags"] = {
       $in: [].concat(tags),
+    };
+
+  if (status.length)
+    aggregation["status"] = {
+      $in: [].concat(status),
     };
 
   if (search) {
@@ -69,7 +74,6 @@ const getAggregationFilters = (req) => {
     const { _id } = req.user;
     aggregation["userId"] = _id;
 
-    if (status) aggregation["status"] = status;
     if (rating) aggregation["rating"] = Number(rating);
     if (type) aggregation["type"] = type;
     if (socialStatus) aggregation["socialStatus"] = socialStatus;
