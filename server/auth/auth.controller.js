@@ -4,7 +4,7 @@ const Joi = require("@hapi/joi");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const User = require("../api/user/user.model");
-const { signToken } = require("../utils/authentication");
+const { signToken, validateToken } = require("../utils/authentication");
 const config = require("../config");
 const { extractUserData, generateDate } = require("../helpers");
 const { generateDefaultState } = require("../defaults");
@@ -27,6 +27,8 @@ const login = async (req, res) => {
     password,
     isGoogleAuth = false,
     goggleAuthToken,
+    authToken,
+    authMethod = "LOGIN",
   } = req.body;
   const matchQuery = {};
 
@@ -38,6 +40,9 @@ const login = async (req, res) => {
 
     const payload = ticket.getPayload();
     matchQuery["email"] = payload.email;
+  } else if (authMethod === "AUTH_TOKEN") {
+    const decoded = validateToken(authToken);
+    matchQuery["_id"] = decoded._id;
   } else {
     if (!username || !password)
       return res.status(400).send("Username & Password is required.");
@@ -49,7 +54,7 @@ const login = async (req, res) => {
 
   if (!user) return res.status(401).send("User not found.");
 
-  if (!isGoogleAuth && !user.authenticate(password))
+  if (authMethod === "LOGIN" && !user.authenticate(password))
     return res.status(401).send("Invalid username/password.");
 
   const appStatus = _.get(user, ["appStatus", [req.source], "status"]);
