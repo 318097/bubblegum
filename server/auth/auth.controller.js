@@ -22,19 +22,12 @@ const RegisterSchemaValidator = Joi.object().keys({
 });
 
 const login = async (req, res) => {
-  const {
-    username,
-    password,
-    isGoogleAuth = false,
-    goggleAuthToken,
-    authToken,
-    authMethod = "LOGIN",
-  } = req.body;
+  const { username, password, authToken, authMethod = "LOGIN" } = req.body;
   const matchQuery = {};
 
-  if (isGoogleAuth) {
+  if (authMethod === "GOOGLE") {
     const ticket = await client.verifyIdToken({
-      idToken: goggleAuthToken,
+      idToken: authToken,
       audience: config.GOOGLE_LOGIN_CLIENT_ID,
     });
 
