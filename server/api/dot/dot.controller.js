@@ -61,7 +61,7 @@ exports.getTodoById = async (req, res) => {
 };
 
 exports.createTodo = async (req, res) => {
-  const { topicId, content, projectId, marked } = req.body;
+  const { topicId, content, projectId, marked, deadline } = req.body;
   const userId = req.user._id;
 
   const data = {
@@ -70,6 +70,7 @@ exports.createTodo = async (req, res) => {
     userId,
     projectId,
     marked,
+    deadline: deadline ? moment(deadline).toDate() : undefined,
   };
   if (marked) data["completedOn"] = moment().toDate();
   const result = await TodoModel.create(data);

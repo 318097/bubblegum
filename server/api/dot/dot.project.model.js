@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
-const collectionName = "dot-project";
 const { ObjectId } = mongoose.Schema.Types;
+const collectionName = "dot-project";
 
 const DotProjectSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    userId: { type: ObjectId, ref: "user" },
+    userId: { type: ObjectId, ref: "user", required: true },
   },
   {
     timestamps: true,

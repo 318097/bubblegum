@@ -6,13 +6,17 @@ const collectionName = "dot-topic";
 const DotTopicSchema = new mongoose.Schema(
   {
     userId: { type: ObjectId, ref: "user", required: true },
-    content: { type: String, required: true },
     projectId: { type: ObjectId, ref: "dot-project", required: true },
+    content: { type: String, required: true },
     isDefault: { type: Boolean, default: false },
     todos: {
-      type: Array,
+      type: [{ type: ObjectId, ref: "dot-todo" }],
     },
     visible: { type: Boolean, default: true },
+    status: {
+      startedOn: Date,
+      endedOn: Date,
+    },
   },
   {
     timestamps: true,

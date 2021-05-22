@@ -8,9 +8,10 @@ const DotTodoSchema = new mongoose.Schema(
     userId: { type: ObjectId, ref: "user", required: true },
     topicId: { type: ObjectId, ref: "dot-topic", required: true },
     projectId: { type: ObjectId, ref: "dot-project", required: true },
-    marked: { type: Boolean, default: false },
     content: { type: String, required: true },
+    marked: { type: Boolean, default: false },
     completedOn: Date,
+    deadline: Date,
   },
   {
     timestamps: true,
