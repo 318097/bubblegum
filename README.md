@@ -19,3 +19,4 @@
 - [ ] Single command to deploy to heroku and netlify
 - [ ] All sessions should logout after password change/reset
 - [ ] Refactor protectedRoutes, transparent, externalAccess
+- [ ] Generate documentation for apis
