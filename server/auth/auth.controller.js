@@ -11,8 +11,6 @@ const { generateDefaultState } = require("../defaults");
 const SessionModel = require("../models/session.model");
 const sendMail = require("../utils/mail");
 
-const client = new OAuth2Client(config.GOOGLE_LOGIN_CLIENT_ID);
-
 const RegisterSchemaValidator = Joi.object().keys({
   name: Joi.string(),
   username: Joi.string(),
@@ -26,9 +24,10 @@ const login = async (req, res) => {
   const matchQuery = {};
 
   if (authMethod === "GOOGLE") {
+    const client = new OAuth2Client(config.GOOGLE_CLIENT_ID);
     const ticket = await client.verifyIdToken({
       idToken: authToken,
-      audience: config.GOOGLE_LOGIN_CLIENT_ID,
+      audience: config.GOOGLE_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();

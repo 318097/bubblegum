@@ -7,7 +7,7 @@ const {
   STAGING_DB_URL,
   NETLIFY_DB_URL,
   JWT,
-  GOOGLE_LOGIN_CLIENT_ID,
+  GOOGLE_CLIENT_ID,
   CLOUDINARY_API_SECRET,
   EMAIL_PASSWORD,
 } = process.env;
@@ -23,7 +23,7 @@ const config = {
     ? STAGING_DB_URL
     : "mongodb://localhost/bubblegum",
   NETLIFY_DB_URL,
-  GOOGLE_LOGIN_CLIENT_ID,
+  GOOGLE_CLIENT_ID,
   CLOUDINARY_API_SECRET,
   NODE_ENV: NODE_ENV || "development",
   IS_PROD,
