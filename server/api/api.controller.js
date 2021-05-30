@@ -6,6 +6,8 @@ const { processId } = require("../helpers");
 const TransactionModel = require("../models/transaction.model");
 const PostModel = require("./post/post.model");
 const UserModel = require("./user/user.model");
+const { google } = require("googleapis");
+const { OAuth2Client } = require("google-auth-library");
 
 exports.fileUploadHandler = async (req, res) => {
   const result = await fileUpload(req, {
@@ -79,4 +81,25 @@ exports.encryptPasswords = async (req, res) => {
   });
 
   res.send("ok");
+};
+
+exports.getEmails = async (req, res) => {
+  const oauth2Client = new google.auth.OAuth2(
+    config.GOOGLE_CLIENT_ID,
+    config.GOOGLE_CLIENT_SECRET
+  );
+
+  const scopes = ["https://www.googleapis.com/auth/gmail.readonly"];
+
+  const url = oauth2Client.generateAuthUrl({
+    // 'online' (default) or 'offline' (gets refresh_token)
+    access_type: "offline",
+
+    // If you only need one scope you can pass it as a string
+    scope: scopes,
+  });
+
+  console.log(url);
+
+  res.send(url);
 };

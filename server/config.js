@@ -7,9 +7,10 @@ const {
   STAGING_DB_URL,
   NETLIFY_DB_URL,
   JWT,
-  GOOGLE_CLIENT_ID,
   CLOUDINARY_API_SECRET,
   EMAIL_PASSWORD,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
 } = process.env;
 
 const IS_PROD = ["production", "express-lambda-production"].includes(NODE_ENV);
@@ -23,13 +24,14 @@ const config = {
     ? STAGING_DB_URL
     : "mongodb://localhost/bubblegum",
   NETLIFY_DB_URL,
-  GOOGLE_CLIENT_ID,
   CLOUDINARY_API_SECRET,
   NODE_ENV: NODE_ENV || "development",
   IS_PROD,
   MEDIUM_RSS_FEED: "https://medium.com/feed/@318097",
   EMAIL_ID: "codedrops.tech@gmail.com",
   EMAIL_PASSWORD,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
 };
 
 module.exports = config;
