@@ -5,18 +5,26 @@ const collectionName = "todo";
 
 const TodosSchema = new mongoose.Schema(
   {
-    task: String,
+    content: { type: String, required: true },
     userId: { type: ObjectId, ref: "user", required: true },
     type: {
       type: String,
-      default: "SINGLE",
-      enum: ["SINGLE", "WEEKLY"],
+      required: true,
+      enum: ["TODO", "GOAL", "PROGRESS"],
     },
-    status: String,
+    status: {
+      type: String,
+      default: "INIT",
+      enum: ["INIT", "IN_PROGRESS", "COMPLETED"],
+    },
     frequency: Number,
     stamps: Object,
-    completionDate: Date,
-    active: Boolean,
+    deadline: Date,
+    completedOn: Date,
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
