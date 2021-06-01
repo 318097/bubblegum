@@ -3,14 +3,27 @@ const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
 const logger = require("../utils/logger");
 const UserModel = require("../api/user/user.model");
+const TaskModel = require("../api/task/task.model");
 const config = require("../config");
+const { getToken, getUser } = require("../utils/authentication");
 
 async function startApolloServer(app) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context() {
-      return { UserModel };
+    context: async ({ req }) => {
+      const models = {
+        User: UserModel,
+        Task: TaskModel,
+      };
+
+      let user;
+      const token = getToken(req);
+      if (token) user = await getUser(token);
+
+      // console.log("user::-", user);
+
+      return { models, user };
     },
     playground: {
       settings: {

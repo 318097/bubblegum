@@ -3,7 +3,7 @@ const Joi = require("@hapi/joi");
 const { ObjectId } = require("mongoose").Types;
 
 // const UserModel = require("../user/user.model");
-const Model = require("./todo.model");
+const Model = require("./task.model");
 
 const TodoSchemaValidator = Joi.object().keys({
   task: Joi.string().min(3).required(),

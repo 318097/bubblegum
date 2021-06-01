@@ -7,10 +7,17 @@ const User = require("../api/user/user.model");
 const signToken = (_id, email) =>
   jwt.sign({ _id, email }, config.JWT, { expiresIn: "30d" });
 
+const getToken = (req) => _.get(req, "headers.authorization");
+
 const validateToken = (token) => jwt.verify(token, config.JWT);
 
+const getUser = async (token) => {
+  const decoded = validateToken(token);
+  return await User.findOne({ _id: decoded._id });
+};
+
 const decodeToken = (req, res, next) => {
-  const token = _.get(req, "headers.authorization");
+  const token = getToken(req);
   if (token) req.headers.authorization = `Bearer ${token}`;
 
   /* this will call next() if token is valid or send error.& attached the decoded token to `req.user` */
@@ -33,7 +40,7 @@ const externalAccess = async (req, res, next) => {
   if (!req.validSource)
     return res.status(401).send("Unauthorized: Invalid source.");
 
-  const token = _.get(req, "headers.authorization");
+  const token = getToken(req);
   if (token) {
     req.user = validateToken(token);
     extractUser(req, res, next);
@@ -44,11 +51,9 @@ const externalAccess = async (req, res, next) => {
 };
 
 const transparent = async (req, res, next) => {
-  const token = _.get(req, "headers.authorization");
-  if (token) {
-    const decoded = validateToken(token);
-    req.user = await User.findOne({ _id: decoded._id });
-  }
+  const token = getToken(req);
+  if (token) req.user = await getUser(token);
+
   next();
 };
 
@@ -60,4 +65,6 @@ module.exports = {
   externalAccess,
   protectedRoute,
   transparent,
+  getUser,
+  getToken,
 };

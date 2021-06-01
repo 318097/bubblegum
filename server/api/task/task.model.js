@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const { ObjectId } = mongoose.Schema.Types;
-const collectionName = "todo";
+const collectionName = "task";
 
-const TodosSchema = new mongoose.Schema(
+const TasksSchema = new mongoose.Schema(
   {
     content: { type: String, required: true },
     userId: { type: ObjectId, ref: "user", required: true },
@@ -31,4 +31,4 @@ const TodosSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(collectionName, TodosSchema);
+module.exports = mongoose.model(collectionName, TasksSchema);

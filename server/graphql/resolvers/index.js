@@ -1,5 +1,8 @@
+const { taskQueryResolvers, taskMutationResolvers } = require("./tasks");
+
 module.exports = {
   Query: {
+    atom: () => ({}),
     me(_, args, ctx) {
       console.log(_, args, ctx);
       return {
@@ -9,4 +12,10 @@ module.exports = {
       };
     },
   },
+  AtomQueries: {
+    ...taskQueryResolvers,
+  },
+  // AtomMutations: {
+  //   ...taskMutationResolvers,
+  // },
 };
