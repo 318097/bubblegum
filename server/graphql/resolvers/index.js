@@ -15,7 +15,10 @@ module.exports = {
   AtomQueries: {
     ...taskQueryResolvers,
   },
-  // AtomMutations: {
-  //   ...taskMutationResolvers,
-  // },
+  Mutation: {
+    atom: () => ({}),
+  },
+  AtomMutations: {
+    ...taskMutationResolvers,
+  },
 };
