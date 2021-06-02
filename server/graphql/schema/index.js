@@ -22,20 +22,33 @@ const typeDefs = gql`
     PROGRESS
   }
 
+  enum TaskStampAction {
+    MARK
+    UNMARK
+  }
+
+  type Stamp {
+    _id: ID!
+    message: String
+    date: String!
+  }
+
   type Task {
     _id: ID!
     content: String!
     userId: String!
     type: TaskType!
     status: String
-    # frequency: Number
+    frequency: Int
     deadline: String
     deleted: Boolean!
+    createdAt: String
+    completedOn: String
+    stamps: [Stamp!]
   }
 
   input CreateTaskInput {
     content: String!
-    userId: String!
     type: TaskType!
     status: String
     deadline: String
@@ -50,6 +63,15 @@ const typeDefs = gql`
     deadline: String
   }
 
+  input StampTaskInput {
+    _id: ID!
+    date: String
+    message: String
+    type: TaskType!
+    action: TaskStampAction!
+    stampId: String
+  }
+
   input TaskByIdInput {
     _id: ID!
   }
@@ -62,7 +84,7 @@ const typeDefs = gql`
   type AtomMutations {
     createTask(input: CreateTaskInput!): Task!
     updateTask(input: UpdateTaskInput!): Task!
-    stampTask(input: UpdateTaskInput!): Task!
+    stampTask(input: StampTaskInput!): Task!
     deleteTask(input: TaskByIdInput!): Task!
   }
 `;
