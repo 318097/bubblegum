@@ -1,11 +1,9 @@
 const apiRouter = require("express").Router();
 
 const userRoutes = require("../server/api/user/user.routes");
-const todoRoutes = require("../server/api/todo/todo.routes");
 const postRoutes = require("../server/api/post/post.routes");
 const expenseRoutes = require("../server/api/expenses/expenses.routes");
 const timelineRoutes = require("../server/api/timeline/timeline.routes");
-const goalsRoutes = require("../server/api/goals/goals.routes");
 const dotRoutes = require("../server/api/dot/dot.routes");
 const feedbackRoutes = require("../server/api/feedback/feedback.routes");
 const scratchPadRoutes = require("../server/api/scratch-pad/scratch-pad.routes");
@@ -20,7 +18,7 @@ const {
   protectedRoute,
   externalAccess,
   transparent,
-} = require("../server/utils/auth");
+} = require("../server/utils/authentication");
 
 apiRouter.get("/test", (req, res) => res.send("Test"));
 
@@ -34,11 +32,9 @@ apiRouter.get("/rssfeed", controller.rssFeedParser);
 // );
 
 apiRouter.use("/users", protectedRoute, userRoutes);
-apiRouter.use("/todos", protectedRoute, todoRoutes);
 apiRouter.use("/posts", postRoutes);
 apiRouter.use("/expenses", protectedRoute, expenseRoutes);
 apiRouter.use("/timeline", protectedRoute, timelineRoutes);
-apiRouter.use("/goals", protectedRoute, goalsRoutes);
 apiRouter.use("/dot", externalAccess, dotRoutes);
 apiRouter.use("/feedback", transparent, feedbackRoutes);
 apiRouter.use("/scratch-pad", protectedRoute, scratchPadRoutes);

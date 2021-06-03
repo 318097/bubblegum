@@ -87,7 +87,7 @@ const stampTask = async (_, args, { models }) => {
     data = {
       $set: {
         status: "COMPLETED",
-        completionDate: date,
+        completedOn: date,
       },
     };
   }
