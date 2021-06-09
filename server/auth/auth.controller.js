@@ -10,6 +10,13 @@ const { extractUserData, generateDate } = require("../helpers");
 const { generateDefaultState } = require("../defaults");
 const SessionModel = require("../models/session.model");
 const sendMail = require("../utils/mail");
+const { google } = require("googleapis");
+
+const oauth2Client = new google.auth.OAuth2(
+  config.GOOGLE_OAUTH.CLIENT_ID,
+  config.GOOGLE_OAUTH.CLIENT_SECRET,
+  config.GOOGLE_OAUTH.REDIRECT_URL
+);
 
 const RegisterSchemaValidator = Joi.object().keys({
   name: Joi.string(),
@@ -24,10 +31,10 @@ const login = async (req, res) => {
   const matchQuery = {};
 
   if (authMethod === "GOOGLE") {
-    const client = new OAuth2Client(config.GOOGLE_CLIENT_ID);
+    const client = new OAuth2Client(config.GOOGLE_OAUTH.CLIENT_ID);
     const ticket = await client.verifyIdToken({
       idToken: authToken,
-      audience: config.GOOGLE_CLIENT_ID,
+      audience: config.GOOGLE_OAUTH.CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
@@ -165,10 +172,27 @@ const resetPassword = async (req, res) => {
   res.send("ok");
 };
 
+const generateGoogleOAuthURL = async (req, res) => {
+  const scopes = ["https://www.googleapis.com/auth/gmail.readonly"];
+  const url = oauth2Client.generateAuthUrl({
+    access_type: "offline",
+    scope: scopes,
+  });
+  res.send({ url });
+};
+
+const generateGoogleOAuthToken = async (req, res) => {
+  const { code } = req.body;
+  const { tokens } = await oauth2Client.getToken(code);
+  res.send(tokens);
+};
+
 module.exports = {
   login,
   register,
   checkAccountStatus,
   forgotPassword,
   resetPassword,
+  generateGoogleOAuthURL,
+  generateGoogleOAuthToken,
 };

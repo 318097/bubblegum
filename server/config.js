@@ -30,8 +30,11 @@ const config = {
   MEDIUM_RSS_FEED: "https://medium.com/feed/@318097",
   EMAIL_ID: "codedrops.tech@gmail.com",
   EMAIL_PASSWORD,
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
+  GOOGLE_OAUTH: {
+    CLIENT_ID: GOOGLE_CLIENT_ID,
+    CLIENT_SECRET: GOOGLE_CLIENT_SECRET,
+    REDIRECT_URL: "http://localhost:3000/login",
+  },
 };
 
 module.exports = config;

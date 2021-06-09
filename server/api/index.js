@@ -21,7 +21,6 @@ const controller = require("./api.controller");
 
 router.get("/test", (req, res) => res.send("Test"));
 router.get("/encrypt-passwords", controller.encryptPasswords);
-router.get("/gmail", controller.getEmails);
 // router.get("/mongo", controller.mongoDbTest);
 
 router.get("/rssfeed", controller.rssFeedParser);
