@@ -10,9 +10,9 @@ const scratchPadRoutes = require("../server/api/scratch-pad/scratch-pad.routes")
 const authRouter = require("../server/auth/auth.routes");
 
 const controller = require("../server/api/api.controller");
-// const errorHandlingWrapper = require(".../server/api/middleware/error-handling");
+const errorHandlingWrapper = require("../server/middleware/error-handling");
 
-// const fileStorage = require(".../server/api/.../server/api/storage");
+const fileStorage = require("../server/utils/file-upload");
 
 const {
   protectedRoute,
@@ -24,12 +24,12 @@ apiRouter.get("/test", (req, res) => res.send("Test"));
 
 apiRouter.get("/rssfeed", controller.rssFeedParser);
 
-// apiRouter.post(
-//   "/upload",
-//   protectedRoute,
-//   fileStorage,
-//   errorHandlingWrapper(controller.fileUploadHandler)
-// );
+apiRouter.post(
+  "/upload",
+  protectedRoute,
+  fileStorage,
+  errorHandlingWrapper(controller.fileUploadHandler)
+);
 
 apiRouter.use("/users", protectedRoute, userRoutes);
 apiRouter.use("/posts", postRoutes);
