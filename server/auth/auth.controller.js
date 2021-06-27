@@ -106,7 +106,7 @@ const register = async (req, res) => {
   const defaultState = generateDefaultState(req);
 
   const result = await User.create({
-    ...req.body,
+    ...data,
     ...defaultState,
   });
 

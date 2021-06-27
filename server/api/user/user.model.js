@@ -43,10 +43,12 @@ const UserSchema = new mongoose.Schema(
     timeline: {
       type: Array,
     },
+    userType: String,
+    verified: Boolean,
   },
   {
     timestamps: true,
-    strict: false,
+    strict: true,
   }
 );
 

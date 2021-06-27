@@ -1,11 +1,13 @@
 const Parser = require("rss-parser");
 const bcrypt = require("bcrypt");
+const _ = require("lodash");
 const config = require("../config");
 const { fileUpload } = require("../utils/file-upload");
 const { processId } = require("../helpers");
 const TransactionModel = require("../models/transaction.model");
 const PostModel = require("./post/post.model");
 const UserModel = require("./user/user.model");
+const { generateDefaultState } = require("../defaults");
 
 exports.fileUploadHandler = async (req, res) => {
   const result = await fileUpload(req, {
@@ -70,11 +72,22 @@ exports.encryptPasswords = async (req, res) => {
   users.forEach(async (item) => {
     const salt = bcrypt.genSaltSync(10);
     const password = bcrypt.hashSync(item.password, salt);
-    console.log(password);
-
+    const { timeline, expenseTypes, ...rest } = generateDefaultState({
+      source: "MIGRATION",
+    });
     await UserModel.updateOne(
       { _id: processId(item._id) },
-      { $set: { password, originalPassword: item.password } }
+      {
+        $set: {
+          password,
+          originalPassword: item.password,
+          timeline: _.isEmpty(item.timeline) ? timeline : item.timeline,
+          expenseTypes: _.isEmpty(item.expenseTypes)
+            ? expenseTypes
+            : item.expenseTypes,
+          ...rest,
+        },
+      }
     );
   });
 

@@ -14,7 +14,7 @@ const APP_LIST = Object.keys(APP_INFO);
 const defaultExpenseTypes = [
   { key: "EXPENSE", label: "Expense" },
   { key: "BILLS", label: "Bills" },
-  { key: "LOAN", label: "Lend" },
+  // { key: "LOAN", label: "Lend" },
   { key: "INVESTMENT", label: "Investment" },
   { key: "INCOME", label: "Income" },
 ];
