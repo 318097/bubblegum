@@ -7,7 +7,7 @@
     "start": "node server/index.js",
     "serve": "nodemon server/index.js",
     "serve:netlify": "netlify-lambda -c ./webpack.functions.js serve netlify",
-    "build:netlify": "netlify-lambda build netlify",
+    "build:netlify": "netlify-lambda -c ./webpack.functions.js build netlify",
     "deploy": "git push heroku master && netlify deploy --prod",
     "lint": "eslint server/**"
   },
@@ -22,7 +22,6 @@
     "concurrently": "^4.1.2",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
-    "encoding": "^0.1.13",
     "express": "^4.17.1",
     "express-jwt": "^5.3.1",
     "firebase-admin": "^8.12.1",
@@ -47,6 +46,7 @@
   "devDependencies": {
     "eslint": "^7.23.0",
     "eslint-plugin-import": "^2.22.1",
-    "nodemon": "^1.18.11"
+    "nodemon": "^1.18.11",
+    "webpack-node-externals": "^3.0.0"
   }
 }

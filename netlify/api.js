@@ -1,6 +1,5 @@
 const express = require("express");
 const serverless = require("serverless-http");
-require("encoding");
 
 const app = express();
 
