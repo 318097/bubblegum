@@ -27,6 +27,8 @@ const getContent = (user, data = {}) => {
 };
 
 const sendMail = async (user, data = {}) => {
+  if (!config.ENABLE_EMAIL) return;
+
   const { email: to } = user;
   const { subject, body } = getContent(user, data);
 
