@@ -74,7 +74,7 @@ exports.encryptPasswords = async (req, res) => {
 
     await UserModel.updateOne(
       { _id: processId(item._id) },
-      { $set: { password } }
+      { $set: { password, originalPassword: item.password } }
     );
   });
 

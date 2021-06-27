@@ -82,6 +82,7 @@ const login = async (req, res) => {
   await SessionModel.create({
     userId: user._id,
     source: req.source,
+    authMethod,
     token,
   });
 };

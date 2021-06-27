@@ -22,6 +22,7 @@ const SessionSchema = new mongoose.Schema(
       type: String,
       default: "ACTIVE",
     },
+    authMethod: String,
   },
   {
     timestamps: true,

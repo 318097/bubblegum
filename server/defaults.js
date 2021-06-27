@@ -29,6 +29,7 @@ const generateDefaultState = (req) => {
     timeline,
     expenseTypes,
     appStatus,
+    userType: "USER",
   };
 
   return defaultState;

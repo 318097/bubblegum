@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const config = require("../config");
 const errorHandlingWrapper = require("../middleware/error-handling");
 const fileStorage = require("../utils/storage");
 const {
@@ -20,9 +21,6 @@ const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
 const controller = require("./api.controller");
 
 router.get("/test", (req, res) => res.send("Test"));
-router.get("/encrypt-passwords", controller.encryptPasswords);
-// router.get("/mongo", controller.mongoDbTest);
-
 router.get("/rssfeed", controller.rssFeedParser);
 router.post(
   "/upload",
@@ -41,5 +39,10 @@ router.use("/storeq", protectedRoute, storeqRoutes);
 router.use("/dot", externalAccess, dotRoutes);
 router.use("/feedback", transparent, feedbackRoutes);
 router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
+
+if (!config.IS_PROD) {
+  router.get("/encrypt-passwords", controller.encryptPasswords);
+  router.get("/mongo", controller.mongoDbTest);
+}
 
 module.exports = router;
