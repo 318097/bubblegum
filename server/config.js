@@ -38,5 +38,4 @@ const config = {
   },
 };
 
-console.log("TEST");
 module.exports = config;
