@@ -70,8 +70,8 @@ exports.encryptPasswords = async (req, res) => {
   const users = await UserModel.find({});
 
   users.forEach(async (item) => {
-    const salt = bcrypt.genSaltSync(10);
-    const password = bcrypt.hashSync(item.password, salt);
+    // const salt = bcrypt.genSaltSync(10);
+    // const password = bcrypt.hashSync(item.password, salt);
     const { timeline, expenseTypes, ...rest } = generateDefaultState({
       source: "MIGRATION",
     });
@@ -79,8 +79,8 @@ exports.encryptPasswords = async (req, res) => {
       { _id: processId(item._id) },
       {
         $set: {
-          password,
-          originalPassword: item.password,
+          // password,
+          // originalPassword: item.password,
           timeline: _.isEmpty(item.timeline) ? timeline : item.timeline,
           expenseTypes: _.isEmpty(item.expenseTypes)
             ? expenseTypes

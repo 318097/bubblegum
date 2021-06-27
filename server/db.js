@@ -3,6 +3,10 @@ const config = require("./config");
 const logger = require("./utils/logger");
 
 const connectToDb = async () => {
+  // Make Mongoose use `findOneAndUpdate()`. Note that this option is `true`
+  // by default, you need to set it to false.
+  // mongoose.set("useFindAndModify", false);
+
   return mongoose
     .connect(config.DB_URL, { useNewUrlParser: true })
     .then(() => logger.log(`Connected to DB.`))

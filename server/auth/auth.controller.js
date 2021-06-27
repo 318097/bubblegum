@@ -56,21 +56,27 @@ const login = async (req, res) => {
   if (authMethod === "LOGIN" && !user.authenticate(password))
     return res.status(401).send("Invalid username/password.");
 
-  const appStatus = _.get(user, ["appStatus", [req.source], "status"]);
+  const appStatus = _.get(user, ["appStatus", req.source, "status"]);
+
+  let userUpdateData = { lastLogin: generateDate() };
+
   if (!appStatus || appStatus === "INIT") {
-    user = await User.findOneAndUpdate(
-      matchQuery,
-      {
-        $set: {
-          [`appStatus.${req.source}`]: {
-            status: "ACTIVE",
-            activatedOn: generateDate(),
-          },
-        },
+    userUpdateData = {
+      ...userUpdateData,
+      [`appStatus.${req.source}`]: {
+        status: "ACTIVE",
+        activatedOn: generateDate(),
       },
-      { new: true }
-    );
+    };
   }
+
+  user = await User.findOneAndUpdate(
+    matchQuery,
+    { $set: userUpdateData },
+    {
+      new: true,
+    }
+  );
 
   user = user.toObject();
   const userInfoToSend = await extractUserData({ user, source: req.source });

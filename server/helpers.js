@@ -59,7 +59,14 @@ const generateName = ({
 
 const extractUserData = async (req) => {
   const { user, source } = req;
-  const basic = _.pick(user, ["name", "email", "_id", "username", "appStatus"]);
+  const basic = _.pick(user, [
+    "name",
+    "email",
+    "_id",
+    "username",
+    "appStatus",
+    "lastLogin",
+  ]);
   let result = {};
   switch (source) {
     case "DOT":
