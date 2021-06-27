@@ -24,8 +24,8 @@ require("./api/chat/chat.socket")(io);
 
 require("./middleware/app-middleware")(app);
 
-app.use("/api", api);
 app.use("/api/auth", authRoutes);
+app.use("/api", api);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

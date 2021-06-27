@@ -32,13 +32,16 @@ router.use("/users", protectedRoute, userRoutes);
 router.use("/tasks", protectedRoute, taskRoutes);
 router.use("/posts", postRoutes);
 router.use("/expenses", protectedRoute, expenseRoutes);
-router.use("/snake", snakeGameRoutes);
 router.use("/timeline", protectedRoute, timelineRoutes);
-router.use("/chat", externalAccess, chatRoutes);
-router.use("/storeq", protectedRoute, storeqRoutes);
 router.use("/dot", externalAccess, dotRoutes);
 router.use("/feedback", transparent, feedbackRoutes);
 router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
+
+if (config.NODE_ENV !== "express-lambda-production") {
+  router.use("/chat", externalAccess, chatRoutes);
+  router.use("/storeq", protectedRoute, storeqRoutes);
+  router.use("/snake", snakeGameRoutes);
+}
 
 if (!config.IS_PROD) {
   router.get("/encrypt-passwords", controller.encryptPasswords);

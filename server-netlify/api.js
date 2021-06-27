@@ -4,7 +4,8 @@ const serverless = require("serverless-http");
 const app = express();
 
 const connectToDb = require("../server/db");
-const api = require("./routes");
+const apiRoutes = require("../server/api");
+const authRoutes = require("../server/auth/auth.routes");
 
 app.use("/.netlify/functions/api", async (req, res, next) => {
   await connectToDb();
@@ -13,7 +14,8 @@ app.use("/.netlify/functions/api", async (req, res, next) => {
 
 require("../server/middleware/app-middleware")(app);
 
-app.use("/.netlify/functions/api", api);
+app.use("/.netlify/functions/api/auth", authRoutes);
+app.use("/.netlify/functions/api", apiRoutes);
 
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
