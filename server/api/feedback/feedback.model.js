@@ -5,10 +5,10 @@ const collectionName = "feedback";
 
 const FeedbackSchema = new mongoose.Schema(
   {
-    name: String,
-    email: String,
+    name: { type: String, required: true },
+    email: { type: String, required: true },
     message: { type: String, required: true },
-    userId: { type: ObjectId, ref: "user", required: true },
+    userId: { type: ObjectId, ref: "user" },
     source: String,
   },
   {
