@@ -1,21 +1,7 @@
 const { gql } = require("apollo-server-express");
+const { typeDefs: scalarTypeDefs } = require("graphql-scalars");
 
-const typeDefs = gql`
-  type Query {
-    me: User!
-    atom: AtomQueries
-  }
-
-  type Mutation {
-    atom: AtomMutations
-  }
-
-  type User {
-    id: ID!
-    name: String!
-    email: String!
-  }
-
+const atomTypeDefs = gql`
   enum TaskType {
     TODO
     GOAL
@@ -76,17 +62,85 @@ const typeDefs = gql`
     _id: ID!
   }
 
+  # Expenses
+  input MonthlyExpensesInput {
+    month: Int!
+    year: Int
+  }
+
+  type Expense {
+    _id: ID!
+    amount: Int!
+    userId: String!
+    message: String
+    date: DateTime!
+    expenseTypeId: String!
+    expenseSubTypeId: String
+    createdAt: DateTime!
+  }
+
+  input CreateExpenseInput {
+    amount: Int!
+    message: String
+    date: DateTime
+    expenseTypeId: String!
+    expenseSubTypeId: String
+  }
+
+  input UpdateExpenseInput {
+    _id: ID!
+    amount: Int
+    message: String
+    date: DateTime
+    expenseTypeId: String
+    expenseSubTypeId: String
+  }
+
+  input DeleteExpenseInput {
+    _id: ID!
+  }
+
+  # Queries & Mutations
   type AtomQueries {
+    # Tasks
     getAllTasks: [Task!]
     getTaskById(input: TaskByIdInput!): Task!
+    # Expenses
+    getExpensesByMonth(input: MonthlyExpensesInput!): [Expense]!
   }
 
   type AtomMutations {
+    # Tasks
     createTask(input: CreateTaskInput!): Task!
     updateTask(input: UpdateTaskInput!): Task!
     stampTask(input: StampTaskInput!): Task!
     deleteTask(input: TaskByIdInput!): Task!
+    # Expenses
+    createExpense(input: CreateExpenseInput): Expense!
+    updateExpense(input: UpdateExpenseInput): Expense!
+    deleteExpense(input: DeleteExpenseInput): Expense!
   }
 `;
+
+const root = gql`
+  type Query {
+    me: User!
+    atom: AtomQueries
+  }
+
+  type Mutation {
+    atom: AtomMutations
+  }
+
+  type User {
+    id: ID!
+    name: String!
+    email: String!
+  }
+
+  ${atomTypeDefs}
+`;
+
+const typeDefs = [...scalarTypeDefs, root];
 
 module.exports = typeDefs;

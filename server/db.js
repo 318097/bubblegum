@@ -8,7 +8,7 @@ const connectToDb = async () => {
   // mongoose.set("useFindAndModify", false);
 
   return mongoose
-    .connect(config.DB_URL, { useNewUrlParser: true })
+    .connect(config.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => logger.log(`Connected to DB.`))
     .catch((err) => logger.log("Error in connecting to MongoDb.", err));
 };

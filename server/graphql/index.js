@@ -4,10 +4,12 @@ const resolvers = require("./resolvers");
 const logger = require("../utils/logger");
 const UserModel = require("../api/user/user.model");
 const TaskModel = require("../api/task/task.model");
+const ExpenseModel = require("../api/expenses/expenses.model");
 const config = require("../config");
 const { getToken, getUser } = require("../utils/authentication");
+const { processId } = require("../helpers");
 
-async function startApolloServer(app) {
+const startApolloServer = async (app) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -15,15 +17,21 @@ async function startApolloServer(app) {
       const models = {
         User: UserModel,
         Task: TaskModel,
+        Expense: ExpenseModel,
       };
 
-      let user;
+      let user = {};
       const token = getToken(req);
       if (token) user = await getUser(token);
 
       // console.log("user::-", user);
 
-      return { models, user };
+      return {
+        models,
+        user,
+        authenticated: !!token,
+        userId: processId(user._id),
+      };
     },
     playground: {
       settings: {
@@ -47,6 +55,6 @@ async function startApolloServer(app) {
   logger.log(
     `🚀 GraphQL server running at :${config.PORT}${server.graphqlPath}`
   );
-}
+};
 
 module.exports = { startApolloServer };
