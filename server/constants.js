@@ -12,11 +12,11 @@ const APP_INFO = {
 const APP_LIST = Object.keys(APP_INFO);
 
 const defaultExpenseTypes = [
-  { key: "EXPENSE", label: "Expense" },
-  { key: "BILLS", label: "Bills" },
+  { key: "EXPENSE", label: "Expense", success: "DOWN" },
+  { key: "BILLS", label: "Bills", success: "DOWN" },
   // { key: "LOAN", label: "Lend" },
-  { key: "INVESTMENT", label: "Investment" },
-  { key: "INCOME", label: "Income" },
+  { key: "INVESTMENT", label: "Investment", success: "UP" },
+  { key: "INCOME", label: "Income", success: "DOWN" },
 ];
 
 module.exports = {

@@ -8,7 +8,7 @@ const {
   transparent,
 } = require("../utils/authentication");
 const userRoutes = require("./user/user.routes");
-const taskRoutes = require("./task/task.routes");
+// const taskRoutes = require("./task/task.routes");
 const postRoutes = require("./post/post.routes");
 const expenseRoutes = require("./expenses/expenses.routes");
 const snakeGameRoutes = require("./snake/snake.routes");
@@ -29,7 +29,7 @@ router.post(
   errorHandlingWrapper(controller.fileUploadHandler)
 );
 router.use("/users", protectedRoute, userRoutes);
-router.use("/tasks", protectedRoute, taskRoutes);
+// router.use("/tasks", protectedRoute, taskRoutes);
 router.use("/posts", postRoutes);
 router.use("/expenses", protectedRoute, expenseRoutes);
 router.use("/timeline", protectedRoute, timelineRoutes);
