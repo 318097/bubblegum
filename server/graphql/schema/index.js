@@ -107,6 +107,7 @@ const atomTypeDefs = gql`
     getTaskById(input: TaskByIdInput!): Task!
     # Expenses
     getExpensesByMonth(input: MonthlyExpensesInput!): [Expense]!
+    expenseStats: JSON!
   }
 
   type AtomMutations {

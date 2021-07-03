@@ -1,6 +1,8 @@
 const moment = require("moment");
 const { ObjectId } = require("mongoose").Types;
 const { generateObjectId, processId, generateDate } = require("../../helpers");
+const _ = require("lodash");
+const set = require("set-value");
 
 const getExpensesByMonth = async (_, args, { models, user }) => {
   const { month, year } = args.input;
@@ -55,9 +57,53 @@ const deleteExpense = async (_, args, { models, userId }) => {
   return result;
 };
 
+const expenseStats = async (parent, args, { models, userId, user }) => {
+  const months = 6;
+  const startMonth = moment()
+    .subtract(months, "months")
+    .startOf("month")
+    .toDate();
+  const data = await models.Expense.find({
+    userId,
+    date: {
+      $gte: startMonth,
+    },
+  });
+
+  const monthlyOverview = {};
+  const categoryTotal = {};
+  data.forEach((item) => {
+    const { date, amount, expenseTypeId } = item;
+
+    const expenseList = _.get(user, "expenseTypes", []);
+    const expenseType = _.find(expenseList, { _id: expenseTypeId }) || {};
+    const expenseTypeLabel = expenseType.label;
+
+    const [month, year] = moment(date).format("MMM-YY").split("-");
+    const createdKey = `${month}-${year}`;
+
+    const previousValue = _.get(
+      monthlyOverview,
+      [createdKey, expenseTypeLabel],
+      0
+    );
+    set(
+      monthlyOverview,
+      [createdKey, expenseTypeLabel],
+      previousValue + amount
+    );
+
+    categoryTotal[expenseTypeLabel] =
+      (categoryTotal[expenseTypeLabel] || 0) + amount;
+  });
+
+  return { monthlyOverview, categoryTotal };
+};
+
 module.exports = {
   expenseQueryResolvers: {
     getExpensesByMonth,
+    expenseStats,
   },
   expenseMutationResolvers: {
     createExpense,
