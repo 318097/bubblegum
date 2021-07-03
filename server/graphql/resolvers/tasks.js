@@ -4,15 +4,9 @@ const { generateObjectId, processId } = require("../../helpers");
 
 const getAllTasks = async (_, args, { models, user }) => {
   const result = await models.Task.find({ userId: user._id }).sort({
-    _id: -1,
+    status: -1,
+    createdAt: -1,
   });
-  // const result = await models.Task.aggregate([
-  // { $match: { userId: user._id } },
-  // {
-  //   $group: { _id: '$type', 'todos': { $push: '$$ROOT' } }
-  // },
-  // { $replaceRoot: { newRoot: { $arrayToObject: [[{ k: '$_id', v: '$todos' }]] } } },
-  // ]);
   return result;
 };
 
@@ -27,21 +21,11 @@ const getTaskById = async (_, args, { models, user }) => {
 const createTask = async (_, args, { models, user }) => {
   const { task, type, frequency } = args.input;
 
-  // let data;
-  // if (type === "WEEKLY") {
-  //   const weekNo = moment().week();
-  //   data = {
-  //     stamps: { [`week-${weekNo}`]: [] },
-  //     frequency,
-  //   };
-  // }
-
   const result = await models.Task.create({
     task,
     type,
     userId: user._id,
     ...args.input,
-    // ...data,
   });
 
   return result;
@@ -62,10 +46,10 @@ const updateTask = async (_, args, { models }) => {
 };
 
 const stampTask = async (_, args, { models }) => {
-  const { date, type, _id, action, message, stampId } = args.input;
+  const { date, actionType, _id, action, message, subTaskId } = args.input;
 
   let data = {};
-  if (type === "PROGRESS") {
+  if (actionType === "SUBTASK") {
     if (action === "MARK") {
       data = {
         $addToSet: {
@@ -79,7 +63,7 @@ const stampTask = async (_, args, { models }) => {
     } else {
       data = {
         $pull: {
-          stamps: { _id: processId(stampId) },
+          stamps: { _id: processId(subTaskId) },
         },
       };
     }

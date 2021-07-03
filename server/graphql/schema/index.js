@@ -13,6 +13,11 @@ const atomTypeDefs = gql`
     UNMARK
   }
 
+  enum TaskStampActionType {
+    TASK
+    SUBTASK
+  }
+
   type Stamp {
     _id: ID!
     message: String
@@ -53,9 +58,9 @@ const atomTypeDefs = gql`
     _id: ID!
     date: DateTime
     message: String
-    type: TaskType!
     action: TaskStampAction!
-    stampId: String
+    actionType: TaskStampActionType!
+    subTaskId: String
   }
 
   input TaskByIdInput {
