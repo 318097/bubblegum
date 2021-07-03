@@ -16,7 +16,7 @@ const atomTypeDefs = gql`
   type Stamp {
     _id: ID!
     message: String
-    date: String!
+    date: DateTime!
   }
 
   type Task {
@@ -26,10 +26,10 @@ const atomTypeDefs = gql`
     type: TaskType!
     status: String
     frequency: Int
-    deadline: String
+    deadline: DateTime
     deleted: Boolean!
-    createdAt: String
-    completedOn: String
+    createdAt: DateTime
+    completedOn: DateTime
     stamps: [Stamp!]
   }
 
@@ -37,7 +37,7 @@ const atomTypeDefs = gql`
     content: String!
     type: TaskType!
     status: String
-    deadline: String
+    deadline: DateTime
   }
 
   input UpdateTaskInput {
@@ -46,12 +46,12 @@ const atomTypeDefs = gql`
     userId: String
     type: TaskType
     status: String
-    deadline: String
+    deadline: DateTime
   }
 
   input StampTaskInput {
     _id: ID!
-    date: String
+    date: DateTime
     message: String
     type: TaskType!
     action: TaskStampAction!
