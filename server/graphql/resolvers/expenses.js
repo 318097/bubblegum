@@ -68,7 +68,7 @@ const expenseStats = async (parent, args, { models, userId, user }) => {
     date: {
       $gte: startMonth,
     },
-  });
+  }).sort({ date: 1 });
 
   const monthlyOverview = {};
   const categoryTotal = {};
@@ -80,7 +80,7 @@ const expenseStats = async (parent, args, { models, userId, user }) => {
     const expenseTypeLabel = expenseType.label;
 
     const [month, year] = moment(date).format("MMM-YY").split("-");
-    const createdKey = `${month}-${year}`;
+    const createdKey = `${month} ${year}`;
 
     const previousValue = _.get(
       monthlyOverview,
