@@ -82,6 +82,7 @@ const atomTypeDefs = gql`
     expenseTypeId: String!
     expenseSubTypeId: String
     createdAt: DateTime!
+    favorite: Boolean
   }
 
   input CreateExpenseInput {
@@ -92,7 +93,7 @@ const atomTypeDefs = gql`
     expenseSubTypeId: String
   }
 
-  input ToggleExpenseInput {
+  input FavoriteExpenseInput {
     _id: ID!
     status: Boolean!
   }
@@ -128,7 +129,7 @@ const atomTypeDefs = gql`
     deleteTask(input: TaskByIdInput!): Task!
     # Expenses
     createExpense(input: CreateExpenseInput): Expense!
-    toggleFavoriteExpense(input: ToggleExpenseInput): Expense!
+    toggleFavoriteExpense(input: FavoriteExpenseInput): Expense!
     updateExpense(input: UpdateExpenseInput): Expense!
     deleteExpense(input: DeleteExpenseInput): Expense!
   }

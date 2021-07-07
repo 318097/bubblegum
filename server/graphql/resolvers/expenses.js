@@ -54,7 +54,7 @@ const toggleFavoriteExpense = async (_, args, { models, userId }) => {
   const result = await models.Expense.findOneAndUpdate(
     { userId, _id },
     {
-      $set: status,
+      $set: { favorite: status },
     },
     { new: true }
   );
