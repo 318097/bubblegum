@@ -92,6 +92,11 @@ const atomTypeDefs = gql`
     expenseSubTypeId: String
   }
 
+  input ToggleExpenseInput {
+    _id: ID!
+    status: Boolean!
+  }
+
   input UpdateExpenseInput {
     _id: ID!
     amount: Int
@@ -123,6 +128,7 @@ const atomTypeDefs = gql`
     deleteTask(input: TaskByIdInput!): Task!
     # Expenses
     createExpense(input: CreateExpenseInput): Expense!
+    toggleFavoriteExpense(input: ToggleExpenseInput): Expense!
     updateExpense(input: UpdateExpenseInput): Expense!
     deleteExpense(input: DeleteExpenseInput): Expense!
   }

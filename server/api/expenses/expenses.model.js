@@ -6,10 +6,11 @@ const collectionName = "expense";
 const ExpenseSchema = new mongoose.Schema(
   {
     userId: { type: ObjectId, ref: "user", required: true },
-    amount: Number,
-    date: Date,
+    amount: { type: Number, required: true },
+    date: { type: Date, required: true },
     message: String,
-    expenseSubTypeId: ObjectId,
+    favorite: { type: Boolean, default: false },
+    expenseSubTypeId: { type: ObjectId, required: true },
     expenseTypeId: ObjectId,
   },
   {

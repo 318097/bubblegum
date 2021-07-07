@@ -24,7 +24,7 @@ exports.getExpensesByMonth = async (req, res) => {
       },
     },
     {
-      $sort: { date: -1 },
+      $sort: { date: -1, _id: -1 },
     },
   ]);
   res.send({ expenses: result });

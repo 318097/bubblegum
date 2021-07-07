@@ -18,6 +18,7 @@ const getExpensesByMonth = async (_, args, { models, user }) => {
       $lte: monthEnd,
     },
   }).sort({
+    date: -1,
     _id: -1,
   });
 
@@ -42,6 +43,18 @@ const updateExpense = async (_, args, { models, userId }) => {
     { userId, _id },
     {
       $set: data,
+    },
+    { new: true }
+  );
+  return result;
+};
+
+const toggleFavoriteExpense = async (_, args, { models, userId }) => {
+  const { _id, status } = args.input;
+  const result = await models.Expense.findOneAndUpdate(
+    { userId, _id },
+    {
+      $set: status,
     },
     { new: true }
   );
@@ -108,6 +121,7 @@ module.exports = {
   expenseMutationResolvers: {
     createExpense,
     updateExpense,
+    toggleFavoriteExpense,
     deleteExpense,
   },
 };
