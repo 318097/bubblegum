@@ -28,7 +28,7 @@ router.post(
   fileStorage,
   errorHandlingWrapper(controller.fileUploadHandler)
 );
-router.use("/users", protectedRoute, userRoutes);
+router.use("/user", protectedRoute, userRoutes);
 // router.use("/tasks", protectedRoute, taskRoutes);
 router.use("/posts", postRoutes);
 router.use("/expenses", protectedRoute, expenseRoutes);
