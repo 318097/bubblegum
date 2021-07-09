@@ -111,6 +111,40 @@ const atomTypeDefs = gql`
     _id: ID!
   }
 
+  # Timeline
+  input GetTimelineInput {
+    groupId: ID
+    search: String
+    page: Int
+    limit: Int
+  }
+
+  input CreateTimelineInput {
+    groupId: [ID!]
+    content: String!
+    date: DateTime!
+  }
+
+  input UpdateTimelineInput {
+    _id: ID!
+    groupId: [ID]
+    content: String
+    date: DateTime
+  }
+
+  input DeleteTimelineInput {
+    _id: ID!
+  }
+
+  type Timeline {
+    _id: ID!
+    content: String!
+    userId: String!
+    date: DateTime
+    groupId: [ID]!
+    createdAt: DateTime
+  }
+
   # Queries & Mutations
   type AtomQueries {
     # Tasks
@@ -119,6 +153,8 @@ const atomTypeDefs = gql`
     # Expenses
     getExpensesByMonth(input: MonthlyExpensesInput!): [Expense]!
     expenseStats: JSON!
+    # Timeline
+    getTimeline(input: GetTimelineInput!): [Timeline]!
   }
 
   type AtomMutations {
@@ -132,6 +168,10 @@ const atomTypeDefs = gql`
     toggleFavoriteExpense(input: FavoriteExpenseInput): Expense!
     updateExpense(input: UpdateExpenseInput): Expense!
     deleteExpense(input: DeleteExpenseInput): Expense!
+    # Timeline
+    createTimelinePost(input: CreateTimelineInput): Timeline!
+    updateTimelinePost(input: UpdateTimelineInput): Timeline!
+    deleteTimelinePost(input: DeleteTimelineInput): Timeline!
   }
 `;
 

@@ -5,6 +5,7 @@ const logger = require("../utils/logger");
 const UserModel = require("../api/user/user.model");
 const TaskModel = require("../api/task/task.model");
 const ExpenseModel = require("../api/expenses/expenses.model");
+const TimelineModel = require("../api/timeline/timeline.model");
 const config = require("../config");
 const { getToken, getUser } = require("../utils/authentication");
 const { processId } = require("../helpers");
@@ -18,6 +19,7 @@ const startApolloServer = async (app) => {
         User: UserModel,
         Task: TaskModel,
         Expense: ExpenseModel,
+        Timeline: TimelineModel,
       };
 
       let user = {};

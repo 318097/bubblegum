@@ -4,6 +4,11 @@ const {
   expenseMutationResolvers,
 } = require("./expenses");
 const {
+  timelineQueryResolvers,
+  timelineMutationResolvers,
+} = require("./timeline");
+
+const {
   DateResolver,
   DateTimeResolver,
   JSONResolver,
@@ -27,6 +32,7 @@ module.exports = {
   AtomQueries: {
     ...taskQueryResolvers,
     ...expenseQueryResolvers,
+    ...timelineQueryResolvers,
   },
   Mutation: {
     atom: () => ({}),
@@ -34,5 +40,6 @@ module.exports = {
   AtomMutations: {
     ...taskMutationResolvers,
     ...expenseMutationResolvers,
+    ...timelineMutationResolvers,
   },
 };
