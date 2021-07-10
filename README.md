@@ -20,3 +20,5 @@
 - [ ] All sessions should logout after password change/reset
 - [ ] Refactor protectedRoutes, transparent, externalAccess
 - [ ] Generate documentation for apis
+- [ ] Soft delete everything
+- [ ] Authentication for resolvers

@@ -3,6 +3,14 @@ const { ObjectId } = require("mongoose").Types;
 const { processId, generateDate } = require("../../helpers");
 const Model = require("./user.model");
 const { APP_INFO } = require("../../constants");
+const { generateTimelineDefault } = require("../../defaults");
+const { extractUserData } = require("../../helpers");
+
+const getDefaultValue = ({ key, name }) => {
+  if (key === "timeline") {
+    return generateTimelineDefault({ key, name });
+  }
+};
 
 exports.updateSettings = async (req, res) => {
   const { user, query, body } = req;
@@ -17,11 +25,14 @@ exports.updateSettings = async (req, res) => {
 
   switch (action) {
     case "CREATE": {
-      const data = {
-        ...body,
-        _id: new ObjectId(),
-        createdAt: generateDate(),
-      };
+      const defaultValue = getDefaultValue({ ...body, key });
+      const data = defaultValue
+        ? defaultValue
+        : {
+            ...body,
+            _id: new ObjectId(),
+            createdAt: generateDate(),
+          };
       dbObj = {
         $push: { [key]: data },
       };
@@ -52,11 +63,16 @@ exports.updateSettings = async (req, res) => {
       throw new Error("Invalid 'action'");
   }
 
-  const result = await Model.findOneAndUpdate(queryObj, dbObj, {
+  const updatedUser = await Model.findOneAndUpdate(queryObj, dbObj, {
     new: true,
   }).lean();
 
-  res.send({ result });
+  const filteredContent = await extractUserData({
+    source: req.source,
+    user: updatedUser,
+  });
+
+  res.send({ result: filteredContent });
 };
 
 exports.updateAppSettings = async (req, res) => {

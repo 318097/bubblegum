@@ -11,12 +11,18 @@ const generateAppStatusDefault = () => {
     );
 };
 
-const generateTimelineDefault = () => {
+const generateTimelineDefault = ({
+  name = "Default",
+  _default = false,
+  ...rest
+} = {}) => {
   return {
-    name: "Default",
-    default: true,
+    name,
+    // color: getRandomColor(),
+    default: _default,
     _id: generateObjectId(),
     createdAt: generateDate(),
+    ...rest,
   };
 };
 
@@ -34,7 +40,7 @@ const generateDefaultState = (req) => {
   const defaultState = {
     source: req.source,
     userType: "USER",
-    timeline: generateTimelineDefault(),
+    timeline: generateTimelineDefault({ _default: true }),
     expenseTypes: generateExpenseTypesDefault(),
     appStatus: generateAppStatusDefault(),
     verified: _.get(req, "body.authMethod") === "GOOGLE",
@@ -43,4 +49,4 @@ const generateDefaultState = (req) => {
   return defaultState;
 };
 
-module.exports = { generateDefaultState };
+module.exports = { generateDefaultState, generateTimelineDefault };
