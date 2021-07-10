@@ -1,6 +1,6 @@
 const APP_INFO = {
-  NOTES_APP: { active: true },
-  DOT: { active: true },
+  NOTES_APP: { active: true, userKey: "notesApp" },
+  DOT: { active: true, userKey: "dot" },
   ATOM: { active: true },
   SNAKE: {},
   CHAT_APP: {},
@@ -14,7 +14,6 @@ const APP_LIST = Object.keys(APP_INFO);
 const defaultExpenseTypes = [
   { key: "EXPENSE", label: "Expense", success: "DOWN", color: "watermelon" },
   { key: "BILLS", label: "Bills", success: "DOWN", color: "orange" },
-  // { key: "LOAN", label: "Lend" },
   { key: "INVESTMENT", label: "Investment", success: "UP", color: "green" },
   { key: "INCOME", label: "Income", success: "DOWN", color: "orchid" },
 ];

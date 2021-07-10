@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { APP_LIST } = require("../../constants");
-const { any } = require("@hapi/joi");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -48,6 +47,7 @@ const UserSchema = new mongoose.Schema(
     verified: Boolean,
     lastLogin: String,
     appStatus: Object,
+    settings: Object,
   },
   {
     timestamps: true,

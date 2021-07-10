@@ -2,6 +2,7 @@ const _ = require("lodash");
 const { ObjectId } = require("mongoose").Types;
 const { processId, generateDate } = require("../../helpers");
 const Model = require("./user.model");
+const { APP_INFO } = require("../../constants");
 
 exports.updateSettings = async (req, res) => {
   const { user, query, body } = req;
@@ -56,4 +57,18 @@ exports.updateSettings = async (req, res) => {
   }).lean();
 
   res.send({ result });
+};
+
+exports.updateAppSettings = async (req, res) => {
+  const keysToInclude = _.map(
+    _.filter(APP_INFO, "userKey"),
+    (item) => item.userKey
+  );
+  const data = _.pick(req.body, keysToInclude);
+  const update = await Model.findOneAndUpdate(
+    { _id: req.user._id },
+    { $set: data },
+    { new: true }
+  );
+  res.send(update);
 };
