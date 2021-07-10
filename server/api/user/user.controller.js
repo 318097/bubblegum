@@ -1,10 +1,9 @@
 const _ = require("lodash");
 const { ObjectId } = require("mongoose").Types;
-const { processId, generateDate } = require("../../helpers");
+const { processId, generateDate, extractUserData } = require("../../helpers");
 const Model = require("./user.model");
 const { APP_INFO } = require("../../constants");
 const { generateTimelineDefault } = require("../../defaults");
-const { extractUserData } = require("../../helpers");
 
 const getDefaultValue = ({ key, name }) => {
   if (key === "timeline") {
@@ -76,11 +75,9 @@ exports.updateSettings = async (req, res) => {
 };
 
 exports.updateAppSettings = async (req, res) => {
-  const keysToInclude = _.map(
-    _.filter(APP_INFO, "userKey"),
-    (item) => item.userKey
-  );
-  const data = _.pick(req.body, keysToInclude);
+  const keysBasedOnSource = _.get(APP_INFO, [req.source, "userKeys"], []);
+  const data = _.pick(req.body, keysBasedOnSource);
+
   const update = await Model.findOneAndUpdate(
     { _id: req.user._id },
     { $set: data },

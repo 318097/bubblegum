@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongoose").Types;
 const _ = require("lodash");
+const { APP_INFO } = require("./constants");
 const DotProjectsModel = require("./api/dot/dot.project.model");
 
 const generateObjectId = () => new ObjectId();
@@ -72,16 +73,11 @@ const extractUserData = async (req) => {
     case "DOT":
       result["dotProjects"] = await DotProjectsModel.find({ userId: user._id });
       break;
-    case "NOTES_APP":
-    case "FLASH":
-      result = _.pick(user, ["notesApp"]);
+    default: {
+      const keysBasedOnSource = _.get(APP_INFO, [req.source, "userKeys"], []);
+      result = _.pick(user, keysBasedOnSource);
       break;
-    case "ATOM":
-      result = _.pick(user, ["expenseTypes", "timeline"]);
-      break;
-    case "CODEDROPS":
-      result = _.pick(user, ["bookmarkedPosts"]);
-      break;
+    }
   }
 
   return { ...basic, ...result };
