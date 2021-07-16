@@ -15,6 +15,14 @@ const startApolloServer = async (app) => {
     typeDefs,
     resolvers,
     context: async ({ req }) => {
+      const token = getToken(req);
+      if (!token) throw new Error("No Authorization token found");
+
+      const user = await getUser(token);
+      if (!user) throw new Error("Unauthorized");
+
+      // console.log("user::-", user);
+
       const models = {
         User: UserModel,
         Task: TaskModel,
@@ -22,33 +30,16 @@ const startApolloServer = async (app) => {
         Timeline: TimelineModel,
       };
 
-      let user = {};
-      const token = getToken(req);
-      if (token) user = await getUser(token);
-
-      // console.log("user::-", user);
-
       return {
         models,
         user,
-        authenticated: !!token,
         userId: processId(user._id),
       };
     },
     playground: {
       settings: {
         "schema.polling.enable": false,
-        // "request.credentials": "include",
       },
-      // tabs: [
-      //   {
-      //     name: "Tab 1",
-      //     headers: {
-      //       authorization:
-      //         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDljZWM1OTY0YWRmZDdjOTc3NmRiZmUiLCJlbWFpbCI6IjMxODA5N0BnbWFpbC5jb20iLCJpYXQiOjE2MjIyNzc3MDksImV4cCI6MTYyNDg2OTcwOX0.40YEO749prMMXgyP7vU-F5Fk-F8XlP18n5_mquAt_5s",
-      //     },
-      //   },
-      // ],
     },
   });
   await server.start();

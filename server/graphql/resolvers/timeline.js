@@ -14,7 +14,6 @@ const getTimeline = async (_, args, { models, userId }) => {
     _id: -1,
   });
 
-  console.log("aggregation::-", result);
   return result;
 };
 

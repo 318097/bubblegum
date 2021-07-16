@@ -177,18 +177,11 @@ const atomTypeDefs = gql`
 
 const root = gql`
   type Query {
-    me: User!
     atom: AtomQueries
   }
 
   type Mutation {
     atom: AtomMutations
-  }
-
-  type User {
-    id: ID!
-    name: String!
-    email: String!
   }
 
   ${atomTypeDefs}

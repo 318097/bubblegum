@@ -9,7 +9,13 @@ const signToken = (_id, email) =>
 
 const getToken = (req) => _.get(req, "headers.authorization");
 
-const validateToken = (token) => jwt.verify(token, config.JWT);
+const validateToken = (token) => {
+  try {
+    return jwt.verify(token, config.JWT);
+  } catch (error) {
+    throw new Error("Invalid JWT");
+  }
+};
 
 const getUser = async (token) => {
   const decoded = validateToken(token);
