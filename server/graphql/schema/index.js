@@ -1,7 +1,7 @@
 const { gql } = require("apollo-server-express");
 const { typeDefs: scalarTypeDefs } = require("graphql-scalars");
 
-const atomTypeDefs = gql`
+const octonTypeDefs = gql`
   enum TaskType {
     TODO
     GOAL
@@ -105,6 +105,7 @@ const atomTypeDefs = gql`
     date: DateTime
     expenseTypeId: String
     expenseSubTypeId: String
+    favorite: Boolean
   }
 
   input DeleteExpenseInput {
@@ -146,7 +147,7 @@ const atomTypeDefs = gql`
   }
 
   # Queries & Mutations
-  type AtomQueries {
+  type OctonQueries {
     # Tasks
     getAllTasks: [Task!]
     getTaskById(input: TaskByIdInput!): Task!
@@ -157,7 +158,7 @@ const atomTypeDefs = gql`
     getTimeline(input: GetTimelineInput!): [Timeline]!
   }
 
-  type AtomMutations {
+  type OctonMutations {
     # Tasks
     createTask(input: CreateTaskInput!): Task!
     updateTask(input: UpdateTaskInput!): Task!
@@ -177,14 +178,14 @@ const atomTypeDefs = gql`
 
 const root = gql`
   type Query {
-    atom: AtomQueries
+    octon: OctonQueries
   }
 
   type Mutation {
-    atom: AtomMutations
+    octon: OctonMutations
   }
 
-  ${atomTypeDefs}
+  ${octonTypeDefs}
 `;
 
 const typeDefs = [...scalarTypeDefs, root];

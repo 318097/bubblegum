@@ -19,17 +19,17 @@ module.exports = {
   DateTime: DateTimeResolver,
   JSON: JSONResolver,
   Query: {
-    atom: () => ({}),
+    octon: () => ({}),
   },
-  AtomQueries: {
+  OctonQueries: {
     ...taskQueryResolvers,
     ...expenseQueryResolvers,
     ...timelineQueryResolvers,
   },
   Mutation: {
-    atom: () => ({}),
+    octon: () => ({}),
   },
-  AtomMutations: {
+  OctonMutations: {
     ...taskMutationResolvers,
     ...expenseMutationResolvers,
     ...timelineMutationResolvers,
