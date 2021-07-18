@@ -14,6 +14,10 @@ const startApolloServer = async (app) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    cors: {
+      origin: "*",
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    },
     context: async ({ req }) => {
       const token = getToken(req);
       if (!token) throw new Error("No Authorization token found");
@@ -44,7 +48,9 @@ const startApolloServer = async (app) => {
   });
   await server.start();
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({
+    app,
+  });
   logger.log(
     `🚀 GraphQL server running at :${config.PORT}${server.graphqlPath}`
   );
