@@ -1,4 +1,5 @@
 const { ApolloServer } = require("apollo-server-express");
+const cors = require("cors");
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
 const logger = require("../utils/logger");
@@ -46,10 +47,7 @@ const startApolloServer = async (app) => {
 
   server.applyMiddleware({
     app,
-    cors: {
-      origin: "*",
-      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    },
+    cors: cors(),
   });
   logger.log(
     `🚀 GraphQL server running at :${config.PORT}${server.graphqlPath}`
