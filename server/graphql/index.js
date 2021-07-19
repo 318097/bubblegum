@@ -44,8 +44,8 @@ const startApolloServer = async (app) => {
 
   server.applyMiddleware({
     app,
-    cors: false,
-    path: "/",
+    // cors: false,
+    // path: "/",
   });
   await server.start();
 
