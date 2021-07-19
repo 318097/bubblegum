@@ -20,7 +20,6 @@ const startApolloServer = async (app) => {
 
       const user = await getUser(token);
       if (!user) throw new Error("Unauthorized");
-
       // console.log("user::-", user);
 
       const models = {
@@ -46,6 +45,8 @@ const startApolloServer = async (app) => {
 
   server.applyMiddleware({
     app,
+    cors: false,
+    path: "/",
   });
   logger.log(
     `🚀 GraphQL server running at :${config.PORT}${server.graphqlPath}`
