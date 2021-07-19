@@ -17,12 +17,13 @@ const { startApolloServer } = require("./graphql");
 logger.log(`Running in ${process.env.NODE_ENV} mode.`);
 
 connectToDb();
-startApolloServer(app);
 
 require("./api/snake/snake.socket")(io);
 require("./api/chat/chat.socket")(io);
 
 require("./middleware/app-middleware")(app);
+
+startApolloServer(app);
 
 app.use("/api/auth", authRoutes);
 app.use("/api", api);

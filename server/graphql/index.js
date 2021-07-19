@@ -14,7 +14,6 @@ const startApolloServer = async (app) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    cors: { origin: "*" },
     context: async ({ req }) => {
       const token = getToken(req);
       if (!token) throw new Error("No Authorization token found");
