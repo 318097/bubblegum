@@ -42,12 +42,12 @@ const startApolloServer = async (app) => {
     },
   });
 
+  await server.start();
   server.applyMiddleware({
     app,
     // cors: false,
     // path: "/",
   });
-  await server.start();
 
   logger.log(
     `🚀 GraphQL server running at :${config.PORT}${server.graphqlPath}`
