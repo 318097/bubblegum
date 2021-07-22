@@ -1,28 +1,41 @@
-const moment = require("moment");
 const _ = require("lodash");
-const { processId } = require("../../helpers");
-const TodoModel = require("./dot.todo.model");
+const { processId, generateDate } = require("../../helpers");
+const TaskModel = require("./dot.task.model");
 const TopicModel = require("./dot.topic.model");
 const ProjectModel = require("./dot.project.model");
 
-exports.getAllTodos = async (req, res) => {
+exports.getAllTasks = async (req, res) => {
   const { projectId } = req.query;
-  const topics = await TopicModel.aggregate([
-    { $match: { userId: req.user._id, projectId: processId(projectId) } },
+
+  const topics = await TaskModel.aggregate([
+    {
+      $match: {
+        userId: req.user._id,
+        projectId: processId(projectId),
+        type: "TOPIC",
+      },
+    },
   ]);
   const visibleTopics = _.map(_.filter(topics, "visible"), "_id");
 
-  const todos = await TodoModel.aggregate([
-    { $match: { userId: req.user._id, topicId: { $in: visibleTopics } } },
+  const todos = await TaskModel.aggregate([
+    {
+      $match: {
+        userId: req.user._id,
+        type: "TODO",
+        parentId: { $in: visibleTopics },
+      },
+    },
   ]);
   res.send({ todos, topics });
 };
 
 exports.getCompletedTodos = async (req, res) => {
-  const { page = 1, limit = 15, type = "TIMELINE", projectId } = req.query;
+  const { page = 1, limit = 15, projectId } = req.query;
   let aggregation = {
     userId: req.user._id,
     marked: true,
+    type: "TODO",
     projectId: processId(projectId),
   };
 
@@ -35,7 +48,7 @@ exports.getCompletedTodos = async (req, res) => {
   //   // type === 'TIMELINE'
   // }
 
-  const result = await TodoModel.aggregate([
+  const result = await TaskModel.aggregate([
     { $match: aggregation },
     { $sort: { completedOn: -1 } },
     { $skip: (Number(page) - 1) * Number(limit) },
@@ -43,7 +56,9 @@ exports.getCompletedTodos = async (req, res) => {
     { $sort: { completedOn: 1 } },
     {
       $group: {
-        _id: { $dateToString: { format: "%Y-%m-%d", date: "$completedOn" } },
+        _id: {
+          $dateToString: { format: "%Y-%m-%d", date: "$status.completedOn" },
+        },
         todos: { $push: "$$ROOT" },
       },
     },
@@ -53,29 +68,33 @@ exports.getCompletedTodos = async (req, res) => {
 };
 
 exports.getTodoById = async (req, res) => {
-  const result = await TodoModel.find({
+  const result = await TaskModel.find({
     userId: req.user._id,
     _id: req.params.id,
   });
   res.send({ todo: result });
 };
 
-exports.createTodo = async (req, res) => {
-  const { topicId, content, projectId, marked, deadline } = req.body;
+exports.createTask = async (req, res) => {
+  const { parentId, content, projectId, marked, deadline, type } = req.body;
   const userId = req.user._id;
 
   const data = {
-    topicId,
-    content,
+    parentId,
     userId,
+    content,
     projectId,
     marked,
-    deadline: deadline ? moment(deadline).toDate() : undefined,
+    type,
+    status: {
+      deadline: deadline ? generateDate(deadline) : undefined,
+      completedOn: marked ? generateDate() : undefined,
+    },
   };
-  if (marked) data["completedOn"] = moment().toDate();
-  const result = await TodoModel.create(data);
-  await TopicModel.findOneAndUpdate(
-    { _id: topicId },
+
+  const result = await TaskModel.create(data);
+  await TaskModel.findOneAndUpdate(
+    { _id: parentId },
     {
       $push: {
         [`todos`]: result._id,
@@ -85,9 +104,9 @@ exports.createTodo = async (req, res) => {
   res.send({ result });
 };
 
-exports.updateTodo = async (req, res) => {
+exports.updateTask = async (req, res) => {
   const { id: todoId } = req.params;
-  const result = await TodoModel.findOneAndUpdate(
+  const result = await TaskModel.findOneAndUpdate(
     {
       _id: todoId,
     },
@@ -99,16 +118,16 @@ exports.updateTodo = async (req, res) => {
   res.send({ result });
 };
 
-exports.stampTodo = async (req, res) => {
-  const { id: todoId } = req.params;
-  const result = await TodoModel.findOneAndUpdate(
+exports.stampTask = async (req, res) => {
+  const { id } = req.params;
+  const result = await TaskModel.findOneAndUpdate(
     {
-      _id: todoId,
+      _id: id,
     },
     {
       $set: {
         marked: true,
-        completedOn: moment().toDate(),
+        "status.completedOn": generateDate(),
       },
     },
     {
@@ -118,42 +137,16 @@ exports.stampTodo = async (req, res) => {
   res.send({ result });
 };
 
-exports.deleteTodo = async (req, res) => {
-  const { id: todoId } = req.params;
-  const result = await TodoModel.findOneAndDelete({
-    _id: todoId,
+exports.deleteTask = async (req, res) => {
+  const { id } = req.params;
+  const result = await TaskModel.findOneAndDelete({
+    _id: id,
   });
   const { topicId } = result;
 
   await TopicModel.findOneAndUpdate(
     { _id: topicId },
     { $pull: { todos: result._id } }
-  );
-  res.send({ result });
-};
-
-exports.createTopic = async (req, res) => {
-  const { content, projectId } = req.body;
-  const userId = req.user._id;
-
-  const result = await TopicModel.create({
-    content,
-    projectId,
-    userId,
-  });
-  res.send({ result });
-};
-
-exports.updateTopic = async (req, res) => {
-  const { id: topicId } = req.params;
-  const result = await TopicModel.findOneAndUpdate(
-    {
-      _id: topicId,
-    },
-    {
-      $set: req.body,
-    },
-    { new: true }
   );
   res.send({ result });
 };
@@ -167,14 +160,13 @@ exports.createProject = async (req, res) => {
     userId,
   });
 
-  await TopicModel.create({
+  await TaskModel.create({
     content: "others",
     projectId: newProject._id,
     isDefault: true,
     userId,
+    type: "TOPIC",
   });
 
-  if (!req.user.dotProjects) req.user.dotProjects = [];
-  req.user.dotProjects.push(newProject);
-  res.send({ ...req.user });
+  res.send({ newProject });
 };

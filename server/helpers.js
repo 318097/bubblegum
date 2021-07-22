@@ -9,7 +9,8 @@ const isObjectId = (id) => /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id);
 
 const processId = (id) => (isObjectId(id) ? ObjectId(id) : id);
 
-const generateDate = () => new Date().toISOString();
+const generateDate = (date) =>
+  (date ? new Date(date) : new Date()).toISOString();
 
 const getKey = (id) => (isObjectId(id) ? "_id" : "slug");
 

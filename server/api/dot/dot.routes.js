@@ -2,20 +2,16 @@ const router = require("express").Router();
 const errorHandlingWrapper = require("../../middleware/error-handling");
 const controller = require("./dot.controller");
 
-router.post("/todos", errorHandlingWrapper(controller.createTodo));
-router.get("/todos", errorHandlingWrapper(controller.getAllTodos));
+router.post("/tasks", errorHandlingWrapper(controller.createTask));
+router.get("/tasks", errorHandlingWrapper(controller.getAllTasks));
 router.get(
-  "/todos/completed",
+  "/tasks/completed",
   errorHandlingWrapper(controller.getCompletedTodos)
 );
-router.get("/todos/:id", errorHandlingWrapper(controller.getTodoById));
-router.put("/todos/:id", errorHandlingWrapper(controller.updateTodo));
-router.put("/todos/:id/stamp", errorHandlingWrapper(controller.stampTodo));
-router.delete("/todos/:id", errorHandlingWrapper(controller.deleteTodo));
-
-router.post("/topics", errorHandlingWrapper(controller.createTopic));
-router.put("/topics/:id", errorHandlingWrapper(controller.updateTopic));
-
+router.get("/tasks/:id", errorHandlingWrapper(controller.getTodoById));
+router.put("/tasks/:id", errorHandlingWrapper(controller.updateTask));
+router.put("/tasks/:id/stamp", errorHandlingWrapper(controller.stampTask));
+router.delete("/tasks/:id", errorHandlingWrapper(controller.deleteTask));
 router.post("/projects", errorHandlingWrapper(controller.createProject));
 
 module.exports = router;

@@ -11,7 +11,7 @@
 - [x] Add compound indexes for Posts
 - [x] Add support for email
 - [x] Set expiry for JWT
-- [ ] Change the project structure architecture for DOT
+- [x] Change the project structure architecture for DOT
 - [ ] Change password
 - [ ] Activate account from email
 - [ ] Advance search for posts
