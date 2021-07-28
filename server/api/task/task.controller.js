@@ -5,13 +5,13 @@ const { ObjectId } = require("mongoose").Types;
 // const UserModel = require("../user/user.model");
 const Model = require("./task.model");
 
-const TodoSchemaValidator = Joi.object().keys({
+const TaskSchemaValidator = Joi.object().keys({
   task: Joi.string().min(3).required(),
   type: Joi.string().regex(/^(SINGLE|WEEKLY)$/),
   frequency: Joi.number(),
 });
 
-exports.getAllTodos = async (req, res) => {
+exports.getAllTasks = async (req, res) => {
   const result = await Model.aggregate([
     { $match: { userId: req.user._id } },
     // {
@@ -22,16 +22,16 @@ exports.getAllTodos = async (req, res) => {
   res.send({ todos: result });
 };
 
-exports.getTodoById = async (req, res) => {
+exports.getTaskById = async (req, res) => {
   const result = await Model.find({ userId: req.user._id, _id: req.params.id });
   res.send({ todo: result });
 };
 
-exports.createTodo = async (req, res) => {
+exports.createTask = async (req, res) => {
   const { task, type, frequency } = req.body;
   const { error } = Joi.validate(
     { task, type, frequency },
-    TodoSchemaValidator
+    TaskSchemaValidator
   );
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -53,7 +53,7 @@ exports.createTodo = async (req, res) => {
   res.send({ result });
 };
 
-exports.updateTodo = async (req, res) => {
+exports.updateTask = async (req, res) => {
   const { task, type } = req.body;
   const todoId = req.params.id;
   const result = await Model.findOneAndUpdate(
@@ -71,7 +71,7 @@ exports.updateTodo = async (req, res) => {
   res.send({ result });
 };
 
-exports.stampTodo = async (req, res) => {
+exports.stampTask = async (req, res) => {
   const { date, type } = req.body;
   const todoId = req.params.id;
 
@@ -104,7 +104,7 @@ exports.stampTodo = async (req, res) => {
   res.send({ result });
 };
 
-exports.deleteTodo = async (req, res) => {
+exports.deleteTask = async (req, res) => {
   const todoId = req.params.id;
   const result = await Model.findOneAndDelete({
     _id: todoId,

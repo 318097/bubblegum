@@ -33,7 +33,7 @@ router.use("/user", protectedRoute, userRoutes);
 router.use("/posts", postRoutes);
 router.use("/expenses", protectedRoute, expenseRoutes);
 router.use("/timeline", protectedRoute, timelineRoutes);
-router.use("/dot", dotRoutes);
+router.use("/dot", protectedRoute, dotRoutes);
 router.use("/feedback", transparent, feedbackRoutes);
 router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
 

@@ -31,7 +31,7 @@ exports.getAllTasks = async (req, res) => {
   res.send({ todos, topics });
 };
 
-exports.getCompletedTodos = async (req, res) => {
+exports.getCompletedTasks = async (req, res) => {
   const { page = 1, limit = 15, projectId } = req.query;
   let aggregation = {
     userId: req.user._id,
@@ -68,7 +68,7 @@ exports.getCompletedTodos = async (req, res) => {
   res.send({ todos: result });
 };
 
-exports.getTodoById = async (req, res) => {
+exports.getTaskById = async (req, res) => {
   const result = await TaskModel.find({
     userId: req.user._id,
     _id: req.params.id,

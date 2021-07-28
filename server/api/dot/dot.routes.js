@@ -6,9 +6,9 @@ router.post("/tasks", errorHandlingWrapper(controller.createTask));
 router.get("/tasks", errorHandlingWrapper(controller.getAllTasks));
 router.get(
   "/tasks/completed",
-  errorHandlingWrapper(controller.getCompletedTodos)
+  errorHandlingWrapper(controller.getCompletedTasks)
 );
-router.get("/tasks/:id", errorHandlingWrapper(controller.getTodoById));
+router.get("/tasks/:id", errorHandlingWrapper(controller.getTaskById));
 router.put("/tasks/:id", errorHandlingWrapper(controller.updateTask));
 router.put("/tasks/:id/stamp", errorHandlingWrapper(controller.stampTask));
 router.delete("/tasks/:id", errorHandlingWrapper(controller.deleteTask));
