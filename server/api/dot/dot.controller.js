@@ -1,7 +1,6 @@
 const _ = require("lodash");
 const { processId, generateDate } = require("../../helpers");
 const TaskModel = require("./dot.task.model");
-const TopicModel = require("./dot.topic.model");
 const ProjectModel = require("./dot.project.model");
 
 exports.getAllTasks = async (req, res) => {
@@ -15,6 +14,7 @@ exports.getAllTasks = async (req, res) => {
         type: "TOPIC",
       },
     },
+    { $sort: { createdAt: -1 } },
   ]);
   const visibleTopics = _.map(_.filter(topics, "visible"), "_id");
 
@@ -26,6 +26,7 @@ exports.getAllTasks = async (req, res) => {
         parentId: { $in: visibleTopics },
       },
     },
+    { $sort: { createdAt: -1 } },
   ]);
   res.send({ todos, topics });
 };
@@ -144,7 +145,7 @@ exports.deleteTask = async (req, res) => {
   });
   const { topicId } = result;
 
-  await TopicModel.findOneAndUpdate(
+  await TaskModel.findOneAndUpdate(
     { _id: topicId },
     { $pull: { todos: result._id } }
   );
