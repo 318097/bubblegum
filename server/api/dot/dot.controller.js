@@ -107,12 +107,15 @@ exports.createTask = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
   const { id: todoId } = req.params;
+  const { deadline, ...rest } = req.body;
+  const updatedStatus = deadline ? { "status.deadline": deadline } : {};
+
   const result = await TaskModel.findOneAndUpdate(
     {
       _id: todoId,
     },
     {
-      $set: req.body,
+      $set: { ...rest, ...updatedStatus },
     },
     { new: true }
   );
