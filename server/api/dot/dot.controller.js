@@ -26,7 +26,7 @@ exports.getAllTasks = async (req, res) => {
         parentId: { $in: visibleTopics },
       },
     },
-    { $sort: { createdAt: -1 } },
+    { $sort: { marked: 1, createdAt: -1 } },
   ]);
   res.send({ todos, topics });
 };
