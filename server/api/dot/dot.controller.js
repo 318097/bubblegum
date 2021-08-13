@@ -107,15 +107,19 @@ exports.createTask = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
   const { id: todoId } = req.params;
-  const { deadline, ...rest } = req.body;
-  const updatedStatus = deadline ? { "status.deadline": deadline } : {};
+  const { deadline, start, stop, ...rest } = req.body;
+
+  const updatedData = {};
+  if (deadline) updatedData["status.deadline"] = deadline;
+  if (start) updatedData["status.startedOn"] = generateDate();
+  if (stop) updatedData["status.stoppedOn"] = generateDate();
 
   const result = await TaskModel.findOneAndUpdate(
     {
       _id: todoId,
     },
     {
-      $set: { ...rest, ...updatedStatus },
+      $set: { ...rest, ...updatedData },
     },
     { new: true }
   );
@@ -124,14 +128,15 @@ exports.updateTask = async (req, res) => {
 
 exports.stampTask = async (req, res) => {
   const { id } = req.params;
+  const { marked } = req.body;
   const result = await TaskModel.findOneAndUpdate(
     {
       _id: id,
     },
     {
       $set: {
-        marked: true,
-        "status.completedOn": generateDate(),
+        marked,
+        "status.completedOn": marked ? generateDate() : null,
       },
     },
     {
@@ -165,7 +170,7 @@ exports.createProject = async (req, res) => {
   });
 
   await TaskModel.create({
-    content: "others",
+    content: "Others",
     projectId: newProject._id,
     isDefault: true,
     userId,
