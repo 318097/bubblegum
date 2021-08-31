@@ -95,7 +95,7 @@ exports.createTask = async (req, res) => {
 
   const result = await TaskModel.create(data);
   await TaskModel.findOneAndUpdate(
-    { _id: parentId },
+    { _id: parentId, userId: req.user._id },
     {
       $push: {
         [`todos`]: result._id,
@@ -117,6 +117,7 @@ exports.updateTask = async (req, res) => {
   const result = await TaskModel.findOneAndUpdate(
     {
       _id: todoId,
+      userId: req.user._id,
     },
     {
       $set: { ...rest, ...updatedData },
@@ -132,6 +133,7 @@ exports.stampTask = async (req, res) => {
   const result = await TaskModel.findOneAndUpdate(
     {
       _id: id,
+      userId: req.user._id,
     },
     {
       $set: {
@@ -154,7 +156,7 @@ exports.deleteTask = async (req, res) => {
   const { topicId } = result;
 
   await TaskModel.findOneAndUpdate(
-    { _id: topicId },
+    { _id: topicId, userId: req.user._id },
     { $pull: { todos: result._id } }
   );
   res.send({ result });

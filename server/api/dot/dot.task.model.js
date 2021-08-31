@@ -40,12 +40,12 @@ const DotTodoSchema = new mongoose.Schema(
       default: true,
     },
     status: {
-      // task
       completedOn: Date,
+      // task
       deadline: Date,
       // topic
       startedOn: Date,
-      endedOn: Date,
+      stoppedOn: Date,
     },
   },
   {
