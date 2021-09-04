@@ -1,7 +1,16 @@
 const _ = require("lodash");
+const moment = require("moment");
 const { processId, generateDate } = require("../../helpers");
 const TaskModel = require("./dot.task.model");
 const ProjectModel = require("./dot.project.model");
+
+const getDateEnds = (dateList) => {
+  const list = _.map(dateList, "date");
+  return {
+    max: moment(_.first(list), "YYYY-MM-DD").endOf("day").toDate(),
+    min: moment(_.last(list), "YYYY-MM-DD").startOf("day").toDate(),
+  };
+};
 
 exports.getAllTasks = async (req, res) => {
   const { projectId } = req.query;
@@ -40,12 +49,31 @@ exports.getCompletedTasks = async (req, res) => {
     projectId: processId(projectId),
   };
 
-  const result = await TaskModel.aggregate([
+  const dateList = await TaskModel.aggregate([
     { $match: aggregation },
-    { $sort: { "status.completedOn": -1 } },
+    {
+      $group: {
+        _id: {
+          $dateToString: { format: "%Y-%m-%d", date: "$status.completedOn" },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        date: "$_id",
+      },
+    },
+    { $sort: { date: -1 } },
     { $skip: (Number(page) - 1) * Number(limit) },
     { $limit: Number(limit) },
-    { $sort: { "status.completedOn": 1 } },
+  ]);
+  const { max, min } = getDateEnds(dateList);
+
+  const result = await TaskModel.aggregate([
+    {
+      $match: { ...aggregation, "status.completedOn": { $gt: min, $lt: max } },
+    },
     {
       $group: {
         _id: {
@@ -54,9 +82,17 @@ exports.getCompletedTasks = async (req, res) => {
         todos: { $push: "$$ROOT" },
       },
     },
-    { $sort: { _id: 1 } },
+    {
+      $project: {
+        _id: 0,
+        date: "$_id",
+        todos: 1,
+      },
+    },
+    { $sort: { date: -1 } },
   ]);
-  res.send({ todos: result });
+
+  res.send({ timeline: result });
 };
 
 exports.getTaskById = async (req, res) => {
