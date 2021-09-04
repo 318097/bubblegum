@@ -32,29 +32,20 @@ exports.getAllTasks = async (req, res) => {
 };
 
 exports.getCompletedTasks = async (req, res) => {
-  const { page = 1, limit = 15, projectId } = req.query;
-  let aggregation = {
+  const { page = 1, limit = 10, projectId } = req.query;
+  const aggregation = {
     userId: req.user._id,
     marked: true,
     type: "TODO",
     projectId: processId(projectId),
   };
 
-  // if (type === "TODAY") {
-  //   aggregation = {
-  //     ...aggregation,
-  //     completedOn: { $gte: moment().startOf("day") },
-  //   };
-  // } else {
-  //   // type === 'TIMELINE'
-  // }
-
   const result = await TaskModel.aggregate([
     { $match: aggregation },
-    { $sort: { completedOn: -1 } },
+    { $sort: { "status.completedOn": -1 } },
     { $skip: (Number(page) - 1) * Number(limit) },
     { $limit: Number(limit) },
-    { $sort: { completedOn: 1 } },
+    { $sort: { "status.completedOn": 1 } },
     {
       $group: {
         _id: {
