@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const { ObjectId } = mongoose.Schema.Types;
-const collectionName = "dot-project";
+const collectionName = "fireboard-project";
 
-const DotProjectSchema = new mongoose.Schema(
+const FireboardProjectSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     userId: { type: ObjectId, ref: "user", required: true },
@@ -13,4 +13,4 @@ const DotProjectSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(collectionName, DotProjectSchema);
+module.exports = mongoose.model(collectionName, FireboardProjectSchema);

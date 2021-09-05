@@ -1,8 +1,8 @@
 const _ = require("lodash");
 const moment = require("moment");
 const { processId, generateDate } = require("../../helpers");
-const TaskModel = require("./dot.task.model");
-const ProjectModel = require("./dot.project.model");
+const TaskModel = require("./fireboard.task.model");
+const ProjectModel = require("./fireboard.project.model");
 
 const getDateEnds = (dateList) => {
   const list = _.map(dateList, "date");

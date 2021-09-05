@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const errorHandlingWrapper = require("../../middleware/error-handling");
-const controller = require("./dot.controller");
+const controller = require("./fireboard.controller");
 
 router.post("/tasks", errorHandlingWrapper(controller.createTask));
 router.get("/tasks", errorHandlingWrapper(controller.getAllTasks));

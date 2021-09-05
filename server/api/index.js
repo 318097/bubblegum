@@ -15,7 +15,7 @@ const snakeGameRoutes = require("./snake/snake.routes");
 const timelineRoutes = require("./timeline/timeline.routes");
 const chatRoutes = require("./chat/chat.routes");
 const storeqRoutes = require("./storeq/storeq.routes");
-const dotRoutes = require("./dot/dot.routes");
+const fireboardRoutes = require("./fireboard/fireboard.routes");
 const feedbackRoutes = require("./feedback/feedback.routes");
 const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
 const controller = require("./api.controller");
@@ -33,7 +33,7 @@ router.use("/user", protectedRoute, userRoutes);
 router.use("/posts", postRoutes);
 router.use("/expenses", protectedRoute, expenseRoutes);
 router.use("/timeline", protectedRoute, timelineRoutes);
-router.use("/dot", protectedRoute, dotRoutes);
+router.use("/fireboard", protectedRoute, fireboardRoutes);
 router.use("/feedback", transparent, feedbackRoutes);
 router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
 

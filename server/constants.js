@@ -1,6 +1,6 @@
 const APP_INFO = {
   NOTES_APP: { active: true, userKeys: ["notesApp"] },
-  DOT: { active: true, userKeys: ["dot"] },
+  FIREBOARD: { active: true, userKeys: ["fireboard"] },
   OCTON: { active: true, userKeys: ["expenseTypes", "timeline"] },
   SNAKE: {},
   CHAT_APP: {},

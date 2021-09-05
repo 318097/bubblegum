@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongoose").Types;
 const _ = require("lodash");
 const { APP_INFO } = require("./constants");
-const DotProjectsModel = require("./api/dot/dot.project.model");
+const FireboardProjectsModel = require("./api/fireboard/fireboard.project.model");
 
 const generateObjectId = () => new ObjectId();
 
@@ -71,8 +71,10 @@ const extractUserData = async (req) => {
   ]);
   let result = {};
   switch (source) {
-    case "DOT":
-      result["dotProjects"] = await DotProjectsModel.find({ userId: user._id });
+    case "FIREBOARD":
+      result["fireboardProjects"] = await FireboardProjectsModel.find({
+        userId: user._id,
+      });
       break;
     default: {
       const keysBasedOnSource = _.get(APP_INFO, [req.source, "userKeys"], []);

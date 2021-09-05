@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
 const { ObjectId } = mongoose.Schema.Types;
-const collectionName = "dot-task";
+const collectionName = "fireboard-task";
 
-const DotTodoSchema = new mongoose.Schema(
+const FireboardTodoSchema = new mongoose.Schema(
   {
     userId: { type: ObjectId, ref: "user", required: true },
-    projectId: { type: ObjectId, ref: "dot-project", required: true },
+    projectId: { type: ObjectId, ref: "fireboard-project", required: true },
     type: {
       type: String,
       enum: ["TODO", "TOPIC"],
@@ -23,7 +23,7 @@ const DotTodoSchema = new mongoose.Schema(
     },
     parentId: {
       type: ObjectId,
-      ref: "dot-task",
+      ref: "fireboard-task",
       validator: function () {
         return this.type === "TODO";
       },
@@ -53,4 +53,4 @@ const DotTodoSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(collectionName, DotTodoSchema);
+module.exports = mongoose.model(collectionName, FireboardTodoSchema);
