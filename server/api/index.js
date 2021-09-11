@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const config = require("../config");
+const sendgrid = require("../utils/sendgrid");
 const errorHandlingWrapper = require("../middleware/error-handling");
 const fileStorage = require("../utils/storage");
 const {
@@ -21,6 +22,10 @@ const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
 const controller = require("./api.controller");
 
 router.get("/test", (req, res) => res.send("Test"));
+router.get("/sendgrid", (req, res) => {
+  sendgrid({ email: "318097@gmail.com", type: "REGISTER" });
+  res.send("Done");
+});
 router.get("/rssfeed", controller.rssFeedParser);
 router.post(
   "/upload",

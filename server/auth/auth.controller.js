@@ -9,7 +9,7 @@ const config = require("../config");
 const { extractUserData, generateDate } = require("../helpers");
 const { generateDefaultState } = require("../defaults");
 const SessionModel = require("../models/session.model");
-const sendMail = require("../utils/mail");
+const sendMail = require("../utils/sendgrid");
 const { google } = require("googleapis");
 
 const oauth2Client = new google.auth.OAuth2(
@@ -104,7 +104,7 @@ const register = async (req, res) => {
   const { error } = Joi.validate(data, RegisterSchemaValidator);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const { email, username } = data;
+  const { email, username, name } = data;
   const userExists = await User.findOne({ $or: [{ email }, { username }] });
 
   if (userExists) throw new Error("Email/Username already exists.");
@@ -115,6 +115,8 @@ const register = async (req, res) => {
     ...data,
     ...defaultState,
   });
+
+  sendMail({ name, email, type: "REGISTER", product: req.source });
 
   res.send({ result });
 };
@@ -137,7 +139,8 @@ const forgotPassword = async (req, res) => {
 
   const resetToken = uuidv4();
 
-  await sendMail(user, {
+  await sendMail({
+    email: user.email,
     resetToken,
     type: "RESET",
   });

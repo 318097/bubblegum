@@ -10,6 +10,7 @@ const {
   EMAIL_PASSWORD,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
+  SENDGRID_API_KEY,
 } = process.env;
 
 const IS_PROD = ["production", "express-lambda-production"].includes(NODE_ENV);
@@ -30,12 +31,13 @@ const config = {
   MEDIUM_RSS_FEED: "https://medium.com/feed/@318097",
   EMAIL_ID: "codedrops.tech@gmail.com",
   EMAIL_PASSWORD,
-  ENABLE_EMAIL: false,
+  ENABLE_EMAIL: !IS_PROD,
   GOOGLE_OAUTH: {
     CLIENT_ID: GOOGLE_CLIENT_ID,
     CLIENT_SECRET: GOOGLE_CLIENT_SECRET,
     REDIRECT_URL: "http://localhost:3000/login",
   },
+  SENDGRID_API_KEY,
 };
 
 module.exports = config;
