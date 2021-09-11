@@ -1,9 +1,13 @@
 const sgMail = require("@sendgrid/mail");
+const _ = require("lodash");
 const config = require("../config");
+const PRODUCTS_LIST = require("../PRODUCTS.json");
+
+const { products } = PRODUCTS_LIST;
 
 sgMail.setApiKey(config.SENDGRID_API_KEY);
 
-const getContent = ({ type, url, resetToken, name, product } = {}) => {
+const getContent = ({ type, url, resetToken, name, source } = {}) => {
   switch (type) {
     case "RESET": {
       return {
@@ -13,15 +17,32 @@ const getContent = ({ type, url, resetToken, name, product } = {}) => {
       `,
       };
     }
-    case "REGISTER":
+    case "REGISTER": {
+      const filteredList = _.filter(
+        products,
+        ({ visibility, id, links, tagline }) =>
+          _.get(visibility, "email") &&
+          id !== source &&
+          tagline &&
+          _.get(links, "product.url")
+      );
+      const other_products = _.map(
+        filteredList,
+        ({ name, tagline, links }) => ({
+          name,
+          description: tagline,
+          href: _.get(links, "product.url"),
+        })
+      );
       return {
         template_id: "d-3027f9e5aef346328b5b1ca7054e261a",
         dynamic_template_data: {
           name,
-          product,
-          other_products: [],
+          product: _.capitalize(source),
+          other_products,
         },
       };
+    }
   }
 };
 
@@ -38,6 +59,8 @@ const sendMail = async (data = {}) => {
     to,
     ...getContent(data),
   };
+
+  // console.log("msg::-", JSON.stringify(msg, undefined, 2));
 
   try {
     const result = await sgMail.send(msg);
