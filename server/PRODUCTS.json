@@ -1,0 +1,274 @@
+{
+  "products": [
+    {
+      "id": "E_FEED",
+      "name": "E Feed",
+      "tagline": "A faster & simpler way to go through emails",
+      "description": "",
+      "visibility": {
+        "email": false,
+        "codedrops": false,
+        "portfolio": false
+      },
+      "path": "/products/e-feed",
+      "status": "WIP",
+      "tags": [
+        "email-feed",
+        "productivity",
+        "email"
+      ],
+      "tagline_0": "Read emails in the form of a feed"
+    },
+    {
+      "id": "FIREBOARD",
+      "name": "Fireboard",
+      "tagline": "",
+      "description": "",
+      "visibility": {
+        "email": true,
+        "codedrops": false,
+        "portfolio": false
+      },
+      "path": "/products/fireboard",
+      "status": "WIP",
+      "logo": "",
+      "poster": ""
+    },
+    {
+      "id": "OCTON",
+      "name": "Octon",
+      "tagline": "Manage expenses, todos, goals, progress & personal timeline",
+      "visibility": {
+        "email": true,
+        "codedrops": true,
+        "portfolio": true
+      },
+      "status": "LIVE",
+      "links": {
+        "product": {
+          "label": "App",
+          "url": "http://octon.netlify.com/"
+        },
+        "github": {
+          "url": "https://github.com/318097/octon"
+        }
+      },
+      "customMessages": [
+        "DM if interested in collaboration"
+      ],
+      "stats": {
+        "launchedOn": "2021-07-18"
+      }
+    },
+    {
+      "id": "FILE_OPS",
+      "name": "File Ops",
+      "tagline": "A VS Code extension to easily tag/alias files & quick switch between files",
+      "description": "Sometimes there are files which have the same names. ex. index.js. File Ops helps in `tagging` or `aliasing` files. These files can be Viewed & Opened from the tree view or using commands. Another feature is to be able to quickly switch between example.js and example.css.",
+      "visibility": {
+        "email": true,
+        "codedrops": true,
+        "portfolio": true
+      },
+      "path": "/products/file-ops",
+      "status": "LIVE",
+      "logo": "https://raw.githubusercontent.com/318097/file-ops/master/icons/icon128.png",
+      "poster": "https://res.cloudinary.com/codedropstech/image/upload/v1617810191/products/file-ops/Screenshot_2021-04-07_at_9.12.33_PM_fmchbl.png",
+      "links": {
+        "demo": {
+          "label": "Demo",
+          "url": "https://youtu.be/ze9KtYe3f48"
+        },
+        "product": {
+          "label": "Marketplace",
+          "url": "https://marketplace.visualstudio.com/items?itemName=mehullakhanpal.file-ops"
+        },
+        "ph": {
+          "label": "Product Hunt",
+          "url": "https://www.producthunt.com/posts/file-ops"
+        },
+        "github": {
+          "url": "https://github.com/318097/file-ops"
+        }
+      },
+      "tags": [
+        "file-ops",
+        "productivity",
+        "quick-switch",
+        "file-operations",
+        "bookmark",
+        "alias",
+        "file-shortcuts"
+      ]
+    },
+    {
+      "id": "CODE_DROPS",
+      "name": "Codedrops",
+      "tagline": "Micro-blogging on Web Development",
+      "visibility": {
+        "email": true,
+        "codedrops": false,
+        "portfolio": true
+      },
+      "status": "LIVE",
+      "links": {
+        "product": {
+          "label": "Visit",
+          "url": "https://www.codedrops.tech/"
+        },
+        "github": {
+          "url": "https://github.com/318097/code-drops"
+        }
+      },
+      "social": {
+        "facebook": {
+          "label": "Facebook",
+          "fontAwesome": "fab fa-facebook",
+          "url": "https://www.facebook.com/codedrops.tech/"
+        },
+        "instagram": {
+          "label": "Instagram",
+          "fontAwesome": "fab fa-instagram",
+          "url": "https://www.instagram.com/codedrops.tech/"
+        },
+        "twitter": {
+          "label": "Twitter",
+          "fontAwesome": "fab fa-twitter",
+          "url": "https://twitter.com/codedrops_tech"
+        }
+      }
+    },
+    {
+      "id": "NOTE_BOX",
+      "name": "Note Box",
+      "tagline": "A chrome extension to add notes/todos based on URL",
+      "description": "A Chrome Extension that provides an environment for every domain/URL. Revisit the notes when back to that URL or access it from `Homepage`. <br/> No Login/Signup. <br/>All the notes are stored in the browser memory.",
+      "visibility": {
+        "email": true,
+        "codedrops": true,
+        "portfolio": true
+      },
+      "path": "/products/note-box",
+      "status": "LIVE",
+      "logo": "https://raw.githubusercontent.com/318097/note-box/master/app/icons/icon32.png",
+      "links": {
+        "demo": {
+          "label": "Demo",
+          "url": "https://youtu.be/fX3IKhiEz1s"
+        },
+        "product": {
+          "label": "Download",
+          "url": "https://chrome.google.com/webstore/detail/note-box/mbbajjgefpenmkkhcnmmnoodlbcbfnmp"
+        },
+        "ph": {
+          "label": "Product Hunt",
+          "url": "https://www.producthunt.com/posts/note-box"
+        },
+        "github": {
+          "url": "https://github.com/318097/note-box"
+        }
+      },
+      "tagline_0": "A Chrome extension to store notes for every domain"
+    },
+    {
+      "id": "GITHUB_MARKER",
+      "name": "Github Marker",
+      "tagline": "A chrome extension to Favorite, Bookmark & Mark link as Read in Github",
+      "description": "There are a lot of links provided on Github pages. Some might need to be marked as read, some might be amazing & some you would love to read it later. Github Marker does exactly that.<br/>The extension provides 3 options attached to every link found on Github related pages/URLs:<br/>1. Mark as Read/Unread <br/>2. Favorite/Un-Favorite a link<br/>3. Bookmark/Unbookmark a link",
+      "visibility": {
+        "email": true,
+        "codedrops": true,
+        "portfolio": true
+      },
+      "status": "LIVE",
+      "path": "/products/github-marker",
+      "logo": "https://raw.githubusercontent.com/318097/github-marker/master/app/icons/v2/icon32.png",
+      "links": {
+        "product": {
+          "label": "Download",
+          "url": "https://chrome.google.com/webstore/detail/github-marker/imjdbnnpnohgcdbpgnidgolnamoghpoo?hl=en"
+        },
+        "ph": {
+          "label": "Product Hunt",
+          "url": "https://www.producthunt.com/posts/github-marker"
+        },
+        "github": {
+          "url": "https://github.com/318097/github-marker"
+        }
+      }
+    },
+    {
+      "id": "REACT_UI",
+      "name": "React UI",
+      "tagline": "Custom UI components library for React.js",
+      "visibility": {
+        "email": false,
+        "codedrops": false,
+        "portfolio": true
+      },
+      "status": "WIP",
+      "links": {
+        "product": {
+          "label": "NPM",
+          "url": "https://www.npmjs.com/package/@codedrops/react-ui"
+        },
+        "preview": {
+          "label": "Preview",
+          "url": "https://react-ui-lib.netlify.app/"
+        },
+        "github": {
+          "url": "https://github.com/318097/react-ui"
+        }
+      },
+      "customMessages": [
+        "DM if interested in collaboration"
+      ]
+    },
+    {
+      "id": "NOTES_APP",
+      "name": "Notes App",
+      "tagline": "A customizable app for tracking & maintaing notes",
+      "visibility": {
+        "email": false,
+        "codedrops": false,
+        "portfolio": true
+      },
+      "status": "WIP",
+      "links": {
+        "product": {
+          "label": "Open",
+          "url": "https://notes-appx.netlify.app/"
+        },
+        "github": {
+          "url": "https://github.com/318097/notes-app"
+        }
+      },
+      "customMessages": [
+        "DM if interested in collaboration"
+      ]
+    },
+    {
+      "id": "SNAKE",
+      "visibility": {
+        "email": false,
+        "codedrops": false,
+        "portfolio": true
+      },
+      "name": "Snake",
+      "tagline": "Single & Multi player Snake game",
+      "status": "LIVE",
+      "links": {
+        "product": {
+          "label": "Play",
+          "url": "https://318097.github.io/snake/"
+        },
+        "github": {
+          "url": "https://github.com/318097/snake"
+        }
+      },
+      "customMessages": [
+        "My first react app"
+      ]
+    }
+  ]
+}

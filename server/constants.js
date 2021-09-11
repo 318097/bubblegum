@@ -1,12 +1,13 @@
 const APP_INFO = {
   NOTES_APP: { active: true, userKeys: ["notesApp"] },
-  FIREBOARD: { active: true, userKeys: ["fireboard"] },
+  FIREBOARD: { active: true },
   OCTON: { active: true, userKeys: ["expenseTypes", "timeline"] },
   SNAKE: {},
   CHAT_APP: {},
-  STOREQ: {},
-  CODEDROPS: { active: true, userKeys: ["bookmarkedPosts"] },
+  STORE_Q: {},
+  CODE_DROPS: { active: true, userKeys: ["bookmarkedPosts"] },
   FLASH: { active: true, userKeys: ["notesApp"] },
+  E_FEED: {},
 };
 
 const APP_LIST = Object.keys(APP_INFO);
