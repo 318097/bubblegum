@@ -21,7 +21,7 @@ const getContent = ({ type, url, resetToken, name, source } = {}) => {
       const filteredList = _.filter(
         products,
         ({ visibility, id, links, tagline }) =>
-          _.get(visibility, "email") &&
+          _.get(visibility, "promotion") &&
           id !== source &&
           tagline &&
           _.get(links, "product.url")

@@ -6,7 +6,7 @@
       "tagline": "A faster & simpler way to go through emails",
       "description": "",
       "visibility": {
-        "email": false,
+        "promotion": false,
         "codedrops": false,
         "portfolio": false
       },
@@ -25,7 +25,7 @@
       "tagline": "",
       "description": "",
       "visibility": {
-        "email": true,
+        "promotion": true,
         "codedrops": false,
         "portfolio": false
       },
@@ -39,7 +39,7 @@
       "name": "Octon",
       "tagline": "Manage expenses, todos, goals, progress & personal timeline",
       "visibility": {
-        "email": true,
+        "promotion": true,
         "codedrops": true,
         "portfolio": true
       },
@@ -66,7 +66,7 @@
       "tagline": "A VS Code extension to easily tag/alias files & quick switch between files",
       "description": "Sometimes there are files which have the same names. ex. index.js. File Ops helps in `tagging` or `aliasing` files. These files can be Viewed & Opened from the tree view or using commands. Another feature is to be able to quickly switch between example.js and example.css.",
       "visibility": {
-        "email": true,
+        "promotion": true,
         "codedrops": true,
         "portfolio": true
       },
@@ -106,7 +106,7 @@
       "name": "Codedrops",
       "tagline": "Micro-blogging on Web Development",
       "visibility": {
-        "email": true,
+        "promotion": true,
         "codedrops": false,
         "portfolio": true
       },
@@ -144,7 +144,7 @@
       "tagline": "A chrome extension to add notes/todos based on URL",
       "description": "A Chrome Extension that provides an environment for every domain/URL. Revisit the notes when back to that URL or access it from `Homepage`. <br/> No Login/Signup. <br/>All the notes are stored in the browser memory.",
       "visibility": {
-        "email": true,
+        "promotion": true,
         "codedrops": true,
         "portfolio": true
       },
@@ -176,7 +176,7 @@
       "tagline": "A chrome extension to Favorite, Bookmark & Mark link as Read in Github",
       "description": "There are a lot of links provided on Github pages. Some might need to be marked as read, some might be amazing & some you would love to read it later. Github Marker does exactly that.<br/>The extension provides 3 options attached to every link found on Github related pages/URLs:<br/>1. Mark as Read/Unread <br/>2. Favorite/Un-Favorite a link<br/>3. Bookmark/Unbookmark a link",
       "visibility": {
-        "email": true,
+        "promotion": true,
         "codedrops": true,
         "portfolio": true
       },
@@ -202,7 +202,7 @@
       "name": "React UI",
       "tagline": "Custom UI components library for React.js",
       "visibility": {
-        "email": false,
+        "promotion": false,
         "codedrops": false,
         "portfolio": true
       },
@@ -229,7 +229,7 @@
       "name": "Notes App",
       "tagline": "A customizable app for tracking & maintaing notes",
       "visibility": {
-        "email": false,
+        "promotion": false,
         "codedrops": false,
         "portfolio": true
       },
@@ -250,7 +250,7 @@
     {
       "id": "SNAKE",
       "visibility": {
-        "email": false,
+        "promotion": false,
         "codedrops": false,
         "portfolio": true
       },
