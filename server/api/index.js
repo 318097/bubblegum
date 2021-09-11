@@ -22,10 +22,17 @@ const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
 const controller = require("./api.controller");
 
 router.get("/test", (req, res) => res.send("Test"));
+
 router.get("/sendgrid", (req, res) => {
-  sendgrid({ email: "318097@gmail.com", type: "REGISTER" });
+  sendgrid({
+    email: "318097@gmail.com",
+    type: "REGISTER",
+    name: "ML",
+    source: "OCTON",
+  });
   res.send("Done");
 });
+
 router.get("/rssfeed", controller.rssFeedParser);
 router.post(
   "/upload",

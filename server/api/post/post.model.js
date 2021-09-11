@@ -30,7 +30,7 @@ const PostsSchema = new mongoose.Schema(
     },
     type: {
       required: false,
-      default: "DROP",
+      default: "POST",
       type: String,
       enum: ["POST", "DROP", "QUIZ", "CHAIN"],
     },
