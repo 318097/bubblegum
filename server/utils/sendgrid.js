@@ -1,7 +1,7 @@
 const sgMail = require("@sendgrid/mail");
 const _ = require("lodash");
 const config = require("../config");
-const PRODUCTS_LIST = require("../PRODUCTS.json");
+const PRODUCTS_LIST = require("../../PRODUCTS.json");
 
 const { products } = PRODUCTS_LIST;
 
