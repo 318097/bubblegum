@@ -49,7 +49,7 @@ exports.getCompletedTasks = async (req, res) => {
     projectId: processId(projectId),
   };
 
-  const dateList = await TaskModel.aggregate([
+  const [dateListObj] = await TaskModel.aggregate([
     { $match: aggregation },
     {
       $group: {
@@ -64,11 +64,23 @@ exports.getCompletedTasks = async (req, res) => {
         date: "$_id",
       },
     },
-    { $sort: { date: -1 } },
-    { $skip: (Number(page) - 1) * Number(limit) },
-    { $limit: Number(limit) },
+    {
+      $facet: {
+        count: [{ $count: "total" }],
+        dateList: [
+          { $sort: { date: -1 } },
+          { $skip: (Number(page) - 1) * Number(limit) },
+          { $limit: Number(limit) },
+        ],
+      },
+    },
   ]);
-  const { max, min } = getDateEnds(dateList);
+
+  const total = _.get(dateListObj, "count.0.total", 0);
+  const next = (page - 1) * limit + _.size(dateListObj.dateList) < total;
+  // console.log("dateListObj::-", JSON.stringify(dateListObj, undefined, 2));
+
+  const { max, min } = getDateEnds(dateListObj.dateList);
 
   const result = await TaskModel.aggregate([
     {
@@ -92,7 +104,10 @@ exports.getCompletedTasks = async (req, res) => {
     { $sort: { date: -1 } },
   ]);
 
-  res.send({ timeline: result });
+  res.send({
+    timeline: result,
+    next,
+  });
 };
 
 exports.getTaskById = async (req, res) => {
