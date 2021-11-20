@@ -2,22 +2,47 @@ const sgMail = require("@sendgrid/mail");
 const _ = require("lodash");
 const config = require("../config");
 const PRODUCTS_LIST = require("../../PRODUCTS.json");
+const { getProductById } = require("../helpers");
 
 const { products } = PRODUCTS_LIST;
 
 sgMail.setApiKey(config.SENDGRID_API_KEY);
 
-const getContent = ({ type, url, resetToken, name, source } = {}) => {
+const getContent = ({ type, token, name, source } = {}) => {
+  const product = getProductById(source);
+  const baseAppURL = _.get(
+    product,
+    "links.product.url",
+    "http://localhost:3000"
+  );
   switch (type) {
-    case "RESET": {
+    case "FORGOT_PASSWORD": {
       return {
-        subject: "Reset password",
-        content: `
-      Reset Password: ${url}?reset_token=${resetToken}
-      `,
+        template_id: "d-f72d2edaf4bb4329b173310587ef6728",
+        dynamic_template_data: {
+          name,
+          url: `${baseAppURL}/reset-password?reset_token=${token}`,
+        },
       };
     }
-    case "REGISTER": {
+    case "RESET_PASSWORD": {
+      return {
+        template_id: "d-3027f9e5aef346328b5b1ca7054e261a",
+        dynamic_template_data: {
+          name,
+        },
+      };
+    }
+    case "VERIFY_ACCOUNT": {
+      return {
+        template_id: "d-ea5eed3ec1f24e0e98197473bdda6ae7",
+        dynamic_template_data: {
+          name,
+          url: `${baseAppURL}/verify-account?verification_token=${token}`,
+        },
+      };
+    }
+    case "WELCOME": {
       const filteredList = _.filter(
         products,
         ({ visibility, id, links, tagline }) =>
@@ -54,7 +79,7 @@ const sendMail = async (data = {}) => {
   const msg = {
     from: {
       name: "Mehul Lakhanpal",
-      email: "codedrops.tech@gmail.com",
+      email: "mehullakhanpal@gmail.com",
     },
     to,
     ...getContent(data),

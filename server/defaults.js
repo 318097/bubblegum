@@ -11,6 +11,22 @@ const generateAppStatusDefault = () => {
     );
 };
 
+const updateAccountStatus = (
+  obj = { verified: false },
+  { verified, token, source, authMethod = "LOGIN" }
+) => {
+  if (token) return { ...obj, verificationToken: token };
+
+  if (!verified) return obj;
+
+  return {
+    verified,
+    verifiedOn: generateDate(),
+    verificationSource: source,
+    verificationMethod: authMethod,
+  };
+};
+
 const generateTimelineDefault = ({
   name = "Default",
   _default = false,
@@ -36,17 +52,30 @@ const generateExpenseTypesDefault = () => {
   }));
 };
 
-const generateDefaultState = (req) => {
+const generateDefaultState = (req, { token }) => {
+  const { source, body } = req;
+  const { authMethod } = body;
+  const verified = authMethod === "GOOGLE";
+
   const defaultState = {
-    source: req.source,
+    source,
     userType: "USER",
     timeline: generateTimelineDefault({ _default: true }),
     expenseTypes: generateExpenseTypesDefault(),
     appStatus: generateAppStatusDefault(),
-    verified: _.get(req, "body.authMethod") === "GOOGLE",
+    accountStatus: updateAccountStatus(undefined, {
+      verified,
+      source,
+      authMethod,
+      token,
+    }),
   };
 
   return defaultState;
 };
 
-module.exports = { generateDefaultState, generateTimelineDefault };
+module.exports = {
+  generateDefaultState,
+  generateTimelineDefault,
+  updateAccountStatus,
+};

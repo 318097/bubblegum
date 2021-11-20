@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const config = require("../config");
-const sendgrid = require("../utils/sendgrid");
+const sendMail = require("../utils/sendgrid");
 const errorHandlingWrapper = require("../middleware/error-handling");
 const fileStorage = require("../utils/storage");
 const {
@@ -24,11 +24,12 @@ const controller = require("./api.controller");
 router.get("/test", (req, res) => res.send("Test"));
 
 router.get("/sendgrid", (req, res) => {
-  sendgrid({
-    email: "318097@gmail.com",
-    type: "REGISTER",
+  sendMail({
+    email: "mehullakhanpal@gmail.com",
+    type: "VERIFY_ACCOUNT",
     name: "ML",
-    source: "OCTON",
+    source: "FIREBOARD",
+    token: "abc",
   });
   res.send("Done");
 });

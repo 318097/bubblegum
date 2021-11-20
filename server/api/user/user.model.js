@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 const { APP_LIST } = require("../../constants");
+const { encryptPassword, comparePassword } = require("./user.utils");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -44,8 +44,16 @@ const UserSchema = new mongoose.Schema(
       type: Array,
     },
     userType: String,
-    verified: Boolean,
-    lastLogin: String,
+    lastPasswordUpdated: Date,
+    accountStatus: {
+      verified: Boolean,
+      verifiedOn: Date,
+      verificationToken: String,
+      verificationSource: String,
+      verificationMethod: String,
+    },
+    resetToken: String,
+    lastLogin: Date,
     appStatus: Object,
     settings: Object,
   },
@@ -62,15 +70,10 @@ UserSchema.pre("save", function (next) {
 });
 
 UserSchema.methods = {
-  authenticate: function (plainTextPassword) {
-    return bcrypt.compareSync(plainTextPassword, this.password);
+  authenticate: function (plainPassword) {
+    return comparePassword(plainPassword, this.password);
   },
-  encryptPassword: function (plainTextPassword) {
-    if (!plainTextPassword) return "";
-
-    const salt = bcrypt.genSaltSync(10);
-    return bcrypt.hashSync(plainTextPassword, salt);
-  },
+  encryptPassword,
 };
 
 module.exports = mongoose.model("user", UserSchema);

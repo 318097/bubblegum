@@ -1,7 +1,10 @@
 const { ObjectId } = require("mongoose").Types;
 const _ = require("lodash");
+const PRODUCTS_LIST = require("../PRODUCTS.json");
 const { APP_INFO } = require("./constants");
 const FireboardProjectsModel = require("./api/fireboard/fireboard.project.model");
+
+const { products } = PRODUCTS_LIST;
 
 const generateObjectId = () => new ObjectId();
 
@@ -86,6 +89,14 @@ const extractUserData = async (req) => {
   return { ...basic, ...result };
 };
 
+const getProductById = (id) => {
+  const match = _.find(products, { id });
+
+  if (!match) throw new Error("Invalid product id");
+
+  return match;
+};
+
 module.exports = {
   getKey,
   generateName,
@@ -96,4 +107,5 @@ module.exports = {
   extractUserData,
   generateObjectId,
   generateDate,
+  getProductById,
 };

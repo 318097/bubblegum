@@ -11,6 +11,11 @@ router.post(
 );
 router.post("/reset-password", errorHandlingWrapper(controller.resetPassword));
 router.post(
+  "/change-password",
+  errorHandlingWrapper(controller.changePassword)
+);
+router.post("/verify-account", errorHandlingWrapper(controller.verifyAccount));
+router.post(
   "/account-status",
   protectedRoute,
   errorHandlingWrapper(controller.checkAccountStatus)

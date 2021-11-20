@@ -2,7 +2,6 @@ const { OAuth2Client } = require("google-auth-library");
 const _ = require("lodash");
 const Joi = require("@hapi/joi");
 const { v4: uuidv4 } = require("uuid");
-const bcrypt = require("bcrypt");
 const User = require("../api/user/user.model");
 const { signToken, validateToken } = require("../utils/authentication");
 const config = require("../config");
@@ -11,6 +10,8 @@ const { generateDefaultState } = require("../defaults");
 const SessionModel = require("../models/session.model");
 const sendMail = require("../utils/sendgrid");
 const { google } = require("googleapis");
+const { encryptPassword } = require("../api/user/user.utils");
+const { updateAccountStatus } = require("../defaults");
 
 const oauth2Client = new google.auth.OAuth2(
   config.GOOGLE_OAUTH.CLIENT_ID,
@@ -40,6 +41,7 @@ const login = async (req, res) => {
     const payload = ticket.getPayload();
     matchQuery["email"] = payload.email;
   } else if (authMethod === "AUTH_TOKEN") {
+    // JWT token
     const decoded = validateToken(authToken);
     matchQuery["_id"] = decoded._id;
   } else {
@@ -94,6 +96,7 @@ const login = async (req, res) => {
 };
 
 const register = async (req, res) => {
+  const { source } = req;
   const data = _.pick(req.body, [
     "name",
     "username",
@@ -109,14 +112,21 @@ const register = async (req, res) => {
 
   if (userExists) throw new Error("Email/Username already exists.");
 
-  const defaultState = generateDefaultState(req);
+  const token = uuidv4();
+  const defaultState = generateDefaultState(req, { token });
 
   const result = await User.create({
     ...data,
     ...defaultState,
   });
 
-  sendMail({ name, email, type: "REGISTER", product: req.source });
+  sendMail({
+    name,
+    email,
+    type: "VERIFY_ACCOUNT",
+    source,
+    token,
+  });
 
   res.send({ result });
 };
@@ -128,6 +138,7 @@ const checkAccountStatus = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
+  const { source } = req;
 
   if (!email) return res.status(404).send("Email is required");
 
@@ -137,18 +148,17 @@ const forgotPassword = async (req, res) => {
 
   if (!user) return res.status(401).send("Invalid email id");
 
-  const resetToken = uuidv4();
+  const token = uuidv4();
+  user.resetToken = token;
+  await user.save();
+  const { name } = user;
 
   await sendMail({
-    email: user.email,
-    resetToken,
-    type: "RESET",
-  });
-
-  await User.findOneAndUpdate(matchQuery, {
-    $set: {
-      resetToken,
-    },
+    name,
+    email,
+    token,
+    type: "FORGOT_PASSWORD",
+    source,
   });
 
   res.send("ok");
@@ -163,21 +173,51 @@ const resetPassword = async (req, res) => {
 
   if (!user) return res.status(404).send("Invalid token");
 
-  const salt = bcrypt.genSaltSync(10);
-  const hashedPassword = bcrypt.hashSync(password, salt);
+  user.password = password;
+  user.lastPasswordUpdated = generateDate();
+  user.resetToken = null;
+  await user.save();
 
-  const updatedData = {
-    password: hashedPassword,
-    lastPasswordUpdated: generateDate(),
-    resetToken: null,
-  };
+  res.send("ok");
+};
 
-  await User.findOneAndUpdate(
-    { _id: user._id },
-    {
-      $set: updatedData,
-    }
-  );
+const changePassword = async (req, res) => {
+  const { existingPassword, newPassword } = req.body;
+
+  const user = await User.findOne({ _id: req.user._id });
+
+  if (user.password !== encryptPassword(existingPassword))
+    return res.status(404).send("Invalid password");
+
+  user.password = newPassword;
+  await user.save();
+
+  res.send("ok");
+};
+
+const verifyAccount = async (req, res) => {
+  const { verificationToken } = req.body;
+  const { source } = req;
+
+  const matchQuery = { "accountStatus.verificationToken": verificationToken };
+
+  const user = await User.findOne(matchQuery);
+
+  if (!user) return res.status(404).send("Invalid verification token");
+
+  user.accountStatus = updateAccountStatus(user.accountStatus, {
+    source,
+    verified: true,
+  });
+
+  await user.save();
+  const { name, email } = user;
+  sendMail({
+    name,
+    email,
+    type: "WELCOME",
+    source,
+  });
 
   res.send("ok");
 };
@@ -205,4 +245,6 @@ module.exports = {
   resetPassword,
   generateGoogleOAuthURL,
   generateGoogleOAuthToken,
+  changePassword,
+  verifyAccount,
 };
