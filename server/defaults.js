@@ -1,8 +1,7 @@
-const _ = require("lodash");
 const { generateObjectId, generateDate } = require("./helpers");
-const { APP_INFO, defaultExpenseTypes } = require("./constants");
+const { APP_INFO, DEFAULT_EXPENSE_TYPES } = require("./constants");
 
-const generateAppStatusDefault = () => {
+const generateDefaultAppStatus = () => {
   return Object.entries(APP_INFO)
     .filter(([, { active }]) => active)
     .reduce(
@@ -27,7 +26,7 @@ const updateAccountStatus = (
   };
 };
 
-const generateTimelineDefault = ({
+const generateDefaultTimeline = ({
   name = "Default",
   _default = false,
   ...rest
@@ -42,8 +41,8 @@ const generateTimelineDefault = ({
   };
 };
 
-const generateExpenseTypesDefault = () => {
-  return defaultExpenseTypes.map((item) => ({
+const generateDefaultExpenseTypes = () => {
+  return DEFAULT_EXPENSE_TYPES.map((item) => ({
     ...item,
     _id: generateObjectId(),
     default: true,
@@ -52,17 +51,17 @@ const generateExpenseTypesDefault = () => {
   }));
 };
 
-const generateDefaultState = (req, { token }) => {
+const generateDefaultUserState = (req, { token }) => {
   const { source, body } = req;
   const { authMethod } = body;
   const verified = authMethod === "GOOGLE";
 
-  const defaultState = {
+  return {
     source,
     userType: "USER",
-    timeline: generateTimelineDefault({ _default: true }),
-    expenseTypes: generateExpenseTypesDefault(),
-    appStatus: generateAppStatusDefault(),
+    timeline: generateDefaultTimeline({ _default: true }),
+    expenseTypes: generateDefaultExpenseTypes(),
+    appStatus: generateDefaultAppStatus(),
     accountStatus: updateAccountStatus(undefined, {
       verified,
       source,
@@ -70,12 +69,10 @@ const generateDefaultState = (req, { token }) => {
       token,
     }),
   };
-
-  return defaultState;
 };
 
 module.exports = {
-  generateDefaultState,
-  generateTimelineDefault,
+  generateDefaultUserState,
+  generateDefaultTimeline,
   updateAccountStatus,
 };

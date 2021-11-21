@@ -4,7 +4,7 @@ const moment = require("moment");
 const UserModel = require("../user/user.model");
 const {
   getKey,
-  generateName,
+  generateResourceName,
   generateSlug,
   isSearchId,
 } = require("../../helpers");
@@ -207,7 +207,7 @@ exports.createPost = async (req, res) => {
     const postIndex = Number(index);
     index++;
 
-    // const resourceId = generateName({ slug, index: postIndex });
+    // const resourceId = generateResourceName({ slug, index: postIndex });
     return {
       ...item,
       userId: _id,
@@ -261,7 +261,7 @@ exports.updatePost = async (req, res) => {
 
   if (["CREATE_RESOURCE", "CREATE_FILENAME"].includes(action)) {
     const key = action === "CREATE_RESOURCE" ? "resources" : "fileNames";
-    const id = generateName({ ...updatedData, action });
+    const id = generateResourceName({ ...updatedData, action });
     query = {
       $addToSet: {
         [key]: {

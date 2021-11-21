@@ -3,11 +3,11 @@ const { ObjectId } = require("mongoose").Types;
 const { processId, generateDate, extractUserData } = require("../../helpers");
 const Model = require("./user.model");
 const { APP_INFO } = require("../../constants");
-const { generateTimelineDefault } = require("../../defaults");
+const { generateDefaultTimeline } = require("../../defaults");
 
 const getDefaultValue = ({ key, name }) => {
   if (key === "timeline") {
-    return generateTimelineDefault({ key, name });
+    return generateDefaultTimeline({ key, name });
   }
 };
 

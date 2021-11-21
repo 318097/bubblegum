@@ -35,7 +35,7 @@ const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
   return slug ? `${slug}${seperator}${timestamp}` : "";
 };
 
-const generateName = ({
+const generateResourceName = ({
   index,
   liveId,
   slug,
@@ -92,14 +92,14 @@ const extractUserData = async (req) => {
 const getProductById = (id) => {
   const match = _.find(products, { id });
 
-  if (!match) throw new Error("Invalid product id");
+  if (!match) throw new Error("Invalid product id.");
 
   return match;
 };
 
 module.exports = {
   getKey,
-  generateName,
+  generateResourceName,
   generateSlug,
   isSearchId,
   isObjectId,

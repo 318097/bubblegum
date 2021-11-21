@@ -11,7 +11,13 @@
 - [x] Add compound indexes for Posts
 - [x] Add support for email
 - [x] Set expiry for JWT
-- [ ] Change password
+- [x] Change password
+- [x] Emails
+  - [x] Account verification
+  - [x] Welcome
+  - [ ] Login
+  - [x] Reset password
+  - [ ] Password updated
 - [ ] Advance search for posts
 - [ ] Wrap all controllers in try..catch
 - [ ] Single command to deploy to heroku and netlify
@@ -20,8 +26,7 @@
 - [ ] Generate documentation for apis
 - [ ] Soft delete everything
 - [ ] Authentication for resolvers
-- [ ] Email verification
-- [ ] Emails - Register, Login, Active account, Reset password
+- [ ] Sentry
 
 #### New app requirements/tools
 

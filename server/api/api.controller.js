@@ -7,7 +7,7 @@ const { processId } = require("../helpers");
 const TransactionModel = require("../models/transaction.model");
 const PostModel = require("./post/post.model");
 const UserModel = require("./user/user.model");
-const { generateDefaultState } = require("../defaults");
+const { generateDefaultUserState } = require("../defaults");
 
 exports.fileUploadHandler = async (req, res) => {
   const result = await fileUpload(req, {
@@ -72,7 +72,7 @@ exports.encryptPasswords = async (req, res) => {
   users.forEach(async (item) => {
     // const salt = bcrypt.genSaltSync(10);
     // const password = bcrypt.hashSync(item.password, salt);
-    const { timeline, expenseTypes, ...rest } = generateDefaultState({
+    const { timeline, expenseTypes, ...rest } = generateDefaultUserState({
       source: "MIGRATION",
     });
     await UserModel.updateOne(

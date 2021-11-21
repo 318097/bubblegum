@@ -6,7 +6,7 @@ const User = require("../api/user/user.model");
 const { signToken, validateToken } = require("../utils/authentication");
 const config = require("../config");
 const { extractUserData, generateDate } = require("../helpers");
-const { generateDefaultState } = require("../defaults");
+const { generateDefaultUserState } = require("../defaults");
 const SessionModel = require("../models/session.model");
 const sendMail = require("../utils/sendgrid");
 const { google } = require("googleapis");
@@ -113,7 +113,7 @@ const register = async (req, res) => {
   if (userExists) throw new Error("Email/Username already exists.");
 
   const token = uuidv4();
-  const defaultState = generateDefaultState(req, { token });
+  const defaultState = generateDefaultUserState(req, { token });
 
   const result = await User.create({
     ...data,

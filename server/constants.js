@@ -12,7 +12,7 @@ const APP_INFO = {
 
 const APP_LIST = Object.keys(APP_INFO);
 
-const defaultExpenseTypes = [
+const DEFAULT_EXPENSE_TYPES = [
   { key: "EXPENSE", label: "Expense", success: "DOWN", color: "watermelon" },
   { key: "BILLS", label: "Bills", success: "DOWN", color: "orange" },
   { key: "INVESTMENT", label: "Investment", success: "UP", color: "green" },
@@ -22,5 +22,5 @@ const defaultExpenseTypes = [
 module.exports = {
   APP_LIST,
   APP_INFO,
-  defaultExpenseTypes,
+  DEFAULT_EXPENSE_TYPES,
 };
