@@ -2,7 +2,7 @@ const _ = require("lodash");
 const { ObjectId } = require("mongoose").Types;
 const { processId, generateDate, extractUserData } = require("../../helpers");
 const Model = require("./user.model");
-const { APP_INFO } = require("../../constants");
+const { getKeysBasedOnSource } = require("../../utils/products");
 const { generateDefaultTimeline } = require("../../defaults");
 
 const getDefaultValue = ({ key, name }) => {
@@ -75,7 +75,7 @@ exports.updateSettings = async (req, res) => {
 };
 
 exports.updateAppSettings = async (req, res) => {
-  const keysBasedOnSource = _.get(APP_INFO, [req.source, "userKeys"], []);
+  const keysBasedOnSource = getKeysBasedOnSource(req.source);
   const data = _.pick(req.body, keysBasedOnSource);
 
   const update = await Model.findOneAndUpdate(

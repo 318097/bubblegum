@@ -25,6 +25,7 @@
       "tagline": "",
       "description": "",
       "visibility": {
+        "active": true,
         "promotion": true,
         "codedrops": false,
         "portfolio": false
@@ -32,18 +33,24 @@
       "path": "/products/fireboard",
       "status": "WIP",
       "logo": "",
-      "poster": ""
+      "poster": "",
+      "devPort": 9000
     },
     {
       "id": "OCTON",
       "name": "Octon",
       "tagline": "Manage expenses, todos, goals, progress & personal timeline",
       "visibility": {
+        "active": true,
         "promotion": true,
         "codedrops": true,
         "portfolio": true
       },
       "status": "LIVE",
+      "userKeys": [
+        "expenseTypes",
+        "timeline"
+      ],
       "links": {
         "product": {
           "label": "App",
@@ -106,11 +113,15 @@
       "name": "Codedrops",
       "tagline": "Micro-blogging on Web Development",
       "visibility": {
+        "active": true,
         "promotion": true,
         "codedrops": false,
         "portfolio": true
       },
       "status": "LIVE",
+      "userKeys": [
+        "bookmarkedPosts"
+      ],
       "links": {
         "product": {
           "label": "Visit",
@@ -229,11 +240,15 @@
       "name": "Notes App",
       "tagline": "A customizable app for tracking & maintaing notes",
       "visibility": {
+        "active": true,
         "promotion": false,
         "codedrops": false,
         "portfolio": true
       },
       "status": "WIP",
+      "userKeys": [
+        "notesApp"
+      ],
       "links": {
         "product": {
           "label": "Open",
@@ -245,6 +260,20 @@
       },
       "customMessages": [
         "DM if interested in collaboration"
+      ]
+    },
+    {
+      "id": "FLASH",
+      "name": "Flash",
+      "tagline": "Easily add notes",
+      "visibility": {
+        "active": true,
+        "promotion": false,
+        "codedrops": false,
+        "portfolio": false
+      },
+      "userKeys": [
+        "notesApp"
       ]
     },
     {

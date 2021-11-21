@@ -1,13 +1,18 @@
 const { generateObjectId, generateDate } = require("./helpers");
-const { APP_INFO, DEFAULT_EXPENSE_TYPES } = require("./constants");
+const { getProducts } = require("./utils/products");
+
+const DEFAULT_EXPENSE_TYPES = [
+  { key: "EXPENSE", label: "Expense", success: "DOWN", color: "watermelon" },
+  { key: "BILLS", label: "Bills", success: "DOWN", color: "orange" },
+  { key: "INVESTMENT", label: "Investment", success: "UP", color: "green" },
+  { key: "INCOME", label: "Income", success: "DOWN", color: "orchid" },
+];
 
 const generateDefaultAppStatus = () => {
-  return Object.entries(APP_INFO)
-    .filter(([, { active }]) => active)
-    .reduce(
-      (result, [name]) => ({ ...result, [name]: { status: "INIT" } }),
-      {}
-    );
+  return getProducts({ visibilityKey: "active" }).reduce(
+    (result, { id }) => ({ ...result, [id]: { status: "INIT" } }),
+    {}
+  );
 };
 
 const updateAccountStatus = (

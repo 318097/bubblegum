@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { APP_LIST } = require("../../constants");
+const { PRODUCT_LIST } = require("../../utils/products");
 const { encryptPassword, comparePassword } = require("./user.utils");
 
 const UserSchema = new mongoose.Schema(
@@ -34,7 +34,7 @@ const UserSchema = new mongoose.Schema(
     notesApp: {},
     source: {
       type: String,
-      enum: APP_LIST,
+      enum: PRODUCT_LIST,
       required: true,
     },
     bookmarkedPosts: {

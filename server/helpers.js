@@ -1,10 +1,7 @@
 const { ObjectId } = require("mongoose").Types;
 const _ = require("lodash");
-const PRODUCTS_LIST = require("../PRODUCTS.json");
-const { APP_INFO } = require("./constants");
+const { getKeysBasedOnSource } = require("./utils/products");
 const FireboardProjectsModel = require("./api/fireboard/fireboard.project.model");
-
-const { products } = PRODUCTS_LIST;
 
 const generateObjectId = () => new ObjectId();
 
@@ -80,21 +77,13 @@ const extractUserData = async (req) => {
       });
       break;
     default: {
-      const keysBasedOnSource = _.get(APP_INFO, [req.source, "userKeys"], []);
+      const keysBasedOnSource = getKeysBasedOnSource(req.source);
       result = _.pick(user, keysBasedOnSource);
       break;
     }
   }
 
   return { ...basic, ...result };
-};
-
-const getProductById = (id) => {
-  const match = _.find(products, { id });
-
-  if (!match) throw new Error("Invalid product id.");
-
-  return match;
 };
 
 module.exports = {
@@ -107,5 +96,4 @@ module.exports = {
   extractUserData,
   generateObjectId,
   generateDate,
-  getProductById,
 };
