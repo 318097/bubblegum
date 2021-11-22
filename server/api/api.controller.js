@@ -15,7 +15,7 @@ exports.fileUploadHandler = async (req, res) => {
   });
   res.send(result);
 
-  if (req.source === "NOTES_APP") {
+  if (req.source === "NOTEBASE") {
     const { type, data } = req.body;
 
     TransactionModel.create({

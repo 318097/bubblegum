@@ -70,7 +70,7 @@ const getAggregationFilters = (req) => {
     }
   }
 
-  if (req.source === "NOTES_APP") {
+  if (req.source === "NOTEBASE") {
     const { _id } = req.user;
     aggregation["userId"] = _id;
 
@@ -172,7 +172,7 @@ exports.getPostById = async (req, res) => {
     collectionId,
   };
 
-  if (req.source === "NOTES_APP") {
+  if (req.source === "NOTEBASE") {
     const { _id } = req.user;
     aggregation["userId"] = _id;
   } else {

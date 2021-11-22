@@ -31,12 +31,12 @@ const config = {
   MEDIUM_RSS_FEED: "https://medium.com/feed/@318097",
   EMAIL_ID: "codedrops.tech@gmail.com",
   EMAIL_PASSWORD,
-  ENABLE_EMAIL: !IS_PROD,
   GOOGLE_OAUTH: {
     CLIENT_ID: GOOGLE_CLIENT_ID,
     CLIENT_SECRET: GOOGLE_CLIENT_SECRET,
     REDIRECT_URL: "http://localhost:3000/login",
   },
+  ENABLE_EMAIL: !IS_PROD,
   SENDGRID_API_KEY,
 };
 

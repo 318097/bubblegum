@@ -7,11 +7,15 @@ sgMail.setApiKey(config.SENDGRID_API_KEY);
 
 const getContent = ({ type, token, name, source } = {}) => {
   const product = getProductById(source);
-  const baseAppURL = _.get(
+  const productURL = _.get(
     product,
     "links.product.url",
     `http://localhost:${product.devPort || 3000}`
   );
+  const baseAppURL = productURL.endsWith("/")
+    ? productURL.slice(0, -1)
+    : productURL;
+
   switch (type) {
     case "FORGOT_PASSWORD": {
       return {

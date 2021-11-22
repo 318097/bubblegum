@@ -10,6 +10,19 @@
         "codedrops": false,
         "portfolio": false
       },
+      "links": {
+        "product": {
+          "label": "App",
+          "url": "https://app.efeed.xyz/"
+        },
+        "landing": {
+          "label": "Landing page",
+          "url": "https://www.efeed.xyz/"
+        },
+        "github": {
+          "url": "https://github.com/318097/e-feed"
+        }
+      },
       "path": "/products/e-feed",
       "status": "WIP",
       "tags": [
@@ -29,6 +42,19 @@
         "promotion": true,
         "codedrops": false,
         "portfolio": false
+      },
+      "links": {
+        "product": {
+          "label": "App",
+          "url": "https://app.fireboardapp.com/"
+        },
+        "landing": {
+          "label": "Landing page",
+          "url": "https://www.fireboardapp.com/"
+        },
+        "github": {
+          "url": "https://github.com/318097/fireboard"
+        }
       },
       "path": "/products/fireboard",
       "status": "WIP",
@@ -109,9 +135,9 @@
       ]
     },
     {
-      "id": "CODE_DROPS",
+      "id": "CODEDROPS",
       "name": "Codedrops",
-      "tagline": "Micro-blogging on Web Development",
+      "tagline": "Micro-blogging on Web development",
       "visibility": {
         "active": true,
         "promotion": true,
@@ -128,7 +154,7 @@
           "url": "https://www.codedrops.tech/"
         },
         "github": {
-          "url": "https://github.com/318097/code-drops"
+          "url": "https://github.com/318097/codedrops"
         }
       },
       "social": {
@@ -236,8 +262,8 @@
       ]
     },
     {
-      "id": "NOTES_APP",
-      "name": "Notes App",
+      "id": "NOTEBASE",
+      "name": "Notebase",
       "tagline": "A customizable app for tracking & maintaing notes",
       "visibility": {
         "active": true,
@@ -252,10 +278,10 @@
       "links": {
         "product": {
           "label": "Open",
-          "url": "https://notes-appx.netlify.app/"
+          "url": "https://notebase.netlify.app/"
         },
         "github": {
-          "url": "https://github.com/318097/notes-app"
+          "url": "https://github.com/318097/notebase"
         }
       },
       "customMessages": [
