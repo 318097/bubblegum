@@ -108,7 +108,9 @@ const register = async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const { email, username, name } = data;
-  const userExists = await User.findOne({ $or: [{ email }, { username }] });
+  const userExists = await User.findOne({
+    $or: [{ email }, { username: username.toLowerCase() }],
+  });
 
   if (userExists) throw new Error("Email/Username already exists.");
 
