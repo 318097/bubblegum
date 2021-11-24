@@ -7,11 +7,10 @@ sgMail.setApiKey(config.SENDGRID_API_KEY);
 
 const getContent = ({ type, token, name, source } = {}) => {
   const product = getProductById(source);
-  const productURL = _.get(
-    product,
-    "links.product.url",
-    `http://localhost:${product.devPort || 3000}`
-  );
+  const productURL = config.IS_PROD
+    ? _.get(product, "links.product.url", "")
+    : `http://localhost:${product.devPort || 3000}`;
+
   const baseAppURL = productURL.endsWith("/")
     ? productURL.slice(0, -1)
     : productURL;
@@ -66,6 +65,7 @@ const sendMail = async (data = {}) => {
     from: {
       name: "Mehul Lakhanpal",
       email: "mehullakhanpal@gmail.com",
+      // email: "codedrops.tech@gmail.com",
     },
     to,
     ...getContent(data),
