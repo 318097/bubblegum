@@ -27,6 +27,7 @@
 - [ ] Soft delete everything
 - [ ] Authentication for resolvers
 - [ ] Sentry
+- [ ] Integrate account statuses. Return proper error message on failure.
 
 #### New app requirements/tools
 

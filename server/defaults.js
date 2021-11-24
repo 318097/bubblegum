@@ -16,8 +16,8 @@ const generateDefaultAppStatus = () => {
 };
 
 const updateAccountStatus = (
-  obj = { verified: false },
-  { verified, token, source, authMethod = "LOGIN" }
+  obj = {},
+  { verified, token, source, authMethod }
 ) => {
   if (token) return { ...obj, verificationToken: token };
 
@@ -63,7 +63,6 @@ const generateDefaultUserState = (req, { token }) => {
 
   return {
     source,
-    userType: "USER",
     timeline: generateDefaultTimeline({ _default: true }),
     expenseTypes: generateDefaultExpenseTypes(),
     appStatus: generateDefaultAppStatus(),

@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const { PRODUCT_LIST } = require("../../utils/products");
+const { ACCOUNT_STATUS } = require("../../utils/account");
 const { encryptPassword, comparePassword } = require("./user.utils");
+
+const USER_TYPES = ["ADMIN", "USER"];
+const VERIFICATION_METHODS = ["LOGIN", "GOOGLE"];
 
 const UserSchema = new mongoose.Schema(
   {
@@ -43,14 +47,19 @@ const UserSchema = new mongoose.Schema(
     timeline: {
       type: Array,
     },
-    userType: String,
+    userType: { type: String, enum: USER_TYPES, default: "USER" },
     lastPasswordUpdated: Date,
     accountStatus: {
-      verified: Boolean,
+      verified: { type: Boolean, default: false },
       verifiedOn: Date,
       verificationToken: String,
       verificationSource: String,
-      verificationMethod: String,
+      verificationMethod: {
+        type: String,
+        enum: VERIFICATION_METHODS,
+        default: "LOGIN",
+      },
+      status: { type: String, enum: ACCOUNT_STATUS, default: "INIT" },
     },
     resetToken: String,
     lastLogin: Date,
