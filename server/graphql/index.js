@@ -7,7 +7,7 @@ const TaskModel = require("../api/task/task.model");
 const ExpenseModel = require("../api/expenses/expenses.model");
 const TimelineModel = require("../api/timeline/timeline.model");
 const config = require("../config");
-const { getToken, getUser } = require("../utils/authentication");
+const { getToken, getUserFromToken } = require("../utils/authentication");
 const { processId } = require("../utils/common");
 
 const startApolloServer = async (app) => {
@@ -16,10 +16,10 @@ const startApolloServer = async (app) => {
     resolvers,
     context: async ({ req }) => {
       const token = getToken(req);
-      if (!token) throw new Error("No Authorization token found");
+      if (!token) throw new Error("No Authorization token found.");
 
-      const user = await getUser(token);
-      if (!user) throw new Error("Unauthorized");
+      const user = await getUserFromToken(token);
+      if (!user) throw new Error("Unauthorized.");
       // console.log("user::-", user);
 
       const models = {

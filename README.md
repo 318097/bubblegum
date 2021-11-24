@@ -12,6 +12,8 @@
 - [x] Add support for email
 - [x] Set expiry for JWT
 - [x] Change password
+- [x] Refactor protectedRoutes, transparent, externalAccess
+- [x] Append userId to req
 - [x] Emails
   - [x] Account verification
   - [x] Welcome
@@ -22,14 +24,12 @@
 - [ ] Wrap all controllers in try..catch
 - [ ] Single command to deploy to heroku and netlify
 - [ ] All sessions should logout after password change/reset
-- [ ] Refactor protectedRoutes, transparent, externalAccess
 - [ ] Generate documentation for apis
 - [ ] Soft delete everything
 - [ ] Authentication for resolvers
 - [ ] Sentry
 - [ ] Integrate account statuses. Return proper error message on failure.
 - [ ] Logout api (expire token)
-- [ ] Append userId to req
 
 #### New app requirements/tools
 

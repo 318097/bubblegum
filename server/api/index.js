@@ -5,7 +5,7 @@ const errorHandlingWrapper = require("../middleware/error-handling");
 const fileStorage = require("../utils/storage");
 const {
   protectedRoute,
-  externalAccess,
+  // externalAccess,
   transparent,
 } = require("../utils/authentication");
 const userRoutes = require("./user/user.routes");
@@ -14,7 +14,7 @@ const postRoutes = require("./post/post.routes");
 const expenseRoutes = require("./expenses/expenses.routes");
 const snakeGameRoutes = require("./snake/snake.routes");
 const timelineRoutes = require("./timeline/timeline.routes");
-const chatRoutes = require("./chat/chat.routes");
+// const chatRoutes = require("./chat/chat.routes");
 const storeqRoutes = require("./storeq/storeq.routes");
 const fireboardRoutes = require("./fireboard/fireboard.routes");
 const feedbackRoutes = require("./feedback/feedback.routes");
@@ -51,7 +51,7 @@ router.use("/feedback", transparent, feedbackRoutes);
 router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
 
 if (config.NODE_ENV !== "express-lambda-production") {
-  router.use("/chat", externalAccess, chatRoutes);
+  // router.use("/chat", externalAccess, chatRoutes);
   router.use("/storeq", protectedRoute, storeqRoutes);
   router.use("/snake", snakeGameRoutes);
 }
