@@ -20,6 +20,11 @@ const SessionSchema = new mongoose.Schema(
     },
     status: {
       type: String,
+      enum: [
+        "ACTIVE",
+        "REVOKED", // manually revoked tokens
+        "LOGGED_OUT",
+      ],
       default: "ACTIVE",
     },
     authMethod: String,

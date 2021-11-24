@@ -7,11 +7,12 @@ const { signToken, validateToken } = require("../utils/authentication");
 const config = require("../config");
 const { extractUserData, generateDate } = require("../helpers");
 const { generateDefaultUserState } = require("../defaults");
-const SessionModel = require("../models/session.model");
 const sendMail = require("../utils/sendgrid");
 const { google } = require("googleapis");
 const { encryptPassword } = require("../api/user/user.utils");
 const { updateAccountStatus } = require("../defaults");
+const { createNewSession } = require("../utils/session");
+const { verifyAccountStatus } = require("../utils/account");
 
 const oauth2Client = new google.auth.OAuth2(
   config.GOOGLE_OAUTH.CLIENT_ID,
@@ -87,7 +88,7 @@ const login = async (req, res) => {
 
   res.send({ token, ...userInfoToSend });
 
-  await SessionModel.create({
+  await createNewSession({
     userId: user._id,
     source: req.source,
     authMethod,
@@ -134,6 +135,7 @@ const register = async (req, res) => {
 };
 
 const checkAccountStatus = async (req, res) => {
+  await verifyAccountStatus(req);
   const result = await extractUserData(req);
   res.send(result);
 };

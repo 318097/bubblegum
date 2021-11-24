@@ -28,6 +28,8 @@
 - [ ] Authentication for resolvers
 - [ ] Sentry
 - [ ] Integrate account statuses. Return proper error message on failure.
+- [ ] Logout api (expire token)
+- [ ] Append userId to req
 
 #### New app requirements/tools
 

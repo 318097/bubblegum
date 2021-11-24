@@ -25,7 +25,10 @@ const getUser = async (token) => {
 
 const decodeToken = (req, res, next) => {
   const token = getToken(req);
-  if (token) req.headers.authorization = `Bearer ${token}`;
+  if (token) {
+    req.headers.authorization = `Bearer ${token}`;
+    req.token = token;
+  }
 
   /* this will call next() if token is valid or send error.& attached the decoded token to `req.user` */
   const checkToken = expressJwt({ secret: config.JWT });
