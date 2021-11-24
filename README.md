@@ -15,7 +15,7 @@
 - [x] Emails
   - [x] Account verification
   - [x] Welcome
-  - [ ] Login
+  - [x] Login
   - [x] Reset password
   - [ ] Password updated
 - [ ] Advance search for posts

@@ -61,14 +61,16 @@ const generateResourceName = ({
 
 const extractUserData = async (req) => {
   const { user, source } = req;
-  const basic = _.pick(user, [
+  const BASIC_USER_KEYS = [
     "name",
     "email",
     "_id",
     "username",
     "appStatus",
     "lastLogin",
-  ]);
+    "accountStatus",
+  ];
+  const basic = _.pick(user, BASIC_USER_KEYS);
   let result = {};
   switch (source) {
     case "FIREBOARD":
