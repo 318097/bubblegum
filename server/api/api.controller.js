@@ -7,7 +7,7 @@ const { processId } = require("../utils/common");
 const TransactionModel = require("../models/transaction.model");
 const PostModel = require("./post/post.model");
 const UserModel = require("./user/user.model");
-const { generateDefaultUserState } = require("../defaults");
+const { generateDefaultUserState } = require("./user/user.utils");
 
 exports.fileUploadHandler = async (req, res) => {
   const result = await fileUpload(req, {

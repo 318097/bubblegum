@@ -6,11 +6,13 @@ const User = require("../api/user/user.model");
 const { signToken, validateToken } = require("../utils/authentication");
 const config = require("../config");
 const { extractUserData, generateDate } = require("../utils/common");
-const { generateDefaultUserState } = require("../defaults");
 const sendMail = require("../utils/sendgrid");
 const { google } = require("googleapis");
-const { encryptPassword } = require("../api/user/user.utils");
-const { updateAccountStatus } = require("../defaults");
+const {
+  encryptPassword,
+  generateDefaultUserState,
+  updateAccountStatus,
+} = require("../api/user/user.utils");
 const { createNewSession } = require("../utils/session");
 const { verifyAccountStatus } = require("../utils/account");
 

@@ -7,7 +7,7 @@ const {
 } = require("../../utils/common");
 const Model = require("./user.model");
 const { getKeysBasedOnSource } = require("../../utils/products");
-const { generateDefaultTimeline } = require("../../defaults");
+const { generateDefaultTimeline } = require("./user.utils");
 
 const getDefaultValue = ({ key, name }) => {
   if (key === "timeline") {
