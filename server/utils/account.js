@@ -2,13 +2,6 @@ const _ = require("lodash");
 // const { getToken } = require("./authentication"); // throws error
 const { getSessionStatus } = require("./session");
 
-const ACCOUNT_STATUS = [
-  "INIT", // just created. Not verified yet
-  "ACTIVE", // verified and in working condition
-  "SUSPENDED", // temporarily blocked/suspended for some reason
-  "DELETED", // soft delete
-];
-
 const isDisabledAccount = (status) => ["SUSPENDED", "DELETED"].includes(status);
 
 const verifyAccountStatus = async (req) => {
@@ -23,4 +16,4 @@ const verifyAccountStatus = async (req) => {
   }
 };
 
-module.exports = { ACCOUNT_STATUS, verifyAccountStatus };
+module.exports = { verifyAccountStatus };

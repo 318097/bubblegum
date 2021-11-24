@@ -1,6 +1,10 @@
 const _ = require("lodash");
 const { ObjectId } = require("mongoose").Types;
-const { processId, generateDate, extractUserData } = require("../../helpers");
+const {
+  processId,
+  generateDate,
+  extractUserData,
+} = require("../../utils/common");
 const Model = require("./user.model");
 const { getKeysBasedOnSource } = require("../../utils/products");
 const { generateDefaultTimeline } = require("../../defaults");

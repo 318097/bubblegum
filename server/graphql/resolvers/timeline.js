@@ -1,5 +1,9 @@
 const moment = require("moment");
-const { generateObjectId, processId, generateDate } = require("../../helpers");
+const {
+  generateObjectId,
+  processId,
+  generateDate,
+} = require("../../utils/common");
 const _ = require("lodash");
 
 const getTimeline = async (_, args, { models, userId }) => {

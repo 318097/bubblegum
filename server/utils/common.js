@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongoose").Types;
 const _ = require("lodash");
-const { getKeysBasedOnSource } = require("./utils/products");
-const FireboardProjectsModel = require("./api/fireboard/fireboard.project.model");
+const { getKeysBasedOnSource } = require("./products");
+const FireboardProjectsModel = require("../api/fireboard/fireboard.project.model");
 
 const generateObjectId = () => new ObjectId();
 

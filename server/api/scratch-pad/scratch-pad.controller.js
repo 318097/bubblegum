@@ -1,4 +1,4 @@
-const { generateDate } = require("../../helpers");
+const { generateDate } = require("../../utils/common");
 const { fileUpload } = require("../../utils/file-upload");
 const Model = require("./scratch-pad.model");
 // const { ObjectId } = require("mongoose").Types;

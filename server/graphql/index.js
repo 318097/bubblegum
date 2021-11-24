@@ -8,7 +8,7 @@ const ExpenseModel = require("../api/expenses/expenses.model");
 const TimelineModel = require("../api/timeline/timeline.model");
 const config = require("../config");
 const { getToken, getUser } = require("../utils/authentication");
-const { processId } = require("../helpers");
+const { processId } = require("../utils/common");
 
 const startApolloServer = async (app) => {
   const server = new ApolloServer({

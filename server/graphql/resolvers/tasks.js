@@ -1,6 +1,6 @@
 const moment = require("moment");
 const { ObjectId } = require("mongoose").Types;
-const { generateObjectId, processId } = require("../../helpers");
+const { generateObjectId, processId } = require("../../utils/common");
 
 const getAllTasks = async (_, args, { models, user }) => {
   const result = await models.Task.find({ userId: user._id }).sort({

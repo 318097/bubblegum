@@ -7,7 +7,7 @@ const {
   generateResourceName,
   generateSlug,
   isSearchId,
-} = require("../../helpers");
+} = require("../../utils/common");
 const Model = require("./post.model");
 
 const { ObjectId } = mongoose.Types;

@@ -1,4 +1,4 @@
-const { generateObjectId, generateDate } = require("./helpers");
+const { generateObjectId, generateDate } = require("./utils/common");
 const { getProducts } = require("./utils/products");
 
 const DEFAULT_EXPENSE_TYPES = [
