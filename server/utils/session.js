@@ -1,17 +1,25 @@
 const sessionModel = require("../models/session.model");
+const { generateDate } = require("./common");
 
-const createNewSession = ({ userId, source, authMethod, token }) =>
+const startSession = ({ userId, source, authMethod, token }) =>
   sessionModel.create({
     userId,
     source,
     authMethod,
     token,
+    loggedInAt: generateDate(),
   });
 
-const getSessionStatus = ({ userId, token }) =>
+const getSession = ({ userId, token }) =>
   sessionModel.findOne({
     userId,
     token,
   });
 
-module.exports = { createNewSession, getSessionStatus };
+const endSession = ({ userId, token }) =>
+  sessionModel.findOneAndUpdate(
+    { userId, token },
+    { $set: { status: "LOGGED_OUT", loggedOutAt: generateDate() } }
+  );
+
+module.exports = { startSession, getSession, endSession };

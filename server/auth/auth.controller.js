@@ -13,7 +13,7 @@ const {
   generateDefaultUserState,
   updateAccountStatus,
 } = require("../api/user/user.utils");
-const { createNewSession } = require("../utils/session");
+const { startSession, endSession } = require("../utils/session");
 const { verifyAccountStatus } = require("../utils/account");
 
 const oauth2Client = new google.auth.OAuth2(
@@ -90,12 +90,17 @@ const login = async (req, res) => {
 
   res.send({ token, ...userInfoToSend });
 
-  await createNewSession({
+  await startSession({
     userId: user._id,
     source: req.source,
     authMethod,
     token,
   });
+};
+
+const logout = async (req, res) => {
+  await endSession(req);
+  res.send("ok");
 };
 
 const register = async (req, res) => {
@@ -253,4 +258,5 @@ module.exports = {
   generateGoogleOAuthToken,
   changePassword,
   verifyAccount,
+  logout,
 };

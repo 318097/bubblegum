@@ -21,17 +21,19 @@ const SessionSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: [
-        "ACTIVE",
+        "LOGGED_IN",
         "REVOKED", // manually revoked tokens
         "LOGGED_OUT",
       ],
-      default: "ACTIVE",
+      default: "LOGGED_IN",
     },
     authMethod: String,
+    loggedInAt: Date,
+    loggedOutAt: Date,
   },
   {
     timestamps: true,
-    strict: false,
+    strict: true,
   }
 );
 

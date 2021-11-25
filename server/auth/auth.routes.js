@@ -4,6 +4,7 @@ const { protectedRoute } = require("../utils/authentication");
 const controller = require("./auth.controller");
 
 router.post("/login", errorHandlingWrapper(controller.login));
+router.post("/logout", errorHandlingWrapper(controller.logout));
 router.post("/register", errorHandlingWrapper(controller.register));
 router.post(
   "/forgot-password",

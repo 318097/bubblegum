@@ -1,10 +1,10 @@
-const { getSessionStatus } = require("./session");
+const { getSession } = require("./session");
 
 const isDisabledAccount = (status) => ["SUSPENDED", "DELETED"].includes(status);
 
 const isInvalidatedJWT = async ({ userId, token }) => {
-  const session = await getSessionStatus({ userId, token });
-  return !session || session.status !== "ACTIVE";
+  const session = await getSession({ userId, token });
+  return !session || session.status !== "LOGGED_IN";
 };
 
 const verifyAccountStatus = async ({ token, status, userId }) => {
