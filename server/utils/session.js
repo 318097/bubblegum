@@ -22,4 +22,7 @@ const endSession = ({ userId, token }) =>
     { $set: { status: "LOGGED_OUT", loggedOutAt: generateDate() } }
   );
 
-module.exports = { startSession, getSession, endSession };
+const revokeAllSessions = ({ userId }) =>
+  sessionModel.updateMany({ userId }, { $set: { status: "REVOKED" } });
+
+module.exports = { startSession, getSession, endSession, revokeAllSessions };

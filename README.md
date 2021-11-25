@@ -22,10 +22,10 @@
 - [x] Append userId to req
 - [x] Integrate account statuses. Return proper error message on failure.
 - [x] Logout api (expire token)
+- [x] All sessions should logout after password change/reset
 - [ ] Advance search for posts
 - [ ] Wrap all controllers in try..catch
 - [ ] Single command to deploy to heroku and netlify
-- [ ] All sessions should logout after password change/reset
 - [ ] Generate documentation for apis
 - [ ] Soft delete everything
 - [ ] Authentication for resolvers

@@ -16,6 +16,7 @@ const appendUserInfo = (req, user) => {
   req._id = _id;
   req.id = _id;
   req.status = _.get(user, "accountStatus.status", "NA");
+  req.verified = _.get(user, "accountStatus.verified", false);
 };
 
 const validateToken = (token) => {

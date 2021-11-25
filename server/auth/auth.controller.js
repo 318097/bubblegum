@@ -13,7 +13,11 @@ const {
   generateDefaultUserState,
   updateAccountStatus,
 } = require("../api/user/user.utils");
-const { startSession, endSession } = require("../utils/session");
+const {
+  startSession,
+  endSession,
+  revokeAllSessions,
+} = require("../utils/session");
 const { verifyAccountStatus } = require("../utils/account");
 
 const oauth2Client = new google.auth.OAuth2(
@@ -60,6 +64,8 @@ const login = async (req, res) => {
 
   if (authMethod === "LOGIN" && !user.authenticate(password))
     return res.status(401).send("INVALID_USERNAME_OR_PASSWORD");
+
+  await verifyAccountStatus(req);
 
   const appStatus = _.get(user, ["appStatus", req.source, "status"]);
 
@@ -189,6 +195,8 @@ const resetPassword = async (req, res) => {
   user.resetToken = null;
   await user.save();
 
+  await revokeAllSessions(req);
+
   res.send("ok");
 };
 
@@ -202,6 +210,8 @@ const changePassword = async (req, res) => {
 
   user.password = newPassword;
   await user.save();
+
+  await revokeAllSessions(req);
 
   res.send("ok");
 };
