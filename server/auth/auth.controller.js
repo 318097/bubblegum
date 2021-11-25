@@ -65,7 +65,12 @@ const login = async (req, res) => {
   if (authMethod === "LOGIN" && !user.authenticate(password))
     return res.status(401).send("INVALID_USERNAME_OR_PASSWORD");
 
-  await verifyAccountStatus(req);
+  const verifyObj = {
+    userId: user._id,
+    ..._.pick(user.accountStatus, ["status", "verified"]),
+  };
+
+  await verifyAccountStatus(verifyObj, "LOGIN");
 
   const appStatus = _.get(user, ["appStatus", req.source, "status"]);
 

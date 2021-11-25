@@ -15,7 +15,7 @@ const appendUserInfo = (req, user) => {
   req.userId = _id;
   req._id = _id;
   req.id = _id;
-  req.status = _.get(user, "accountStatus.status", "NA");
+  req.status = _.get(user, "accountStatus.status");
   req.verified = _.get(user, "accountStatus.verified", false);
 };
 
