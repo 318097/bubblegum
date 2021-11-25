@@ -1,7 +1,7 @@
 {
   "name": "bubblegum",
   "version": "1.0.0",
-  "description": "",
+  "description": "Core of my world :)",
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
