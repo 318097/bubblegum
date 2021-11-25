@@ -49,17 +49,17 @@ const login = async (req, res) => {
     matchQuery["_id"] = decoded._id;
   } else {
     if (!username || !password)
-      return res.status(400).send("Username & Password is required.");
+      return res.status(400).send("USERNAME_AND_PASSWORD_REQUIRED");
 
     matchQuery["username"] = username;
   }
 
   let user = await User.findOne(matchQuery);
 
-  if (!user) return res.status(401).send("User not found.");
+  if (!user) return res.status(401).send("USER_NOT_FOUND");
 
   if (authMethod === "LOGIN" && !user.authenticate(password))
-    return res.status(401).send("Invalid username/password.");
+    return res.status(401).send("INVALID_USERNAME_OR_PASSWORD");
 
   const appStatus = _.get(user, ["appStatus", req.source, "status"]);
 
@@ -146,13 +146,13 @@ const forgotPassword = async (req, res) => {
   const { email } = req.body;
   const { source } = req;
 
-  if (!email) return res.status(404).send("Email is required");
+  if (!email) return res.status(404).send("EMAIL_REQUIRED");
 
   const matchQuery = { email };
 
   const user = await User.findOne(matchQuery);
 
-  if (!user) return res.status(401).send("Invalid email id");
+  if (!user) return res.status(401).send("INVALID_EMAIL");
 
   const token = uuidv4();
   user.resetToken = token;
@@ -177,7 +177,7 @@ const resetPassword = async (req, res) => {
 
   const user = await User.findOne(matchQuery);
 
-  if (!user) return res.status(404).send("Invalid token");
+  if (!user) return res.status(404).send("INVALID_TOKEN");
 
   user.password = password;
   user.lastPasswordUpdated = generateDate();
@@ -193,7 +193,7 @@ const changePassword = async (req, res) => {
   const user = await User.findOne({ _id: req.user._id });
 
   if (user.password !== encryptPassword(existingPassword))
-    return res.status(404).send("Invalid password");
+    return res.status(404).send("INCORRECT_PASSWORD");
 
   user.password = newPassword;
   await user.save();
@@ -209,7 +209,7 @@ const verifyAccount = async (req, res) => {
 
   const user = await User.findOne(matchQuery);
 
-  if (!user) return res.status(404).send("Invalid verification token");
+  if (!user) return res.status(404).send("INVALID_VERIFICATION_TOKEN");
 
   user.accountStatus = updateAccountStatus(user.accountStatus, {
     source,

@@ -8,9 +8,9 @@ const isInvalidatedJWT = async ({ userId, token }) => {
 };
 
 const verifyAccountStatus = async ({ token, status, userId }) => {
-  if (isDisabledAccount(status)) throw new Error(status);
+  if (isDisabledAccount(status)) throw new Error(`ACCOUNT_${status}`);
   if (token && (await isInvalidatedJWT({ userId, token })))
-    throw new Error("INVALID_JWT");
+    throw new Error("INVALID_TOKEN");
 };
 
 module.exports = { verifyAccountStatus };

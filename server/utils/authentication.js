@@ -45,7 +45,7 @@ const extractUser = async (req, res, next) => {
 
   /* if no user is found, it was a valid JWT but didn't decode to a real user in DB
   Either the user was deleted or it was a JWT from some other source */
-  if (!user) return res.status(401).send("Unauthorized");
+  if (!user) return res.status(401).send("UNAUTHORIZED");
 
   appendUserInfo(req, user);
   next();
