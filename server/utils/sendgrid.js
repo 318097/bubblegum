@@ -13,6 +13,7 @@ const from = {
 
 const getContent = ({ type, token, name, source } = {}) => {
   const product = getProductById(source);
+  const productName = _.get(product, "name");
   const productURL = config.IS_PROD
     ? _.get(product, "links.product.url", "")
     : `http://localhost:${product.devPort || 3000}`;
@@ -54,7 +55,7 @@ const getContent = ({ type, token, name, source } = {}) => {
         template_id: "d-3027f9e5aef346328b5b1ca7054e261a",
         dynamic_template_data: {
           name,
-          product: _.capitalize(source),
+          product: _.capitalize(productName),
           other_products,
         },
       };
