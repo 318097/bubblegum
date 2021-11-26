@@ -1,5 +1,4 @@
 const Parser = require("rss-parser");
-const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const config = require("../config");
 const { fileUpload } = require("../utils/file-upload");
@@ -8,6 +7,8 @@ const TransactionModel = require("../models/transaction.model");
 const PostModel = require("./post/post.model");
 const UserModel = require("./user/user.model");
 const { generateDefaultUserState } = require("./user/user.utils");
+const sendMail = require("../utils/sendgrid");
+const { ORIGIN_LIST } = require("../utils/products");
 
 exports.fileUploadHandler = async (req, res) => {
   const result = await fileUpload(req, {
@@ -41,6 +42,26 @@ exports.rssFeedParser = async (req, res) => {
     }))
     .slice(0, -1);
   res.send(result);
+};
+
+exports.sendEmail = async (req, res) => {
+  const { email, name, source, type = "WELCOME" } = req.body;
+  const origin = req.get("host");
+  const validSource = config.isProd
+    ? ORIGIN_LIST.some((host) => host.includes(origin))
+    : true;
+
+  if (!validSource) throw new Error("INVALID_SOURCE");
+  if (!email || !source) throw new Error("INVALID_EMAIL_PARAMETERS");
+
+  sendMail({
+    name,
+    email,
+    type,
+    source,
+  });
+
+  res.send("ok");
 };
 
 exports.mongoDbTest = async (req, res) => {

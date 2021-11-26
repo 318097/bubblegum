@@ -21,7 +21,10 @@ const feedbackRoutes = require("./feedback/feedback.routes");
 const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
 const controller = require("./api.controller");
 
-router.get("/test", (req, res) => res.send("Test"));
+router.get("/test", (req, res) => {
+  console.log("host: ", req.get("host"));
+  res.send("Working :)");
+});
 
 router.get("/sendgrid", (req, res) => {
   sendMail({
@@ -34,7 +37,9 @@ router.get("/sendgrid", (req, res) => {
   res.send("Done");
 });
 
-router.get("/rssfeed", controller.rssFeedParser);
+router.post("/send-email", errorHandlingWrapper(controller.sendEmail));
+
+router.get("/rssfeed", errorHandlingWrapper(controller.rssFeedParser));
 router.post(
   "/upload",
   protectedRoute,
