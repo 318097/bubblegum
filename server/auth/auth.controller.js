@@ -55,7 +55,7 @@ const login = async (req, res) => {
     if (!username || !password)
       return res.status(400).send("USERNAME_AND_PASSWORD_REQUIRED");
 
-    matchQuery["username"] = username;
+    matchQuery["username"] = username.toLowerCase().trim();
   }
 
   let user = await User.findOne(matchQuery);
