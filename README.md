@@ -31,6 +31,7 @@
 - [ ] Soft delete everything
 - [ ] Authentication for resolvers
 - [ ] Sentry
+- [ ] Send Welcome mail when registered from Google
 
 #### New app requirements/tools
 

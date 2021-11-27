@@ -24,7 +24,7 @@ const validateToken = (token) => {
     if (!token) return;
     return jwt.verify(token, config.JWT);
   } catch (error) {
-    throw new Error("Invalid JWT.");
+    throw new Error("INVALID_TOKEN");
   }
 };
 

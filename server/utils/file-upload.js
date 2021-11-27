@@ -11,7 +11,7 @@ const CLOUDINARY_CONFIG = {
 };
 
 exports.fileUpload = async (req, { exactFileName = true, folder } = {}) => {
-  if (_.isEmpty(req.files)) throw new Error("No files received.");
+  if (_.isEmpty(req.files)) throw new Error("No files received");
 
   cloudinary.config(CLOUDINARY_CONFIG);
 

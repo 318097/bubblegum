@@ -131,7 +131,7 @@ const register = async (req, res) => {
     $or: [{ email }, { username: username.toLowerCase() }],
   });
 
-  if (userExists) throw new Error("Email/Username already exists.");
+  if (userExists) throw new Error("EMAIL_OR_USERNAME_REGISTERED");
 
   const token = uuidv4();
   const defaultState = generateDefaultUserState(req, { token });

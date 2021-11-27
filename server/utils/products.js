@@ -23,7 +23,7 @@ const getKeysBasedOnSource = (source) =>
 const getProductById = (id) => {
   const match = _.find(products, { id });
 
-  if (!match) throw new Error("Invalid product id.");
+  if (!match) throw new Error("Invalid product id");
 
   return match;
 };
