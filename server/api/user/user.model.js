@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema(
     expenseTypes: {
       type: Array,
     },
-    notesApp: {},
+    notebase: [],
     source: {
       type: String,
       enum: PRODUCT_LIST,

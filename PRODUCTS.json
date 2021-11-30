@@ -273,7 +273,7 @@
       },
       "status": "WIP",
       "userKeys": [
-        "notesApp"
+        "notebase"
       ],
       "links": {
         "product": {
@@ -299,7 +299,7 @@
         "portfolio": false
       },
       "userKeys": [
-        "notesApp"
+        "notebase"
       ]
     },
     {

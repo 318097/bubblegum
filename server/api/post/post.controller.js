@@ -198,8 +198,8 @@ exports.getPostById = async (req, res) => {
 exports.createPost = async (req, res) => {
   const { data } = req.body;
   const { collectionId } = req.query;
-  const { _id, userType } = req.user;
-  const currentCollection = _.get(req, ["user", "notesApp", collectionId], {});
+  const { _id, userType, notebase = [] } = req.user;
+  const currentCollection = _.find(notebase, { _id: collectionId });
   let index = _.get(currentCollection, "index", 1);
 
   const posts = [].concat(data).map((item) => {
@@ -223,8 +223,8 @@ exports.createPost = async (req, res) => {
   const result = await Model.create(posts);
 
   await UserModel.findOneAndUpdate(
-    { _id },
-    { $set: { [`notesApp.${collectionId}.index`]: index } }
+    { _id, "notebase._id": collectionId },
+    { $set: { [`notebase.$.index`]: index } }
   );
 
   res.send({ result });
@@ -245,17 +245,17 @@ exports.updatePost = async (req, res) => {
   if (updatedChainedTo) updatedData["chainedTo"] = updatedChainedTo;
 
   if (!liveId && status === "POSTED") {
-    const collectionLiveIndex = _.get(
-      user,
-      ["notesApp", collectionId, "liveId"],
+    const collectionLiveId = _.get(
+      _.find(user.notebase, { _id: collectionId }, {}),
+      "liveId",
       0
     );
-    updatedData["liveId"] = collectionLiveIndex;
+    updatedData["liveId"] = collectionLiveId;
     updatedData["publishedAt"] = moment().toISOString();
 
     await UserModel.findOneAndUpdate(
-      { _id: userId },
-      { $set: { [`notesApp.${collectionId}.liveId`]: collectionLiveIndex + 1 } }
+      { _id: userId, "notebase._id": collectionId },
+      { $set: { [`notebase.$.liveId`]: collectionLiveId + 1 } }
     );
   }
 
