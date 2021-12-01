@@ -7,6 +7,7 @@ const {
   generateResourceName,
   generateSlug,
   isSearchId,
+  processId,
 } = require("../../utils/common");
 const Model = require("./post.model");
 
@@ -29,7 +30,7 @@ const getAggregationFilters = (req) => {
   } = req.query;
 
   const aggregation = {
-    collectionId,
+    collectionId: processId(collectionId),
     deleted: false,
   };
   // need to sort by _id because when bulk creation is done, all the post have same timestamp and during fetching it results in different sort order if its only sorted by `createdAt`
@@ -71,8 +72,7 @@ const getAggregationFilters = (req) => {
   }
 
   if (req.source === "NOTEBASE") {
-    const { _id } = req.user;
-    aggregation["userId"] = _id;
+    aggregation["userId"] = req.userId;
 
     if (rating) aggregation["rating"] = Number(rating);
     if (type) aggregation["type"] = type;
@@ -101,7 +101,7 @@ exports.getRelatedPosts = async (req, res) => {
     visible: true,
     isAdmin: true,
     deleted: false,
-    collectionId,
+    collectionId: processId(collectionId),
     _id: { $ne: ObjectId(postId) },
   };
   if (tags.length) aggregation["tags"] = { $in: tags };
@@ -116,14 +116,14 @@ exports.getRelatedPosts = async (req, res) => {
 };
 
 exports.getChains = async (req, res) => {
-  const { _id } = req.user;
+  const { userId } = req;
   const { collectionId } = req.query;
   const chains = await Model.aggregate([
     {
       $match: {
         type: "CHAIN",
-        collectionId,
-        userId: _id,
+        collectionId: processId(collectionId),
+        userId,
       },
     },
     {
@@ -169,7 +169,7 @@ exports.getPostById = async (req, res) => {
   const key = getKey(id);
   const aggregation = {
     [key]: key === "_id" ? ObjectId(id) : id,
-    collectionId,
+    collectionId: processId(collectionId),
   };
 
   if (req.source === "NOTEBASE") {
@@ -199,7 +199,10 @@ exports.createPost = async (req, res) => {
   const { data } = req.body;
   const { collectionId } = req.query;
   const { _id, userType, notebase = [] } = req.user;
-  const currentCollection = _.find(notebase, { _id: collectionId });
+  const currentCollection = _.find(notebase, { _id: processId(collectionId) });
+
+  if (!currentCollection) throw new Error("Cannot find collection.");
+
   let index = _.get(currentCollection, "index", 1);
 
   const posts = [].concat(data).map((item) => {
@@ -213,7 +216,7 @@ exports.createPost = async (req, res) => {
       userId: _id,
       isAdmin: userType === "ADMIN",
       index: postIndex,
-      collectionId,
+      collectionId: processId(collectionId),
       slug,
       resources: [],
       source: req.source,
@@ -223,7 +226,7 @@ exports.createPost = async (req, res) => {
   const result = await Model.create(posts);
 
   await UserModel.findOneAndUpdate(
-    { _id, "notebase._id": collectionId },
+    { _id, "notebase._id": processId(collectionId) },
     { $set: { [`notebase.$.index`]: index } }
   );
 
@@ -246,7 +249,7 @@ exports.updatePost = async (req, res) => {
 
   if (!liveId && status === "POSTED") {
     const collectionLiveId = _.get(
-      _.find(user.notebase, { _id: collectionId }, {}),
+      _.find(user.notebase, { _id: processId(collectionId) }, {}),
       "liveId",
       0
     );
@@ -254,7 +257,7 @@ exports.updatePost = async (req, res) => {
     updatedData["publishedAt"] = moment().toISOString();
 
     await UserModel.findOneAndUpdate(
-      { _id: userId, "notebase._id": collectionId },
+      { _id: userId, "notebase._id": processId(collectionId) },
       { $set: { [`notebase.$.liveId`]: collectionLiveId + 1 } }
     );
   }

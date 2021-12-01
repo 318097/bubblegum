@@ -57,7 +57,7 @@ const PostsSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    collectionId: { type: String, required: true },
+    collectionId: { type: ObjectId, required: true },
     liveId: Number,
     deleted: {
       type: Boolean,
