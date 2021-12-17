@@ -3,11 +3,14 @@ const _ = require("lodash");
 const { getKeysBasedOnSource } = require("./products");
 const FireboardProjectsModel = require("../api/fireboard/fireboard.project.model");
 
+const OBJECT_ID_REGEX = /^[a-f\d]{24}$/i;
+
 const generateObjectId = () => new ObjectId();
 
-const isObjectId = (id) => /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id);
+const isObjectId = (id) => OBJECT_ID_REGEX.test(id);
 
-const processId = (id) => (isObjectId(id) ? ObjectId(id) : id);
+const processId = (id) =>
+  isObjectId(id) && ObjectId.isValid(id) ? ObjectId(id) : id;
 
 const generateDate = (date) =>
   (date ? new Date(date) : new Date()).toISOString();

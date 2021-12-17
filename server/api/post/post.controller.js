@@ -16,7 +16,7 @@ const { ObjectId } = mongoose.Types;
 const getAggregationFilters = (req) => {
   const {
     search,
-    limit = 10,
+    limit = 25,
     page = 1,
     tags = [],
     status = [],
