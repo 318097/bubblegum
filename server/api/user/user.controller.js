@@ -19,6 +19,10 @@ exports.updateSettings = async (req, res) => {
   const { user, query, body } = req;
   const { action, key } = query;
 
+  const keysBasedOnSource = getKeysBasedOnSource(req.source);
+  if (!keysBasedOnSource.includes(key))
+    throw new Error("No permission for this key");
+
   if (!action || !key) throw new Error("'action' & 'key' are required");
 
   const _id = processId(body._id);
