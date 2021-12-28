@@ -71,6 +71,8 @@ const octonTypeDefs = gql`
   input MonthlyExpensesInput {
     month: Int!
     year: Int
+    minAmount: Int
+    monthsRange: Int
   }
 
   type Expense {

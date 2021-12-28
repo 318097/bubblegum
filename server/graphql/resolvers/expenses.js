@@ -9,19 +9,34 @@ const _ = require("lodash");
 const set = require("set-value");
 
 const getExpensesByMonth = async (_, args, { models, user }) => {
-  const { month, year } = args.input;
-
-  const monthObject = moment(`${month}-${year}`, "MM-YYYY");
-  const monthStart = monthObject.startOf("month").toDate();
-  const monthEnd = monthObject.endOf("month").toDate();
-
-  const result = await models.Expense.find({
+  const { month, year, minAmount, monthsRange } = args.input;
+  const query = {
     userId: user._id,
-    date: {
+  };
+
+  if (minAmount) {
+    query["amount"] = { $gte: minAmount };
+  }
+
+  if (monthsRange) {
+    const monthStart = moment()
+      .subtract(monthsRange, "months")
+      .startOf("month")
+      .toDate();
+    query["date"] = {
+      $gte: monthStart,
+    };
+  } else {
+    const monthObject = moment(`${month}-${year}`, "MM-YYYY");
+    const monthStart = monthObject.startOf("month").toDate();
+    const monthEnd = monthObject.endOf("month").toDate();
+    query["date"] = {
       $gte: monthStart,
       $lte: monthEnd,
-    },
-  }).sort({
+    };
+  }
+
+  const result = await models.Expense.find(query).sort({
     date: -1,
     _id: -1,
   });
