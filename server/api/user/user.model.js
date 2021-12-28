@@ -32,6 +32,12 @@ const UserSchema = new mongoose.Schema(
     expenseTypes: {
       type: Array,
     },
+    expenseSources: {
+      type: Array,
+    },
+    expenseApps: {
+      type: Array,
+    },
     notebase: [],
     source: {
       type: String,

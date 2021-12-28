@@ -32,6 +32,8 @@
 - [ ] Authentication for resolvers
 - [ ] Sentry
 - [ ] Send Welcome mail when registered from Google
+- [ ] Access products from an API
+- [ ] Lead generation data from landing pages
 
 #### New app requirements/tools
 

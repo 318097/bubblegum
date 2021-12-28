@@ -75,6 +75,8 @@
       "status": "LIVE",
       "userKeys": [
         "expenseTypes",
+        "expenseSources",
+        "expenseApps",
         "timeline"
       ],
       "links": {

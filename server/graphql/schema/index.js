@@ -83,6 +83,8 @@ const octonTypeDefs = gql`
     expenseSubTypeId: String
     createdAt: DateTime!
     favorite: Boolean
+    expenseSourceId: String
+    expenseAppId: String
   }
 
   input CreateExpenseInput {
@@ -91,6 +93,9 @@ const octonTypeDefs = gql`
     date: DateTime
     expenseTypeId: String!
     expenseSubTypeId: String
+    favorite: Boolean
+    expenseSourceId: String
+    expenseAppId: String
   }
 
   input FavoriteExpenseInput {
@@ -106,6 +111,8 @@ const octonTypeDefs = gql`
     expenseTypeId: String
     expenseSubTypeId: String
     favorite: Boolean
+    expenseSourceId: String
+    expenseAppId: String
   }
 
   input DeleteExpenseInput {
