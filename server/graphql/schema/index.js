@@ -86,6 +86,7 @@ const octonTypeDefs = gql`
     expenseSubTypeId: String
     createdAt: DateTime!
     favorite: Boolean
+    excluded: Boolean
     expenseSourceId: String
     expenseAppId: String
   }
@@ -97,6 +98,7 @@ const octonTypeDefs = gql`
     expenseTypeId: String!
     expenseSubTypeId: String
     favorite: Boolean
+    excluded: Boolean
     expenseSourceId: String
     expenseAppId: String
   }
@@ -114,6 +116,7 @@ const octonTypeDefs = gql`
     expenseTypeId: String
     expenseSubTypeId: String
     favorite: Boolean
+    excluded: Boolean
     expenseSourceId: String
     expenseAppId: String
   }

@@ -101,6 +101,7 @@ const expenseStats = async (parent, args, { models, userId, user }) => {
     date: {
       $gte: startMonth,
     },
+    excluded: { $ne: true },
   }).sort({ date: 1 });
 
   const monthlyOverview = {};
