@@ -196,7 +196,7 @@ exports.getPostById = async (req, res) => {
 };
 
 exports.createPost = async (req, res) => {
-  const { data } = req.body;
+  const { data, sourceInfo = {} } = req.body;
   const { collectionId } = req.query;
   const { _id, userType, notebase = [] } = req.user;
   const currentCollection = _.find(notebase, { _id: processId(collectionId) });
@@ -204,6 +204,22 @@ exports.createPost = async (req, res) => {
   if (!currentCollection) throw new Error("Cannot find collection.");
 
   let index = _.get(currentCollection, "index", 1);
+
+  const batchSourceInfo =
+    data.length > 1
+      ? {
+          batchId: new Date().getTime(),
+          batchSize: data.length,
+          startIndex: index,
+          endIndex: Number(index) + data.length - 1,
+        }
+      : {};
+
+  const mergedSourceInfo = {
+    ...sourceInfo,
+    ...batchSourceInfo,
+    source: req.source,
+  };
 
   const posts = [].concat(data).map((item) => {
     const slug = item.slug ? item.slug : generateSlug({ title: item.title });
@@ -219,7 +235,7 @@ exports.createPost = async (req, res) => {
       collectionId: processId(collectionId),
       slug,
       resources: [],
-      source: req.source,
+      sourceInfo: { ...mergedSourceInfo, ...item.sourceInfo },
     };
   });
 
