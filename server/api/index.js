@@ -38,6 +38,7 @@ router.get("/sendgrid", (req, res) => {
 });
 
 router.post("/send-email", errorHandlingWrapper(controller.sendEmail));
+router.get("/products", errorHandlingWrapper(controller.getProducts));
 
 router.get("/rssfeed", errorHandlingWrapper(controller.rssFeedParser));
 router.post(

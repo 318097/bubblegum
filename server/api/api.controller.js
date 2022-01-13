@@ -8,7 +8,7 @@ const PostModel = require("./post/post.model");
 const UserModel = require("./user/user.model");
 const { generateDefaultUserState } = require("./user/user.utils");
 const sendMail = require("../utils/sendgrid");
-const { ORIGIN_LIST } = require("../utils/products");
+const { ORIGIN_LIST, getProducts } = require("../utils/products");
 
 exports.fileUploadHandler = async (req, res) => {
   const result = await fileUpload(req, {
@@ -113,4 +113,9 @@ exports.encryptPasswords = async (req, res) => {
   });
 
   res.send("ok");
+};
+
+exports.getProducts = async (req, res) => {
+  const products = getProducts();
+  res.send({ products });
 };
