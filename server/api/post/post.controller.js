@@ -21,17 +21,18 @@ const getAggregationFilters = (req) => {
     tags = [],
     status = [],
     socialStatus,
-    visibility,
+    visible,
     collectionId,
     sortOrder,
     sortFilter,
     rating,
     type,
+    deleted,
   } = req.query;
 
   const aggregation = {
     collectionId: processId(collectionId),
-    deleted: false,
+    deleted: deleted === "true",
   };
   // need to sort by _id because when bulk creation is done, all the post have same timestamp and during fetching it results in different sort order if its only sorted by `createdAt`
   let sort = {
@@ -77,7 +78,7 @@ const getAggregationFilters = (req) => {
     if (rating) aggregation["rating"] = Number(rating);
     if (type) aggregation["type"] = type;
     if (socialStatus) aggregation["socialStatus"] = socialStatus;
-    if (visibility) aggregation["visible"] = visibility === "visible";
+    if (visible) aggregation["visible"] = visible === "true";
     if (sortFilter)
       sort = {
         [sortFilter]: sortOrder === "ASC" ? 1 : -1,
