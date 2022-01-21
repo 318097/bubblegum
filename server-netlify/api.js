@@ -19,7 +19,7 @@ app.use("/.netlify/functions/api", apiRoutes);
 
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
-    res.status(401).send("INVALID_TOKEN");
+    res.status(401).send("INVALID_JWT_TOKEN");
     return;
   }
   res.status(500).send(err);

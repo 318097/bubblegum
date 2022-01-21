@@ -16,7 +16,7 @@ const verifyAccountStatus = async (
     const session = await getSession({ userId, token });
     const { status } = session || {};
     if (status === "REVOKED") throw new Error("CREDENTIALS_REVOKED");
-    else if (status !== "LOGGED_IN") throw new Error("TOKEN_EXPIRED");
+    else if (status !== "LOGGED_IN") throw new Error("JWT_TOKEN_EXPIRED");
   }
 };
 

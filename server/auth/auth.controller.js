@@ -193,7 +193,7 @@ const resetPassword = async (req, res) => {
 
   const user = await User.findOne(matchQuery);
 
-  if (!user) return res.status(404).send("INVALID_TOKEN");
+  if (!user) return res.status(404).send("INVALID_RESET_TOKEN");
 
   user.password = password;
   user.lastPasswordUpdated = generateDate();

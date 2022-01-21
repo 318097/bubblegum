@@ -16,7 +16,7 @@ const startApolloServer = async (app) => {
     resolvers,
     context: async ({ req }) => {
       const { token } = req;
-      if (!token) throw new Error("NO_TOKEN_FOUND");
+      if (!token) throw new Error("NO_JWT_TOKEN_FOUND");
 
       const user = await getUserFromToken(token);
       if (!user) throw new Error("UNAUTHORIZED");
