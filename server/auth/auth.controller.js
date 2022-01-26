@@ -26,6 +26,8 @@ const oauth2Client = new google.auth.OAuth2(
   config.GOOGLE_OAUTH.REDIRECT_URL
 );
 
+const lowerCaseAndTrim = (input) => input.toLowerCase().trim();
+
 const RegisterSchemaValidator = Joi.object().keys({
   name: Joi.string(),
   username: Joi.string(),
@@ -55,7 +57,7 @@ const login = async (req, res) => {
     if (!username || !password)
       return res.status(400).send("USERNAME_AND_PASSWORD_REQUIRED");
 
-    matchQuery["username"] = username.toLowerCase().trim();
+    matchQuery["username"] = lowerCaseAndTrim(username);
   }
 
   let user = await User.findOne(matchQuery);
@@ -81,7 +83,7 @@ const login = async (req, res) => {
       ...userUpdateData,
       [`appStatus.${req.source}`]: {
         status: "ACTIVE",
-        activatedOn: generateDate(),
+        firstLoginOn: generateDate(),
       },
     };
   }
@@ -128,7 +130,7 @@ const register = async (req, res) => {
 
   const { email, username, name } = data;
   const userExists = await User.findOne({
-    $or: [{ email }, { username: username.toLowerCase() }],
+    $or: [{ email }, { username: lowerCaseAndTrim(username) }],
   });
 
   if (userExists) throw new Error("EMAIL_OR_USERNAME_REGISTERED");
@@ -138,6 +140,7 @@ const register = async (req, res) => {
 
   const result = await User.create({
     ...data,
+    username: lowerCaseAndTrim(username),
     ...defaultState,
   });
 
