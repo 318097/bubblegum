@@ -138,7 +138,7 @@ const register = async (req, res) => {
   const token = uuidv4();
   const defaultState = generateDefaultUserState(req, { token });
 
-  const result = await User.create({
+  const user = await User.create({
     ...data,
     username: lowerCaseAndTrim(username),
     ...defaultState,
@@ -151,8 +151,8 @@ const register = async (req, res) => {
     source,
     token,
   });
-
-  res.send({ result });
+  const userInfoToSend = await extractUserData({ user, source: req.source });
+  res.send({ ...userInfoToSend });
 };
 
 const checkAccountStatus = async (req, res) => {
