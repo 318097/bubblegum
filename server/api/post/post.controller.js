@@ -72,7 +72,7 @@ const getAggregationFilters = (req) => {
     }
   }
 
-  if (req.source === "NOTEBASE") {
+  if (["NOTEBASE", "FLASH"].includes(req.source)) {
     aggregation["userId"] = req.userId;
 
     if (rating) aggregation["rating"] = Number(rating);
@@ -138,6 +138,7 @@ exports.getChains = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
   const { aggregation, sort, page, limit } = getAggregationFilters(req);
+  console.log("aggregation, sort::-", aggregation, sort);
 
   const result = await Model.aggregate([
     { $match: aggregation },
