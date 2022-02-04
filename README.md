@@ -33,7 +33,7 @@
 - [ ] Sentry
 - [ ] Send Welcome mail when registered from Google
 - [x] Access products from an API
-- [ ] Lead generation data from landing pages
+- [ ] Lead generation data from landing pages (mail chimp)
 
 #### New app requirements/tools
 

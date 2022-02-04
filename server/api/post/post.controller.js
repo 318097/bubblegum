@@ -138,7 +138,7 @@ exports.getChains = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
   const { aggregation, sort, page, limit } = getAggregationFilters(req);
-  console.log("aggregation, sort::-", aggregation, sort);
+  // console.log("aggregation, sort::-", aggregation, sort);
 
   const result = await Model.aggregate([
     { $match: aggregation },
@@ -247,6 +247,27 @@ exports.createPost = async (req, res) => {
     { _id, "notebase._id": processId(collectionId) },
     { $set: { [`notebase.$.index`]: index } }
   );
+
+  res.send({ result });
+};
+
+exports.bulkUpdate = async (req, res) => {
+  const { userId } = req;
+  const { ids = [], ...update } = req.body;
+  const { collectionId } = req.query;
+  const updatedData = {
+    ...update,
+  };
+
+  const query = {
+    _id: { $in: ids.map((id) => processId(id)) },
+    collectionId: processId(collectionId),
+    userId,
+  };
+
+  const result = await Model.updateMany(query, updatedData, {
+    new: true,
+  });
 
   res.send({ result });
 };

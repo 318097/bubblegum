@@ -17,6 +17,7 @@ router.get(
   protectedRoute,
   errorHandlingWrapper(controller.getBookmarks)
 );
+router.put("/", protectedRoute, errorHandlingWrapper(controller.bulkUpdate));
 router.put(
   "/:id/bookmark",
   protectedRoute,
