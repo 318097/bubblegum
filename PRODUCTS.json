@@ -6,6 +6,7 @@
       "tagline": "A faster & simpler way to go through emails",
       "description": "",
       "visibility": {
+        "active": true,
         "promotion": false,
         "codedrops": false,
         "portfolio": false

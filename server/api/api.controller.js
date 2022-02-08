@@ -47,6 +47,7 @@ exports.rssFeedParser = async (req, res) => {
 exports.sendEmail = async (req, res) => {
   const { email, name, source, type = "WELCOME" } = req.body;
   const origin = req.get("host");
+  console.log(origin, "origin");
   const validSource = config.isProd
     ? ORIGIN_LIST.some((host) => host.includes(origin))
     : true;
@@ -54,7 +55,7 @@ exports.sendEmail = async (req, res) => {
   if (!validSource) throw new Error("INVALID_SOURCE");
   if (!email || !source) throw new Error("INVALID_EMAIL_PARAMETERS");
 
-  sendMail({
+  await sendMail({
     name,
     email,
     type,

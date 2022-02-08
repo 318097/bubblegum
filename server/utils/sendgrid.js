@@ -2,6 +2,7 @@ const sgMail = require("@sendgrid/mail");
 const _ = require("lodash");
 const config = require("../config");
 const { getProductById, getPromotionalProducts } = require("./products");
+const EmailLogModel = require("../models/email.model");
 
 sgMail.setApiKey(config.SENDGRID_API_KEY);
 
@@ -66,21 +67,27 @@ const getContent = ({ type, token, name, source } = {}) => {
 const sendMail = async (data = {}) => {
   if (!config.ENABLE_EMAIL) return;
 
-  const { email: to } = data;
+  const { email: to, source, type } = data;
 
-  const msg = {
+  const emailContent = getContent(data);
+
+  const msgObj = {
     from,
     to,
-    ...getContent(data),
+    ...emailContent,
   };
 
+  const emailObj = { to, source, emailType: type, body: emailContent };
   try {
-    console.log("Msg:", JSON.stringify(msg, undefined, 2));
-    const result = await sgMail.send(msg);
-    console.log("Email sent:", result);
+    console.log("Msg:", JSON.stringify(msgObj, undefined, 2));
+    const result = await sgMail.send(msgObj);
+    emailObj["response"] = result;
   } catch (error) {
     console.log("Email error:", error);
-    if (error.response) console.error(error.response.body);
+    // if (error.response) console.error(error.response.body);
+    emailObj["error"] = error;
+  } finally {
+    await EmailLogModel.create(emailObj);
   }
 };
 

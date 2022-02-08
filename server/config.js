@@ -36,7 +36,8 @@ const config = {
     CLIENT_SECRET: GOOGLE_CLIENT_SECRET,
     REDIRECT_URL: "http://localhost:3000/login",
   },
-  ENABLE_EMAIL: !IS_PROD,
+  // ENABLE_EMAIL: IS_PROD,
+  ENABLE_EMAIL: true,
   SENDGRID_API_KEY,
 };
 
