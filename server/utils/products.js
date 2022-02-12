@@ -1,7 +1,21 @@
 const _ = require("lodash");
 const PRODUCTS_JSON = require("../../PRODUCTS.json");
 
-const { products } = PRODUCTS_JSON;
+// Keep this function in sync with 'lib'
+const parseProducts = (products) =>
+  _.map(products, (product) => {
+    const { links } = product;
+    const ctaUrl = _.get(links, "landing.url") || _.get(links, "product.url");
+    const ctaLabel =
+      _.get(links, "landing.label") || _.get(links, "product.label");
+    return {
+      ...product,
+      ctaUrl,
+      ctaLabel,
+    };
+  });
+
+const products = parseProducts(PRODUCTS_JSON.products);
 
 const getProducts = ({ visibilityKey = "" } = {}) => {
   return _.filter(products, (product) =>
@@ -32,24 +46,20 @@ const getPromotionalProducts = ({ source }) => {
   const filteredList = _.filter(
     products,
     ({ visibility, id, links, tagline }) =>
-      _.get(visibility, "promotion") &&
       id !== source &&
       tagline &&
+      _.get(visibility, "promotion") &&
       _.get(links, "product.url")
   );
-  const promotionalProducts = _.map(
-    filteredList,
-    ({ name, tagline, links }) => ({
-      name,
-      description: tagline,
-      href: _.get(links, "product.url"),
-    })
-  );
+
+  const promotionalProducts = _.map(filteredList, ({ name, tagline, cta }) => ({
+    name,
+    description: tagline,
+    href: cta,
+  }));
 
   return promotionalProducts;
 };
-
-// console.log("PRODUCT_MAP::-", PRODUCT_MAP, PRODUCT_LIST);
 
 module.exports = {
   getProductById,

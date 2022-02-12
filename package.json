@@ -11,7 +11,7 @@
     "deploy:heroku": "git push heroku master",
     "deploy:netlify": "netlify deploy --prod",
     "predeploy": "git push origin master",
-    "deploy": "npm run deploy:heroku",
+    "deploy": "git push origin master && npm run deploy:heroku",
     "lint": "eslint server/**"
   },
   "author": "",
