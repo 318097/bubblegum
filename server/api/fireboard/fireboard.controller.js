@@ -122,17 +122,20 @@ exports.createTask = async (req, res) => {
   const { parentId, content, projectId, marked, deadline, type } = req.body;
   const userId = req.user._id;
 
+  const extra =
+    type === "TOPIC"
+      ? { todos: [], isDefault: false, visible: true }
+      : { marked: false, parentId };
   const data = {
-    parentId,
     userId,
     content,
     projectId,
-    marked,
     type,
     status: {
       deadline: deadline ? generateDate(deadline) : undefined,
       completedOn: marked ? generateDate() : undefined,
     },
+    ...extra,
   };
 
   const result = await TaskModel.create(data);

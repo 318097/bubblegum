@@ -34,6 +34,11 @@
 - [ ] Send Welcome mail when registered from Google
 - [x] Access products from an API
 - [ ] Lead generation data from landing pages (mail chimp)
+- [ ] Bulk query for notebase upload
+
+#### Bugs
+
+- [x] All the fields are getting created in task collection for fireboard
 
 #### New app requirements/tools
 

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { PRODUCT_LIST } = require("../utils/products");
 
-const collectionName = "emailLog";
+const collectionName = "email-logs";
 
 const EmailLogSchema = new mongoose.Schema(
   {

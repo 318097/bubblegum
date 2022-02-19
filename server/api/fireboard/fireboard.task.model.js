@@ -13,31 +13,19 @@ const FireboardTodoSchema = new mongoose.Schema(
       required: true,
     },
     content: { type: String, required: true },
-    marked: { type: Boolean, default: false },
+    marked: { type: Boolean },
     todos: {
       type: Object,
-      default: [],
-      validator: function () {
-        return this.type === "TOPIC";
-      },
     },
     parentId: {
       type: ObjectId,
       ref: "fireboard-task",
-      validator: function () {
-        return this.type === "TODO";
-      },
     },
     isDefault: {
       type: Boolean,
-      default: false,
-      validator: function () {
-        return this.type === "TOPIC";
-      },
     },
     visible: {
       type: Boolean,
-      default: true,
     },
     status: {
       completedOn: Date,
