@@ -47,7 +47,11 @@
       "links": {
         "product": {
           "label": "App",
-          "url": "https://app.fireboardapp.com/"
+          "url": "https://web.fireboardapp.com/"
+        },
+        "extension": {
+          "label": "Extension",
+          "url": "https://chrome.google.com/webstore/detail/fireboard/dcleiepmlcoabfipbcpfjkbgehdmhogk"
         },
         "landing": {
           "label": "Go",
