@@ -52,11 +52,14 @@ const getPromotionalProducts = ({ source }) => {
       _.get(links, "product.url")
   );
 
-  const promotionalProducts = _.map(filteredList, ({ name, tagline, cta }) => ({
-    name,
-    description: tagline,
-    href: cta,
-  }));
+  const promotionalProducts = _.map(
+    filteredList,
+    ({ name, tagline, ctaUrl }) => ({
+      name,
+      description: tagline,
+      href: ctaUrl,
+    })
+  );
 
   return promotionalProducts;
 };
