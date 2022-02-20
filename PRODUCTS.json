@@ -7,9 +7,9 @@
       "description": "",
       "visibility": {
         "active": true,
-        "promotion": true,
-        "codedrops": true,
-        "portfolio": true
+        "promotion": false,
+        "codedrops": false,
+        "portfolio": false
       },
       "links": {
         "product": {
@@ -41,8 +41,8 @@
       "visibility": {
         "active": true,
         "promotion": true,
-        "codedrops": false,
-        "portfolio": false
+        "codedrops": true,
+        "portfolio": true
       },
       "links": {
         "product": {

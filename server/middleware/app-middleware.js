@@ -22,7 +22,8 @@ const appendSourceInfo = (req, res, next) => {
 
 module.exports = function (app) {
   app.use(morgan("dev"));
-  app.use(express.json()); // for parsing application/json
+  // setting limit for toby/bookmark upload, as the default value is 100kb
+  app.use(express.json({ limit: "1mb" })); // for parsing application/json
   app.use(express.urlencoded({ extended: true }));
   app.use(cors());
   app.use(override());
