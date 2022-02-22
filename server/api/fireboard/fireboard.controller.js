@@ -125,7 +125,7 @@ exports.createTask = async (req, res) => {
   const extra =
     type === "TOPIC"
       ? { todos: [], isDefault: false, visible: true }
-      : { marked: false, parentId };
+      : { marked: !!marked, parentId };
   const data = {
     userId,
     content,
@@ -217,9 +217,10 @@ exports.createProject = async (req, res) => {
   });
 
   await TaskModel.create({
-    content: "Others",
+    content: "Uncategorized",
     projectId: newProject._id,
     isDefault: true,
+    visible: true,
     userId,
     type: "TOPIC",
   });
