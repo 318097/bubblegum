@@ -36,7 +36,7 @@
     {
       "id": "FIREBOARD",
       "name": "Fireboard",
-      "tagline": "Daily work tracker for Web developers",
+      "tagline": "A work tracker for software developers",
       "description": "",
       "visibility": {
         "active": true,
@@ -59,10 +59,13 @@
         },
         "github": {
           "url": "https://github.com/318097/fireboard"
+        },
+        "demo": {
+          "url": "https://www.youtube.com/watch?v=NvD6Cv4PiTc&t=6s"
         }
       },
       "path": "/products/fireboard",
-      "status": "WIP",
+      "status": "LIVE",
       "logo": "",
       "poster": "",
       "devPort": 9000
