@@ -3,7 +3,7 @@
     {
       "id": "E_FEED",
       "name": "E Feed",
-      "tagline": "A faster & simpler way to go through emails",
+      "tagline": "Read emails in the form of a feed",
       "description": "",
       "visibility": {
         "active": true,
@@ -45,6 +45,9 @@
         "portfolio": true
       },
       "links": {
+        "demo": {
+          "url": "https://www.youtube.com/watch?v=NvD6Cv4PiTc&t=6s"
+        },
         "product": {
           "label": "App",
           "url": "https://web.fireboardapp.com/"
@@ -54,14 +57,8 @@
           "url": "https://chrome.google.com/webstore/detail/fireboard/dcleiepmlcoabfipbcpfjkbgehdmhogk"
         },
         "landing": {
-          "label": "Go",
+          "label": "Visit",
           "url": "https://www.fireboardapp.com/"
-        },
-        "github": {
-          "url": "https://github.com/318097/fireboard"
-        },
-        "demo": {
-          "url": "https://www.youtube.com/watch?v=NvD6Cv4PiTc&t=6s"
         }
       },
       "path": "/products/fireboard",
