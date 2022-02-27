@@ -23,6 +23,8 @@
 - [x] Integrate account statuses. Return proper error message on failure.
 - [x] Logout api (expire token)
 - [x] All sessions should logout after password change/reset
+- [ ] Send Welcome mail when registered from Google
+- [x] Access products from an API
 - [x] Expose email trigger from other services
 - [ ] Advance search for posts
 - [ ] Wrap all controllers in try..catch
@@ -31,10 +33,9 @@
 - [ ] Soft delete everything
 - [ ] Authentication for resolvers
 - [ ] Sentry
-- [ ] Send Welcome mail when registered from Google
-- [x] Access products from an API
 - [ ] Lead generation data from landing pages (mail chimp)
 - [ ] Bulk query for notebase upload
+- [ ] Separate out tags into a different collection (tags from notebase, timeline, etc) All tags from all the projects should be in a single collection
 
 #### Bugs
 

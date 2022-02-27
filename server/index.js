@@ -14,7 +14,7 @@ const authRoutes = require("./auth/auth.routes");
 const api = require("./api");
 const { startApolloServer } = require("./graphql");
 
-logger.log(`Running in ${process.env.NODE_ENV} mode.`);
+logger.log(`Running in ${config.NODE_ENV} mode.`);
 
 connectToDb();
 
