@@ -28,7 +28,7 @@ const config = {
   JWT: JWT || "bubblegum-server",
   DB_URL: DB_CONNECTION_URL,
   CLOUDINARY_API_SECRET,
-  MEDIUM_RSS_FEED: "https://medium.com/feed/@318097",
+  MEDIUM_RSS_FEED: "https://medium.com/feed/@ml318097",
   EMAIL_ID: "codedrops.tech@gmail.com",
   EMAIL_PASSWORD,
   GOOGLE_OAUTH: {

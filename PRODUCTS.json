@@ -59,6 +59,10 @@
         "landing": {
           "label": "Visit",
           "url": "https://www.fireboardapp.com/"
+        },
+        "ph": {
+          "label": "Product Hunt",
+          "url": "https://www.producthunt.com/posts/fireboard"
         }
       },
       "path": "/products/fireboard",
