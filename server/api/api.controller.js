@@ -1,12 +1,7 @@
 const Parser = require("rss-parser");
-const _ = require("lodash");
 const config = require("../config");
 const { fileUpload } = require("../utils/file-upload");
-const { processId } = require("../utils/common");
 const TransactionModel = require("../models/transaction.model");
-const PostModel = require("./post/post.model");
-const UserModel = require("./user/user.model");
-const { generateDefaultUserState } = require("./user/user.utils");
 const sendMail = require("../utils/sendgrid");
 const { ORIGIN_LIST, getProducts } = require("../utils/products");
 
@@ -60,57 +55,6 @@ exports.sendEmail = async (req, res) => {
     email,
     type,
     source,
-  });
-
-  res.send("ok");
-};
-
-exports.mongoDbTest = async (req, res) => {
-  // const updateResources = () => {
-  //   db.getCollection("posts")
-  //     .find({})
-  //     .forEach((item) => {
-  //       const newValues = item.resources
-  //         ? item.resources.map((label) => ({ label }))
-  //         : [];
-  //       item.resources = newValues;
-  //       db.posts.save(item);
-  //     });
-  // }
-
-  let result = await PostModel.aggregate([
-    { $sort: { _id: 1 } },
-    { $project: { _id: 1, resources: 1, title: 1 } },
-  ]);
-  result = result
-    .filter((item) => item.resources.length)
-    .map((item) => item._id);
-  res.send({ result, count: result.length });
-};
-
-exports.encryptPasswords = async (req, res) => {
-  const users = await UserModel.find({});
-
-  users.forEach(async (item) => {
-    // const salt = bcrypt.genSaltSync(10);
-    // const password = bcrypt.hashSync(item.password, salt);
-    const { timeline, expenseTypes, ...rest } = generateDefaultUserState({
-      source: "MIGRATION",
-    });
-    await UserModel.updateOne(
-      { _id: processId(item._id) },
-      {
-        $set: {
-          // password,
-          // originalPassword: item.password,
-          timeline: _.isEmpty(item.timeline) ? timeline : item.timeline,
-          expenseTypes: _.isEmpty(item.expenseTypes)
-            ? expenseTypes
-            : item.expenseTypes,
-          ...rest,
-        },
-      }
-    );
   });
 
   res.send("ok");

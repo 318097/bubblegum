@@ -3,7 +3,7 @@
     {
       "id": "E_FEED",
       "name": "E Feed",
-      "tagline": "Read emails in the form of a feed",
+      "tagline": "Emails in the form of feed",
       "description": "",
       "visibility": {
         "active": true,
@@ -19,12 +19,8 @@
         "landing": {
           "label": "Go",
           "url": "https://www.efeed.xyz/"
-        },
-        "github": {
-          "url": "https://github.com/318097/e-feed"
         }
       },
-      "path": "/products/e-feed",
       "status": "WIP",
       "tags": [
         "email-feed",
@@ -65,7 +61,6 @@
           "url": "https://www.producthunt.com/posts/fireboard"
         }
       },
-      "path": "/products/fireboard",
       "status": "LIVE",
       "logo": "",
       "poster": "",
@@ -114,7 +109,6 @@
         "codedrops": true,
         "portfolio": true
       },
-      "path": "/products/file-ops",
       "status": "LIVE",
       "logo": "https://raw.githubusercontent.com/318097/file-ops/master/icons/icon128.png",
       "poster": "https://res.cloudinary.com/codedropstech/image/upload/v1617810191/products/file-ops/Screenshot_2021-04-07_at_9.12.33_PM_fmchbl.png",
@@ -196,7 +190,6 @@
         "codedrops": true,
         "portfolio": true
       },
-      "path": "/products/note-box",
       "status": "LIVE",
       "logo": "https://raw.githubusercontent.com/318097/note-box/master/app/icons/icon32.png",
       "links": {
@@ -229,7 +222,6 @@
         "portfolio": true
       },
       "status": "LIVE",
-      "path": "/products/github-marker",
       "logo": "https://raw.githubusercontent.com/318097/github-marker/master/app/icons/v2/icon32.png",
       "links": {
         "product": {

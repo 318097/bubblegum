@@ -34,7 +34,7 @@
 - [ ] Authentication for resolvers
 - [ ] Sentry
 - [ ] Lead generation data from landing pages (mail chimp)
-- [ ] Bulk query for notebase upload
+- [ ] Bulk query for notebase upload - transaction
 - [ ] Separate out tags into a different collection (tags from notebase, timeline, etc) All tags from all the projects should be in a single collection
 
 #### Bugs

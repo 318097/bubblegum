@@ -19,6 +19,12 @@ const storeqRoutes = require("./storeq/storeq.routes");
 const fireboardRoutes = require("./fireboard/fireboard.routes");
 const feedbackRoutes = require("./feedback/feedback.routes");
 const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
+const migrationRoutes = require("./migration/migration.routes");
+
+const dynamicRoutes = require("./dynamic-routes/dynamic-routes.routes");
+
+const TagsModel = require("../models/tags.model");
+
 const controller = require("./api.controller");
 
 router.get("/test", (req, res) => {
@@ -56,15 +62,15 @@ router.use("/fireboard", protectedRoute, fireboardRoutes);
 router.use("/feedback", transparent, feedbackRoutes);
 router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
 
+// if(config.IS_PROD)
+router.use("/migration", migrationRoutes);
+
+router.use("/tags", dynamicRoutes({ Model: TagsModel }));
+
 if (config.NODE_ENV !== "express-lambda-production") {
   // router.use("/chat", externalAccess, chatRoutes);
   router.use("/storeq", protectedRoute, storeqRoutes);
   router.use("/snake", snakeGameRoutes);
-}
-
-if (!config.IS_PROD) {
-  router.get("/encrypt-passwords", controller.encryptPasswords);
-  router.get("/mongo", controller.mongoDbTest);
 }
 
 module.exports = router;
