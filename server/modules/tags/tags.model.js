@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const { PRODUCT_LIST } = require("../utils/products");
-const constants = require("../constants");
+const { PRODUCT_LIST } = require("../../utils/products");
+const constants = require("../../constants");
 
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "tags";

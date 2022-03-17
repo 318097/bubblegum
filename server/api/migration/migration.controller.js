@@ -2,39 +2,14 @@ const _ = require("lodash");
 const { processId } = require("../../utils/common");
 const PostModel = require("../post/post.model");
 const UserModel = require("../user/user.model");
-const TagsModel = require("../../models/tags.model");
+const TagsModel = require("../../modules/tags/tags.model");
+const {
+  generateDefaultTagInfo,
+} = require("../../modules/tags/tags.operations");
 const { generateDefaultUserState } = require("../user/user.utils");
 
 exports.updateToNewTagsCollection = async (req, res) => {
   let usersList = await UserModel.find({}).lean();
-
-  const generateDefaultTagInfo = ({
-    obj,
-    user,
-    source,
-    moduleName,
-    moduleId,
-  }) => {
-    if (!obj.label) {
-      obj["label"] = obj.name;
-    }
-
-    const newObj = {
-      ...obj,
-      value: obj.label ? obj.label.replace(/\s/, "_").toLowerCase() : undefined,
-      source,
-      userId: user._id,
-      moduleName,
-      moduleId,
-      parentTagId: obj.parentId,
-    };
-
-    delete newObj.parentId;
-    delete newObj.name;
-    delete newObj.count;
-
-    return newObj;
-  };
 
   const response = [];
   const mapping = {
@@ -46,10 +21,10 @@ exports.updateToNewTagsCollection = async (req, res) => {
 
   usersList.forEach((user) => {
     if (user.expenseTypes) {
-      const newTagsList = user.expenseTypes.map((type) => {
+      const newTagsList = user.expenseTypes.map((obj) => {
         const newTag = generateDefaultTagInfo({
-          obj: type,
-          user: user,
+          obj,
+          user,
           source: "OCTON",
           moduleName: "EXPENSE_TYPES",
         });
@@ -61,10 +36,10 @@ exports.updateToNewTagsCollection = async (req, res) => {
     }
 
     if (user.expenseSources) {
-      const newTagsList = user.expenseSources.map((type) => {
+      const newTagsList = user.expenseSources.map((obj) => {
         const newTag = generateDefaultTagInfo({
-          obj: type,
-          user: user,
+          obj,
+          user,
           source: "OCTON",
           moduleName: "EXPENSE_SOURCES",
         });
@@ -76,10 +51,10 @@ exports.updateToNewTagsCollection = async (req, res) => {
     }
 
     if (user.expenseApps) {
-      const newTagsList = user.expenseApps.map((type) => {
+      const newTagsList = user.expenseApps.map((obj) => {
         const newTag = generateDefaultTagInfo({
-          obj: type,
-          user: user,
+          obj,
+          user,
           source: "OCTON",
           moduleName: "EXPENSE_APPS",
         });
@@ -95,7 +70,7 @@ exports.updateToNewTagsCollection = async (req, res) => {
         const newTagsList = collection.tags.map((tag) => {
           const newTag = generateDefaultTagInfo({
             obj: tag,
-            user: user,
+            user,
             source: "NOTEBASE",
             moduleName: "COLLECTION",
             moduleId: collection._id,

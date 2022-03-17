@@ -36,10 +36,10 @@
 - [ ] Lead generation data from landing pages (mail chimp)
 - [ ] Bulk query for notebase upload - transaction
 - [ ] Separate out tags into a different collection (tags from notebase, timeline, etc) All tags from all the projects should be in a single collection
-  - [ ] Remove previous default values
+  - [x] Remove previous default values
   - [ ] Remove keys from PRODUCTS.json
 - [ ] Separate timeline, collections, etc from user doc
-- [ ] Setting operations should work independent of Model
+- [x] Setting operations should work independent of Model
 
 #### Bugs
 

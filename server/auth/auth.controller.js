@@ -19,6 +19,8 @@ const {
   revokeAllSessions,
 } = require("../utils/session");
 const { verifyAccountStatus } = require("../utils/account");
+const { generateDefaultExpenseTypes } = require("../api/user/user.utils");
+const { createTags } = require("../modules/tags/tags.operations");
 
 const oauth2Client = new google.auth.OAuth2(
   config.GOOGLE_OAUTH.CLIENT_ID,
@@ -27,6 +29,20 @@ const oauth2Client = new google.auth.OAuth2(
 );
 
 const lowerCaseAndTrim = (input) => input.toLowerCase().trim();
+
+const generateDefaultState = async ({ req, user }) => {
+  try {
+    if (req.source === "OCTON") {
+      await createTags(generateDefaultExpenseTypes(), {
+        user,
+        source: "OCTON",
+        moduleName: "EXPENSE_TYPES",
+      });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 const RegisterSchemaValidator = Joi.object().keys({
   name: Joi.string(),
@@ -79,6 +95,8 @@ const login = async (req, res) => {
   let userUpdateData = { lastLogin: generateDate() };
 
   if (!appStatus || appStatus === "INIT") {
+    await generateDefaultState({ req, user });
+
     userUpdateData = {
       ...userUpdateData,
       [`appStatus.${req.source}`]: {

@@ -23,7 +23,7 @@ const migrationRoutes = require("./migration/migration.routes");
 
 const dynamicRoutes = require("./dynamic-routes/dynamic-routes.routes");
 
-const TagsModel = require("../models/tags.model");
+const TagsModel = require("../modules/tags/tags.model");
 
 const controller = require("./api.controller");
 

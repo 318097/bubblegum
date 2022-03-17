@@ -2,7 +2,7 @@ const { ObjectId } = require("mongoose").Types;
 const _ = require("lodash");
 const { getKeysBasedOnSource } = require("./products");
 const FireboardProjectsModel = require("../api/fireboard/fireboard.project.model");
-const TagsModel = require("../models/tags.model");
+const TagsModel = require("../modules/tags/tags.model");
 
 const OBJECT_ID_REGEX = /^[a-f\d]{24}$/i;
 
