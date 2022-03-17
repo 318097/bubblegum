@@ -153,7 +153,7 @@ const register = async (req, res) => {
 
   if (userExists) throw new Error("EMAIL_OR_USERNAME_REGISTERED");
 
-  const token = uuidv4();
+  const token = uuidv4(); // verification token
   const defaultState = generateDefaultUserState(req, { token });
 
   const user = await User.create({
@@ -162,10 +162,11 @@ const register = async (req, res) => {
     ...defaultState,
   });
 
+  const requireVerification = false;
   sendMail({
     name,
     email,
-    type: "VERIFY_ACCOUNT",
+    type: requireVerification ? "VERIFY_ACCOUNT" : "WELCOME",
     source,
     token,
   });

@@ -26,18 +26,6 @@ const UserSchema = new mongoose.Schema(
     mobile: {
       type: String,
     },
-    // contactList: {
-    //   type: Array,
-    // },
-    // expenseTypes: {
-    //   type: Array,
-    // },
-    // expenseSources: {
-    //   type: Array,
-    // },
-    // expenseApps: {
-    //   type: Array,
-    // },
     notebase: [],
     bookmarkedPosts: {
       type: Array,

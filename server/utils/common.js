@@ -82,7 +82,9 @@ const extractUserData = async (req) => {
     "accountStatus",
   ];
   const basic = _.pick(user, BASIC_USER_KEYS);
-  let result = {};
+  const keysBasedOnSource = getKeysBasedOnSource(req.source);
+  let result = _.pick(user, keysBasedOnSource);
+
   switch (source) {
     case "FIREBOARD":
       result["fireboardProjects"] = await FireboardProjectsModel.find({
@@ -126,8 +128,6 @@ const extractUserData = async (req) => {
       break;
     }
     default: {
-      const keysBasedOnSource = getKeysBasedOnSource(req.source);
-      result = _.pick(user, keysBasedOnSource);
       break;
     }
   }

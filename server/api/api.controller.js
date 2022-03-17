@@ -5,6 +5,22 @@ const TransactionModel = require("../models/transaction.model");
 const sendMail = require("../utils/sendgrid");
 const { ORIGIN_LIST, getProducts } = require("../utils/products");
 
+exports.test = async (req, res) => {
+  console.log("host: ", req.get("host"));
+  res.send("Working :)");
+};
+
+exports.sendgrid = async (req, res) => {
+  sendMail({
+    email: "mehullakhanpal@gmail.com",
+    type: "VERIFY_ACCOUNT",
+    name: "ML",
+    source: "FIREBOARD",
+    token: "abc",
+  });
+  res.send("Done");
+};
+
 exports.fileUploadHandler = async (req, res) => {
   const result = await fileUpload(req, {
     exactFileName: req.body.storeExactFileName === "TRUE",
