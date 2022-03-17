@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 const {
-  NODE_ENV,
   PORT,
   DB_URL,
   STAGING_DB_URL,
@@ -13,6 +12,9 @@ const {
   SENDGRID_API_KEY,
 } = process.env;
 
+let { NODE_ENV } = process.env;
+NODE_ENV = NODE_ENV || "staging";
+
 const IS_PROD = ["production", "express-lambda-production"].includes(NODE_ENV);
 
 const DB_CONNECTION_URL = IS_PROD
@@ -22,7 +24,7 @@ const DB_CONNECTION_URL = IS_PROD
   : "mongodb://localhost/bubblegum";
 
 const config = {
-  NODE_ENV: NODE_ENV || "development",
+  NODE_ENV,
   IS_PROD,
   PORT: PORT || 7000,
   JWT: JWT || "bubblegum-server",

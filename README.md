@@ -20,7 +20,7 @@
   - [ ] Password updated
 - [x] Refactor protectedRoutes, transparent, externalAccess
 - [x] Append userId to req
-- [x] Integrate account statuses. Return proper error message on failure.
+- [x] Integrate account statuses. Return proper error message on failure
 - [x] Logout api (expire token)
 - [x] All sessions should logout after password change/reset
 - [ ] Send Welcome mail when registered from Google
@@ -36,6 +36,10 @@
 - [ ] Lead generation data from landing pages (mail chimp)
 - [ ] Bulk query for notebase upload - transaction
 - [ ] Separate out tags into a different collection (tags from notebase, timeline, etc) All tags from all the projects should be in a single collection
+  - [ ] Remove previous default values
+  - [ ] Remove keys from PRODUCTS.json
+- [ ] Separate timeline, collections, etc from user doc
+- [ ] Setting operations should work independent of Model
 
 #### Bugs
 
