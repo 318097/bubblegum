@@ -2,6 +2,7 @@ const { ObjectId } = require("mongoose").Types;
 const _ = require("lodash");
 const { getKeysBasedOnSource } = require("./products");
 const FireboardProjectsModel = require("../api/fireboard/fireboard.project.model");
+const TagsModel = require("../models/tags.model");
 
 const OBJECT_ID_REGEX = /^[a-f\d]{24}$/i;
 
@@ -34,6 +35,13 @@ const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
 
   return slug ? `${slug}${seperator}${timestamp}` : "";
 };
+
+const getTags = async ({ userId, moduleName, source }) =>
+  TagsModel.find({
+    userId,
+    moduleName,
+    source,
+  });
 
 const generateResourceName = ({
   index,
@@ -81,6 +89,42 @@ const extractUserData = async (req) => {
         userId: user._id,
       });
       break;
+    case "OCTON":
+      result["expenseTypes"] = await getTags({
+        userId: user._id,
+        moduleName: "EXPENSE_TYPES",
+        source,
+      });
+      result["expenseApps"] = await getTags({
+        userId: user._id,
+        moduleName: "EXPENSE_APPS",
+        source,
+      });
+      result["expenseSources"] = await getTags({
+        userId: user._id,
+        moduleName: "EXPENSE_SOURCES",
+        source,
+      });
+      break;
+    case "NOTEBASE":
+    case "FLASH": {
+      const notebase = user.notebase.map(async (collection) => {
+        const tags = await getTags({
+          userId: user._id,
+          moduleName: "COLLECTION",
+          moduleId: collection._id,
+          source,
+        });
+
+        return {
+          ...collection,
+          tags,
+        };
+      });
+
+      result["notebase"] = await Promise.all(notebase);
+      break;
+    }
     default: {
       const keysBasedOnSource = getKeysBasedOnSource(req.source);
       result = _.pick(user, keysBasedOnSource);

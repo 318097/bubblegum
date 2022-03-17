@@ -65,7 +65,7 @@ router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
 // if(config.IS_PROD)
 router.use("/migration", migrationRoutes);
 
-router.use("/tags", dynamicRoutes({ Model: TagsModel }));
+router.use("/tags", protectedRoute, dynamicRoutes({ Model: TagsModel }));
 
 if (config.NODE_ENV !== "express-lambda-production") {
   // router.use("/chat", externalAccess, chatRoutes);
