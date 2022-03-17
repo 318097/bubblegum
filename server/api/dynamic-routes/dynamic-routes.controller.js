@@ -1,12 +1,19 @@
+const _ = require("lodash");
 const { processId } = require("../../utils/common");
 
 exports.controllerHOC = (config) => {
   const { Model } = config;
 
+  const defaultQuery = {
+    deleted: false,
+    visible: true,
+  };
+
   const getAllEntities = async (req, res) => {
     const { userId } = req;
 
     const result = await Model.find({
+      ...defaultQuery,
       userId,
     });
     res.send({ result });
@@ -18,6 +25,7 @@ exports.controllerHOC = (config) => {
 
     const result = await Model.findOne({
       // userId:processId(userId)
+      ...defaultQuery,
       userId,
       _id: id,
     });
@@ -26,12 +34,14 @@ exports.controllerHOC = (config) => {
 
   const createEntity = async (req, res) => {
     const { source, userId } = req;
-
-    const result = await Model.create({
+    const obj = {
+      ...defaultQuery,
       ...req.body,
       source,
       userId,
-    });
+    };
+
+    const result = await Model.create(obj);
 
     res.send({ result });
   };
@@ -42,6 +52,7 @@ exports.controllerHOC = (config) => {
 
     const result = await Model.findOneAndUpdate(
       {
+        ...defaultQuery,
         _id: processId(id),
         userId: processId(userId),
       },
@@ -54,12 +65,36 @@ exports.controllerHOC = (config) => {
     const { userId } = req;
     const { id } = req.params;
 
-    const result = await Model.delete({
-      _id: processId(id),
-      userId: processId(userId),
-    });
+    const result = await Model.findOneAndUpdate(
+      {
+        ...defaultQuery,
+        _id: processId(id),
+        userId: processId(userId),
+      },
+      { $set: { deleted: true } }
+    );
 
     res.send({ result });
+  };
+
+  const entityOperations = async (req, res) => {
+    const { query, body } = req;
+    const { action } = query;
+    const { _id } = body;
+
+    req.params.id = _id;
+    req.body = _.omit(body, ["_id", "createdAt", "updatedAt"]);
+
+    switch (action) {
+      case "CREATE":
+        return await createEntity(req, res);
+      case "UPDATE":
+        return await updateEntity(req, res);
+      case "DELETE":
+        return await deleteEntity(req, res);
+      default:
+        return res.status(401).send("INVALID OPERATION");
+    }
   };
 
   return {
@@ -68,5 +103,6 @@ exports.controllerHOC = (config) => {
     createEntity,
     updateEntity,
     deleteEntity,
+    entityOperations,
   };
 };

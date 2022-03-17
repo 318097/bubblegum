@@ -14,6 +14,10 @@ module.exports = (config) => {
         break;
       case "POST":
         router.post("/", errorHandlingWrapper(controller.createEntity));
+        router.post(
+          "/operations",
+          errorHandlingWrapper(controller.entityOperations)
+        );
         break;
       case "PUT":
         router.put("/:id", errorHandlingWrapper(controller.updateEntity));
