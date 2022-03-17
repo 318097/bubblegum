@@ -5,8 +5,6 @@ const UserModel = require("../user/user.model");
 const TagsModel = require("../../models/tags.model");
 const { generateDefaultUserState } = require("../user/user.utils");
 
-const moduleNames = ["EXPENSE_TYPES"];
-
 exports.updateToNewTagsCollection = async (req, res) => {
   let usersList = await UserModel.find({}).lean();
 

@@ -65,7 +65,6 @@ const generateDefaultUserState = (req, { token }) => {
   return {
     source,
     timeline: generateDefaultTimeline({ _default: true }),
-    expenseTypes: generateDefaultExpenseTypes(),
     appStatus: generateDefaultAppStatus(),
     accountStatus: updateAccountStatus(undefined, {
       verified,
@@ -92,4 +91,5 @@ module.exports = {
   generateDefaultUserState,
   generateDefaultTimeline,
   updateAccountStatus,
+  generateDefaultExpenseTypes,
 };

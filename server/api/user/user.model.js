@@ -26,29 +26,29 @@ const UserSchema = new mongoose.Schema(
     mobile: {
       type: String,
     },
-    contactList: {
-      type: Array,
-    },
-    expenseTypes: {
-      type: Array,
-    },
-    expenseSources: {
-      type: Array,
-    },
-    expenseApps: {
-      type: Array,
-    },
+    // contactList: {
+    //   type: Array,
+    // },
+    // expenseTypes: {
+    //   type: Array,
+    // },
+    // expenseSources: {
+    //   type: Array,
+    // },
+    // expenseApps: {
+    //   type: Array,
+    // },
     notebase: [],
-    source: {
-      type: String,
-      enum: PRODUCT_LIST,
-      required: true,
-    },
     bookmarkedPosts: {
       type: Array,
     },
     timeline: {
       type: Array,
+    },
+    source: {
+      type: String,
+      enum: PRODUCT_LIST,
+      required: true,
     },
     userType: { type: String, enum: constants.USER_TYPES, default: "USER" },
     lastPasswordUpdated: Date,
