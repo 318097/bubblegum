@@ -3,15 +3,18 @@ const expressJwt = require("express-jwt");
 const _ = require("lodash");
 const config = require("../config");
 const User = require("../api/user/user.model");
+const { getAppBasedInfo } = require("./common");
 
 const getToken = (req) => _.get(req, "headers.authorization");
 
 const signToken = (_id, email) =>
   jwt.sign({ _id, email }, config.JWT, { expiresIn: "30d" });
 
-const appendUserInfo = (req, user) => {
+const appendUserInfo = async (req, user) => {
   const { _id } = user;
-  req.user = user;
+  const appBasedInfo = await getAppBasedInfo({ user, source: req.source });
+  req.user = { ...user, ...appBasedInfo };
+
   req.userId = _id;
   req._id = _id;
   req.id = _id;
@@ -48,7 +51,7 @@ const extractUser = async (req, res, next) => {
   Either the user was deleted or it was a JWT from some other source */
   if (!user) return res.status(401).send("UNAUTHORIZED");
 
-  appendUserInfo(req, user);
+  await appendUserInfo(req, user);
   next();
 };
 
@@ -57,7 +60,7 @@ const transparent = async (req, res, next) => {
 
   if (token) {
     const user = await getUserFromToken(token);
-    appendUserInfo(req, user);
+    await appendUserInfo(req, user);
   }
 
   next();

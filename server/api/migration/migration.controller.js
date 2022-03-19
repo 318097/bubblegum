@@ -3,10 +3,56 @@ const { processId } = require("../../utils/common");
 const PostModel = require("../post/post.model");
 const UserModel = require("../user/user.model");
 const TagsModel = require("../../modules/tags/tags.model");
+const ModulesModel = require("../../modules/modules/modules.model");
 const {
   generateDefaultTagInfo,
 } = require("../../modules/tags/tags.operations");
 const { generateDefaultUserState } = require("../user/user.utils");
+
+exports.normalizeCollectionsAndTimeline = async (req, res) => {
+  let usersList = await UserModel.find({}).lean();
+
+  const response = [];
+  const mapping = {
+    notebase: 0,
+    timeline: 0,
+  };
+
+  usersList.forEach((user) => {
+    const userId = user._id;
+    if (user.notebase) {
+      response.push(
+        ...user.notebase.map(({ tags, ...rest }) => ({
+          ...rest,
+          moduleType: "COLLECTION",
+          source: "NOTEBASE",
+          userId,
+        }))
+      );
+      mapping["notebase"] += user.notebase.length;
+    }
+    if (user.timeline) {
+      response.push(
+        ...user.timeline.map((obj) => ({
+          ...obj,
+          moduleType: "TIMELINE",
+          source: "OCTON",
+          userId,
+        }))
+      );
+      mapping["timeline"] += user.timeline.length;
+    }
+  });
+
+  let dbResponse;
+  dbResponse = await ModulesModel.create(response);
+  res.send({
+    totalUsers: usersList.length,
+    mapping,
+    // response,
+    dbResponse,
+  });
+};
 
 exports.updateToNewTagsCollection = async (req, res) => {
   let usersList = await UserModel.find({}).lean();

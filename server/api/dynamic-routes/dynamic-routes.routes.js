@@ -1,8 +1,10 @@
-const router = require("express").Router();
+const express = require("express");
 const errorHandlingWrapper = require("../../middleware/error-handling");
-const { controllerHOC } = require("./dynamic-routes.controller");
+const controllerHOC = require("./dynamic-routes.controller");
 
-module.exports = (config) => {
+const dynamicRoutes = function (config) {
+  const router = express.Router();
+
   const routes = ["GET", "POST", "PUT", "DELETE"];
   const controller = controllerHOC(config);
 
@@ -30,3 +32,5 @@ module.exports = (config) => {
 
   return router;
 };
+
+module.exports = dynamicRoutes;

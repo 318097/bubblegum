@@ -1,7 +1,7 @@
 const _ = require("lodash");
 const { processId } = require("../../utils/common");
 
-exports.controllerHOC = (config) => {
+module.exports = (config) => {
   const { Model } = config;
 
   const defaultQuery = {
@@ -83,7 +83,13 @@ exports.controllerHOC = (config) => {
     const { _id } = body;
 
     req.params.id = _id;
-    req.body = _.omit(body, ["_id", "createdAt", "updatedAt"]);
+    req.body = _.omit(body, [
+      "_id",
+      "createdAt",
+      "updatedAt",
+      "source",
+      "userId",
+    ]);
 
     switch (action) {
       case "CREATE":

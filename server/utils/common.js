@@ -3,6 +3,7 @@ const _ = require("lodash");
 const { getKeysBasedOnSource } = require("./products");
 const FireboardProjectsModel = require("../api/fireboard/fireboard.project.model");
 const TagsModel = require("../modules/tags/tags.model");
+const ModulesModel = require("../modules/modules/modules.model");
 
 const OBJECT_ID_REGEX = /^[a-f\d]{24}$/i;
 
@@ -36,12 +37,20 @@ const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
   return slug ? `${slug}${seperator}${timestamp}` : "";
 };
 
-const getTags = async ({ userId, moduleName, source }) =>
+const getTags = async ({ userId, moduleName, source, moduleId }) =>
   TagsModel.find({
     userId,
     moduleName,
     source,
-  });
+    moduleId,
+  }).lean();
+
+const getModules = async ({ userId, moduleType, source }) =>
+  ModulesModel.find({
+    userId,
+    moduleType,
+    source,
+  }).lean();
 
 const generateResourceName = ({
   index,
@@ -70,21 +79,8 @@ const generateResourceName = ({
   return `${prefix}${id}-${slug}-${nextId}${_suffix}`;
 };
 
-const extractUserData = async (req) => {
-  const { user, source } = req;
-  const BASIC_USER_KEYS = [
-    "name",
-    "email",
-    "_id",
-    "username",
-    "appStatus",
-    "lastLogin",
-    "accountStatus",
-  ];
-  const basic = _.pick(user, BASIC_USER_KEYS);
-  const keysBasedOnSource = getKeysBasedOnSource(req.source);
-  let result = _.pick(user, keysBasedOnSource);
-
+const getAppBasedInfo = async ({ user, source }) => {
+  let result = {};
   switch (source) {
     case "FIREBOARD":
       result["fireboardProjects"] = await FireboardProjectsModel.find({
@@ -107,10 +103,20 @@ const extractUserData = async (req) => {
         moduleName: "EXPENSE_SOURCES",
         source,
       });
+      result["timeline"] = await getModules({
+        userId: user._id,
+        moduleType: "TIMELINE",
+        source,
+      });
       break;
     case "NOTEBASE":
     case "FLASH": {
-      const notebase = user.notebase.map(async (collection) => {
+      const collections = await getModules({
+        userId: user._id,
+        moduleType: "COLLECTION",
+        source: "NOTEBASE",
+      });
+      const notebase = collections.map(async (collection) => {
         const tags = await getTags({
           userId: user._id,
           moduleName: "COLLECTION",
@@ -127,12 +133,32 @@ const extractUserData = async (req) => {
       result["notebase"] = await Promise.all(notebase);
       break;
     }
-    default: {
+    default:
       break;
-    }
   }
 
-  return { ...basic, ...result };
+  return result;
+};
+
+const extractUserData = async (req) => {
+  const { user, source } = req;
+  const BASIC_USER_KEYS = [
+    "name",
+    "email",
+    "_id",
+    "username",
+    "appStatus",
+    "lastLogin",
+    "accountStatus",
+  ];
+  const basic = _.pick(user, BASIC_USER_KEYS);
+
+  const keysBasedOnSource = getKeysBasedOnSource(req.source);
+  const sourceBasedInfo = _.pick(user, keysBasedOnSource);
+
+  const appSpecificInfo = await getAppBasedInfo({ user, source });
+
+  return { ...basic, ...sourceBasedInfo, ...appSpecificInfo };
 };
 
 module.exports = {
@@ -145,4 +171,5 @@ module.exports = {
   extractUserData,
   generateObjectId,
   generateDate,
+  getAppBasedInfo,
 };

@@ -12,9 +12,18 @@ const fireboardRoutes = require("./fireboard/fireboard.routes");
 const feedbackRoutes = require("./feedback/feedback.routes");
 const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
 const migrationRoutes = require("./migration/migration.routes");
-const dynamicRoutes = require("./dynamic-routes/dynamic-routes.routes");
 const TagsModel = require("../modules/tags/tags.model");
+const ModulesModel = require("../modules/modules/modules.model");
 const controller = require("./api.controller");
+
+const dynamicRoutes = require("./dynamic-routes/dynamic-routes.routes");
+
+const tagRoutes = dynamicRoutes({
+  Model: TagsModel,
+});
+const moduleRoutes = dynamicRoutes({
+  Model: ModulesModel,
+});
 
 // const taskRoutes = require("./task/task.routes");
 // const expenseRoutes = require("./expenses/expenses.routes");
@@ -48,7 +57,8 @@ router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
 // if(config.IS_PROD)
 router.use("/migration", migrationRoutes);
 
-router.use("/tags", protectedRoute, dynamicRoutes({ Model: TagsModel }));
+router.use("/tags", protectedRoute, tagRoutes);
+router.use("/modules", protectedRoute, moduleRoutes);
 
 if (config.NODE_ENV !== "express-lambda-production") {
   // router.use("/chat", externalAccess, chatRoutes);

@@ -11,5 +11,9 @@ router.get(
   "/update-tags-collection",
   errorHandlingWrapper(controller.updateToNewTagsCollection)
 );
+router.get(
+  "/normalize-collections-and-timeline",
+  errorHandlingWrapper(controller.normalizeCollectionsAndTimeline)
+);
 
 module.exports = router;
