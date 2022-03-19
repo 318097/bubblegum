@@ -7,13 +7,6 @@ const {
 } = require("../../utils/common");
 const Model = require("./user.model");
 const { getKeysBasedOnSource } = require("../../utils/products");
-const { generateDefaultTimeline } = require("./user.utils");
-
-const getDefaultValue = ({ key, name }) => {
-  if (key === "timeline") {
-    return generateDefaultTimeline({ key, name });
-  }
-};
 
 exports.updateSettings = async (req, res) => {
   const { user, query, body } = req;
@@ -32,14 +25,11 @@ exports.updateSettings = async (req, res) => {
 
   switch (action) {
     case "CREATE": {
-      const defaultValue = getDefaultValue({ ...body, key });
-      const data = defaultValue
-        ? defaultValue
-        : {
-            ...body,
-            _id: new ObjectId(),
-            createdAt: generateDate(),
-          };
+      const data = {
+        ...body,
+        _id: new ObjectId(),
+        createdAt: generateDate(),
+      };
       dbObj = {
         $push: { [key]: data },
       };

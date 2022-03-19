@@ -32,21 +32,6 @@ const updateAccountStatus = (
   };
 };
 
-const generateDefaultTimeline = ({
-  name = "Default",
-  _default = false,
-  ...rest
-} = {}) => {
-  return {
-    name,
-    // color: getRandomColor(),
-    default: _default,
-    _id: generateObjectId(),
-    createdAt: generateDate(),
-    ...rest,
-  };
-};
-
 const generateDefaultExpenseTypes = () => {
   return DEFAULT_EXPENSE_TYPES.map((item) => ({
     ...item,
@@ -64,7 +49,6 @@ const generateDefaultUserState = (req, { token }) => {
 
   return {
     source,
-    timeline: generateDefaultTimeline({ _default: true }),
     appStatus: generateDefaultAppStatus(),
     accountStatus: updateAccountStatus(undefined, {
       verified,
@@ -89,7 +73,6 @@ module.exports = {
   encryptPassword,
   comparePassword,
   generateDefaultUserState,
-  generateDefaultTimeline,
   updateAccountStatus,
   generateDefaultExpenseTypes,
 };

@@ -21,6 +21,7 @@ const {
 const { verifyAccountStatus } = require("../utils/account");
 const { generateDefaultExpenseTypes } = require("../api/user/user.utils");
 const { createTags } = require("../modules/tags/tags.operations");
+const { createModules } = require("../modules/modules/modules.operations");
 
 const oauth2Client = new google.auth.OAuth2(
   config.GOOGLE_OAUTH.CLIENT_ID,
@@ -37,6 +38,13 @@ const generateDefaultState = async ({ req, user }) => {
         user,
         source: "OCTON",
         moduleName: "EXPENSE_TYPES",
+      });
+      await createModules({
+        ...req.body,
+        default: true,
+        userId: user._id,
+        source: "OCTON",
+        moduleName: "TIMELINE",
       });
     }
   } catch (err) {
