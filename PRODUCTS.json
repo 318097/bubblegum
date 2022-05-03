@@ -1,6 +1,36 @@
 {
   "products": [
     {
+      "id": "ARRAY_BUILDER",
+      "name": "Array Builder",
+      "tagline": "A free tool to visualize the output of array operations",
+      "description": "",
+      "visibility": {
+        "active": true,
+        "promotion": true,
+        "codedrops": true,
+        "portfolio": true
+      },
+      "links": {
+        "product": {
+          "label": "Tool",
+          "url": "https://www.arraybuilder.com"
+        }
+      },
+      "bitly": "https://bit.ly/array-builder",
+      "status": "LIVE",
+      "tags": [
+        "array-builder",
+        "productivity",
+        "devtools"
+      ],
+      "release": {
+        "year": 2022,
+        "month": 5,
+        "day": 1
+      }
+    },
+    {
       "id": "E_FEED",
       "name": "E Feed",
       "tagline": "Emails in the form of feed",
@@ -21,6 +51,7 @@
           "url": "https://www.efeed.xyz/"
         }
       },
+      "bitly": "https://bit.ly/efeed-app",
       "status": "WIP",
       "tags": [
         "email-feed",
@@ -61,10 +92,16 @@
           "url": "https://www.producthunt.com/posts/fireboard"
         }
       },
+      "bitly": "https://bit.ly/fireboardapp",
       "status": "LIVE",
       "logo": "",
       "poster": "",
-      "devPort": 9000
+      "devPort": 9000,
+      "release": {
+        "year": 2022,
+        "month": 2,
+        "day": 20
+      }
     },
     {
       "id": "OCTON",
@@ -89,6 +126,7 @@
           "url": "https://github.com/318097/octon"
         }
       },
+      "bitly": "https://bit.ly/octon-app",
       "customMessages": [
         "DM if interested in collaboration"
       ],
@@ -126,6 +164,7 @@
           "url": "https://github.com/318097/file-ops"
         }
       },
+      "bitly": "https://bit.ly/file-ops",
       "tags": [
         "file-ops",
         "productivity",
@@ -134,7 +173,12 @@
         "bookmark",
         "alias",
         "file-shortcuts"
-      ]
+      ],
+      "release": {
+        "year": 2021,
+        "month": 3,
+        "day": 28
+      }
     },
     {
       "id": "CODEDROPS",
@@ -159,6 +203,7 @@
           "url": "https://github.com/318097/codedrops"
         }
       },
+      "bitly": "https://bit.ly/codedrops-tech",
       "social": {
         "facebook": {
           "label": "Facebook",
@@ -206,7 +251,13 @@
           "url": "https://github.com/318097/note-box"
         }
       },
-      "tagline_0": "A Chrome extension to store notes for every domain"
+      "bitly": "https://bit.ly/notebox-extension",
+      "tagline_0": "A Chrome extension to store notes for every domain",
+      "release": {
+        "year": 2021,
+        "month": 2,
+        "day": 8
+      }
     },
     {
       "id": "GITHUB_MARKER",
@@ -223,7 +274,7 @@
       "links": {
         "product": {
           "label": "Download",
-          "url": "https://chrome.google.com/webstore/detail/github-marker/imjdbnnpnohgcdbpgnidgolnamoghpoo?hl=en"
+          "url": "https://chrome.google.com/webstore/detail/github-marker/imjdbnnpnohgcdbpgnidgolnamoghpoo"
         },
         "ph": {
           "label": "Product Hunt",
@@ -232,7 +283,8 @@
         "github": {
           "url": "https://github.com/318097/github-marker"
         }
-      }
+      },
+      "bitly": "https://bit.ly/github-marker"
     },
     {
       "id": "REACT_UI",
