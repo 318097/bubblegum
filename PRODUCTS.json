@@ -1,6 +1,44 @@
 {
   "products": [
     {
+      "id": "DEVBOX",
+      "name": "Devbox",
+      "tagline": "A UI for local storage",
+      "description": "",
+      "visibility": {
+        "active": true,
+        "promotion": true,
+        "codedrops": true,
+        "portfolio": true
+      },
+      "links": {
+        "product": {
+          "label": "Extension",
+          "url": "https://chrome.google.com/webstore/detail/devbox/moifkpmfincoglpljkonmgnfaeonlgmo"
+        },
+        "ph": {
+          "label": "Product Hunt",
+          "url": "https://www.producthunt.com/posts/devbox-57e32865-572d-4a14-b068-70f00fe489d4"
+        },
+        "github": {
+          "url": "https://github.com/318097/devbox"
+        }
+      },
+      "bitly": "https://bit.ly/devbox-extension",
+      "status": "LIVE",
+      "tags": [
+        "localstorage",
+        "productivity",
+        "devtools",
+        "chromeextension"
+      ],
+      "release": {
+        "year": 2022,
+        "month": 6,
+        "day": 11
+      }
+    },
+    {
       "id": "ARRAY_BUILDER",
       "name": "Array Builder",
       "tagline": "A free tool to visualize the output of array operations",
