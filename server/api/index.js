@@ -21,7 +21,7 @@ const dynamicRoutes = require("./dynamic-routes/dynamic-routes.routes");
 
 const tagRoutes = dynamicRoutes({
   Model: TagsModel,
-  customMiddleware: tagsMiddleware,
+  _customMiddleware: tagsMiddleware,
 });
 
 const moduleRoutes = dynamicRoutes({

@@ -1,6 +1,6 @@
 const { generateSlugV2 } = require("../../utils/common");
 
-exports.tagsMiddleware = {
+module.exports = {
   parseInputForCreateEntity: (body) => ({
     ...body,
     value: generateSlugV2(body.label),

@@ -4,8 +4,7 @@ const { processId } = require("../../utils/common");
 const KEYS_TO_OMIT = ["_id", "createdAt", "updatedAt", "source", "userId"];
 
 module.exports = (config) => {
-  const { Model, customMiddleware } = config;
-
+  const { Model, _customMiddleware } = config;
   const defaultQuery = {
     deleted: false,
     visible: true,
@@ -36,11 +35,10 @@ module.exports = (config) => {
 
   const createEntity = async (req, res) => {
     const { source, userId } = req;
-
     const obj = {
       ...defaultQuery,
-      ...(customMiddleware
-        ? customMiddleware.parseInputForCreateEntity(req.body)
+      ...(_customMiddleware
+        ? _customMiddleware.parseInputForCreateEntity(req.body)
         : req.body),
       source,
       userId,
