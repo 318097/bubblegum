@@ -9,11 +9,11 @@ const TagsSchema = new mongoose.Schema(
   {
     label: {
       type: String,
-      // required: true,
+      required: true,
     },
     value: {
       type: String,
-      // required: true,
+      required: true,
     },
     description: {
       type: String,

@@ -33,8 +33,8 @@ const updateAccountStatus = (
 };
 
 const generateDefaultExpenseTypes = () => {
-  return DEFAULT_EXPENSE_TYPES.map((item) => ({
-    ...item,
+  return DEFAULT_EXPENSE_TYPES.map((expenseType) => ({
+    ...expenseType,
     _id: generateObjectId(),
     default: true,
     isRoot: true,

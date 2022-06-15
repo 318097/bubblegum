@@ -14,7 +14,9 @@ const authRoutes = require("./auth/auth.routes");
 const api = require("./api");
 const { startApolloServer } = require("./graphql");
 
-logger.log(`Running in ${config.NODE_ENV} mode.`);
+logger.log(
+  `${config.IS_PROD ? "💀" : "🆗"} Running in '${config.NODE_ENV}' mode`
+);
 
 connectToDb();
 
@@ -37,4 +39,4 @@ app.use((err, req, res, next) => {
   res.status(500).send(err);
 });
 
-http.listen(config.PORT, () => logger.log(`Listening on :${config.PORT}`));
+http.listen(config.PORT, () => logger.log(`🎤 Listening on ':${config.PORT}'`));

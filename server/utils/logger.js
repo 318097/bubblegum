@@ -5,9 +5,9 @@ const chalkLog = chalk.green;
 const chalkTest = chalk.bgYellow.italic;
 
 const logger = {
-  log: (...args) => console.log(chalkLog("[LOG]:", ...args)),
-  error: (...error) => console.log(chalkError("[ERROR]:", ...error)),
-  test: (...test) => console.log(chalkTest("[TEST]:", ...test)),
+  log: (...args) => console.log(chalkLog("[log]:", ...args)),
+  error: (...error) => console.log(chalkError("[error]:", ...error)),
+  test: (...test) => console.log(chalkTest("[test]:", ...test)),
 };
 
 module.exports = logger;

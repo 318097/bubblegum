@@ -49,7 +49,7 @@ const startApolloServer = async (app) => {
   });
 
   logger.log(
-    `🚀 GraphQL server running at :${config.PORT}${server.graphqlPath}`
+    `🚀 GraphQL server running at ':${config.PORT}${server.graphqlPath}'`
   );
 };
 

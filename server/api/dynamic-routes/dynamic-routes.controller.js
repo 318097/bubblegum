@@ -1,8 +1,10 @@
 const _ = require("lodash");
 const { processId } = require("../../utils/common");
 
+const KEYS_TO_OMIT = ["_id", "createdAt", "updatedAt", "source", "userId"];
+
 module.exports = (config) => {
-  const { Model } = config;
+  const { Model, customMiddleware } = config;
 
   const defaultQuery = {
     deleted: false,
@@ -34,9 +36,12 @@ module.exports = (config) => {
 
   const createEntity = async (req, res) => {
     const { source, userId } = req;
+
     const obj = {
       ...defaultQuery,
-      ...req.body,
+      ...(customMiddleware
+        ? customMiddleware.parseInputForCreateEntity(req.body)
+        : req.body),
       source,
       userId,
     };
@@ -83,13 +88,7 @@ module.exports = (config) => {
     const { _id } = body;
 
     req.params.id = _id;
-    req.body = _.omit(body, [
-      "_id",
-      "createdAt",
-      "updatedAt",
-      "source",
-      "userId",
-    ]);
+    req.body = _.omit(body, KEYS_TO_OMIT);
 
     switch (action) {
       case "CREATE":

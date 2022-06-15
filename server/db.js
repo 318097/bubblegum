@@ -9,8 +9,8 @@ const connectToDb = async () => {
 
   return mongoose
     .connect(config.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => logger.log(`Connected to DB.`))
-    .catch((err) => logger.log("Error in connecting to MongoDb.", err));
+    .then(() => logger.log(`✅ Connected to DB.`))
+    .catch((err) => logger.log(`❌ Error in connecting to DB.`, err));
 };
 
 module.exports = connectToDb;

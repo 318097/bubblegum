@@ -61,7 +61,7 @@ async function initializeCache() {
     cache[storeId]["waitingNo"]++;
   });
 
-  logCache();
+  // logCache();
 }
 
 const addToCache = ({ booking, storeId }) => {

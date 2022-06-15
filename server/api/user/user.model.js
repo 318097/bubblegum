@@ -23,14 +23,7 @@ const UserSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    mobile: {
-      type: String,
-    },
-    notebase: [],
     bookmarkedPosts: {
-      type: Array,
-    },
-    timeline: {
       type: Array,
     },
     source: {

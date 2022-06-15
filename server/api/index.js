@@ -15,12 +15,15 @@ const migrationRoutes = require("./migration/migration.routes");
 const TagsModel = require("../modules/tags/tags.model");
 const ModulesModel = require("../modules/modules/modules.model");
 const controller = require("./api.controller");
+const tagsMiddleware = require("../modules/tags/tags.middleware");
 
 const dynamicRoutes = require("./dynamic-routes/dynamic-routes.routes");
 
 const tagRoutes = dynamicRoutes({
   Model: TagsModel,
+  customMiddleware: tagsMiddleware,
 });
+
 const moduleRoutes = dynamicRoutes({
   Model: ModulesModel,
 });
@@ -54,7 +57,6 @@ router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
 // router.use("/expenses", protectedRoute, expenseRoutes);
 // router.use("/timeline", protectedRoute, timelineRoutes);
 
-// if(config.IS_PROD)
 router.use("/migration", migrationRoutes);
 
 router.use("/tags", protectedRoute, tagRoutes);

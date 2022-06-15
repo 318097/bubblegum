@@ -4,6 +4,7 @@ const { getKeysBasedOnSource } = require("./products");
 const FireboardProjectsModel = require("../api/fireboard/fireboard.project.model");
 const TagsModel = require("../modules/tags/tags.model");
 const ModulesModel = require("../modules/modules/modules.model");
+const slug = require("slug");
 
 const OBJECT_ID_REGEX = /^[a-f\d]{24}$/i;
 
@@ -161,6 +162,10 @@ const extractUserData = async (req) => {
   return { ...basic, ...sourceBasedInfo, ...appSpecificInfo };
 };
 
+const generateSlugV2 = (title) => slug(title, "_");
+
+const lowerCaseAndTrim = (input) => input.toLowerCase().trim();
+
 module.exports = {
   getKey,
   generateResourceName,
@@ -172,4 +177,6 @@ module.exports = {
   generateObjectId,
   generateDate,
   getAppBasedInfo,
+  generateSlugV2,
+  lowerCaseAndTrim,
 };
