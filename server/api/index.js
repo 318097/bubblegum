@@ -1,13 +1,13 @@
 const router = require("express").Router();
-const config = require("../config");
+// const config = require("../config");
 const errorHandlingWrapper = require("../middleware/error-handling");
 const fileStorage = require("../utils/storage");
 const { protectedRoute, transparent } = require("../utils/authentication");
 
 const userRoutes = require("./user/user.routes");
 const postRoutes = require("./post/post.routes");
-const snakeGameRoutes = require("./snake/snake.routes");
-const storeqRoutes = require("./storeq/storeq.routes");
+// const snakeGameRoutes = require("./snake/snake.routes");
+// const storeqRoutes = require("./storeq/storeq.routes");
 const fireboardRoutes = require("./fireboard/fireboard.routes");
 const feedbackRoutes = require("./feedback/feedback.routes");
 const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
@@ -62,10 +62,10 @@ router.use("/migration", migrationRoutes);
 router.use("/tags", protectedRoute, tagRoutes);
 router.use("/modules", protectedRoute, moduleRoutes);
 
-if (config.NODE_ENV !== "express-lambda-production") {
+// if (config.NODE_ENV !== "express-lambda-production") {
   // router.use("/chat", externalAccess, chatRoutes);
-  router.use("/storeq", protectedRoute, storeqRoutes);
-  router.use("/snake", snakeGameRoutes);
-}
+  // router.use("/storeq", protectedRoute, storeqRoutes);
+  // router.use("/snake", snakeGameRoutes);
+// }
 
 module.exports = router;

@@ -8,7 +8,6 @@
       "visibility": {
         "active": true,
         "promotion": true,
-        "codedrops": true,
         "portfolio": true
       },
       "links": {
@@ -25,7 +24,6 @@
         }
       },
       "bitly": "https://bit.ly/devbox-extension",
-      "status": "LIVE",
       "tags": [
         "localstorage",
         "productivity",
@@ -46,17 +44,19 @@
       "visibility": {
         "active": true,
         "promotion": true,
-        "codedrops": true,
         "portfolio": true
       },
       "links": {
+        "ph": {
+          "label": "Product Hunt",
+          "url": "https://www.producthunt.com/products/array-builder"
+        },
         "product": {
           "label": "Tool",
           "url": "https://www.arraybuilder.com"
         }
       },
       "bitly": "https://bit.ly/array-builder",
-      "status": "LIVE",
       "tags": [
         "array-builder",
         "productivity",
@@ -90,13 +90,11 @@
         }
       },
       "bitly": "https://bit.ly/efeed-app",
-      "status": "WIP",
       "tags": [
         "email-feed",
         "productivity",
         "email"
-      ],
-      "tagline_0": "Read emails in the form of a feed"
+      ]
     },
     {
       "id": "FIREBOARD",
@@ -106,7 +104,6 @@
       "visibility": {
         "active": true,
         "promotion": true,
-        "codedrops": true,
         "portfolio": true
       },
       "links": {
@@ -131,9 +128,7 @@
         }
       },
       "bitly": "https://bit.ly/fireboardapp",
-      "status": "LIVE",
       "logo": "",
-      "poster": "",
       "devPort": 9000,
       "release": {
         "year": 2022,
@@ -148,10 +143,8 @@
       "visibility": {
         "active": true,
         "promotion": true,
-        "codedrops": true,
         "portfolio": true
       },
-      "status": "LIVE",
       "userKeys": [
         "timeline"
       ],
@@ -179,12 +172,9 @@
       "description": "Sometimes there are files which have the same names. ex. index.js. File Ops helps in `tagging` or `aliasing` files. These files can be Viewed & Opened from the tree view or using commands. Another feature is to be able to quickly switch between example.js and example.css.",
       "visibility": {
         "promotion": true,
-        "codedrops": true,
         "portfolio": true
       },
-      "status": "LIVE",
       "logo": "https://raw.githubusercontent.com/318097/file-ops/master/icons/icon128.png",
-      "poster": "https://res.cloudinary.com/codedropstech/image/upload/v1617810191/products/file-ops/Screenshot_2021-04-07_at_9.12.33_PM_fmchbl.png",
       "links": {
         "demo": {
           "label": "Demo",
@@ -228,7 +218,6 @@
         "codedrops": false,
         "portfolio": true
       },
-      "status": "LIVE",
       "userKeys": [
         "bookmarkedPosts"
       ],
@@ -267,10 +256,8 @@
       "description": "A Chrome Extension that provides an environment for every domain/URL. Revisit the notes when back to that URL or access it from `Homepage`. <br/> No Login/Signup. <br/>All the notes are stored in the browser memory.",
       "visibility": {
         "promotion": true,
-        "codedrops": true,
         "portfolio": true
       },
-      "status": "LIVE",
       "logo": "https://raw.githubusercontent.com/318097/note-box/master/app/icons/icon32.png",
       "links": {
         "demo": {
@@ -290,7 +277,6 @@
         }
       },
       "bitly": "https://bit.ly/notebox-extension",
-      "tagline_0": "A Chrome extension to store notes for every domain",
       "release": {
         "year": 2021,
         "month": 2,
@@ -304,10 +290,8 @@
       "description": "There are a lot of links provided on Github pages. Some might need to be marked as read, some might be amazing & some you would love to read it later. Github Marker does exactly that.<br/>The extension provides 3 options attached to every link found on Github related pages/URLs:<br/>1. Mark as Read/Unread <br/>2. Favorite/Un-Favorite a link<br/>3. Bookmark/Unbookmark a link",
       "visibility": {
         "promotion": true,
-        "codedrops": true,
         "portfolio": true
       },
-      "status": "LIVE",
       "logo": "https://raw.githubusercontent.com/318097/github-marker/master/app/icons/v2/icon32.png",
       "links": {
         "product": {
@@ -333,7 +317,6 @@
         "codedrops": false,
         "portfolio": true
       },
-      "status": "WIP",
       "links": {
         "product": {
           "label": "NPM",
@@ -361,7 +344,6 @@
         "codedrops": false,
         "portfolio": true
       },
-      "status": "WIP",
       "userKeys": [
         "notebase"
       ],
@@ -373,10 +355,7 @@
         "github": {
           "url": "https://github.com/318097/notebase"
         }
-      },
-      "customMessages": [
-        "DM if interested in collaboration"
-      ]
+      }
     },
     {
       "id": "FLASH",
@@ -401,7 +380,6 @@
       },
       "name": "Snake",
       "tagline": "Single & Multi player Snake game",
-      "status": "LIVE",
       "links": {
         "product": {
           "label": "Play",

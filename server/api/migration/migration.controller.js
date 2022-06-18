@@ -10,6 +10,58 @@ const TagsModel = require("../../modules/tags/tags.model");
 // } = require("../../modules/tags/tags.operations");
 // const { generateDefaultUserState } = require("../user/user.utils");
 
+// exports.getDataForCSV = async (req, res) => {
+//   const { collectionId } = req.params;
+//   const posts = await PostModel.find({
+//     collectionId: processId(collectionId),
+//   }).lean();
+
+//   const result = posts.map((post) => {
+//     const {
+//       _id,
+//       title,
+//       url,
+//       tags = [],
+//       visible,
+//       index,
+//       sourceInfo,
+//       createdAt,
+//       status,
+//     } = post;
+//     const {
+//       collectionName,
+//       collectionSize,
+//       collectionType,
+//       fileName,
+//       uploadedFileId,
+//     } = sourceInfo || {};
+//     return {
+//       _id,
+//       Title: _.capitalize(title),
+//       URL: url,
+//       Tags: `${
+//         _.isEmpty(tags)
+//           ? ""
+//           : _.join(
+//               _.map(tags, (tag) => _.toUpper(tag)),
+//               ","
+//             )
+//       }`,
+//       Visible: visible ? "Yes" : "No",
+//       Idx: index,
+//       CreatedAtNb: createdAt,
+//       status,
+//       collectionName,
+//       collectionSize,
+//       collectionType,
+//       fileName,
+//       uploadedFileId,
+//     };
+//   });
+
+//   res.send({ result });
+// };
+
 exports.autoGenerateTagsForCollection = async (req, res) => {
   const { collectionId } = req.params;
   const tags = await TagsModel.find({

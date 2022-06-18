@@ -1,6 +1,11 @@
 const router = require("express").Router();
-// const errorHandlingWrapper = require("../../middleware/error-handling");
-// const controller = require("./migration.controller");
+const errorHandlingWrapper = require("../../middleware/error-handling");
+const controller = require("./migration.controller");
+
+// router.get(
+//   "/get-data-for-csv/:collectionId",
+//   errorHandlingWrapper(controller.getDataForCSV)
+// );
 
 // router.put(
 //   "/auto-generate-tags/:collectionId",
