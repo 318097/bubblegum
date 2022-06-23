@@ -76,7 +76,6 @@
       "visibility": {
         "active": true,
         "promotion": false,
-        "codedrops": false,
         "portfolio": false
       },
       "links": {
@@ -158,9 +157,6 @@
         }
       },
       "bitly": "https://bit.ly/octon-app",
-      "customMessages": [
-        "DM if interested in collaboration"
-      ],
       "stats": {
         "launchedOn": "2021-07-18"
       }
@@ -215,7 +211,6 @@
       "visibility": {
         "active": true,
         "promotion": true,
-        "codedrops": false,
         "portfolio": true
       },
       "userKeys": [
@@ -314,7 +309,6 @@
       "tagline": "Custom UI components library for React.js",
       "visibility": {
         "promotion": false,
-        "codedrops": false,
         "portfolio": true
       },
       "links": {
@@ -329,10 +323,53 @@
         "github": {
           "url": "https://github.com/318097/react-ui"
         }
+      }
+    },
+    {
+      "id": "LIB",
+      "name": "Lib",
+      "tagline": "Custom utils, helpers, hooks & services",
+      "visibility": {
+        "promotion": false,
+        "portfolio": true
       },
-      "customMessages": [
-        "DM if interested in collaboration"
-      ]
+      "links": {
+        "product": {
+          "label": "Docs",
+          "url": "https://docs-codedrops.netlify.app/"
+        },
+        "github": {
+          "url": "https://github.com/318097/lib"
+        }
+      }
+    },
+    {
+      "id": "TEMPLATES",
+      "name": "Templates",
+      "tagline": "Ready to use next-app, next-landing, react-extension, UI library wrappers, dynamic UI generator",
+      "visibility": {
+        "promotion": false,
+        "portfolio": true
+      },
+      "links": {
+        "github": {
+          "url": "https://github.com/318097/templates"
+        }
+      }
+    },
+    {
+      "id": "BUBBLEGUM",
+      "name": "Bubblegum Server",
+      "tagline": "All-in-one Node server",
+      "visibility": {
+        "promotion": false,
+        "portfolio": true
+      },
+      "links": {
+        "github": {
+          "url": "https://github.com/318097/bubblegum"
+        }
+      }
     },
     {
       "id": "NOTEBASE",
@@ -341,7 +378,6 @@
       "visibility": {
         "active": true,
         "promotion": false,
-        "codedrops": false,
         "portfolio": true
       },
       "userKeys": [
@@ -364,7 +400,6 @@
       "visibility": {
         "active": true,
         "promotion": false,
-        "codedrops": false,
         "portfolio": false
       },
       "userKeys": [
@@ -375,7 +410,6 @@
       "id": "SNAKE",
       "visibility": {
         "promotion": false,
-        "codedrops": false,
         "portfolio": true
       },
       "name": "Snake",
