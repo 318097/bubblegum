@@ -164,7 +164,7 @@
     {
       "id": "FILE_OPS",
       "name": "File Ops",
-      "tagline": "A VS Code extension to easily tag/alias files & quick switch between files",
+      "tagline": "VS Code extension to import file path, tag/alias files & quick switch",
       "description": "Sometimes there are files which have the same names. ex. index.js. File Ops helps in `tagging` or `aliasing` files. These files can be Viewed & Opened from the tree view or using commands. Another feature is to be able to quickly switch between example.js and example.css.",
       "visibility": {
         "promotion": true,
