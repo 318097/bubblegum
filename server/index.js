@@ -1,7 +1,6 @@
 /* eslint-disable import/newline-after-import */
 const express = require("express");
 const app = express();
-require("./graphql");
 
 // eslint-disable-next-line import/order
 const http = require("http").Server(app);
