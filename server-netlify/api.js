@@ -5,7 +5,6 @@ const app = express();
 const connectToDb = require("../server/db");
 const apiRoutes = require("../server/api");
 const authRoutes = require("../server/auth/auth.routes");
-const { startApolloServer } = require("../server/graphql");
 
 app.use("/.netlify/functions/api", async (req, res, next) => {
   await connectToDb();
@@ -16,8 +15,6 @@ require("../server/middleware/app-middleware")(app);
 
 app.use("/.netlify/functions/api/auth", authRoutes);
 app.use("/.netlify/functions/api", apiRoutes);
-
-startApolloServer(app);
 
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {

@@ -8,10 +8,8 @@
     "serve": "nodemon server/index.js",
     "serve:netlify": "netlify-lambda -c ./webpack.functions.js serve server-netlify",
     "build:netlify": "netlify-lambda -c ./webpack.functions.js build server-netlify",
-    "deploy:heroku": "git push heroku master",
     "deploy:netlify": "netlify deploy --prod",
     "predeploy": "git push origin master",
-    "deploy": "git push origin master && npm run deploy:heroku",
     "lint": "eslint server/**"
   },
   "author": "",
@@ -19,7 +17,7 @@
   "dependencies": {
     "@hapi/joi": "^15.1.0",
     "@sendgrid/mail": "^7.4.6",
-    "apollo-server-express": "^2.25.0",
+    "apollo-server-lambda": "^3.10.1",
     "bcrypt": "^5.0.1",
     "chalk": "^3.0.0",
     "cloudinary": "^1.25.1",

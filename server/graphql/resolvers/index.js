@@ -20,6 +20,7 @@ module.exports = {
   JSON: JSONResolver,
   Query: {
     octon: () => ({}),
+    test: () => "Working :)",
   },
   OctonQueries: {
     ...taskQueryResolvers,

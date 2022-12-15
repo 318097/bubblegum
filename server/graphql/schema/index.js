@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-express");
+const { gql } = require("apollo-server-lambda");
 const { typeDefs: scalarTypeDefs } = require("graphql-scalars");
 
 const octonTypeDefs = gql`
@@ -192,6 +192,7 @@ const octonTypeDefs = gql`
 const root = gql`
   type Query {
     octon: OctonQueries
+    test: String
   }
 
   type Mutation {

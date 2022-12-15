@@ -11,8 +11,6 @@ const config = require("./config");
 const logger = require("./utils/logger");
 const authRoutes = require("./auth/auth.routes");
 const api = require("./api");
-const { startApolloServer } = require("./graphql");
-
 logger.log(
   `${config.IS_PROD ? "💀" : "🆗"} Running in '${config.NODE_ENV}' mode`
 );
@@ -23,8 +21,6 @@ require("./api/snake/snake.socket")(io);
 require("./api/chat/chat.socket")(io);
 
 require("./middleware/app-middleware")(app);
-
-startApolloServer(app);
 
 app.use("/api/auth", authRoutes);
 app.use("/api", api);
