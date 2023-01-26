@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo-server-express": "^2.25.0",
     "@hapi/joi": "^15.1.0",
     "@sendgrid/mail": "^7.4.6",
     "apollo-server-lambda": "^3.10.1",
