@@ -3,7 +3,7 @@ const config = require("../config");
 const { fileUpload } = require("../utils/file-upload");
 const TransactionModel = require("../models/transaction.model");
 const sendMail = require("../utils/sendgrid");
-const { ORIGIN_LIST, getProducts } = require("../utils/products");
+const { ACTIVE_PRODUCT_URLS, getProducts } = require("../utils/products");
 
 exports.test = async (req, res) => {
   console.log("host: ", req.get("host"));
@@ -60,7 +60,8 @@ exports.sendEmail = async (req, res) => {
   const origin = req.get("host");
   console.log("origin", origin);
   const validSource = config.IS_PROD
-    ? ORIGIN_LIST.some((host) => host.includes(origin))
+    ? ACTIVE_PRODUCT_URLS.some((host) => host.includes(origin)) ||
+      config.ALLOWED_PRODUCT_SOURCES.includes(source)
     : true;
 
   if (!validSource) throw new Error("INVALID_SOURCE");

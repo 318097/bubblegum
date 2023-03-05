@@ -25,9 +25,9 @@ const getProducts = ({ visibilityKey = "" } = {}) => {
 
 const PRODUCT_MAP = _.keyBy(getProducts({ visibilityKey: "active" }), "id");
 
-const ORIGIN_LIST = getProducts({ visibilityKey: "active" })
+const ACTIVE_PRODUCT_URLS = getProducts({ visibilityKey: "active" })
   .map((product) => _.get(product, "links.product.url"))
-  .filter((origin) => !!origin);
+  .filter((url) => !!url);
 
 const PRODUCT_LIST = Object.keys(PRODUCT_MAP);
 
@@ -71,6 +71,6 @@ module.exports = {
   getKeysBasedOnSource,
   PRODUCT_MAP,
   PRODUCT_LIST,
-  ORIGIN_LIST,
+  ACTIVE_PRODUCT_URLS,
   products,
 };

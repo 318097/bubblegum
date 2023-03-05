@@ -41,6 +41,7 @@ const config = {
   // ENABLE_EMAIL: IS_PROD,
   ENABLE_EMAIL: true,
   SENDGRID_API_KEY,
+  ALLOWED_PRODUCT_SOURCES: ["QUICK_SWITCH"], // allow sending emails for these sources as they dont have a fixed URL
 };
 
 module.exports = config;
