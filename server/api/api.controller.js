@@ -58,7 +58,11 @@ exports.rssFeedParser = async (req, res) => {
 exports.sendEmail = async (req, res) => {
   const { email, name, source, type = "WELCOME" } = req.body;
   const origin = req.get("host");
-  console.log("origin", origin);
+  console.log("sendEmail:", {
+    origin,
+    source,
+    ALLOWED_PRODUCT_SOURCES: config.ALLOWED_PRODUCT_SOURCES,
+  });
   const validSource = config.IS_PROD
     ? ACTIVE_PRODUCT_URLS.some((host) => host.includes(origin)) ||
       config.ALLOWED_PRODUCT_SOURCES.includes(source)
