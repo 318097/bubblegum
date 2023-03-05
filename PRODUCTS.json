@@ -1,6 +1,37 @@
 {
   "products": [
     {
+      "id": "QUICK_SWITCH",
+      "name": "Quick Switch",
+      "tagline": "Power shortcuts for tabs",
+      "description": "",
+      "visibility": {
+        "active": true,
+        "promotion": true,
+        "portfolio": true
+      },
+      "links": {
+        "product": {
+          "label": "Extension",
+          "url": "https://chrome.google.com/webstore/detail/quick-switch/opmkdcghgfeofhpoefbehjgfjekbdhnc"
+        },
+        "landing": {
+          "label": "Go",
+          "url": "https://www.quickswitch.xyz/"
+        }
+      },
+      "bitly": "https://bit.ly/quick-switch-extension",
+      "tags": [
+        "Productivity",
+        "ChromeExtension"
+      ],
+      "release": {
+        "year": 2023,
+        "month": 2,
+        "day": 10
+      }
+    },
+    {
       "id": "DEVBOX",
       "name": "Devbox",
       "tagline": "A UI for local storage",
