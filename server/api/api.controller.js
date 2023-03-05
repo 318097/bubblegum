@@ -61,7 +61,6 @@ exports.sendEmail = async (req, res) => {
   console.log("sendEmail:", {
     origin,
     source,
-    ALLOWED_PRODUCT_SOURCES: config.ALLOWED_PRODUCT_SOURCES,
   });
   const validSource = config.IS_PROD
     ? ACTIVE_PRODUCT_URLS.some((host) => host.includes(origin)) ||
