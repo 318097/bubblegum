@@ -96,7 +96,7 @@ const getAggregationFilters = (req) => {
 };
 
 exports.getRelatedPosts = async (req, res) => {
-  const { collectionId, tags = [], postId } = req.query;
+  const { collectionId, tags = [], postId, size = 6 } = req.query;
   const aggregation = {
     status: "POSTED",
     visible: true,
@@ -111,7 +111,7 @@ exports.getRelatedPosts = async (req, res) => {
     {
       $match: aggregation,
     },
-    { $sample: { size: 4 } },
+    { $sample: { size: Number(size) } },
   ]);
   res.send({ posts });
 };
@@ -138,7 +138,6 @@ exports.getChains = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
   const { aggregation, sort, page, limit } = getAggregationFilters(req);
-  // console.log("aggregation, sort::-", aggregation, sort);
 
   const result = await Model.aggregate([
     { $match: aggregation },
@@ -162,6 +161,19 @@ exports.getAllPosts = async (req, res) => {
   res.send({
     posts: result,
     meta: { count },
+  });
+};
+
+exports.getAllPostIds = async (req, res) => {
+  const { aggregation } = getAggregationFilters(req);
+
+  const result = await Model.aggregate([
+    { $match: aggregation },
+    { $project: { slug: 1 } },
+  ]);
+
+  res.send({
+    postIds: result,
   });
 };
 

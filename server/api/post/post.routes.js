@@ -5,6 +5,11 @@ const { transparent, protectedRoute } = require("../../utils/authentication");
 const controller = require("./post.controller");
 
 router.get("/", transparent, errorHandlingWrapper(controller.getAllPosts));
+router.get(
+  "/post-ids",
+  transparent,
+  errorHandlingWrapper(controller.getAllPostIds)
+);
 router.get("/random", errorHandlingWrapper(controller.getRelatedPosts));
 router.get("/stats", protectedRoute, errorHandlingWrapper(controller.getStats));
 router.get(
