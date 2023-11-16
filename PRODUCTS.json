@@ -133,7 +133,7 @@
       "description": "",
       "visibility": {
         "active": true,
-        "promotion": true,
+        "promotion": false,
         "portfolio": true
       },
       "links": {
@@ -142,7 +142,7 @@
         },
         "product": {
           "label": "App",
-          "url": "https://web.fireboardapp.com/"
+          "url": "https://fireboard.netlify.app/"
         },
         "extension": {
           "label": "Extension",
@@ -150,7 +150,7 @@
         },
         "landing": {
           "label": "Visit",
-          "url": "https://www.fireboardapp.com/"
+          "url": "https://fireboardapp.netlify.app/"
         },
         "ph": {
           "label": "Product Hunt",
@@ -172,7 +172,7 @@
       "tagline": "Manage expenses, todos, goals, progress & personal timeline",
       "visibility": {
         "active": true,
-        "promotion": true,
+        "promotion": false,
         "portfolio": true
       },
       "userKeys": [
@@ -241,8 +241,8 @@
       "tagline": "Micro-blogging on Web development",
       "visibility": {
         "active": true,
-        "promotion": true,
-        "portfolio": true
+        "promotion": false,
+        "portfolio": false
       },
       "userKeys": [
         "bookmarkedPosts"
@@ -276,12 +276,46 @@
       }
     },
     {
+      "id": "CODE404",
+      "name": "Code404",
+      "tagline": "Micro-blogging on web development",
+      "visibility": {
+        "active": true,
+        "promotion": true,
+        "portfolio": true
+      },
+      "links": {
+        "product": {
+          "label": "Visit",
+          "url": "https://www.code404.co/"
+        }
+      },
+      "bitly": "https://bit.ly/codedrops-tech",
+      "social": {
+        "facebook": {
+          "label": "Facebook",
+          "fontAwesome": "fab fa-facebook",
+          "url": "https://www.facebook.com/code404.co/"
+        },
+        "instagram": {
+          "label": "Instagram",
+          "fontAwesome": "fab fa-instagram",
+          "url": "https://www.instagram.com/code404.co/"
+        },
+        "twitter": {
+          "label": "Twitter",
+          "fontAwesome": "fab fa-twitter",
+          "url": "https://twitter.com/code404_co"
+        }
+      }
+    },
+    {
       "id": "NOTE_BOX",
       "name": "Note Box",
       "tagline": "A chrome extension to add notes/todos based on URL",
       "description": "A Chrome Extension that provides an environment for every domain/URL. Revisit the notes when back to that URL or access it from `Homepage`. <br/> No Login/Signup. <br/>All the notes are stored in the browser memory.",
       "visibility": {
-        "promotion": true,
+        "promotion": false,
         "portfolio": true
       },
       "logo": "https://raw.githubusercontent.com/318097/note-box/master/app/icons/icon32.png",
@@ -315,7 +349,7 @@
       "tagline": "A chrome extension to Favorite, Bookmark & Mark link as Read in Github",
       "description": "There are a lot of links provided on Github pages. Some might need to be marked as read, some might be amazing & some you would love to read it later. Github Marker does exactly that.<br/>The extension provides 3 options attached to every link found on Github related pages/URLs:<br/>1. Mark as Read/Unread <br/>2. Favorite/Un-Favorite a link<br/>3. Bookmark/Unbookmark a link",
       "visibility": {
-        "promotion": true,
+        "promotion": false,
         "portfolio": true
       },
       "logo": "https://raw.githubusercontent.com/318097/github-marker/master/app/icons/v2/icon32.png",
