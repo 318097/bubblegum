@@ -2,7 +2,7 @@
   "products": [
     {
       "id": "QUICK_SWITCH",
-      "name": "Quick Switch",
+      "name": "QuickSwitch",
       "tagline": "Power shortcuts for tabs",
       "description": "",
       "visibility": {
@@ -69,7 +69,7 @@
     },
     {
       "id": "ARRAY_BUILDER",
-      "name": "Array Builder",
+      "name": "ArrayBuilder",
       "tagline": "A free tool to visualize the output of array operations",
       "description": "",
       "visibility": {
@@ -101,7 +101,7 @@
     },
     {
       "id": "E_FEED",
-      "name": "E Feed",
+      "name": "EFeed",
       "tagline": "Emails in the form of feed",
       "description": "",
       "visibility": {
@@ -112,11 +112,11 @@
       "links": {
         "product": {
           "label": "App",
-          "url": "https://app.efeed.xyz/"
+          "url": "https://efeed.netlify.app/"
         },
         "landing": {
           "label": "Go",
-          "url": "https://www.efeed.xyz/"
+          "url": "https://efeed-landing.netlify.app/"
         }
       },
       "bitly": "https://bit.ly/efeed-app",
@@ -194,7 +194,7 @@
     },
     {
       "id": "FILE_OPS",
-      "name": "File Ops",
+      "name": "FileOps",
       "tagline": "VS Code extension to import file path, tag/alias files & quick switch",
       "description": "Sometimes there are files which have the same names. ex. index.js. File Ops helps in `tagging` or `aliasing` files. These files can be Viewed & Opened from the tree view or using commands. Another feature is to be able to quickly switch between example.js and example.css.",
       "visibility": {
@@ -311,7 +311,7 @@
     },
     {
       "id": "NOTE_BOX",
-      "name": "Note Box",
+      "name": "NoteBox",
       "tagline": "A chrome extension to add notes/todos based on URL",
       "description": "A Chrome Extension that provides an environment for every domain/URL. Revisit the notes when back to that URL or access it from `Homepage`. <br/> No Login/Signup. <br/>All the notes are stored in the browser memory.",
       "visibility": {
@@ -345,7 +345,7 @@
     },
     {
       "id": "GITHUB_MARKER",
-      "name": "Github Marker",
+      "name": "GithubMarker",
       "tagline": "A chrome extension to Favorite, Bookmark & Mark link as Read in Github",
       "description": "There are a lot of links provided on Github pages. Some might need to be marked as read, some might be amazing & some you would love to read it later. Github Marker does exactly that.<br/>The extension provides 3 options attached to every link found on Github related pages/URLs:<br/>1. Mark as Read/Unread <br/>2. Favorite/Un-Favorite a link<br/>3. Bookmark/Unbookmark a link",
       "visibility": {
@@ -370,7 +370,7 @@
     },
     {
       "id": "REACT_UI",
-      "name": "React UI",
+      "name": "ReactUI",
       "tagline": "Custom UI components library for React.js",
       "visibility": {
         "promotion": false,
