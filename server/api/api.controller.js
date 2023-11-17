@@ -4,6 +4,12 @@ const { fileUpload } = require("../utils/file-upload");
 const TransactionModel = require("../models/transaction.model");
 const sendMail = require("../utils/sendgrid");
 const { ACTIVE_PRODUCT_URLS, getProducts } = require("../utils/products");
+const _ = require("lodash");
+const { Client } = require("@notionhq/client");
+
+const notion = new Client({
+  auth: config.NOTION_AUTH_KEY,
+});
 
 exports.test = async (req, res) => {
   console.log("host: ", req.get("host"));
@@ -83,4 +89,57 @@ exports.sendEmail = async (req, res) => {
 exports.getProducts = async (req, res) => {
   const products = getProducts();
   res.send({ products });
+};
+
+exports.getNotionData = async (req, res) => {
+  try {
+    const { dbId } = req.query;
+    const response = await notion.databases.query({
+      database_id: dbId,
+      filter: {
+        property: "Live",
+        checkbox: {
+          equals: true,
+        },
+      },
+    });
+
+    const results = [];
+    response.results.map((item) => {
+      const { properties } = item;
+      const result = {};
+      _.forEach(properties, (value, key) => {
+        const { type } = value;
+        let finalValue = "";
+        switch (type) {
+          case "multi_select":
+            finalValue = value.multi_select.map((item) => item.name);
+            break;
+          case "title":
+            finalValue = _.get(value, "title.0.plain_text");
+            break;
+          case "rich_text":
+            finalValue = _.get(value, "rich_text.0.plain_text");
+            break;
+          case "select":
+            finalValue = _.get(value, "select.name");
+            break;
+          case "checkbox":
+            finalValue = _.get(value, "checkbox");
+            break;
+          case "number":
+            finalValue = _.get(value, "number");
+            break;
+          // default:
+          //   throw new Error("Unhandled notion type.");
+        }
+        result[key] = finalValue;
+      });
+      results.push(result);
+    });
+
+    res.send({ data: results });
+  } catch (err) {
+    console.log(err);
+  }
 };

@@ -39,6 +39,7 @@ router.get("/sendgrid", controller.sendgrid);
 router.post("/send-email", errorHandlingWrapper(controller.sendEmail));
 router.get("/products", errorHandlingWrapper(controller.getProducts));
 router.get("/rssfeed", errorHandlingWrapper(controller.rssFeedParser));
+router.get("/notion-data", errorHandlingWrapper(controller.getNotionData));
 router.post(
   "/upload",
   protectedRoute,
@@ -63,9 +64,9 @@ router.use("/tags", protectedRoute, tagRoutes);
 router.use("/modules", protectedRoute, moduleRoutes);
 
 // if (config.NODE_ENV !== "express-lambda-production") {
-  // router.use("/chat", externalAccess, chatRoutes);
-  // router.use("/storeq", protectedRoute, storeqRoutes);
-  // router.use("/snake", snakeGameRoutes);
+// router.use("/chat", externalAccess, chatRoutes);
+// router.use("/storeq", protectedRoute, storeqRoutes);
+// router.use("/snake", snakeGameRoutes);
 // }
 
 module.exports = router;

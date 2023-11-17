@@ -15,9 +15,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-server-express": "^2.25.0",
     "@hapi/joi": "^15.1.0",
+    "@notionhq/client": "^2.2.13",
     "@sendgrid/mail": "^7.4.6",
+    "apollo-server-express": "^2.25.0",
     "apollo-server-lambda": "^3.10.1",
     "bcrypt": "^5.0.1",
     "chalk": "^3.0.0",

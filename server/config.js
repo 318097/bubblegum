@@ -10,6 +10,7 @@ const {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   SENDGRID_API_KEY,
+  NOTION_AUTH_KEY,
 } = process.env;
 
 let { NODE_ENV } = process.env;
@@ -42,6 +43,7 @@ const config = {
   ENABLE_EMAIL: true,
   SENDGRID_API_KEY,
   ALLOWED_PRODUCT_SOURCES: ["QUICK_SWITCH"], // allow sending emails for these sources as they dont have a fixed URL
+  NOTION_AUTH_KEY,
 };
 
 module.exports = config;
