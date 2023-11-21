@@ -12,6 +12,7 @@ const fireboardRoutes = require("./fireboard/fireboard.routes");
 const feedbackRoutes = require("./feedback/feedback.routes");
 const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
 const migrationRoutes = require("./migration/migration.routes");
+const notionRoutes = require("./notion/notion.routes");
 const TagsModel = require("../modules/tags/tags.model");
 const ModulesModel = require("../modules/modules/modules.model");
 const controller = require("./api.controller");
@@ -39,7 +40,6 @@ router.get("/sendgrid", controller.sendgrid);
 router.post("/send-email", errorHandlingWrapper(controller.sendEmail));
 router.get("/products", errorHandlingWrapper(controller.getProducts));
 router.get("/rssfeed", errorHandlingWrapper(controller.rssFeedParser));
-router.get("/notion-data", errorHandlingWrapper(controller.getNotionData));
 router.post(
   "/upload",
   protectedRoute,
@@ -49,6 +49,7 @@ router.post(
 
 router.use("/user", protectedRoute, userRoutes);
 router.use("/posts", postRoutes);
+router.use("/notion", notionRoutes);
 router.use("/fireboard", protectedRoute, fireboardRoutes);
 
 router.use("/feedback", transparent, feedbackRoutes);

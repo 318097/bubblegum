@@ -44,6 +44,10 @@ const config = {
   SENDGRID_API_KEY,
   ALLOWED_PRODUCT_SOURCES: ["QUICK_SWITCH"], // allow sending emails for these sources as they dont have a fixed URL
   NOTION_AUTH_KEY,
+  NOTION_DB: {
+    LIQUID_TECH: "9af81c6dc67643acaddd38643a7e3189",
+    KEYBINDINGS: "afacc590c45e46b58c0582fa1abfb2f4",
+  },
 };
 
 module.exports = config;
