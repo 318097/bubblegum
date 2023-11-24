@@ -72,21 +72,15 @@ exports.getLiquidTech = async (req, res) => {
       filter: {
         and: [
           {
-            property: "Status",
-            select: {
-              equals: "DB",
+            property: "status",
+            multi_select: {
+              contains: "DB",
             },
           },
           {
-            property: "Visible",
-            checkbox: {
-              equals: true,
-            },
-          },
-          {
-            property: "Duplicate",
-            checkbox: {
-              equals: false,
+            property: "void",
+            multi_select: {
+              is_empty: true,
             },
           },
         ],
@@ -97,11 +91,12 @@ exports.getLiquidTech = async (req, res) => {
 
     const parsedList = parseNotionData(list).map((listItem) => {
       return {
-        title: listItem["Title"],
-        url: listItem["URL"],
-        type: _.toLower(listItem["L0 Tag"]),
-        subType: _.toLower(listItem["L1 Tag"]),
-        tags: listItem["Tags"],
+        _id: listItem["_id"],
+        title: listItem["title"],
+        url: listItem["url"],
+        type: _.toLower(listItem["L0"]),
+        subType: _.toLower(listItem["L1"]),
+        tags: listItem["tags"],
       };
     });
 
@@ -116,22 +111,32 @@ exports.getAllKeyBindings = async (req, res) => {
     const params = {
       database_id: config.NOTION_DB.KEYBINDINGS,
       filter: {
-        property: "Live",
-        checkbox: {
-          equals: true,
-        },
+        and: [
+          {
+            property: "status",
+            multi_select: {
+              contains: "DB",
+            },
+          },
+          {
+            property: "void",
+            multi_select: {
+              is_empty: true,
+            },
+          },
+        ],
       },
     };
 
     const list = await fetchAllData(params);
 
     const parsedList = parseNotionData(list).map(
-      ({ Name, Platform, MAC, Id }) => {
+      ({ title, platform, binding, _id }) => {
         return {
-          _id: Id,
-          title: Name,
-          platform: Platform,
-          MAC: JSON.parse(MAC),
+          _id,
+          title,
+          platform,
+          binding: JSON.parse(binding),
         };
       }
     );
