@@ -78,6 +78,12 @@ exports.getLiquidTech = async (req, res) => {
             },
           },
           {
+            property: "status",
+            multi_select: {
+              contains: "Live",
+            },
+          },
+          {
             property: "void",
             multi_select: {
               is_empty: true,
@@ -97,6 +103,7 @@ exports.getLiquidTech = async (req, res) => {
         type: _.toLower(listItem["L0"]),
         subType: _.toLower(listItem["L1"]),
         tags: listItem["tags"],
+        description: listItem["description"],
       };
     });
 
@@ -116,6 +123,12 @@ exports.getAllKeyBindings = async (req, res) => {
             property: "status",
             multi_select: {
               contains: "DB",
+            },
+          },
+          {
+            property: "status",
+            multi_select: {
+              contains: "Live",
             },
           },
           {
