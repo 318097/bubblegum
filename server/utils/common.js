@@ -94,9 +94,9 @@ const getAppBasedInfo = async ({ user, source }) => {
         moduleName: "EXPENSE_TYPES",
         source,
       });
-      result["expenseApps"] = await getTags({
+      result["expenseGroups"] = await getTags({
         userId: user._id,
-        moduleName: "EXPENSE_APPS",
+        moduleName: "EXPENSE_GROUPS",
         source,
       });
       result["expenseSources"] = await getTags({

@@ -11,10 +11,10 @@ const ExpenseSchema = new mongoose.Schema(
     message: String,
     favorite: { type: Boolean, default: false },
     excluded: { type: Boolean, default: false },
-    expenseSourceId: { type: String },
-    expenseAppId: { type: String },
-    expenseSubTypeId: ObjectId,
     expenseTypeId: { type: ObjectId, required: true },
+    expenseSubTypeId: ObjectId,
+    expenseSourceId: { type: String },
+    expenseGroupId: { type: ObjectId },
   },
   {
     timestamps: true,

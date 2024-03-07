@@ -88,7 +88,7 @@ const octonTypeDefs = gql`
     favorite: Boolean
     excluded: Boolean
     expenseSourceId: String
-    expenseAppId: String
+    expenseGroupId: String
   }
 
   input CreateExpenseInput {
@@ -100,7 +100,7 @@ const octonTypeDefs = gql`
     favorite: Boolean
     excluded: Boolean
     expenseSourceId: String
-    expenseAppId: String
+    expenseGroupId: String
   }
 
   input FavoriteExpenseInput {
@@ -118,7 +118,7 @@ const octonTypeDefs = gql`
     favorite: Boolean
     excluded: Boolean
     expenseSourceId: String
-    expenseAppId: String
+    expenseGroupId: String
   }
 
   input DeleteExpenseInput {
