@@ -9,13 +9,21 @@ const _ = require("lodash");
 const set = require("set-value");
 
 const getExpensesByMonth = async (_, args, { models, user }) => {
-  const { month, year, minAmount, startMonth, endMonth } = args.input;
+  const { month, year, minAmount, maxAmount, startMonth, endMonth } =
+    args.input;
   const query = {
     userId: user._id,
   };
 
-  if (minAmount) {
-    query["amount"] = { $gte: minAmount };
+  if (minAmount || maxAmount) {
+    query["amount"] = {};
+    if (minAmount) {
+      query["amount"]["$gte"] = minAmount;
+    }
+
+    if (maxAmount) {
+      query["amount"]["$lte"] = maxAmount;
+    }
   }
 
   if (startMonth) {

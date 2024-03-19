@@ -72,6 +72,7 @@ const octonTypeDefs = gql`
     month: Int
     year: Int
     minAmount: Int
+    maxAmount: Int
     startMonth: String
     endMonth: String
   }
