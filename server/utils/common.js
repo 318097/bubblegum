@@ -44,7 +44,9 @@ const getTags = async ({ userId, moduleName, source, moduleId }) =>
     moduleName,
     source,
     moduleId,
-  }).lean();
+  })
+    .sort({ label: 1 })
+    .lean();
 
 const getModules = async ({ userId, moduleType, source }) =>
   ModulesModel.find({
