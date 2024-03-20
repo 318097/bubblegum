@@ -74,6 +74,7 @@ const octonTypeDefs = gql`
     minAmount: Int
     maxAmount: Int
     startMonth: String
+    expenseSubTypeId: String
     endMonth: String
   }
 
