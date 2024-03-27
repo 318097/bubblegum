@@ -103,6 +103,7 @@ const octonTypeDefs = gql`
     excluded: Boolean
     expenseSourceId: String
     expenseGroupId: String
+    expenseCategoryId: String
   }
 
   input FavoriteExpenseInput {
@@ -168,7 +169,7 @@ const octonTypeDefs = gql`
     getTaskById(input: TaskByIdInput!): Task!
     # Expenses
     getExpensesByMonth(input: MonthlyExpensesInput!): [Expense]!
-    expenseStats: JSON!
+    expenseStats(input: MonthlyExpensesInput!): JSON!
     # Timeline
     getTimeline(input: GetTimelineInput!): [Timeline]!
   }

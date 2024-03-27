@@ -111,26 +111,26 @@ const deleteExpense = async (_, args, { models, userId }) => {
 
 const expenseStats = async (parent, args, { models, userId, user }) => {
   const months = 6;
-  const startMonth = moment()
+  const last6StartMonth = moment()
     .subtract(months, "months")
     .startOf("month")
     .toDate();
   const data = await models.Expense.find({
     userId,
     date: {
-      $gte: startMonth,
+      $gte: last6StartMonth,
     },
     excluded: { $ne: true },
   }).sort({ date: 1 });
 
   const monthlyOverview = {};
   const categoryTotal = {};
+  const expenseTypes = _.get(user, "expenseTypes", []);
   data.forEach((item) => {
-    const { date, amount, expenseTypeId } = item;
+    const { date, amount, expenseSubTypeId } = item;
 
-    const expenseList = _.get(user, "expenseTypes", []);
-    const expenseType = _.find(expenseList, { _id: expenseTypeId }) || {};
-    const expenseTypeLabel = expenseType.label;
+    const { label: expenseTypeLabel } =
+      _.find(expenseTypes, { _id: expenseSubTypeId }) || {};
 
     const [month, year] = moment(date).format("MMM-YY").split("-");
     const createdKey = `${month} ${year}`;
