@@ -110,6 +110,16 @@ const deleteExpense = async (_, args, { models, userId }) => {
 };
 
 const expenseStats = async (parent, args, { models, userId, user }) => {
+  // const {
+  //   month,
+  //   year,
+  //   minAmount,
+  //   expenseSubTypeId,
+  //   maxAmount,
+  //   startMonth,
+  //   endMonth,
+  // } = args.input;
+
   const months = 6;
   const last6StartMonth = moment()
     .subtract(months, "months")
@@ -124,7 +134,7 @@ const expenseStats = async (parent, args, { models, userId, user }) => {
   }).sort({ date: 1 });
 
   const monthlyOverview = {};
-  const categoryTotal = {};
+  // const categoryTotal = {};
   const expenseTypes = _.get(user, "expenseTypes", []);
   data.forEach((item) => {
     const { date, amount, expenseSubTypeId } = item;
@@ -146,11 +156,11 @@ const expenseStats = async (parent, args, { models, userId, user }) => {
       previousValue + amount
     );
 
-    categoryTotal[expenseTypeLabel] =
-      (categoryTotal[expenseTypeLabel] || 0) + amount;
+    // categoryTotal[expenseTypeLabel] =
+    //   (categoryTotal[expenseTypeLabel] || 0) + amount;
   });
 
-  return { monthlyOverview, categoryTotal };
+  return { monthlyOverview, categoryTotal: {} };
 };
 
 module.exports = {
