@@ -125,7 +125,7 @@ const expenseStats = async (parent, args, { models, userId, user }) => {
     .subtract(months, "months")
     .startOf("month")
     .toDate();
-  const data = await models.Expense.find({
+  const expenses = await models.Expense.find({
     userId,
     date: {
       $gte: last6StartMonth,
@@ -134,33 +134,32 @@ const expenseStats = async (parent, args, { models, userId, user }) => {
   }).sort({ date: 1 });
 
   const monthlyOverview = {};
-  // const categoryTotal = {};
   const expenseTypes = _.get(user, "expenseTypes", []);
-  data.forEach((item) => {
-    const { date, amount, expenseSubTypeId } = item;
 
-    const { label: expenseTypeLabel } =
+  expenses.forEach((expense) => {
+    const { date, amount, expenseSubTypeId } = expense;
+
+    const { label: expenseTypeLabel, visible } =
       _.find(expenseTypes, { _id: expenseSubTypeId }) || {};
 
-    const [month, year] = moment(date).format("MMM-YY").split("-");
-    const createdKey = `${month} ${year}`;
+    if (visible) {
+      const [month, year] = moment(date).format("MMM-YY").split("-");
+      const createdKey = `${month} ${year}`;
 
-    const previousValue = _.get(
-      monthlyOverview,
-      [createdKey, expenseTypeLabel],
-      0
-    );
-    set(
-      monthlyOverview,
-      [createdKey, expenseTypeLabel],
-      previousValue + amount
-    );
-
-    // categoryTotal[expenseTypeLabel] =
-    //   (categoryTotal[expenseTypeLabel] || 0) + amount;
+      const previousValue = _.get(
+        monthlyOverview,
+        [createdKey, expenseTypeLabel],
+        0
+      );
+      set(
+        monthlyOverview,
+        [createdKey, expenseTypeLabel],
+        previousValue + amount
+      );
+    }
   });
 
-  return { monthlyOverview, categoryTotal: {} };
+  return { monthlyOverview };
 };
 
 module.exports = {

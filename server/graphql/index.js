@@ -8,7 +8,7 @@ const TaskModel = require("../api/task/task.model");
 const ExpenseModel = require("../api/expenses/expenses.model");
 const TimelineModel = require("../api/timeline/timeline.model");
 const { getUserFromToken } = require("../utils/authentication");
-const { processId } = require("../utils/common");
+const { processId, getAppBasedInfo } = require("../utils/common");
 const logger = require("../utils/logger");
 const config = require("../config");
 
@@ -20,6 +20,10 @@ const options = {
     if (!token) throw new Error("NO_JWT_TOKEN_FOUND");
 
     const user = await getUserFromToken(token);
+    const appBasedInfo = await getAppBasedInfo({
+      user,
+      source: req.headers.source,
+    });
     if (!user) throw new Error("UNAUTHORIZED");
 
     const models = {
@@ -31,7 +35,10 @@ const options = {
 
     return {
       models,
-      user,
+      user: {
+        ...user,
+        ...appBasedInfo,
+      },
       userId: processId(user._id),
     };
   },
