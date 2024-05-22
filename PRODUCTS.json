@@ -5,6 +5,7 @@
       "name": "QuickSwitch",
       "tagline": "Power shortcuts for tabs",
       "description": "",
+      "isProduct": true,
       "visibility": {
         "active": true,
         "promotion": true,
@@ -36,6 +37,7 @@
       "name": "Devbox",
       "tagline": "A UI for local storage",
       "description": "",
+      "isProduct": true,
       "visibility": {
         "active": true,
         "promotion": true,
@@ -72,6 +74,7 @@
       "name": "ArrayBuilder",
       "tagline": "A free tool to visualize the output of array operations",
       "description": "",
+      "isProduct": true,
       "visibility": {
         "active": true,
         "promotion": true,
@@ -131,6 +134,7 @@
       "name": "Fireboard",
       "tagline": "A work tracker for software developers",
       "description": "",
+      "isProduct": true,
       "visibility": {
         "active": true,
         "promotion": false,
@@ -197,6 +201,7 @@
       "name": "FileOps",
       "tagline": "VS Code extension to import, group, bookmark, quick switch files, text transformations & keyboard shortcuts.",
       "description": "Sometimes there are files which have the same names. ex. index.js. File Ops helps in `tagging` or `aliasing` files. These files can be Viewed & Opened from the tree view or using commands. Another feature is to be able to quickly switch between example.js and example.css.",
+      "isProduct": true,
       "visibility": {
         "promotion": true,
         "portfolio": true
@@ -284,6 +289,7 @@
         "promotion": true,
         "portfolio": true
       },
+      "isProduct": true,
       "links": {
         "product": {
           "label": "Visit",
@@ -314,6 +320,7 @@
       "name": "NoteBox",
       "tagline": "A chrome extension to add notes/todos based on URL",
       "description": "A Chrome Extension that provides an environment for every domain/URL. Revisit the notes when back to that URL or access it from `Homepage`. <br/> No Login/Signup. <br/>All the notes are stored in the browser memory.",
+      "isProduct": true,
       "visibility": {
         "promotion": false,
         "portfolio": true
