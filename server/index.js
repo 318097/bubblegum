@@ -14,7 +14,9 @@ const api = require("./api");
 const { startApolloServerExpress } = require("./graphql");
 
 logger.log(
-  `${config.IS_PROD ? "💀" : "🆗"} Running in '${config.NODE_ENV}' mode`
+  `${config.IS_PROD ? "💀💀💀💀💀" : "🆗"} Running in '${
+    config.NODE_ENV
+  }' mode ${config.IS_PROD ? "💀💀💀💀💀" : ""}`
 );
 
 connectToDb();

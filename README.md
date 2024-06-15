@@ -50,3 +50,7 @@
 - [ ] General - Feedback (Intercom), About, Emailing (Sendgrid), Forgot/Reset password page
 - [ ] Others - Analytics, Sentry, Mixpanel, Landing pages, Hotjar, Adsense, Sponsers, Buy me a coffee
 - [ ] Promotions - Linkedin, fb, insta, twitter, product hunt, hackernews, reddit, quora, youtube, medium, dev, indiehacker
+
+#### Problems with Notion as DB
+
+-
