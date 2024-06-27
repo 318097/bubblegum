@@ -7,37 +7,45 @@ const notion = new Client({
 });
 
 const parseNotionData = (data) => {
-  return data.map((item) => {
-    const { properties } = item;
-    const result = {};
-    _.forEach(properties, (value, key) => {
-      const { type } = value;
-      let finalValue = "";
-      switch (type) {
-        case "multi_select":
-          finalValue = value.multi_select.map((item) => item.name);
-          break;
-        case "title":
-          finalValue = _.get(value, "title.0.plain_text");
-          break;
-        case "rich_text":
-          finalValue = _.get(value, "rich_text.0.plain_text");
-          break;
-        case "select":
-          finalValue = _.get(value, "select.name");
-          break;
-        case "checkbox":
-        case "number":
-        case "url":
-          finalValue = _.get(value, type);
-          break;
-        default:
-          console.log("Unhandled notion type", type, value);
-      }
-      result[key] = finalValue;
-    });
-    return result;
-  });
+  return data
+    .map((item) => {
+      const { properties } = item;
+      const result = {};
+      _.forEach(properties, (value, key) => {
+        const { type } = value;
+        let finalValue = "";
+        switch (type) {
+          case "multi_select":
+            finalValue = value.multi_select.map((item) => item.name);
+            break;
+          case "title":
+            finalValue = _.get(value, "title.0.plain_text");
+            break;
+          case "rich_text":
+            finalValue = _.get(value, "rich_text.0.plain_text");
+            break;
+          case "select":
+            finalValue = _.get(value, "select.name");
+            break;
+          case "checkbox":
+          case "number":
+          case "url":
+            finalValue = _.get(value, type);
+            break;
+          case "relation":
+            finalValue = _.get(value, "relation", []);
+            break;
+          case "formula":
+            finalValue = _.get(value, "formula.string");
+            break;
+          default:
+            console.log("Unhandled notion type", type, value);
+        }
+        result[key] = finalValue;
+      });
+      return result;
+    })
+    .filter((item) => _.isEmpty(item["Parent item"])); // do not return nested items
 };
 
 // const renameKeys = (list, mapping = {}) => {
@@ -74,6 +82,12 @@ exports.getLiquidTech = async (req, res) => {
           {
             property: "status",
             multi_select: {
+              contains: "Reviewed",
+            },
+          },
+          {
+            property: "status",
+            multi_select: {
               contains: "DB",
             },
           },
@@ -89,21 +103,37 @@ exports.getLiquidTech = async (req, res) => {
               is_empty: true,
             },
           },
+          {
+            property: "priority",
+            select: {
+              does_not_equal: "Low",
+            },
+          },
         ],
       },
+      sorts: [
+        {
+          property: "title",
+          direction: "ascending",
+        },
+      ],
     };
 
     const list = await fetchAllData(params);
 
     const parsedList = parseNotionData(list).map((listItem) => {
+      const [, subType] = _.split(_.toLower(listItem["L1"]), ":");
       return {
-        _id: listItem["_id"],
-        title: listItem["title"],
-        url: listItem["url"],
+        ..._.pick(listItem, [
+          "_id",
+          "title",
+          "url",
+          "tags",
+          "description",
+          "priority",
+        ]),
         type: _.toLower(listItem["L0"]),
-        subType: _.toLower(listItem["L1"]),
-        tags: listItem["tags"],
-        description: listItem["description"],
+        subType,
       };
     });
 
