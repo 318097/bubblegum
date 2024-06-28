@@ -4,6 +4,8 @@ const { getKeysBasedOnSource } = require("./products");
 const FireboardProjectsModel = require("../api/fireboard/fireboard.project.model");
 const TagsModel = require("../modules/tags/tags.model");
 const ModulesModel = require("../modules/modules/modules.model");
+const ExpensesModel = require("../api/expenses/expenses.model");
+
 const slug = require("slug");
 
 const OBJECT_ID_REGEX = /^[a-f\d]{24}$/i;
@@ -54,6 +56,9 @@ const getModules = async ({ userId, moduleType, source }) =>
     moduleType,
     source,
   }).lean();
+
+const getExpenseAutofillMessages = async ({ userId }) =>
+  ExpensesModel.distinct("message", { message: { $ne: null }, userId });
 
 const generateResourceName = ({
   index,
@@ -115,6 +120,9 @@ const getAppBasedInfo = async ({ user, source }) => {
         userId: user._id,
         moduleType: "TIMELINE",
         source,
+      });
+      result["autofill"] = await getExpenseAutofillMessages({
+        userId: user._id,
       });
       break;
     case "NOTEBASE":
