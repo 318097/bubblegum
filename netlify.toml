@@ -3,5 +3,6 @@
   functions = "functions"
 
 [functions]
+  directory = "functions"
   # Set the default timeout for all functions (in seconds)
   timeout = 60
