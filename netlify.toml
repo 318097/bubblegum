@@ -1,3 +1,7 @@
 [build]
   command = "npm install && npm run build:netlify"
   functions = "functions"
+
+[functions]
+  # Set the default timeout for all functions (in seconds)
+  timeout = 60
