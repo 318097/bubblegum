@@ -18,7 +18,7 @@
         },
         "landing": {
           "label": "Go",
-          "url": "https://www.quickswitch.xyz/"
+          "url": "https://quickswitch.vercel.app/"
         }
       },
       "bitly": "https://bit.ly/quick-switch-extension",
