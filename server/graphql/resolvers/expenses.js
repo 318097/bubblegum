@@ -13,7 +13,7 @@ const getExpensesByMonth = async (_, args, { models, user }) => {
     month,
     year,
     minAmount,
-    expenseSubTypeId,
+    expenseSubTypeId = [],
     maxAmount,
     startMonth,
     endMonth,
@@ -23,7 +23,7 @@ const getExpensesByMonth = async (_, args, { models, user }) => {
   };
 
   if (expenseSubTypeId) {
-    query["expenseSubTypeId"] = expenseSubTypeId;
+    query["expenseSubTypeId"] = { $in: expenseSubTypeId };
   }
 
   if (minAmount || maxAmount) {
