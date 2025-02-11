@@ -8,7 +8,7 @@ const {
 const _ = require("lodash");
 const set = require("set-value");
 
-const getExpensesByMonth = async (_, args, { models, user }) => {
+const getExpensesByMonth = async (__, args, { models, user }) => {
   const {
     month,
     year,
