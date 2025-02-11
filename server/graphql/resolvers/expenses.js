@@ -22,7 +22,7 @@ const getExpensesByMonth = async (_, args, { models, user }) => {
     userId: user._id,
   };
 
-  if (expenseSubTypeId) {
+  if (!_.isEmpty(expenseSubTypeId)) {
     query["expenseSubTypeId"] = { $in: expenseSubTypeId };
   }
 
