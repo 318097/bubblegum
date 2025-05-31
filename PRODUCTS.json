@@ -1,6 +1,65 @@
 {
   "products": [
     {
+      "id": "GRID",
+      "name": "Grid",
+      "tagline": "A free text editor that formats, previews, paginates, and exports your content in seconds.",
+      "description": "Grid is a modern, markdown-friendly post creator that turns your raw text into beautifully styled, center-aligned multi-page social posts — ready for Instagram, Twitter, LinkedIn, and more. Whether you're crafting carousels, quotes, or content threads, Grid provides a live preview of how your posts will appear on each platform. Just paste your content, use simple tags or list formatting to create multiple pages, style with Tailwind-inspired presets, and export all your pages as high-quality images in one click. It’s fast, free, and built for content-first creators.",
+      "isProduct": true,
+      "visibility": {
+        "active": true,
+        "promotion": true,
+        "portfolio": true
+      },
+      "links": {
+        "product": {
+          "label": "Visit",
+          "url": "https://grid.liquidsearch.co/"
+        }
+      },
+      "tags": [],
+      "release": {
+        "year": 2025,
+        "month": 6,
+        "day": 1
+      }
+    },
+    {
+      "id": "CODE404",
+      "name": "Code404",
+      "tagline": "Micro-blogging on web development",
+      "visibility": {
+        "active": true,
+        "promotion": true,
+        "portfolio": true
+      },
+      "isProduct": true,
+      "links": {
+        "product": {
+          "label": "Visit",
+          "url": "https://www.code404.co/"
+        }
+      },
+      "bitly": "https://bit.ly/codedrops-tech",
+      "social": {
+        "facebook": {
+          "label": "Facebook",
+          "fontAwesome": "fab fa-facebook",
+          "url": "https://www.facebook.com/code404.co/"
+        },
+        "instagram": {
+          "label": "Instagram",
+          "fontAwesome": "fab fa-instagram",
+          "url": "https://www.instagram.com/code404.co/"
+        },
+        "twitter": {
+          "label": "Twitter",
+          "fontAwesome": "fab fa-twitter",
+          "url": "https://twitter.com/code404_co"
+        }
+      }
+    },
+    {
       "id": "QUICK_SWITCH",
       "name": "QuickSwitch",
       "tagline": "Power shortcuts for tabs",
@@ -18,7 +77,7 @@
         },
         "landing": {
           "label": "Go",
-          "url": "https://quickswitch.vercel.app/"
+          "url": "https://switch.liquidsearch.co/"
         }
       },
       "bitly": "https://bit.ly/quick-switch-extension",
@@ -87,7 +146,7 @@
         },
         "product": {
           "label": "Tool",
-          "url": "https://www.arraybuilder.com"
+          "url": "https://array.code404.co"
         }
       },
       "bitly": "https://bit.ly/array-builder",
@@ -281,48 +340,13 @@
       }
     },
     {
-      "id": "CODE404",
-      "name": "Code404",
-      "tagline": "Micro-blogging on web development",
-      "visibility": {
-        "active": true,
-        "promotion": true,
-        "portfolio": true
-      },
-      "isProduct": true,
-      "links": {
-        "product": {
-          "label": "Visit",
-          "url": "https://www.code404.co/"
-        }
-      },
-      "bitly": "https://bit.ly/codedrops-tech",
-      "social": {
-        "facebook": {
-          "label": "Facebook",
-          "fontAwesome": "fab fa-facebook",
-          "url": "https://www.facebook.com/code404.co/"
-        },
-        "instagram": {
-          "label": "Instagram",
-          "fontAwesome": "fab fa-instagram",
-          "url": "https://www.instagram.com/code404.co/"
-        },
-        "twitter": {
-          "label": "Twitter",
-          "fontAwesome": "fab fa-twitter",
-          "url": "https://twitter.com/code404_co"
-        }
-      }
-    },
-    {
       "id": "NOTE_BOX",
       "name": "NoteBox",
       "tagline": "A chrome extension to add notes/todos based on URL",
       "description": "A Chrome Extension that provides an environment for every domain/URL. Revisit the notes when back to that URL or access it from `Homepage`. <br/> No Login/Signup. <br/>All the notes are stored in the browser memory.",
       "isProduct": true,
       "visibility": {
-        "promotion": false,
+        "promotion": true,
         "portfolio": true
       },
       "logo": "https://raw.githubusercontent.com/318097/note-box/master/app/icons/icon32.png",
@@ -356,7 +380,7 @@
       "tagline": "A chrome extension to Favorite, Bookmark & Mark link as Read in Github",
       "description": "There are a lot of links provided on Github pages. Some might need to be marked as read, some might be amazing & some you would love to read it later. Github Marker does exactly that.<br/>The extension provides 3 options attached to every link found on Github related pages/URLs:<br/>1. Mark as Read/Unread <br/>2. Favorite/Un-Favorite a link<br/>3. Bookmark/Unbookmark a link",
       "visibility": {
-        "promotion": false,
+        "promotion": true,
         "portfolio": true
       },
       "logo": "https://raw.githubusercontent.com/318097/github-marker/master/app/icons/v2/icon32.png",
