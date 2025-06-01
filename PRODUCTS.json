@@ -3,7 +3,7 @@
     {
       "id": "GRID",
       "name": "Grid",
-      "tagline": "A free text editor that formats, previews, paginates, and exports your content in seconds.",
+      "tagline": "A free, real-time Markdown-powered builder for social posts — preview, paginate, and export in seconds.",
       "description": "Grid is a modern, markdown-friendly post creator that turns your raw text into beautifully styled, center-aligned multi-page social posts — ready for Instagram, Twitter, LinkedIn, and more. Whether you're crafting carousels, quotes, or content threads, Grid provides a live preview of how your posts will appear on each platform. Just paste your content, use simple tags or list formatting to create multiple pages, style with Tailwind-inspired presets, and export all your pages as high-quality images in one click. It’s fast, free, and built for content-first creators.",
       "isProduct": true,
       "visibility": {
