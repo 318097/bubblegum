@@ -2,6 +2,7 @@ const { OAuth2Client } = require("google-auth-library");
 const _ = require("lodash");
 const Joi = require("@hapi/joi");
 const { v4: uuidv4 } = require("uuid");
+const admin = require("firebase-admin");
 const User = require("../api/user/user.model");
 const { signToken, validateToken } = require("../utils/authentication");
 const config = require("../config");
@@ -185,6 +186,67 @@ const register = async (req, res) => {
   res.send({ ...userInfoToSend });
 };
 
+const authenticateWithGoogle = async (req, res) => {
+  const { name, authToken, photoURL } = req.body;
+
+  const serviceAccountPath = {
+    FUSION: '"../../fusion-97e8c-firebase-adminsdk-qjtt8-a6765111ba.json"',
+  };
+
+  if (!admin.apps.length) {
+    admin.initializeApp({
+      credential: admin.credential.cert(
+        require(serviceAccountPath[req.source])
+      ),
+    });
+  }
+  try {
+    const decoded = await admin.auth().verifyIdToken(authToken);
+
+    let { uid, email } = decoded;
+    if (!email) {
+      // anonymous user
+      email = `${uid}@google.uid`;
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      const defaultState = generateDefaultUserState(req, {});
+      const newUser = {
+        name: name || "Anonymous",
+        uid,
+        email,
+        username: email,
+        password: uuidv4(), // random password
+        photoURL,
+        ...defaultState,
+      };
+      user = await User.create(newUser);
+    }
+
+    //  const requireVerification = false;
+    //  sendMail({
+    //    name,
+    //    email,
+    //    type: requireVerification ? "VERIFY_ACCOUNT" : "WELCOME",
+    //    source,
+    //    token,
+    //  });
+    const userInfoToSend = await extractUserData({
+      user,
+      source: req.source,
+    });
+
+    const token = signToken(user._id, user.email);
+
+    res.send({ token, ...userInfoToSend });
+  } catch (err) {
+    console.log("err::-", err);
+    res.status(401).json({ success: false, error: "Invalid token" });
+  }
+};
+
 const checkAccountStatus = async (req, res) => {
   await verifyAccountStatus(req);
   const result = await extractUserData(req);
@@ -307,4 +369,5 @@ module.exports = {
   changePassword,
   verifyAccount,
   logout,
+  authenticateWithGoogle,
 };

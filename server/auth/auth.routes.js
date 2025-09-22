@@ -4,6 +4,10 @@ const { protectedRoute } = require("../utils/authentication");
 const controller = require("./auth.controller");
 
 router.post("/login", errorHandlingWrapper(controller.login));
+router.post(
+  "/google-authentication",
+  errorHandlingWrapper(controller.authenticateWithGoogle)
+);
 router.post("/logout", errorHandlingWrapper(controller.logout));
 router.post("/register", errorHandlingWrapper(controller.register));
 router.post(

@@ -49,6 +49,18 @@ const UserSchema = new mongoose.Schema(
     lastLogin: Date,
     appStatus: Object,
     settings: Object,
+    uid: {
+      // Google UID
+      type: String,
+      default: "",
+      required: false,
+    },
+    photoURL: {
+      // Google Photo URL
+      type: String,
+      default: "",
+      required: false,
+    },
   },
   {
     timestamps: true,
