@@ -13,6 +13,7 @@ const feedbackRoutes = require("./feedback/feedback.routes");
 const scratchPadRoutes = require("./scratch-pad/scratch-pad.routes");
 const migrationRoutes = require("./migration/migration.routes");
 const photosRoutes = require("./photos/photos.routes");
+const fusionRoutes = require("./fusion/fusion.routes");
 const notionRoutes = require("./notion/notion.routes");
 const TagsModel = require("../modules/tags/tags.model");
 const ModulesModel = require("../modules/modules/modules.model");
@@ -57,6 +58,7 @@ router.use("/feedback", transparent, feedbackRoutes);
 
 router.use("/scratch-pad", protectedRoute, scratchPadRoutes);
 router.use("/photos", photosRoutes);
+router.use("/fusion", fusionRoutes);
 // router.use("/tasks", protectedRoute, taskRoutes);
 // router.use("/expenses", protectedRoute, expenseRoutes);
 // router.use("/timeline", protectedRoute, timelineRoutes);
