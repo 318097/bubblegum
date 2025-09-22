@@ -1,6 +1,44 @@
 {
   "products": [
     {
+      "id": "PHOTOS",
+      "name": "PHOTOS",
+      "tagline": "",
+      "isProduct": true,
+      "visibility": {
+        "active": true,
+        "promotion": false,
+        "portfolio": false
+      },
+      "links": {
+        "product": {
+          "label": "Visit",
+          "url": "https://photos.liquidsearch.co/"
+        }
+      },
+      "tags": [],
+      "release": {}
+    },
+    {
+      "id": "FUSION",
+      "name": "Fusion",
+      "tagline": "",
+      "isProduct": true,
+      "visibility": {
+        "active": true,
+        "promotion": false,
+        "portfolio": false
+      },
+      "links": {
+        "product": {
+          "label": "Visit",
+          "url": "https://fusion.liquidsearch.co/"
+        }
+      },
+      "tags": [],
+      "release": {}
+    },
+    {
       "id": "GRID",
       "name": "Grid",
       "tagline": "A free, real-time Markdown-powered builder for social posts — preview, paginate, and export in seconds.",
