@@ -17,7 +17,7 @@ const AlertsAndMsgesSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    time: {
+    slots: {
       type: Array,
       default: [],
     },

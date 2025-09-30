@@ -13,7 +13,7 @@ const alertFilters = [
     key: "days",
   },
   {
-    key: "time",
+    key: "slots",
   },
 ];
 
