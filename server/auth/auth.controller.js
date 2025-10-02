@@ -190,7 +190,7 @@ const authenticateWithGoogle = async (req, res) => {
   const { name, authToken, photoURL } = req.body;
 
   const serviceAccountPath = {
-    FUSION: '"../../fusion-97e8c-firebase-adminsdk-qjtt8-a6765111ba.json"',
+    FUSION: "../../fusion-97e8c-firebase-adminsdk-qjtt8-a6765111ba.json",
   };
 
   if (!admin.apps.length) {

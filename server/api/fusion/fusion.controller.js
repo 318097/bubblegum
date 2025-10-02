@@ -25,6 +25,9 @@ const getAggregationFilters = (alert, filter = "ALERT") => {
   // TODO: add filter to match with unique users & alert should not be off or disabled.
   const aggregation = {
     _id: { $ne: _id },
+    active: true,
+    archived: false,
+    deleted: false,
   };
 
   let sort = {
@@ -92,6 +95,7 @@ exports.updateEntity = async (req, res) => {
   const { entityId } = req.params;
   const { type } = req.query;
   const { _id: userId } = req.user;
+  console.log("type, req.body::-", type, req.body);
 
   const collection = type === "ACTIVITY" ? ActivitiesModel : AlertAndMsgModel;
   const result = await collection.findOneAndUpdate(
@@ -99,7 +103,7 @@ exports.updateEntity = async (req, res) => {
       _id: entityId,
       userId,
     },
-    { $set: { ...req.body } }
+    { $set: { ..._.omit(req.body, "_id") } }
   );
   res.send({ result });
 };
