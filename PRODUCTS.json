@@ -36,7 +36,10 @@
         }
       },
       "tags": [],
-      "release": {}
+      "release": {},
+      "userKeys": [
+        "location"
+      ]
     },
     {
       "id": "GRID",
