@@ -1,10 +1,18 @@
 const _ = require("lodash");
 // const mongoose = require("mongoose");
 // const moment = require("moment");
-// const UserModel = require("../user/user.model");
 // const { getKey } = require("../../utils/common");
 const { AlertAndMsgModel, ActivitiesModel } = require("./fusion.model");
 const UserModel = require("../user/user.model");
+
+const USER_PROJECT = {
+  _id: 1,
+  uid: 1,
+  name: 1,
+  email: 1,
+  username: 1,
+  photoURL: 1,
+};
 
 const getAggregationFilters = (alert, filter = "ALERT") => {
   const aggregation = {
@@ -108,7 +116,7 @@ exports.getAlertDetailsById = async (req, res) => {
       $geoNear: {
         near: req.user.geoCoordinates,
         distanceField: "distance",
-        maxDistance: 1000, // in meters
+        maxDistance: parseInt(alert.radius) || 1000, // in meters
         spherical: true,
       },
     },
@@ -136,14 +144,7 @@ exports.getAlertDetailsById = async (req, res) => {
       },
     },
     {
-      $project: {
-        _id: 1,
-        uid: 1,
-        name: 1,
-        email: 1,
-        username: 1,
-        photoURL: 1,
-      },
+      $project: USER_PROJECT,
     },
   ]);
 
@@ -158,6 +159,14 @@ exports.getAlertDetailsById = async (req, res) => {
       },
     },
     { $unwind: "$user" },
+    {
+      $project: {
+        _id: 1,
+        msg: 1,
+        createdAt: 1,
+        user: USER_PROJECT,
+      },
+    },
     // { $sort: sort },
     // {
     //   $skip: (Number(page) - 1) * Number(limit),

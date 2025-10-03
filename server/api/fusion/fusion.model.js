@@ -21,6 +21,10 @@ const AlertsAndMsgesSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    radius: {
+      type: String,
+      default: "1000",
+    },
     isAlert: {
       type: Boolean, // true for alert, false for message
       default: true,
