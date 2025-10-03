@@ -38,7 +38,8 @@
       "tags": [],
       "release": {},
       "userKeys": [
-        "location"
+        "location",
+        "geoCoordinates"
       ]
     },
     {

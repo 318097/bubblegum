@@ -4,37 +4,17 @@ const _ = require("lodash");
 // const UserModel = require("../user/user.model");
 // const { getKey } = require("../../utils/common");
 const { AlertAndMsgModel, ActivitiesModel } = require("./fusion.model");
-
-const alertFilters = [
-  {
-    key: "activities",
-  },
-  {
-    key: "days",
-  },
-  {
-    key: "slots",
-  },
-];
-
-const activitiesFilters = [];
+const UserModel = require("../user/user.model");
 
 const getAggregationFilters = (alert, filter = "ALERT") => {
-  const { limit = 250, page = 1, sortOrder, sortFilter, type, _id } = alert;
-
-  // TODO: add filter to match with unique users & alert should not be off or disabled.
   const aggregation = {
-    _id: { $ne: _id },
     active: true,
     archived: false,
     deleted: false,
+    isAlert: filter === "ALERT",
   };
 
-  let sort = {
-    createdAt: 1,
-  };
-
-  const filters = filter === "ALERT" ? alertFilters : activitiesFilters;
+  const filters = filter === "ALERT" ? ["activities", "days", "slots"] : [];
 
   filters.forEach(({ key }) => {
     const keyValue = alert[key];
@@ -44,11 +24,7 @@ const getAggregationFilters = (alert, filter = "ALERT") => {
       };
   });
 
-  // sort = {
-  //   [sortFilter]: sortOrder === "ASC" ? 1 : -1,
-  // };
-
-  return { aggregation, sort, page, limit };
+  return aggregation;
 };
 
 exports.getAllEntities = async (req, res) => {
@@ -56,13 +32,11 @@ exports.getAllEntities = async (req, res) => {
     isAlert: true,
     deleted: false,
     userId: req.user._id,
-    status: "ACTIVE",
   });
 
   const activities = await ActivitiesModel.find({
     deleted: false,
     userId: req.user._id,
-    // status: "ACTIVE",
   });
 
   res.send(
@@ -95,7 +69,6 @@ exports.updateEntity = async (req, res) => {
   const { entityId } = req.params;
   const { type } = req.query;
   const { _id: userId } = req.user;
-  console.log("type, req.body::-", type, req.body);
 
   const collection = type === "ACTIVITY" ? ActivitiesModel : AlertAndMsgModel;
   const result = await collection.findOneAndUpdate(
@@ -128,20 +101,50 @@ exports.deleteEntity = async (req, res) => {
 exports.getAlertDetailsById = async (req, res) => {
   const { alertId } = req.params;
   const alert = await AlertAndMsgModel.findById(alertId);
-  const { aggregation, sort, page, limit } = getAggregationFilters(alert);
+  const aggregation = getAggregationFilters(alert);
 
-  // find all unique users (excluding self), and send back only user profile
-  const users = await AlertAndMsgModel.aggregate([
-    { $match: { ...aggregation, isAlert: true } },
+  const users = await UserModel.aggregate([
     {
-      $lookup: {
-        from: "users",
-        localField: "userId",
-        foreignField: "_id",
-        as: "user",
+      $geoNear: {
+        near: req.user.geoCoordinates,
+        distanceField: "distance",
+        maxDistance: 1000, // in meters
+        spherical: true,
       },
     },
-    { $unwind: "$user" },
+    {
+      $lookup: {
+        from: "alert-and-msges",
+        let: { userId: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ["$userId", "$$userId"] },
+            },
+          },
+          {
+            $match: aggregation,
+          },
+        ],
+        as: "alerts",
+      },
+    },
+    {
+      $match: {
+        "alerts.0": { $exists: true }, // must have at least one alert
+        _id: { $ne: req.user._id }, // exclude requesting user
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        uid: 1,
+        name: 1,
+        email: 1,
+        username: 1,
+        photoURL: 1,
+      },
+    },
   ]);
 
   const msges = await AlertAndMsgModel.aggregate([
@@ -155,11 +158,11 @@ exports.getAlertDetailsById = async (req, res) => {
       },
     },
     { $unwind: "$user" },
-    { $sort: sort },
-    {
-      $skip: (Number(page) - 1) * Number(limit),
-    },
-    { $limit: Number(limit) },
+    // { $sort: sort },
+    // {
+    //   $skip: (Number(page) - 1) * Number(limit),
+    // },
+    // { $limit: Number(limit) },
   ]);
 
   // find all unique users (excluding self), and send back only user profile

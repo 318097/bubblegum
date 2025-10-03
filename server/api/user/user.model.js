@@ -66,12 +66,19 @@ const UserSchema = new mongoose.Schema(
       default: {},
       required: false,
     },
+    geoCoordinates: {
+      type: Object,
+      default: {},
+      required: false,
+    },
   },
   {
     timestamps: true,
     strict: true,
   }
 );
+
+UserSchema.index({ geoCoordinates: "2dsphere" });
 
 UserSchema.pre("save", function (next) {
   if (!this.isModified("password")) return next();
