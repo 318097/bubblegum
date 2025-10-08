@@ -14,18 +14,18 @@ const USER_PROJECT = {
   photoURL: 1,
 };
 
-const getAggregationFilters = (alert, filter = "ALERT") => {
+const getAggregationFilters = (entity) => {
   const aggregation = {
     active: true,
     archived: false,
     deleted: false,
-    isAlert: filter === "ALERT",
   };
 
-  const filters = filter === "ALERT" ? ["activities", "days", "slots"] : [];
+  const filters =
+    entity.type === "ALERT" ? ["activities", "days", "slots"] : [];
 
   filters.forEach(({ key }) => {
-    const keyValue = alert[key];
+    const keyValue = entity[key];
     if (!_.isEmpty(keyValue))
       aggregation[key] = {
         $in: keyValue,
@@ -37,7 +37,7 @@ const getAggregationFilters = (alert, filter = "ALERT") => {
 
 exports.getAllEntities = async (req, res) => {
   const alerts = await AlertAndMsgModel.find({
-    isAlert: true,
+    type: "ALERT",
     deleted: false,
     userId: req.user._id,
   });
@@ -47,13 +47,32 @@ exports.getAllEntities = async (req, res) => {
     userId: req.user._id,
   });
 
-  res.send(
-    [...alerts, ...activities].map((a) => ({
-      ...a.toObject(),
-      id: a._id,
-      level: 1,
-    }))
-  );
+  res.send([...alerts, ...activities]);
+};
+
+exports.getEntityById = async (req, res) => {
+  const { type } = req.query;
+  const { entityId } = req.params;
+
+  const query = {
+    deleted: false,
+    userId: req.user._id,
+    _id: entityId,
+  };
+
+  let entity;
+  if (type === "ALERT") {
+    entity = await AlertAndMsgModel.find({
+      ...query,
+      type: "ALERT",
+    });
+  } else if (type === "ACTIVITY") {
+    entity = await ActivitiesModel.find({
+      ...query,
+    });
+  }
+
+  res.send(entity);
 };
 
 exports.createEntity = async (req, res) => {
@@ -149,7 +168,7 @@ exports.getAlertDetailsById = async (req, res) => {
   ]);
 
   const msges = await AlertAndMsgModel.aggregate([
-    { $match: { ...aggregation, isAlert: false } },
+    { $match: { ...aggregation, type: "MESSAGE" } },
     {
       $lookup: {
         from: "users",
@@ -210,7 +229,7 @@ exports.createAlertMessage = async (req, res) => {
   const msg = {
     userId: _id,
     ...req.body,
-    isAlert: false,
+    type: "MESSAGE",
   };
   const result = await AlertAndMsgModel.create(msg);
 

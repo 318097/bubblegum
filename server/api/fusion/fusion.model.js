@@ -25,10 +25,6 @@ const AlertsAndMsgesSchema = new mongoose.Schema(
       type: String,
       default: "1000",
     },
-    isAlert: {
-      type: Boolean, // true for alert, false for message
-      default: true,
-    },
     active: {
       type: Boolean,
       default: true,
@@ -41,14 +37,7 @@ const AlertsAndMsgesSchema = new mongoose.Schema(
       required: false,
       default: "ALERT",
       type: String,
-      // enum: ["POST", "DROP", "QUIZ", "CHAIN"],
     },
-    // status: { // TODO: remove active and use this
-    //   type: String,
-    //   enum: ["ACTIVE", "INACTIVE"],
-    //   required: true,
-    //   default: "ACTIVE",
-    // },
     archived: {
       type: Boolean,
       default: false,
@@ -60,7 +49,7 @@ const AlertsAndMsgesSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    strict: false,
+    strict: true,
   }
 );
 
@@ -99,6 +88,11 @@ const ActivitiesSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    type: {
+      required: false,
+      default: "ACTIVITY",
+      type: String,
+    },
     archived: {
       type: Boolean,
       default: false,
@@ -110,7 +104,7 @@ const ActivitiesSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    strict: false,
+    strict: true,
   }
 );
 

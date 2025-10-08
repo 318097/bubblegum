@@ -1,10 +1,16 @@
 const router = require("express").Router();
 const errorHandlingWrapper = require("../../middleware/error-handling");
 
-const { temporaryAccess, transparent } = require("../../utils/authentication");
+const { transparent } = require("../../utils/authentication");
 const controller = require("./fusion.controller");
 
+// router.get("/feed", transparent, errorHandlingWrapper(controller.getFeed));
 router.get("/", transparent, errorHandlingWrapper(controller.getAllEntities));
+router.get(
+  "/:entityId",
+  transparent,
+  errorHandlingWrapper(controller.getEntityById)
+);
 router.post("/", transparent, errorHandlingWrapper(controller.createEntity));
 router.put(
   "/:entityId",
