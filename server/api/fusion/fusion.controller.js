@@ -62,7 +62,7 @@ exports.getAlertsFeed = async (req, res) => {
     const alerts = await AlertAndMsgModel.aggregate([
       {
         $match: {
-          type: "ALERT",
+          type: "alerts",
           deleted: false,
           userId: { $ne: req.user._id },
         },
@@ -85,7 +85,7 @@ exports.getAlertsFeed = async (req, res) => {
     feed.push(...alerts);
   }
 
-  if (["all", "alerts"].includes(feedType)) {
+  if (["all", "activities"].includes(feedType)) {
     const activities = await ActivitiesModel.aggregate([
       {
         $match: {
@@ -111,7 +111,7 @@ exports.getAlertsFeed = async (req, res) => {
     feed.push(...activities);
   }
 
-  res.send(feed);
+  res.send(_.orderBy(feed, "createdAt", "desc"));
 };
 
 exports.getAllEntities = async (req, res) => {
