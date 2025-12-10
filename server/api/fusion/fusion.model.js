@@ -2,6 +2,40 @@ const mongoose = require("mongoose");
 
 const { ObjectId } = mongoose.Schema.Types;
 
+const EditablesSchema = new mongoose.Schema(
+  {
+    userId: { type: ObjectId, ref: "user", required: true },
+    label: {
+      type: String,
+      // required: true,
+    },
+    description: {
+      type: String,
+      // required: true,
+    },
+    cols: {
+      type: Array,
+      default: [],
+    },
+    isBubblegumServer: {
+      type: Boolean,
+      default: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+    strict: false,
+  }
+);
+
 const AlertsAndMsgesSchema = new mongoose.Schema(
   {
     userId: { type: ObjectId, ref: "user", required: true },
@@ -24,6 +58,10 @@ const AlertsAndMsgesSchema = new mongoose.Schema(
     radius: {
       type: String,
       default: "1000",
+    },
+    msg: {
+      type: String,
+      default: null,
     },
     active: {
       type: Boolean,
@@ -111,4 +149,5 @@ const ActivitiesSchema = new mongoose.Schema(
 module.exports = {
   AlertAndMsgModel: mongoose.model("alert-and-msges", AlertsAndMsgesSchema),
   ActivitiesModel: mongoose.model("activities", ActivitiesSchema),
+  EditablesModel: mongoose.model("editables", EditablesSchema),
 };

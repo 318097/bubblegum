@@ -1,37 +1,53 @@
 const router = require("express").Router();
 const errorHandlingWrapper = require("../../middleware/error-handling");
 
-const { transparent } = require("../../utils/authentication");
+const { transparent, temporaryAccess } = require("../../utils/authentication");
 const controller = require("./fusion.controller");
 
-// router.get("/feed", transparent, errorHandlingWrapper(controller.getFeed));
-router.get("/", transparent, errorHandlingWrapper(controller.getAllEntities));
-router.get(
-  "/:entityId",
-  transparent,
-  errorHandlingWrapper(controller.getEntityById)
-);
-router.post("/", transparent, errorHandlingWrapper(controller.createEntity));
-router.put(
-  "/:entityId",
-  transparent,
-  errorHandlingWrapper(controller.updateEntity)
-);
-router.delete(
-  "/:entityId",
-  transparent,
-  errorHandlingWrapper(controller.deleteEntity)
-);
+// Alerts routes
 
 router.get(
-  "/alert/:alertId",
+  "/alerts/feed",
+  temporaryAccess,
+  errorHandlingWrapper(controller.getAlertsFeed)
+);
+router.get(
+  "/alert-details/:alertId",
   transparent,
   errorHandlingWrapper(controller.getAlertDetailsById)
 );
 router.post(
-  "/alert/msg",
+  "/alerts/msg",
   transparent,
   errorHandlingWrapper(controller.createAlertMessage)
+);
+
+// Generic entity routes
+
+router.get(
+  "/:entityType",
+  transparent,
+  errorHandlingWrapper(controller.getAllEntities)
+);
+router.get(
+  "/:entityType/:entityId",
+  transparent,
+  errorHandlingWrapper(controller.getEntityById)
+);
+router.post(
+  "/:entityType",
+  transparent,
+  errorHandlingWrapper(controller.createEntity)
+);
+router.put(
+  "/:entityType/:entityId",
+  transparent,
+  errorHandlingWrapper(controller.updateEntity)
+);
+router.delete(
+  "/:entityType/:entityId",
+  transparent,
+  errorHandlingWrapper(controller.deleteEntity)
 );
 
 module.exports = router;

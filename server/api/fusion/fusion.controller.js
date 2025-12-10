@@ -2,8 +2,18 @@ const _ = require("lodash");
 // const mongoose = require("mongoose");
 // const moment = require("moment");
 // const { getKey } = require("../../utils/common");
-const { AlertAndMsgModel, ActivitiesModel } = require("./fusion.model");
+const {
+  AlertAndMsgModel,
+  ActivitiesModel,
+  EditablesModel,
+} = require("./fusion.model");
 const UserModel = require("../user/user.model");
+
+const modelEntityMap = {
+  alerts: AlertAndMsgModel,
+  activities: ActivitiesModel,
+  editables: EditablesModel,
+};
 
 const USER_PROJECT = {
   _id: 1,
@@ -14,9 +24,17 @@ const USER_PROJECT = {
   photoURL: 1,
 };
 
+const USER_UNPROJECT = {
+  accountStatus: 0,
+  bookmarkedPosts: 0,
+  userType: 0,
+  password: 0,
+  source: 0,
+  appStatus: 0,
+};
+
 const getAggregationFilters = (entity) => {
   const aggregation = {
-    active: true,
     archived: false,
     deleted: false,
   };
@@ -35,24 +53,95 @@ const getAggregationFilters = (entity) => {
   return aggregation;
 };
 
+exports.getAlertsFeed = async (req, res) => {
+  const { feedType = "all" } = req.query;
+
+  const feed = [];
+
+  if (["all", "alerts"].includes(feedType)) {
+    const alerts = await AlertAndMsgModel.aggregate([
+      {
+        $match: {
+          type: "ALERT",
+          deleted: false,
+          userId: { $ne: req.user._id },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $project: {
+          user: USER_UNPROJECT,
+        },
+      },
+    ]).sort({ createdAt: -1 });
+    feed.push(...alerts);
+  }
+
+  if (["all", "alerts"].includes(feedType)) {
+    const activities = await ActivitiesModel.aggregate([
+      {
+        $match: {
+          deleted: false,
+          userId: { $ne: req.user._id },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $project: {
+          user: USER_UNPROJECT,
+        },
+      },
+    ]).sort({ createdAt: -1 });
+    feed.push(...activities);
+  }
+
+  res.send(feed);
+};
+
 exports.getAllEntities = async (req, res) => {
-  const alerts = await AlertAndMsgModel.find({
-    type: "ALERT",
-    deleted: false,
-    userId: req.user._id,
-  });
+  const { entityType } = req.params;
 
-  const activities = await ActivitiesModel.find({
-    deleted: false,
-    userId: req.user._id,
-  });
+  if (entityType === "alerts") {
+    const alerts = await AlertAndMsgModel.find({
+      type: "alerts",
+      deleted: false,
+      userId: req.user._id,
+    });
 
-  res.send([...alerts, ...activities]);
+    const activities = await ActivitiesModel.find({
+      deleted: false,
+      userId: req.user._id,
+    });
+
+    res.send([...alerts, ...activities]);
+  } else if (entityType === "editables") {
+    const editables = await EditablesModel.find({
+      deleted: false,
+      userId: req.user._id,
+    });
+
+    res.send(editables);
+  }
 };
 
 exports.getEntityById = async (req, res) => {
-  const { type } = req.query;
-  const { entityId } = req.params;
+  const { entityId, entityType } = req.params;
 
   const query = {
     deleted: false,
@@ -61,12 +150,12 @@ exports.getEntityById = async (req, res) => {
   };
 
   let entity;
-  if (type === "ALERT") {
+  if (entityType === "alerts") {
     entity = await AlertAndMsgModel.find({
       ...query,
-      type: "ALERT",
+      entityType: "alerts",
     });
-  } else if (type === "ACTIVITY") {
+  } else if (entityType === "activities") {
     entity = await ActivitiesModel.find({
       ...query,
     });
@@ -77,27 +166,24 @@ exports.getEntityById = async (req, res) => {
 
 exports.createEntity = async (req, res) => {
   const { _id } = req.user;
-  const { type } = req.body;
+  const { entityType } = req.params;
 
   const entity = {
     userId: _id,
     ...req.body,
   };
 
-  const result =
-    type === "ACTIVITY"
-      ? await ActivitiesModel.create(entity)
-      : await AlertAndMsgModel.create(entity);
+  const result = await modelEntityMap[entityType].create(entity);
 
   res.send(result);
 };
 
 exports.updateEntity = async (req, res) => {
-  const { entityId } = req.params;
-  const { type } = req.query;
+  const { entityId, entityType } = req.params;
+
   const { _id: userId } = req.user;
 
-  const collection = type === "ACTIVITY" ? ActivitiesModel : AlertAndMsgModel;
+  const collection = modelEntityMap[entityType];
   const result = await collection.findOneAndUpdate(
     {
       _id: entityId,
@@ -109,11 +195,10 @@ exports.updateEntity = async (req, res) => {
 };
 
 exports.deleteEntity = async (req, res) => {
-  const { entityId } = req.params;
-  const { type } = req.query;
+  const { entityId, entityType } = req.params;
   const { _id: userId } = req.user;
 
-  const collection = type === "ACTIVITY" ? ActivitiesModel : AlertAndMsgModel;
+  const collection = modelEntityMap[entityType];
 
   const result = await collection.findOneAndUpdate(
     {
@@ -168,7 +253,7 @@ exports.getAlertDetailsById = async (req, res) => {
   ]);
 
   const msges = await AlertAndMsgModel.aggregate([
-    { $match: { ...aggregation, type: "MESSAGE" } },
+    { $match: { ...aggregation, type: "message" } },
     {
       $lookup: {
         from: "users",
@@ -229,7 +314,7 @@ exports.createAlertMessage = async (req, res) => {
   const msg = {
     userId: _id,
     ...req.body,
-    type: "MESSAGE",
+    type: "message",
   };
   const result = await AlertAndMsgModel.create(msg);
 
