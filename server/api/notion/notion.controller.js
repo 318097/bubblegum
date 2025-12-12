@@ -6,6 +6,25 @@ const notion = new Client({
   auth: config.NOTION_AUTH_KEY,
 });
 
+const generateHtml = (data) => {
+  let output = "";
+
+  data.forEach((item) => {
+    output += `
+      <div class="vocab-item">
+      <div style="margin-top: 0.8rem; color: #9b9b9bff; font-size: 0.75rem;">Word of the day</div>
+      <div style="font-size: 1.875rem; line-height: normal; font-weight: 700;">${item["name"]}</div>
+      <div style="margin-top: 0.8rem; color: #9b9b9bff; font-size: 0.75rem;">Definition</div>
+      <div>${item["description"]}</div>
+      <div style="margin-top: 0.8rem; color: #9b9b9bff; font-size: 0.75rem;">Example</div>
+      <div>${item["ex"]}</div>
+      </div>
+    `;
+  });
+
+  return `<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; max-width: 480px; margin: 0 auto;">${output}</div>`;
+};
+
 const parseNotionData = (data) => {
   return data
     .map((item) => {
@@ -60,17 +79,18 @@ const parseNotionData = (data) => {
 
 const fetchAllData = async (params) => {
   const list = [];
+  let next_cursor = null;
   const fetchDetails = async (p = {}) => {
     const response = await notion.databases.query(p);
     list.push(...response.results);
-
-    if (response.has_more)
-      await fetchDetails({ ...p, start_cursor: response.next_cursor });
+    next_cursor = response.next_cursor;
+    // if (response.has_more)
+    //   await fetchDetails({ ...p, start_cursor: response.next_cursor });
   };
 
   await fetchDetails(params);
 
-  return list;
+  return { list, next_cursor };
 };
 
 exports.getLiquidTech = async (req, res) => {
@@ -143,6 +163,51 @@ exports.getLiquidTech = async (req, res) => {
   }
 };
 
+exports.getVocab = async (req, res) => {
+  try {
+    const params = {
+      database_id: config.NOTION_DB.VOCAB,
+      filter: {
+        and: [
+          {
+            property: "status",
+            multi_select: {
+              contains: "Posted",
+            },
+          },
+        ],
+      },
+      sorts: [
+        {
+          property: "createdAt",
+          direction: "descending",
+        },
+      ],
+    };
+
+    const { list, next_cursor } = await fetchAllData({
+      ...params,
+      page_size: 1,
+      start_cursor: req.query.cursor || undefined,
+    });
+
+    const data = parseNotionData(list);
+
+    const html = generateHtml(data);
+
+    res.send({
+      data,
+      html,
+      apiParams: {
+        cursor: next_cursor,
+        lastUpdatedAt: new Date().toISOString(),
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.getAllKeyBindings = async (req, res) => {
   try {
     const params = {
@@ -171,7 +236,7 @@ exports.getAllKeyBindings = async (req, res) => {
       },
     };
 
-    const list = await fetchAllData(params);
+    const { list } = await fetchAllData(params);
 
     const parsedList = parseNotionData(list).map(
       ({ title, platform, binding, _id }) => {
