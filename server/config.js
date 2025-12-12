@@ -47,6 +47,7 @@ const config = {
   NOTION_DB: {
     LIQUID_TECH: "9af81c6dc67643acaddd38643a7e3189",
     KEYBINDINGS: "afacc590c45e46b58c0582fa1abfb2f4",
+    VOCAB: "18e39cb7c16b819faa66df8d0c199045",
   },
 };
 

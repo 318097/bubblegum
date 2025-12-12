@@ -6,6 +6,7 @@ const {
   AlertAndMsgModel,
   ActivitiesModel,
   EditablesModel,
+  DynamicModel,
 } = require("./fusion.model");
 const UserModel = require("../user/user.model");
 
@@ -13,6 +14,7 @@ const modelEntityMap = {
   alerts: AlertAndMsgModel,
   activities: ActivitiesModel,
   editables: EditablesModel,
+  dynamic: DynamicModel,
 };
 
 const USER_PROJECT = {
@@ -137,6 +139,13 @@ exports.getAllEntities = async (req, res) => {
     });
 
     res.send(editables);
+  } else if (entityType === "dynamic") {
+    const dynamic = await DynamicModel.find({
+      deleted: false,
+      userId: req.user._id,
+    });
+
+    res.send(dynamic);
   }
 };
 
@@ -172,6 +181,14 @@ exports.createEntity = async (req, res) => {
     userId: _id,
     ...req.body,
   };
+
+  if (entityType === "dynamic") {
+    entity["api"] = `/notion/vocab`;
+    entity["apiParams"] = {
+      cursor: undefined,
+    };
+    entity["refreshDuration"] = 60 * 60 * 8; // 8 hours
+  }
 
   const result = await modelEntityMap[entityType].create(entity);
 

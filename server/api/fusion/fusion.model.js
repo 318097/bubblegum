@@ -36,6 +36,48 @@ const EditablesSchema = new mongoose.Schema(
   }
 );
 
+const DynamicSchema = new mongoose.Schema(
+  {
+    userId: { type: ObjectId, ref: "user", required: true },
+    label: {
+      type: String,
+      // required: true,
+    },
+    description: {
+      type: String,
+      // required: true,
+    },
+    refreshDuration: {
+      type: Number,
+      default: 60 * 60 * 8, // 8 hours
+    },
+    api: {
+      type: String,
+      required: true,
+    },
+    apiParams: {
+      type: Object,
+      default: {},
+    },
+    isBubblegumServer: {
+      type: Boolean,
+      default: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+    strict: false,
+  }
+);
+
 const AlertsAndMsgesSchema = new mongoose.Schema(
   {
     userId: { type: ObjectId, ref: "user", required: true },
@@ -150,4 +192,5 @@ module.exports = {
   AlertAndMsgModel: mongoose.model("alert-and-msges", AlertsAndMsgesSchema),
   ActivitiesModel: mongoose.model("activities", ActivitiesSchema),
   EditablesModel: mongoose.model("editables", EditablesSchema),
+  DynamicModel: mongoose.model("dynamic-ui", DynamicSchema),
 };

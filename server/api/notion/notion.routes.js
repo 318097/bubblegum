@@ -14,5 +14,6 @@ router.get(
   transparent,
   errorHandlingWrapper(controller.getLiquidTech)
 );
+router.get("/vocab", transparent, errorHandlingWrapper(controller.getVocab));
 
 module.exports = router;
