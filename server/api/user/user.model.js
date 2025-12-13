@@ -71,6 +71,20 @@ const UserSchema = new mongoose.Schema(
       default: {},
       required: false,
     },
+    displayLocation: {
+      type: String,
+      default: "",
+      required: false,
+    },
+    interests: {
+      type: [String],
+      default: [],
+    },
+    contact: {
+      type: String,
+      default: "",
+      required: false,
+    },
   },
   {
     timestamps: true,

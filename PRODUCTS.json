@@ -39,7 +39,10 @@
       "release": {},
       "userKeys": [
         "location",
-        "geoCoordinates"
+        "geoCoordinates",
+        "displayLocation",
+        "interests",
+        "contact"
       ]
     },
     {

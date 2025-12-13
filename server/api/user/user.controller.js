@@ -83,3 +83,14 @@ exports.updateAppSettings = async (req, res) => {
   );
   res.send(update);
 };
+
+exports.getProfileById = async (profileId) => {
+  const profile = await Model.findOne({ _id: profileId }).lean();
+  return profile;
+};
+
+exports.getProfile = async (req, res) => {
+  const { id } = req.params;
+  const profile = await this.getProfileById(id);
+  res.send(profile);
+};

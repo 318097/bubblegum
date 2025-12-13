@@ -24,6 +24,9 @@ const USER_PROJECT = {
   email: 1,
   username: 1,
   photoURL: 1,
+  displayLocation: 1,
+  contact: 1,
+  interests: 1,
 };
 
 const USER_UNPROJECT = {
@@ -126,26 +129,15 @@ exports.getAllEntities = async (req, res) => {
       userId: req.user._id,
     });
 
-    const activities = await ActivitiesModel.find({
+    res.send(alerts);
+  } else {
+    const collection = modelEntityMap[entityType];
+    const entities = await collection.find({
       deleted: false,
       userId: req.user._id,
     });
 
-    res.send([...alerts, ...activities]);
-  } else if (entityType === "editables") {
-    const editables = await EditablesModel.find({
-      deleted: false,
-      userId: req.user._id,
-    });
-
-    res.send(editables);
-  } else if (entityType === "dynamic") {
-    const dynamic = await DynamicModel.find({
-      deleted: false,
-      userId: req.user._id,
-    });
-
-    res.send(dynamic);
+    res.send(entities);
   }
 };
 
