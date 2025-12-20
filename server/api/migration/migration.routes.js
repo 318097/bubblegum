@@ -38,4 +38,9 @@ const controller = require("./migration.controller");
 //   errorHandlingWrapper(controller.normalizeCollectionsAndTimeline)
 // );
 
+router.get(
+  "/get-octon-expenses-for-notion",
+  errorHandlingWrapper(controller.getOctonExpensesForNotion)
+);
+
 module.exports = router;
