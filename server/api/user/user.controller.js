@@ -91,6 +91,7 @@ exports.getProfileById = async (profileId) => {
 
 exports.getProfile = async (req, res) => {
   const { id } = req.params;
+  // TODO: return the no of alerts, activites created by the user and last active time
   const profile = await this.getProfileById(id);
   res.send(profile);
 };

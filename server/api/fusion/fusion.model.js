@@ -188,9 +188,69 @@ const ActivitiesSchema = new mongoose.Schema(
   }
 );
 
+const LynkCollectionSchema = new mongoose.Schema(
+  {
+    userId: { type: ObjectId, ref: "user", required: true },
+    label: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    isBubblegumServer: {
+      type: Boolean,
+      default: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+    strict: false,
+  }
+);
+
+const LynksSchema = new mongoose.Schema(
+  {
+    userId: { type: ObjectId, ref: "user", required: true },
+    collectionId: { type: ObjectId, ref: "lynk", required: true },
+    slug: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+    isBubblegumServer: {
+      type: Boolean,
+      default: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+    strict: false,
+  }
+);
+
 module.exports = {
   AlertAndMsgModel: mongoose.model("alert-and-msges", AlertsAndMsgesSchema),
   ActivitiesModel: mongoose.model("activities", ActivitiesSchema),
   EditablesModel: mongoose.model("editables", EditablesSchema),
   DynamicModel: mongoose.model("dynamic-ui", DynamicSchema),
+  LynkCollectionModel: mongoose.model("lynk", LynkCollectionSchema),
+  LynksModel: mongoose.model("links", LynksSchema),
 };

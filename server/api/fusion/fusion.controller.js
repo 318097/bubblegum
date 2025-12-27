@@ -7,6 +7,8 @@ const {
   ActivitiesModel,
   EditablesModel,
   DynamicModel,
+  LynkCollectionModel,
+  LynksModel,
 } = require("./fusion.model");
 const UserModel = require("../user/user.model");
 
@@ -15,6 +17,7 @@ const modelEntityMap = {
   activities: ActivitiesModel,
   editables: EditablesModel,
   dynamic: DynamicModel,
+  links: LynkCollectionModel,
 };
 
 const USER_PROJECT = {
@@ -326,6 +329,34 @@ exports.createAlertMessage = async (req, res) => {
     type: "message",
   };
   const result = await AlertAndMsgModel.create(msg);
+
+  res.send(result);
+};
+
+exports.createLink = async (req, res) => {
+  const { _id } = req.user;
+
+  const link = {
+    userId: _id,
+    collectionId: req.params.collectionId,
+    ...req.body,
+  };
+  const result = await LynksModel.create(link);
+
+  res.send(result);
+};
+
+exports.getLynksByCollectionId = async (req, res) => {
+  const { _id } = req.user;
+
+  const result = await LynksModel.aggregate([
+    {
+      $match: {
+        userId: _id,
+        // collectionId: req.params.collectionId,
+      },
+    },
+  ]);
 
   res.send(result);
 };

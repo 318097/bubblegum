@@ -22,6 +22,19 @@ router.post(
   errorHandlingWrapper(controller.createAlertMessage)
 );
 
+// Lynk routes
+router.get(
+  "/links/:collectionId",
+  transparent,
+  errorHandlingWrapper(controller.getLynksByCollectionId)
+);
+
+router.post(
+  "/links/:collectionId",
+  transparent,
+  errorHandlingWrapper(controller.createLink)
+);
+
 // Generic entity routes
 
 router.get(
