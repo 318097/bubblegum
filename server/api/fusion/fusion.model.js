@@ -33,7 +33,7 @@ const EditablesSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: false,
-  }
+  },
 );
 
 const DynamicSchema = new mongoose.Schema(
@@ -75,7 +75,7 @@ const DynamicSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: false,
-  }
+  },
 );
 
 const AlertsAndMsgesSchema = new mongoose.Schema(
@@ -130,7 +130,7 @@ const AlertsAndMsgesSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: true,
-  }
+  },
 );
 
 const ActivitiesSchema = new mongoose.Schema(
@@ -185,7 +185,7 @@ const ActivitiesSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: true,
-  }
+  },
 );
 
 const LynkCollectionSchema = new mongoose.Schema(
@@ -212,7 +212,7 @@ const LynkCollectionSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: false,
-  }
+  },
 );
 
 const LynksSchema = new mongoose.Schema(
@@ -243,7 +243,41 @@ const LynksSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: false,
-  }
+  },
+);
+
+const HabitsSchema = new mongoose.Schema(
+  {
+    userId: { type: ObjectId, ref: "user", required: true },
+    label: {
+      type: String,
+      // required: true,
+    },
+    description: {
+      type: String,
+      // required: true,
+    },
+    tracker: {
+      type: Object,
+      default: {},
+    },
+    isBubblegumServer: {
+      type: Boolean,
+      default: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+    strict: false,
+  },
 );
 
 module.exports = {
@@ -253,4 +287,5 @@ module.exports = {
   DynamicModel: mongoose.model("dynamic-ui", DynamicSchema),
   LynkCollectionModel: mongoose.model("lynk", LynkCollectionSchema),
   LynksModel: mongoose.model("links", LynksSchema),
+  HabitsModel: mongoose.model("habits", HabitsSchema),
 };

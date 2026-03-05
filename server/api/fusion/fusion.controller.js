@@ -9,6 +9,7 @@ const {
   DynamicModel,
   LynkCollectionModel,
   LynksModel,
+  HabitsModel,
 } = require("./fusion.model");
 const UserModel = require("../user/user.model");
 
@@ -18,6 +19,7 @@ const modelEntityMap = {
   editables: EditablesModel,
   dynamic: DynamicModel,
   links: LynkCollectionModel,
+  habits: HabitsModel,
 };
 
 const USER_PROJECT = {
@@ -201,7 +203,7 @@ exports.updateEntity = async (req, res) => {
       _id: entityId,
       userId,
     },
-    { $set: { ..._.omit(req.body, "_id") } }
+    { $set: { ..._.omit(req.body, "_id") } },
   );
   res.send({ result });
 };
@@ -217,7 +219,7 @@ exports.deleteEntity = async (req, res) => {
       _id: entityId,
       userId,
     },
-    { $set: { deleted: true } }
+    { $set: { deleted: true } },
   );
   res.send({ result });
 };
