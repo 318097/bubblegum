@@ -8,7 +8,7 @@ const { getAppBasedInfo } = require("./common");
 const getToken = (req) => _.get(req, "headers.authorization");
 
 const signToken = (_id, email) =>
-  jwt.sign({ _id, email }, config.JWT, { expiresIn: "30d" });
+  jwt.sign({ _id, email }, config.JWT, { expiresIn: "90d" });
 
 const appendUserInfo = async (req, user) => {
   const { _id } = user;
