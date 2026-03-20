@@ -257,6 +257,14 @@ const HabitsSchema = new mongoose.Schema(
       type: String,
       // required: true,
     },
+    targetCount: {
+      type: Number,
+      default: 0,
+    },
+    startDate: {
+      type: String,
+      default: "",
+    },
     tracker: {
       type: Object,
       default: {},

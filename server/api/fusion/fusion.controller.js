@@ -1,5 +1,5 @@
 const _ = require("lodash");
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 // const moment = require("moment");
 // const { getKey } = require("../../utils/common");
 const {
@@ -335,17 +335,45 @@ exports.createAlertMessage = async (req, res) => {
   res.send(result);
 };
 
-exports.createLink = async (req, res) => {
+exports.createOrUpdateLink = async (req, res) => {
   const { _id } = req.user;
 
   const link = {
+    ...req.body,
     userId: _id,
     collectionId: req.params.collectionId,
-    ...req.body,
+    slug: req.body.slug,
+    deleted: false,
+    archived: false,
+    isBubblegumServer: true,
   };
-  const result = await LynksModel.create(link);
+  const result = await LynksModel.findOneAndUpdate(
+    { _id: req.body._id || new mongoose.Types.ObjectId() },
+    {
+      $set: link,
+    },
+    {
+      upsert: true,
+      new: true,
+    },
+  );
 
   res.send(result);
+};
+
+exports.deleteLink = async (req, res) => {
+  const { linkId, collectionId } = req.params;
+  const { _id: userId } = req.user;
+
+  const result = await LynksModel.findOneAndUpdate(
+    {
+      _id: linkId,
+      userId,
+      collectionId,
+    },
+    { $set: { deleted: true } },
+  );
+  res.send({ result });
 };
 
 exports.getLynksByCollectionId = async (req, res) => {
@@ -355,10 +383,32 @@ exports.getLynksByCollectionId = async (req, res) => {
     {
       $match: {
         userId: _id,
+        deleted: false,
         // collectionId: req.params.collectionId,
       },
     },
   ]);
 
+  res.send(result);
+};
+
+exports.resolveShortLink = async (req, res) => {
+  const { path } = req.params;
+
+  const [collection, ...slug] = path.split("::");
+
+  const lynkCollection = await LynkCollectionModel.findOne({
+    label: collection.trim().toLowerCase(),
+    // collectionId: req.params.collectionId,
+  });
+  console.log("lynkCollection::-", lynkCollection._id);
+
+  const result = await LynksModel.findOne({
+    collectionId: lynkCollection._id,
+    slug: `${slug.join("/")}`,
+    // collectionId: req.params.collectionId,
+  });
+
+  // TODO: limit the content that is sent back, and also add analytics for the same
   res.send(result);
 };

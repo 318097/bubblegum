@@ -9,30 +9,42 @@ const controller = require("./fusion.controller");
 router.get(
   "/alerts/feed",
   temporaryAccess,
-  errorHandlingWrapper(controller.getAlertsFeed)
+  errorHandlingWrapper(controller.getAlertsFeed),
 );
 router.get(
   "/alert-details/:alertId",
   transparent,
-  errorHandlingWrapper(controller.getAlertDetailsById)
+  errorHandlingWrapper(controller.getAlertDetailsById),
 );
 router.post(
   "/alerts/msg",
   transparent,
-  errorHandlingWrapper(controller.createAlertMessage)
+  errorHandlingWrapper(controller.createAlertMessage),
 );
 
 // Lynk routes
 router.get(
+  "/sh/:path",
+  transparent,
+  errorHandlingWrapper(controller.resolveShortLink),
+);
+
+router.get(
   "/links/:collectionId",
   transparent,
-  errorHandlingWrapper(controller.getLynksByCollectionId)
+  errorHandlingWrapper(controller.getLynksByCollectionId),
 );
 
 router.post(
   "/links/:collectionId",
   transparent,
-  errorHandlingWrapper(controller.createLink)
+  errorHandlingWrapper(controller.createOrUpdateLink),
+);
+
+router.delete(
+  "/links/:collectionId/:linkId",
+  transparent,
+  errorHandlingWrapper(controller.deleteLink),
 );
 
 // Generic entity routes
@@ -40,27 +52,27 @@ router.post(
 router.get(
   "/:entityType",
   transparent,
-  errorHandlingWrapper(controller.getAllEntities)
+  errorHandlingWrapper(controller.getAllEntities),
 );
 router.get(
   "/:entityType/:entityId",
   transparent,
-  errorHandlingWrapper(controller.getEntityById)
+  errorHandlingWrapper(controller.getEntityById),
 );
 router.post(
   "/:entityType",
   transparent,
-  errorHandlingWrapper(controller.createEntity)
+  errorHandlingWrapper(controller.createEntity),
 );
 router.put(
   "/:entityType/:entityId",
   transparent,
-  errorHandlingWrapper(controller.updateEntity)
+  errorHandlingWrapper(controller.updateEntity),
 );
 router.delete(
   "/:entityType/:entityId",
   transparent,
-  errorHandlingWrapper(controller.deleteEntity)
+  errorHandlingWrapper(controller.deleteEntity),
 );
 
 module.exports = router;
