@@ -16,7 +16,7 @@ const { startApolloServerExpress } = require("./graphql");
 logger.log(
   `${config.IS_PROD ? "💀💀💀💀💀" : "🆗"} Running in '${
     config.NODE_ENV
-  }' mode ${config.IS_PROD ? "💀💀💀💀💀" : ""}`
+  }' mode ${config.IS_PROD ? "💀💀💀💀💀" : ""}`,
 );
 
 connectToDb();
@@ -34,6 +34,7 @@ app.use("/api", api);
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
+    console.log("[Middleware] : ", err);
     res.status(401).send("INVALID_JWT_TOKEN");
     return;
   }

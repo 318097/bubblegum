@@ -31,7 +31,7 @@ const { createModules } = require("../modules/modules/modules.operations");
 const oauth2Client = new google.auth.OAuth2(
   config.GOOGLE_OAUTH.CLIENT_ID,
   config.GOOGLE_OAUTH.CLIENT_SECRET,
-  config.GOOGLE_OAUTH.REDIRECT_URL
+  config.GOOGLE_OAUTH.REDIRECT_URL,
 );
 
 const generateDefaultState = async ({ req, user }) => {
@@ -123,7 +123,7 @@ const login = async (req, res) => {
     { $set: userUpdateData },
     {
       new: true,
-    }
+    },
   );
 
   user = user.toObject();
@@ -196,7 +196,7 @@ const authenticateWithGoogle = async (req, res) => {
   if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.cert(
-        require(serviceAccountPath[req.source])
+        require(serviceAccountPath[req.source]),
       ),
     });
   }
@@ -240,6 +240,13 @@ const authenticateWithGoogle = async (req, res) => {
 
     const token = signToken(user._id, user.email);
 
+    await startSession({
+      userId: user._id,
+      source: req.source,
+      authMethod: "GOOGLE",
+      token,
+    });
+
     res.send({ token, ...userInfoToSend });
   } catch (err) {
     console.log("err::-", err);
@@ -249,8 +256,8 @@ const authenticateWithGoogle = async (req, res) => {
 
 const checkAccountStatus = async (req, res) => {
   await verifyAccountStatus(req);
-  const result = await extractUserData(req);
-  res.send(result);
+  const user = await extractUserData(req);
+  res.send({ ...user, token: req.token });
 };
 
 const forgotPassword = async (req, res) => {

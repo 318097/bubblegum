@@ -18,6 +18,7 @@ app.use("/.netlify/functions/api", apiRoutes);
 
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
+    console.log("[Middleware] : ", err);
     res.status(401).send("INVALID_JWT_TOKEN");
     return;
   }
