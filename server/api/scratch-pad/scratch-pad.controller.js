@@ -42,7 +42,7 @@ exports.updateItem = async (req, res) => {
       $set: {
         ...req.body,
       },
-    }
+    },
   );
   res.send({ result });
 };

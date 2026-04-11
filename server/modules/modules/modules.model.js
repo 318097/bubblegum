@@ -28,7 +28,7 @@ const ModulesSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: false,
-  }
+  },
 );
 
 module.exports = mongoose.model(collectionName, ModulesSchema);

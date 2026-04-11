@@ -82,7 +82,7 @@ const PostsSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: false,
-  }
+  },
 );
 
 PostsSchema.index({ collectionId: 1, index: 1 }, { unique: true });

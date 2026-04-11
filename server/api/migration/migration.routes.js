@@ -40,7 +40,7 @@ const controller = require("./migration.controller");
 
 router.get(
   "/get-octon-expenses-for-notion",
-  errorHandlingWrapper(controller.getOctonExpensesForNotion)
+  errorHandlingWrapper(controller.getOctonExpensesForNotion),
 );
 
 module.exports = router;

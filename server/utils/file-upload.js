@@ -40,11 +40,11 @@ exports.fileUpload = async (req, { exactFileName = true, folder } = {}) => {
 
         let stream = cloudinary.uploader.upload_stream(
           options,
-          (error, result) => (result ? resolve(result) : reject(error))
+          (error, result) => (result ? resolve(result) : reject(error)),
         );
 
         streamifier.createReadStream(file.buffer).pipe(stream);
-      })
+      }),
   );
 
   return Promise.all(responses);

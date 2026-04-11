@@ -37,7 +37,7 @@ const AlbumsSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: false,
-  }
+  },
 );
 
 const filesCollectionName = "files";
@@ -88,7 +88,7 @@ const FilesSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: false,
-  }
+  },
 );
 
 module.exports = {

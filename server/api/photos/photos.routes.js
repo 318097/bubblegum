@@ -8,18 +8,18 @@ router.get("/", errorHandlingWrapper(controller.getAllAlbums));
 router.get(
   "/:albumId",
   // temporaryAccess,
-  errorHandlingWrapper(controller.getAllPhotosByAlbum)
+  errorHandlingWrapper(controller.getAllPhotosByAlbum),
 );
 router.post("/", temporaryAccess, errorHandlingWrapper(controller.createAlbum));
 router.post(
   "/files/:albumId",
   temporaryAccess,
-  errorHandlingWrapper(controller.addFilesToAlbum)
+  errorHandlingWrapper(controller.addFilesToAlbum),
 );
 router.put(
   "/:albumId",
   temporaryAccess,
-  errorHandlingWrapper(controller.updateFilesInAlbum)
+  errorHandlingWrapper(controller.updateFilesInAlbum),
 );
 
 // router.get("/random", errorHandlingWrapper(controller.getRelatedPosts));
@@ -37,7 +37,7 @@ router.put(
 router.put(
   "/:id",
   temporaryAccess,
-  errorHandlingWrapper(controller.updatePost)
+  errorHandlingWrapper(controller.updatePost),
 );
 // router.put(
 //   "/:id/bookmark",
@@ -47,12 +47,12 @@ router.put(
 router.get(
   "/:id",
   temporaryAccess,
-  errorHandlingWrapper(controller.getPostById)
+  errorHandlingWrapper(controller.getPostById),
 );
 router.delete(
   "/:id",
   temporaryAccess,
-  errorHandlingWrapper(controller.deletePost)
+  errorHandlingWrapper(controller.deletePost),
 );
 
 module.exports = router;

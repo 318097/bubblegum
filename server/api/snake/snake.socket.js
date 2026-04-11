@@ -47,8 +47,8 @@ module.exports = (io) => {
         game.player1.id === playerId
           ? "player1"
           : game.player2.id === playerId
-          ? "player2"
-          : null;
+            ? "player2"
+            : null;
       if (playerNo) {
         game[playerNo]["status"] = statusCodes.DEAD;
         console.log(`${playerNo} dead with uid: ${playerId}`);

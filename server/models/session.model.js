@@ -34,7 +34,7 @@ const SessionSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: true,
-  }
+  },
 );
 
 module.exports = mongoose.model(collectionName, SessionSchema);

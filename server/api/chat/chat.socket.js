@@ -27,7 +27,7 @@ module.exports = (io) => {
               ...user,
               userId,
             }
-          : user
+          : user,
       );
     });
 
@@ -72,7 +72,7 @@ module.exports = (io) => {
         });
 
         socket.emit(MESSAGE_UPDATE, { metaInfo, _id, tempId });
-      }
+      },
     );
 
     socket.on(DISCONNECT, () => {

@@ -106,7 +106,7 @@ const getFromCache = ({ storeId, bookingId }) => {
   if (cache[storeId])
     return _.find(
       _.get(cache, [storeId, "bookings"]),
-      (booking) => String(booking._id) === bookingId
+      (booking) => String(booking._id) === bookingId,
     );
 };
 

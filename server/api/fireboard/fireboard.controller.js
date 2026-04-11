@@ -145,7 +145,7 @@ exports.createTask = async (req, res) => {
       $push: {
         [`todos`]: result._id,
       },
-    }
+    },
   );
   res.send({ result });
 };
@@ -167,7 +167,7 @@ exports.updateTask = async (req, res) => {
     {
       $set: { ...rest, ...updatedData },
     },
-    { new: true }
+    { new: true },
   );
   res.send({ result });
 };
@@ -188,7 +188,7 @@ exports.stampTask = async (req, res) => {
     },
     {
       new: true,
-    }
+    },
   );
   res.send({ result });
 };
@@ -202,7 +202,7 @@ exports.deleteTask = async (req, res) => {
 
   await TaskModel.findOneAndUpdate(
     { _id: topicId, userId: req.user._id },
-    { $pull: { todos: result._id } }
+    { $pull: { todos: result._id } },
   );
   res.send({ result });
 };

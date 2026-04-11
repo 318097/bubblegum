@@ -19,7 +19,7 @@ const getSession = ({ userId, token }) =>
 const endSession = ({ userId, token }) =>
   sessionModel.findOneAndUpdate(
     { userId, token },
-    { $set: { status: "LOGGED_OUT", loggedOutAt: generateDate() } }
+    { $set: { status: "LOGGED_OUT", loggedOutAt: generateDate() } },
   );
 
 const revokeAllSessions = ({ userId }) =>

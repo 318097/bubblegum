@@ -10,7 +10,7 @@ const FireboardProjectSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model(collectionName, FireboardProjectSchema);

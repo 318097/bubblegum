@@ -83,7 +83,7 @@ const updateExpense = async (_, args, { models, userId }) => {
     {
       $set: data,
     },
-    { new: true }
+    { new: true },
   );
   return result;
 };
@@ -95,7 +95,7 @@ const toggleFavoriteExpense = async (_, args, { models, userId }) => {
     {
       $set: { favorite: status },
     },
-    { new: true }
+    { new: true },
   );
   return result;
 };
@@ -149,12 +149,12 @@ const expenseStats = async (parent, args, { models, userId, user }) => {
       const previousValue = _.get(
         monthlyOverview,
         [createdKey, expenseTypeLabel],
-        0
+        0,
       );
       set(
         monthlyOverview,
         [createdKey, expenseTypeLabel],
-        previousValue + amount
+        previousValue + amount,
       );
     }
   });

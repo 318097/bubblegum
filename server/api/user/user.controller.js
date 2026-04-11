@@ -79,7 +79,7 @@ exports.updateAppSettings = async (req, res) => {
   const update = await Model.findOneAndUpdate(
     { _id: req.user._id },
     { $set: data },
-    { new: true }
+    { new: true },
   );
   res.send(update);
 };

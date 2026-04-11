@@ -22,7 +22,7 @@ const TransactionSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: false,
-  }
+  },
 );
 
 module.exports = mongoose.model(collectionName, TransactionSchema);

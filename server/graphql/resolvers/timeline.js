@@ -37,7 +37,7 @@ const updateTimelinePost = async (_, args, { models, userId }) => {
     {
       $set: data,
     },
-    { new: true }
+    { new: true },
   );
   return result;
 };

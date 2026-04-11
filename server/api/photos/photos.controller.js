@@ -250,7 +250,7 @@ exports.updateFilesInAlbum = async (req, res) => {
     { $set: updatedData },
     {
       new: true,
-    }
+    },
   );
 
   res.send({ result });
@@ -274,14 +274,14 @@ exports.updatePost = async (req, res) => {
     const collectionLiveId = _.get(
       _.find(user.notebase, { _id: processId(collectionId) }, {}),
       "liveId",
-      0
+      0,
     );
     updatedData["liveId"] = collectionLiveId;
     updatedData["publishedAt"] = moment().toISOString();
 
     await UserModel.findOneAndUpdate(
       { _id: userId, "notebase._id": processId(collectionId) },
-      { $set: { [`notebase.$.liveId`]: collectionLiveId + 1 } }
+      { $set: { [`notebase.$.liveId`]: collectionLiveId + 1 } },
     );
   }
 
@@ -310,7 +310,7 @@ exports.updatePost = async (req, res) => {
       userId,
     },
     query,
-    { new: true }
+    { new: true },
   );
 
   if (updatedChainedTo) {
@@ -318,14 +318,14 @@ exports.updatePost = async (req, res) => {
     if (added.length)
       await AlbumModel.findOneAndUpdate(
         { _id: added[0], userId },
-        { $addToSet: { chainedItems: id } }
+        { $addToSet: { chainedItems: id } },
       );
 
     const removed = _.difference(chainedTo, updatedChainedTo);
     if (removed.length)
       await AlbumModel.findOneAndUpdate(
         { _id: removed[0], userId },
-        { $pull: { chainedItems: id } }
+        { $pull: { chainedItems: id } },
       );
   }
 
@@ -342,7 +342,7 @@ exports.deletePost = async (req, res) => {
       [key]: id,
       userId,
     },
-    { $set: { deleted: true } }
+    { $set: { deleted: true } },
   );
   res.send({ result });
 };
@@ -431,7 +431,7 @@ exports.toggleBookmark = async (req, res) => {
     {
       _id: req.user._id,
     },
-    updatedData
+    updatedData,
   );
 
   res.send({

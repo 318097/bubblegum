@@ -12,13 +12,13 @@ const DEFAULT_EXPENSE_TYPES = [
 const generateDefaultAppStatus = () => {
   return getProducts({ visibilityKey: "active" }).reduce(
     (result, { id }) => ({ ...result, [id]: { status: "INIT" } }),
-    {}
+    {},
   );
 };
 
 const updateAccountStatus = (
   obj = {},
-  { verified, token, source, authMethod }
+  { verified, token, source, authMethod },
 ) => {
   if (token) return { ...obj, verificationToken: token };
 

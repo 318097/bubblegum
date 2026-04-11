@@ -59,7 +59,7 @@ module.exports = (config) => {
         _id: processId(id),
         userId: processId(userId),
       },
-      { $set: { ...req.body } }
+      { $set: { ...req.body } },
     );
     res.send({ result });
   };
@@ -74,7 +74,7 @@ module.exports = (config) => {
         _id: processId(id),
         userId: processId(userId),
       },
-      { $set: { deleted: true } }
+      { $set: { deleted: true } },
     );
 
     res.send({ result });

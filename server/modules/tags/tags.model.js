@@ -42,7 +42,7 @@ const TagsSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: false,
-  }
+  },
 );
 
 module.exports = mongoose.model(collectionName, TagsSchema);

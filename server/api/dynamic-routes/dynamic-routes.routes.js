@@ -18,7 +18,7 @@ const dynamicRoutes = function (config) {
         router.post("/", errorHandlingWrapper(controller.createEntity));
         router.post(
           "/operations",
-          errorHandlingWrapper(controller.entityOperations)
+          errorHandlingWrapper(controller.entityOperations),
         );
         break;
       case "PUT":

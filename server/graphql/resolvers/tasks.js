@@ -40,7 +40,7 @@ const updateTask = async (_, args, { models }) => {
     {
       $set: args.input,
     },
-    { new: true }
+    { new: true },
   );
   return result;
 };
@@ -80,7 +80,7 @@ const stampTask = async (_, args, { models }) => {
     {
       _id,
     },
-    data
+    data,
   );
 
   return result;

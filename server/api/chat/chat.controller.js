@@ -44,6 +44,6 @@ exports.updateMessage = async (tempId, _id, messageUpdate) => {
   return await Model.findOneAndUpdate(
     { $or: aggregation },
     { $set: messageUpdate },
-    { new: true }
+    { new: true },
   );
 };

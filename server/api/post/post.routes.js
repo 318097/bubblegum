@@ -8,25 +8,25 @@ router.get("/", transparent, errorHandlingWrapper(controller.getAllPosts));
 router.get(
   "/post-ids",
   transparent,
-  errorHandlingWrapper(controller.getAllPostIds)
+  errorHandlingWrapper(controller.getAllPostIds),
 );
 router.get("/random", errorHandlingWrapper(controller.getRelatedPosts));
 router.get("/stats", protectedRoute, errorHandlingWrapper(controller.getStats));
 router.get(
   "/chains",
   protectedRoute,
-  errorHandlingWrapper(controller.getChains)
+  errorHandlingWrapper(controller.getChains),
 );
 router.get(
   "/bookmarks",
   protectedRoute,
-  errorHandlingWrapper(controller.getBookmarks)
+  errorHandlingWrapper(controller.getBookmarks),
 );
 router.put("/", protectedRoute, errorHandlingWrapper(controller.bulkUpdate));
 router.put(
   "/:id/bookmark",
   protectedRoute,
-  errorHandlingWrapper(controller.toggleBookmark)
+  errorHandlingWrapper(controller.toggleBookmark),
 );
 router.get("/:id", transparent, errorHandlingWrapper(controller.getPostById));
 router.post("/", protectedRoute, errorHandlingWrapper(controller.createPost));
@@ -34,7 +34,7 @@ router.put("/:id", protectedRoute, errorHandlingWrapper(controller.updatePost));
 router.delete(
   "/:id",
   protectedRoute,
-  errorHandlingWrapper(controller.deletePost)
+  errorHandlingWrapper(controller.deletePost),
 );
 
 module.exports = router;

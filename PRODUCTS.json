@@ -126,10 +126,7 @@
         }
       },
       "bitly": "https://bit.ly/quick-switch-extension",
-      "tags": [
-        "Productivity",
-        "ChromeExtension"
-      ],
+      "tags": ["Productivity", "ChromeExtension"],
       "release": {
         "year": 2023,
         "month": 2,
@@ -161,12 +158,7 @@
         }
       },
       "bitly": "https://bit.ly/devbox-extension",
-      "tags": [
-        "localstorage",
-        "productivity",
-        "devtools",
-        "chromeextension"
-      ],
+      "tags": ["localstorage", "productivity", "devtools", "chromeextension"],
       "release": {
         "year": 2022,
         "month": 6,
@@ -195,11 +187,7 @@
         }
       },
       "bitly": "https://bit.ly/array-builder",
-      "tags": [
-        "array-builder",
-        "productivity",
-        "devtools"
-      ],
+      "tags": ["array-builder", "productivity", "devtools"],
       "release": {
         "year": 2022,
         "month": 5,
@@ -227,11 +215,7 @@
         }
       },
       "bitly": "https://bit.ly/efeed-app",
-      "tags": [
-        "email-feed",
-        "productivity",
-        "email"
-      ]
+      "tags": ["email-feed", "productivity", "email"]
     },
     {
       "id": "FIREBOARD",
@@ -283,9 +267,7 @@
         "promotion": false,
         "portfolio": true
       },
-      "userKeys": [
-        "timeline"
-      ],
+      "userKeys": ["timeline"],
       "links": {
         "product": {
           "label": "App",
@@ -353,9 +335,7 @@
         "promotion": false,
         "portfolio": false
       },
-      "userKeys": [
-        "bookmarkedPosts"
-      ],
+      "userKeys": ["bookmarkedPosts"],
       "links": {
         "product": {
           "label": "Visit",
@@ -521,9 +501,7 @@
         "promotion": false,
         "portfolio": true
       },
-      "userKeys": [
-        "notebase"
-      ],
+      "userKeys": ["notebase"],
       "links": {
         "product": {
           "label": "Open",
@@ -543,9 +521,7 @@
         "promotion": false,
         "portfolio": false
       },
-      "userKeys": [
-        "notebase"
-      ]
+      "userKeys": ["notebase"]
     },
     {
       "id": "SNAKE",
@@ -564,9 +540,7 @@
           "url": "https://github.com/318097/snake"
         }
       },
-      "customMessages": [
-        "My first react app"
-      ]
+      "customMessages": ["My first react app"]
     }
   ]
 }

@@ -82,7 +82,7 @@ exports.autoGenerateTagsForCollection = async (req, res) => {
       _.filter(tags, (tag) => {
         return _.includes(_.toLower(post.title), _.toLower(tag.label));
       }),
-      "value"
+      "value",
     );
 
     const hasNewTags = _.difference(newTags, post.tags);

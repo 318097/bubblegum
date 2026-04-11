@@ -41,7 +41,7 @@ exports.updatePost = async (req, res) => {
       $set: {
         ...req.body,
       },
-    }
+    },
   );
   res.send({ result });
 };

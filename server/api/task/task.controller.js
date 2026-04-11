@@ -31,7 +31,7 @@ exports.createTask = async (req, res) => {
   const { task, type, frequency } = req.body;
   const { error } = Joi.validate(
     { task, type, frequency },
-    TaskSchemaValidator
+    TaskSchemaValidator,
   );
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -66,7 +66,7 @@ exports.updateTask = async (req, res) => {
         type,
         userId: req.user._id,
       },
-    }
+    },
   );
   res.send({ result });
 };
@@ -99,7 +99,7 @@ exports.stampTask = async (req, res) => {
     },
     {
       ...expression,
-    }
+    },
   );
   res.send({ result });
 };

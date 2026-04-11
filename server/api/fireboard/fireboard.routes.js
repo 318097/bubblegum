@@ -6,7 +6,7 @@ router.post("/tasks", errorHandlingWrapper(controller.createTask));
 router.get("/tasks", errorHandlingWrapper(controller.getAllTasks));
 router.get(
   "/tasks/completed",
-  errorHandlingWrapper(controller.getCompletedTasks)
+  errorHandlingWrapper(controller.getCompletedTasks),
 );
 router.get("/tasks/:id", errorHandlingWrapper(controller.getTaskById));
 router.put("/tasks/:id", errorHandlingWrapper(controller.updateTask));

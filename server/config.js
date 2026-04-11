@@ -21,8 +21,8 @@ const IS_PROD = ["production", "express-lambda-production"].includes(NODE_ENV);
 const DB_CONNECTION_URL = IS_PROD
   ? DB_URL
   : NODE_ENV === "staging"
-  ? STAGING_DB_URL
-  : "mongodb://localhost/bubblegum";
+    ? STAGING_DB_URL
+    : "mongodb://localhost/bubblegum";
 
 const config = {
   NODE_ENV,

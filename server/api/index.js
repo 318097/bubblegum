@@ -46,7 +46,7 @@ router.post(
   "/upload",
   protectedRoute,
   fileStorage,
-  errorHandlingWrapper(controller.fileUploadHandler)
+  errorHandlingWrapper(controller.fileUploadHandler),
 );
 
 router.use("/user", protectedRoute, userRoutes);

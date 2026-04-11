@@ -54,7 +54,7 @@ exports.updateExpense = async (req, res) => {
   const { id: expenseId } = req.params;
   const result = await Model.findOneAndUpdate(
     { _id: expenseId },
-    { $set: expense }
+    { $set: expense },
   );
   res.send({ result });
 };

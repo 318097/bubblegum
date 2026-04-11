@@ -10,7 +10,11 @@
     "build:netlify": "netlify-lambda -c ./webpack.functions.js build server-netlify",
     "deploy:netlify": "netlify deploy --prod",
     "predeploy": "git push origin master",
-    "lint": "eslint server/**"
+    "lint": "eslint",
+    "lint:err": "eslint --quiet",
+    "format": "prettier --write .",
+    "check-deps": "npx npm-check-updates --target semver",
+    "update-deps": "npx npm-check-updates --target semver --upgrade && npm install"
   },
   "author": "",
   "license": "ISC",
@@ -54,6 +58,7 @@
     "eslint": "^7.23.0",
     "eslint-plugin-import": "^2.22.1",
     "nodemon": "^1.18.11",
+    "prettier": "3.8.2",
     "webpack-node-externals": "^3.0.0"
   }
 }

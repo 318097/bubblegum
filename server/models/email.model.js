@@ -22,7 +22,7 @@ const EmailLogSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: true,
-  }
+  },
 );
 
 module.exports = mongoose.model(collectionName, EmailLogSchema);

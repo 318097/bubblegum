@@ -19,7 +19,7 @@ const products = parseProducts(PRODUCTS_JSON.products);
 
 const getProducts = ({ visibilityKey = "" } = {}) => {
   return _.filter(products, (product) =>
-    visibilityKey ? _.get(product, ["visibility", visibilityKey]) : true
+    visibilityKey ? _.get(product, ["visibility", visibilityKey]) : true,
   );
 };
 
@@ -49,7 +49,7 @@ const getPromotionalProducts = ({ source }) => {
       id !== source &&
       tagline &&
       _.get(visibility, "promotion") &&
-      _.get(links, "product.url")
+      _.get(links, "product.url"),
   );
 
   const promotionalProducts = _.map(
@@ -58,7 +58,7 @@ const getPromotionalProducts = ({ source }) => {
       name,
       description: tagline,
       href: ctaUrl,
-    })
+    }),
   );
 
   return promotionalProducts;

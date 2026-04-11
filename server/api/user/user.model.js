@@ -89,7 +89,7 @@ const UserSchema = new mongoose.Schema(
   {
     timestamps: true,
     strict: true,
-  }
+  },
 );
 
 UserSchema.index({ geoCoordinates: "2dsphere" });

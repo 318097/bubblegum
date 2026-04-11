@@ -91,7 +91,7 @@ exports.updateBooking = async (req, res) => {
       updatedData,
       {
         new: true,
-      }
+      },
     );
 
     const updatedBooking = { ...booking, ...result.toObject() };
@@ -109,7 +109,7 @@ exports.updateBooking = async (req, res) => {
             status: "ACTIVE",
             startedOn: getCurrentDate(),
           },
-        }
+        },
       );
     }
 
@@ -119,7 +119,7 @@ exports.updateBooking = async (req, res) => {
         $inc: {
           waitingNo: -1,
         },
-      }
+      },
     );
 
     const userList = _.get(cache, [storeId, "bookings"], []).map((booking) => ({
