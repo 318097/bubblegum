@@ -29,7 +29,9 @@ const parseNotionData = (data) => {
   return data
     .map((item) => {
       const { properties } = item;
-      const result = {};
+      const result = {
+        id: item.id,
+      };
       _.forEach(properties, (value, key) => {
         const { type } = value;
         let finalValue = "";
@@ -124,7 +126,7 @@ exports.getLiquidTech = async (req, res) => {
             },
           },
           {
-            property: "priority",
+            property: "rank",
             select: {
               does_not_equal: "Low",
             },
@@ -139,21 +141,15 @@ exports.getLiquidTech = async (req, res) => {
       ],
     };
 
-    const list = await fetchAllData(params);
+    const { list } = await fetchAllData(params);
 
     const parsedList = parseNotionData(list).map((listItem) => {
-      const [, subType] = _.split(_.toLower(listItem["L1"]), ":");
+      // const [, subType] = _.split(_.toLower(listItem["L1"]), ":");
       return {
-        ..._.pick(listItem, [
-          "_id",
-          "title",
-          "url",
-          "tags",
-          "description",
-          "priority",
-        ]),
+        ..._.pick(listItem, ["_id", "title", "url", "tags", "description"]),
         type: _.toLower(listItem["L0"]),
-        subType,
+        subType: _.get(listItem, "L1"),
+        priority: _.get(listItem, "rank"),
       };
     });
 
@@ -246,7 +242,7 @@ exports.getAllKeyBindings = async (req, res) => {
           platform,
           binding: JSON.parse(binding),
         };
-      }
+      },
     );
 
     res.send({ data: parsedList });
