@@ -4,7 +4,7 @@ const moment = require("moment");
 const _ = require("lodash");
 
 const logger = require("../../utils/logger");
-const serviceAccount = require("../../../storeq-d518c-firebase-adminsdk-cv2ze-0b870f5cf0.json");
+const serviceAccount = require("../../../secrets/storeq-d518c-firebase-adminsdk-cv2ze-0b870f5cf0.json");
 const Model = require("./storeq.model");
 
 admin.initializeApp({
