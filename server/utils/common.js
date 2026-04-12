@@ -13,7 +13,7 @@ const generateObjectId = () => new ObjectId();
 const isObjectId = (id) => OBJECT_ID_REGEX.test(id);
 
 const processId = (id) =>
-  isObjectId(id) && ObjectId.isValid(id) ? ObjectId(id) : id;
+  isObjectId(id) && ObjectId.isValid(id) ? new ObjectId(id) : id;
 
 const generateDate = (date) =>
   (date ? new Date(date) : new Date()).toISOString();

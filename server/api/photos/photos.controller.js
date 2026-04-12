@@ -83,7 +83,7 @@ async function getRelatedPosts(req, res) {
     isAdmin: true,
     deleted: false,
     collectionId: processId(collectionId),
-    _id: { $ne: ObjectId(postId) },
+    _id: { $ne: new ObjectId(postId) },
   };
   if (tags.length) aggregation["tags"] = { $in: tags };
 
@@ -128,7 +128,7 @@ async function getAllPhotosByAlbum(req, res) {
     { $limit: Number(limit) },
   ]);
 
-  const count = await FilesModel.find(aggregation).count();
+  const count = await FilesModel.countDocuments(aggregation);
 
   res.send({
     photos,
@@ -151,7 +151,7 @@ async function getPostById(req, res) {
   const { collectionId } = req.query;
   const key = getKey(id);
   const aggregation = {
-    [key]: key === "_id" ? ObjectId(id) : id,
+    [key]: key === "_id" ? new ObjectId(id) : id,
     collectionId: processId(collectionId),
   };
 
@@ -424,7 +424,7 @@ async function toggleBookmark(req, res) {
 
   const updatedData = {
     [status ? "$addToSet" : "$pull"]: {
-      bookmarkedPosts: ObjectId(id),
+      bookmarkedPosts: new ObjectId(id),
     },
   };
   const result = await UserModel.findOneAndUpdate(

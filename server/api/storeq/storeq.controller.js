@@ -26,7 +26,7 @@ async function getAllStores(req, res) {
 async function showAllBookingsForStore(req, res) {
   const storeId = req.params.id;
   const result = await Model.aggregate([
-    { $match: { storeId: ObjectId(storeId) } },
+    { $match: { storeId: new ObjectId(storeId) } },
     {
       $lookup: {
         from: "users",
@@ -44,7 +44,7 @@ async function showAllBookingsForStore(req, res) {
 
 async function showAllBookingsForBuyer(req, res) {
   const userId = req.params.id;
-  const result = await Model.find({ userId: ObjectId(userId) });
+  const result = await Model.find({ userId: new ObjectId(userId) });
   res.send({ orders: result });
 }
 
@@ -87,7 +87,7 @@ async function updateBooking(req, res) {
 
     const result = await Model.findOneAndUpdate(
       {
-        _id: ObjectId(bookingId),
+        _id: new ObjectId(bookingId),
       },
       updatedData,
       {

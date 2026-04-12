@@ -4,7 +4,7 @@ import logger from "./utils/logger.js";
 
 const connectToDb = async () => {
   return mongoose
-    .connect(config.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(config.DB_URL)
     .then(() => logger.log(`Connected to DB ✅`))
     .catch((err) => logger.error(`Error in connecting to DB ❌`, err));
 };

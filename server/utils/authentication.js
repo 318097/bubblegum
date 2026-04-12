@@ -1,9 +1,15 @@
 import jwt from "jsonwebtoken";
-import expressJwt from "express-jwt";
+import { expressjwt } from "express-jwt";
 import _ from "lodash";
 import config from "../config.js";
 import User from "../api/user/user.model.js";
 import { getAppBasedInfo } from "./common.js";
+
+const checkToken = expressjwt({
+  secret: config.JWT,
+  algorithms: ["HS256"],
+  requestProperty: "user",
+});
 
 const getToken = (req) => _.get(req, "headers.authorization");
 
@@ -40,7 +46,6 @@ const getUserFromToken = async (token) => {
 
 const decodeToken = (req, res, next) => {
   /* this will call next() if token is valid or send error.& attached the decoded token to `req.user` */
-  const checkToken = expressJwt({ secret: config.JWT });
   checkToken(req, res, next);
 };
 
