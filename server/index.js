@@ -1,15 +1,16 @@
-const express = require("express");
+import express from "express";
 
 const app = express();
 
-const http = require("http").Server(app);
+import { Server as HttpServer } from "http";
+const http = new HttpServer(app);
 
-const connectToDb = require("./db");
-const config = require("./config");
-const logger = require("./utils/logger");
-
-const authRoutes = require("./auth/auth.routes");
-const api = require("./api");
+import connectToDb from "./db.js";
+import config from "./config.js";
+import logger from "./utils/logger.js";
+import authRoutes from "./auth/auth.routes.js";
+import api from "./api/index.js";
+import applyAppMiddleware from "./middleware/app-middleware.js";
 
 logger.log(
   `Server started in '${config.NODE_ENV}' mode ${config.IS_PROD ? "💀" : ""}`,
@@ -17,7 +18,7 @@ logger.log(
 
 connectToDb();
 
-require("./middleware/app-middleware")(app);
+applyAppMiddleware(app);
 
 app.use("/api/auth", authRoutes);
 app.use("/api", api);

@@ -1,14 +1,15 @@
-const _ = require("lodash");
-const { ObjectId } = require("mongoose").Types;
-const {
+import _ from "lodash";
+import mongoose from "mongoose";
+const { ObjectId } = mongoose.Types;
+import {
   processId,
   generateDate,
   extractUserData,
-} = require("../../utils/common");
-const Model = require("./user.model");
-const { getKeysBasedOnSource } = require("../../utils/products");
+} from "../../utils/common.js";
+import Model from "./user.model.js";
+import { getKeysBasedOnSource } from "../../utils/products.js";
 
-exports.updateSettings = async (req, res) => {
+async function updateSettings(req, res) {
   const { user, query, body } = req;
   const { action, key } = query;
 
@@ -70,9 +71,9 @@ exports.updateSettings = async (req, res) => {
   });
 
   res.send({ result: filteredContent });
-};
+}
 
-exports.updateAppSettings = async (req, res) => {
+async function updateAppSettings(req, res) {
   const keysBasedOnSource = getKeysBasedOnSource(req.source);
   const data = _.pick(req.body, keysBasedOnSource);
 
@@ -82,16 +83,18 @@ exports.updateAppSettings = async (req, res) => {
     { new: true },
   );
   res.send(update);
-};
+}
 
-exports.getProfileById = async (profileId) => {
+async function getProfileById(profileId) {
   const profile = await Model.findOne({ _id: profileId }).lean();
   return profile;
-};
+}
 
-exports.getProfile = async (req, res) => {
+async function getProfile(req, res) {
   const { id } = req.params;
   // TODO: return the no of alerts, activites created by the user and last active time
   const profile = await this.getProfileById(id);
   res.send(profile);
-};
+}
+
+export { updateSettings, updateAppSettings, getProfileById, getProfile };

@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
-const { PRODUCT_LIST } = require("../../utils/products");
-const constants = require("../../constants");
-const { encryptPassword, comparePassword } = require("./user.utils");
+import mongoose from "mongoose";
+import {PRODUCT_LIST} from "../../utils/products.js";
+import constants from "../../constants.js";
+import {encryptPassword, comparePassword} from "./user.utils.js";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -107,4 +107,4 @@ UserSchema.methods = {
   encryptPassword,
 };
 
-module.exports = mongoose.model("user", UserSchema);
+export default mongoose.model("user", UserSchema);

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "session";
@@ -37,4 +37,4 @@ const SessionSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model(collectionName, SessionSchema);
+export default mongoose.model(collectionName, SessionSchema);

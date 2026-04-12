@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const { PRODUCT_LIST } = require("../../utils/products");
-const constants = require("../../constants");
+import mongoose from "mongoose";
+import {PRODUCT_LIST} from "../../utils/products.js";
+import constants from "../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "tags";
@@ -45,4 +45,4 @@ const TagsSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model(collectionName, TagsSchema);
+export default mongoose.model(collectionName, TagsSchema);

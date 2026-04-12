@@ -1,6 +1,6 @@
-const { generateSlugV2 } = require("../../utils/common");
+import {generateSlugV2} from "../../utils/common.js";
 
-module.exports = {
+export default {
   parseInputForCreateEntity: (body) => ({
     ...body,
     value: generateSlugV2(body.label),

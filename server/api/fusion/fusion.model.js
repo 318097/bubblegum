@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const { ObjectId } = mongoose.Schema.Types;
 
@@ -288,12 +288,23 @@ const HabitsSchema = new mongoose.Schema(
   },
 );
 
-module.exports = {
-  AlertAndMsgModel: mongoose.model("alert-and-msges", AlertsAndMsgesSchema),
-  ActivitiesModel: mongoose.model("activities", ActivitiesSchema),
-  EditablesModel: mongoose.model("editables", EditablesSchema),
-  DynamicModel: mongoose.model("dynamic-ui", DynamicSchema),
-  LynkCollectionModel: mongoose.model("lynk", LynkCollectionSchema),
-  LynksModel: mongoose.model("links", LynksSchema),
-  HabitsModel: mongoose.model("habits", HabitsSchema),
+const AlertAndMsgModel = mongoose.model(
+  "alert-and-msges",
+  AlertsAndMsgesSchema,
+);
+const ActivitiesModel = mongoose.model("activities", ActivitiesSchema);
+const EditablesModel = mongoose.model("editables", EditablesSchema);
+const DynamicModel = mongoose.model("dynamic-ui", DynamicSchema);
+const LynkCollectionModel = mongoose.model("lynk", LynkCollectionSchema);
+const LynksModel = mongoose.model("links", LynksSchema);
+const HabitsModel = mongoose.model("habits", HabitsSchema);
+
+export {
+  AlertAndMsgModel,
+  ActivitiesModel,
+  EditablesModel,
+  DynamicModel,
+  LynkCollectionModel,
+  LynksModel,
+  HabitsModel,
 };

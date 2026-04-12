@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "fireboard-project";
@@ -13,4 +13,4 @@ const FireboardProjectSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model(collectionName, FireboardProjectSchema);
+export default mongoose.model(collectionName, FireboardProjectSchema);

@@ -1,6 +1,6 @@
-const _ = require("lodash");
-const { Client } = require("@notionhq/client");
-const config = require("../../config");
+import _ from "lodash";
+import { Client } from "@notionhq/client";
+import config from "../../config.js";
 
 const notion = new Client({
   auth: config.NOTION_AUTH_KEY,
@@ -95,7 +95,7 @@ const fetchAllData = async (params) => {
   return { list, next_cursor };
 };
 
-exports.getLiquidTech = async (req, res) => {
+async function getLiquidTech(req, res) {
   try {
     const params = {
       database_id: config.NOTION_DB.LIQUID_TECH,
@@ -157,9 +157,9 @@ exports.getLiquidTech = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-};
+}
 
-exports.getVocab = async (req, res) => {
+async function getVocab(req, res) {
   try {
     const params = {
       database_id: config.NOTION_DB.VOCAB,
@@ -202,9 +202,9 @@ exports.getVocab = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-};
+}
 
-exports.getAllKeyBindings = async (req, res) => {
+async function getAllKeyBindings(req, res) {
   try {
     const params = {
       database_id: config.NOTION_DB.KEYBINDINGS,
@@ -249,4 +249,6 @@ exports.getAllKeyBindings = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-};
+}
+
+export { getLiquidTech, getVocab, getAllKeyBindings };

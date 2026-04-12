@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "storeq";
@@ -30,4 +30,4 @@ const StoreqSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model(collectionName, StoreqSchema);
+export default mongoose.model(collectionName, StoreqSchema);

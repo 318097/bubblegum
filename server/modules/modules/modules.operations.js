@@ -1,8 +1,8 @@
-const _ = require("lodash");
-const ModelsModel = require("./modules.model");
+import _ from "lodash";
+import ModelsModel from "./modules.model.js";
 
 const createModules = (input) => {
   return ModelsModel.create(input);
 };
 
-module.exports = { createModules };
+export { createModules };

@@ -1,7 +1,8 @@
-const router = require("express").Router();
-const errorHandlingWrapper = require("../middleware/error-handling");
-const { protectedRoute } = require("../utils/authentication");
-const controller = require("./auth.controller");
+import { Router } from "express";
+const router = Router();
+import errorHandlingWrapper from "../middleware/error-handling.js";
+import { protectedRoute } from "../utils/authentication.js";
+import * as controller from "./auth.controller.js";
 
 router.post("/login", errorHandlingWrapper(controller.login));
 router.post(
@@ -46,4 +47,4 @@ router.post(
   errorHandlingWrapper(controller.generateGoogleOAuthToken),
 );
 
-module.exports = router;
+export default router;

@@ -1,11 +1,10 @@
-const { ObjectId } = require("mongoose").Types;
-const _ = require("lodash");
-const { getKeysBasedOnSource } = require("./products");
-const FireboardProjectsModel = require("../api/fireboard/fireboard.project.model");
-const TagsModel = require("../modules/tags/tags.model");
-const ModulesModel = require("../modules/modules/modules.model");
-
-const slug = require("slug");
+import mongoose from "mongoose";
+const { ObjectId } = mongoose.Types;
+import _ from "lodash";
+import { getKeysBasedOnSource } from "./products.js";
+import FireboardProjectsModel from "../api/fireboard/fireboard.project.model.js";
+import TagsModel from "../modules/tags/tags.model.js";
+import ModulesModel from "../modules/modules/modules.model.js";
 
 const OBJECT_ID_REGEX = /^[a-f\d]{24}$/i;
 
@@ -143,11 +142,18 @@ const extractUserData = async (req) => {
   return { ...basic, ...sourceBasedInfo, ...appSpecificInfo };
 };
 
-const generateSlugV2 = (title) => slug(title, "_");
+const generateSlugV2 = (title = "") =>
+  title
+    .toString()
+    .toLowerCase()
+    .replace(/[^a-z0-9\s_-]/g, "")
+    .trim()
+    .replace(/[\s-]+/g, "_")
+    .replace(/_+/g, "_");
 
 const lowerCaseAndTrim = (input) => input.toLowerCase().trim();
 
-module.exports = {
+export {
   getKey,
   generateResourceName,
   generateSlug,

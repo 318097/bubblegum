@@ -1,13 +1,16 @@
-const chalk = require("chalk");
+const colorize =
+  (open, close) =>
+  (...args) =>
+    `${open}${args.map((arg) => String(arg)).join(" ")}${close}`;
 
-const chalkError = chalk.red;
-const chalkLog = chalk.green;
-const chalkTest = chalk.bgYellow.italic;
+const logStyle = colorize("\u001b[32m", "\u001b[0m");
+const errorStyle = colorize("\u001b[31m", "\u001b[0m");
+const testStyle = colorize("\u001b[43m\u001b[30m\u001b[3m", "\u001b[0m");
 
 const logger = {
-  log: (...args) => console.log(chalkLog("[log]:", ...args)),
-  error: (...error) => console.error(chalkError("[error]:", ...error)),
-  test: (...test) => console.info(chalkTest("[test]:", ...test)),
+  log: (...args) => console.log(logStyle("[log]:", ...args)),
+  error: (...error) => console.error(errorStyle("[error]:", ...error)),
+  test: (...test) => console.info(testStyle("[test]:", ...test)),
 };
 
-module.exports = logger;
+export default logger;

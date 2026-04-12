@@ -1,15 +1,15 @@
-const _ = require("lodash");
-const mongoose = require("mongoose");
-const moment = require("moment");
-const UserModel = require("../user/user.model");
-const {
+import _ from "lodash";
+import mongoose from "mongoose";
+import moment from "moment";
+import UserModel from "../user/user.model.js";
+import {
   getKey,
   generateResourceName,
   generateSlug,
   isSearchId,
   processId,
-} = require("../../utils/common");
-const Model = require("./post.model");
+} from "../../utils/common.js";
+import Model from "./post.model.js";
 
 const { ObjectId } = mongoose.Types;
 
@@ -95,7 +95,7 @@ const getAggregationFilters = (req) => {
   return { aggregation, sort, page, limit };
 };
 
-exports.getRelatedPosts = async (req, res) => {
+async function getRelatedPosts(req, res) {
   const { collectionId, tags = [], postId, size = 6 } = req.query;
   const aggregation = {
     status: "POSTED",
@@ -114,9 +114,9 @@ exports.getRelatedPosts = async (req, res) => {
     { $sample: { size: Number(size) } },
   ]);
   res.send({ posts });
-};
+}
 
-exports.getChains = async (req, res) => {
+async function getChains(req, res) {
   const { userId } = req;
   const { collectionId } = req.query;
   const chains = await Model.aggregate([
@@ -134,9 +134,9 @@ exports.getChains = async (req, res) => {
     },
   ]);
   res.send({ chains });
-};
+}
 
-exports.getAllPosts = async (req, res) => {
+async function getAllPosts(req, res) {
   const { aggregation, sort, page, limit } = getAggregationFilters(req);
 
   const result = await Model.aggregate([
@@ -162,9 +162,9 @@ exports.getAllPosts = async (req, res) => {
     posts: result,
     meta: { count },
   });
-};
+}
 
-exports.getAllPostIds = async (req, res) => {
+async function getAllPostIds(req, res) {
   const { aggregation } = getAggregationFilters(req);
 
   const result = await Model.aggregate([
@@ -175,9 +175,9 @@ exports.getAllPostIds = async (req, res) => {
   res.send({
     postIds: result,
   });
-};
+}
 
-exports.getPostById = async (req, res) => {
+async function getPostById(req, res) {
   const { id } = req.params;
   const { collectionId } = req.query;
   const key = getKey(id);
@@ -207,9 +207,9 @@ exports.getPostById = async (req, res) => {
     },
   ]);
   res.send({ post: result });
-};
+}
 
-exports.createPost = async (req, res) => {
+async function createPost(req, res) {
   const { data, sourceInfo = {} } = req.body;
   const { collectionId } = req.query;
   const { _id, userType, notebase = [] } = req.user;
@@ -261,9 +261,9 @@ exports.createPost = async (req, res) => {
   );
 
   res.send({ result });
-};
+}
 
-exports.bulkUpdate = async (req, res) => {
+async function bulkUpdate(req, res) {
   const { userId } = req;
   const { ids = [], ...update } = req.body;
   const { collectionId } = req.query;
@@ -282,9 +282,9 @@ exports.bulkUpdate = async (req, res) => {
   });
 
   res.send({ result });
-};
+}
 
-exports.updatePost = async (req, res) => {
+async function updatePost(req, res) {
   const { id } = req.params;
   const key = getKey(id);
   const { action, collectionId } = req.query;
@@ -358,9 +358,9 @@ exports.updatePost = async (req, res) => {
   }
 
   res.send({ result });
-};
+}
 
-exports.deletePost = async (req, res) => {
+async function deletePost(req, res) {
   const { id } = req.params;
   const key = getKey(id);
   const { _id: userId } = req.user;
@@ -373,9 +373,9 @@ exports.deletePost = async (req, res) => {
     { $set: { deleted: true } },
   );
   res.send({ result });
-};
+}
 
-exports.getStats = async (req, res) => {
+async function getStats(req, res) {
   const { aggregation } = getAggregationFilters(req);
   const result = await Model.find(aggregation).sort({ createdAt: 1 });
 
@@ -420,9 +420,9 @@ exports.getStats = async (req, res) => {
   });
 
   res.send({ stats });
-};
+}
 
-exports.getBookmarks = async (req, res) => {
+async function getBookmarks(req, res) {
   const { aggregation } = getAggregationFilters(req);
   const result = await Model.aggregate([
     {
@@ -444,9 +444,9 @@ exports.getBookmarks = async (req, res) => {
   res.send({
     bookmarks: result,
   });
-};
+}
 
-exports.toggleBookmark = async (req, res) => {
+async function toggleBookmark(req, res) {
   const { status } = req.body;
   const { id } = req.params;
 
@@ -465,4 +465,19 @@ exports.toggleBookmark = async (req, res) => {
   res.send({
     result,
   });
+}
+
+export {
+  getRelatedPosts,
+  getChains,
+  getAllPosts,
+  getAllPostIds,
+  getPostById,
+  createPost,
+  bulkUpdate,
+  updatePost,
+  deletePost,
+  getStats,
+  getBookmarks,
+  toggleBookmark,
 };

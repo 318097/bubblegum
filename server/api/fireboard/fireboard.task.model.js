@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "fireboard-task";
@@ -41,4 +41,4 @@ const FireboardTodoSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model(collectionName, FireboardTodoSchema);
+export default mongoose.model(collectionName, FireboardTodoSchema);

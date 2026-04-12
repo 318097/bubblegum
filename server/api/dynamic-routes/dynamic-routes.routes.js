@@ -1,6 +1,6 @@
-const express = require("express");
-const errorHandlingWrapper = require("../../middleware/error-handling");
-const controllerHOC = require("./dynamic-routes.controller");
+import express from "express";
+import errorHandlingWrapper from "../../middleware/error-handling.js";
+import controllerHOC from "./dynamic-routes.controller.js";
 
 const dynamicRoutes = function (config) {
   const router = express.Router();
@@ -33,4 +33,4 @@ const dynamicRoutes = function (config) {
   return router;
 };
 
-module.exports = dynamicRoutes;
+export default dynamicRoutes;

@@ -1,8 +1,8 @@
-const router = require("express").Router();
-const errorHandlingWrapper = require("../../middleware/error-handling");
-
-const { transparent, protectedRoute } = require("../../utils/authentication");
-const controller = require("./post.controller");
+import { Router } from "express";
+const router = Router();
+import errorHandlingWrapper from "../../middleware/error-handling.js";
+import { transparent, protectedRoute } from "../../utils/authentication.js";
+import * as controller from "./post.controller.js";
 
 router.get("/", transparent, errorHandlingWrapper(controller.getAllPosts));
 router.get(
@@ -37,4 +37,4 @@ router.delete(
   errorHandlingWrapper(controller.deletePost),
 );
 
-module.exports = router;
+export default router;

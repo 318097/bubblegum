@@ -1,9 +1,9 @@
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
-const _ = require("lodash");
-const { PRODUCT_LIST } = require("../utils/products");
-const { getToken } = require("../utils/authentication");
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+import _ from "lodash";
+import {PRODUCT_LIST} from "../utils/products.js";
+import {getToken} from "../utils/authentication.js";
 
 const appendSourceInfo = (req, res, next) => {
   const externalSource = _.get(req, "headers.external-source");
@@ -19,7 +19,7 @@ const appendSourceInfo = (req, res, next) => {
   next();
 };
 
-module.exports = function (app) {
+export default function (app) {
   app.use(morgan("dev"));
   // setting limit for toby/bookmark upload, as the default value is 100kb
   app.use(express.json({ limit: "1mb" })); // for parsing application/json

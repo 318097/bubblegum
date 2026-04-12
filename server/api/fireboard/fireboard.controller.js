@@ -1,8 +1,8 @@
-const _ = require("lodash");
-const moment = require("moment");
-const { processId, generateDate } = require("../../utils/common");
-const TaskModel = require("./fireboard.task.model");
-const ProjectModel = require("./fireboard.project.model");
+import _ from "lodash";
+import moment from "moment";
+import { processId, generateDate } from "../../utils/common.js";
+import TaskModel from "./fireboard.task.model.js";
+import ProjectModel from "./fireboard.project.model.js";
 
 const getDateEnds = (dateList) => {
   const list = _.map(dateList, "date");
@@ -12,7 +12,7 @@ const getDateEnds = (dateList) => {
   };
 };
 
-exports.getAllTasks = async (req, res) => {
+async function getAllTasks(req, res) {
   const { projectId } = req.query;
 
   const topics = await TaskModel.aggregate([
@@ -38,9 +38,9 @@ exports.getAllTasks = async (req, res) => {
     { $sort: { marked: 1, createdAt: -1 } },
   ]);
   res.send({ todos, topics });
-};
+}
 
-exports.getCompletedTasks = async (req, res) => {
+async function getCompletedTasks(req, res) {
   const { page = 1, limit = 10, projectId } = req.query;
   const aggregation = {
     userId: req.user._id,
@@ -108,17 +108,17 @@ exports.getCompletedTasks = async (req, res) => {
     timeline: result,
     next,
   });
-};
+}
 
-exports.getTaskById = async (req, res) => {
+async function getTaskById(req, res) {
   const result = await TaskModel.find({
     userId: req.user._id,
     _id: req.params.id,
   });
   res.send({ todo: result });
-};
+}
 
-exports.createTask = async (req, res) => {
+async function createTask(req, res) {
   const { parentId, content, projectId, marked, deadline, type } = req.body;
   const userId = req.user._id;
 
@@ -148,9 +148,9 @@ exports.createTask = async (req, res) => {
     },
   );
   res.send({ result });
-};
+}
 
-exports.updateTask = async (req, res) => {
+async function updateTask(req, res) {
   const { id: todoId } = req.params;
   const { deadline, start, stop, ...rest } = req.body;
 
@@ -170,9 +170,9 @@ exports.updateTask = async (req, res) => {
     { new: true },
   );
   res.send({ result });
-};
+}
 
-exports.stampTask = async (req, res) => {
+async function stampTask(req, res) {
   const { id } = req.params;
   const { marked } = req.body;
   const result = await TaskModel.findOneAndUpdate(
@@ -191,9 +191,9 @@ exports.stampTask = async (req, res) => {
     },
   );
   res.send({ result });
-};
+}
 
-exports.deleteTask = async (req, res) => {
+async function deleteTask(req, res) {
   const { id } = req.params;
   const result = await TaskModel.findOneAndDelete({
     _id: id,
@@ -205,9 +205,9 @@ exports.deleteTask = async (req, res) => {
     { $pull: { todos: result._id } },
   );
   res.send({ result });
-};
+}
 
-exports.createProject = async (req, res) => {
+async function createProject(req, res) {
   const { name } = req.body;
   const userId = req.user._id;
 
@@ -226,4 +226,15 @@ exports.createProject = async (req, res) => {
   });
 
   res.send({ newProject });
+}
+
+export {
+  getAllTasks,
+  getCompletedTasks,
+  getTaskById,
+  createTask,
+  updateTask,
+  stampTask,
+  deleteTask,
+  createProject,
 };

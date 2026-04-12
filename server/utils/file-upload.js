@@ -1,8 +1,8 @@
-const path = require("path");
-const cloudinary = require("cloudinary").v2;
-const _ = require("lodash");
-const streamifier = require("streamifier");
-const config = require("../config");
+import path from "path";
+import { v2 as cloudinary } from "cloudinary";
+import _ from "lodash";
+import streamifier from "streamifier";
+import config from "../config.js";
 
 const CLOUDINARY_CONFIG = {
   cloud_name: "codedropstech",
@@ -10,7 +10,7 @@ const CLOUDINARY_CONFIG = {
   api_secret: config.CLOUDINARY_API_SECRET,
 };
 
-exports.fileUpload = async (req, { exactFileName = true, folder } = {}) => {
+async function fileUpload(req, { exactFileName = true, folder } = {}) {
   if (_.isEmpty(req.files)) throw new Error("No files received");
 
   cloudinary.config(CLOUDINARY_CONFIG);
@@ -48,4 +48,6 @@ exports.fileUpload = async (req, { exactFileName = true, folder } = {}) => {
   );
 
   return Promise.all(responses);
-};
+}
+
+export { fileUpload };

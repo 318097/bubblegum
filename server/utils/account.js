@@ -1,4 +1,4 @@
-const { getSession } = require("./session");
+import { getSession } from "./session.js";
 
 const isDisabledAccount = (status) => ["SUSPENDED", "DELETED"].includes(status);
 
@@ -20,4 +20,4 @@ const verifyAccountStatus = async (req, callSource = "NOT_LOGIN") => {
   }
 };
 
-module.exports = { verifyAccountStatus };
+export { verifyAccountStatus };

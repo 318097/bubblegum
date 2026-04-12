@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const config = require("./config");
-const logger = require("./utils/logger");
+import mongoose from "mongoose";
+import config from "./config.js";
+import logger from "./utils/logger.js";
 
 const connectToDb = async () => {
   return mongoose
@@ -9,4 +9,4 @@ const connectToDb = async () => {
     .catch((err) => logger.error(`Error in connecting to DB ❌`, err));
 };
 
-module.exports = connectToDb;
+export default connectToDb;

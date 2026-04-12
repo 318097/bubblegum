@@ -1,9 +1,9 @@
-const jwt = require("jsonwebtoken");
-const expressJwt = require("express-jwt");
-const _ = require("lodash");
-const config = require("../config");
-const User = require("../api/user/user.model");
-const { getAppBasedInfo } = require("./common");
+import jwt from "jsonwebtoken";
+import expressJwt from "express-jwt";
+import _ from "lodash";
+import config from "../config.js";
+import User from "../api/user/user.model.js";
+import { getAppBasedInfo } from "./common.js";
 
 const getToken = (req) => _.get(req, "headers.authorization");
 
@@ -87,13 +87,12 @@ const temporaryAccess = async (req, res, next) => {
 
 const protectedRoute = [decodeToken, extractUser];
 
-module.exports = {
+export {
+  getToken,
   signToken,
   validateToken,
-  // externalAccess,
+  getUserFromToken,
+  transparent,
   temporaryAccess,
   protectedRoute,
-  transparent,
-  getUserFromToken,
-  getToken,
 };

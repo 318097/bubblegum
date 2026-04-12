@@ -1,8 +1,8 @@
-const router = require("express").Router();
-const errorHandlingWrapper = require("../../middleware/error-handling");
-
-const { transparent, temporaryAccess } = require("../../utils/authentication");
-const controller = require("./fusion.controller");
+import { Router } from "express";
+const router = Router();
+import errorHandlingWrapper from "../../middleware/error-handling.js";
+import { transparent, temporaryAccess } from "../../utils/authentication.js";
+import * as controller from "./fusion.controller.js";
 
 // Alerts routes
 
@@ -75,4 +75,4 @@ router.delete(
   errorHandlingWrapper(controller.deleteEntity),
 );
 
-module.exports = router;
+export default router;

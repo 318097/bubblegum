@@ -1,8 +1,8 @@
-const sgMail = require("@sendgrid/mail");
-const _ = require("lodash");
-const config = require("../config");
-const { getProductById, getPromotionalProducts } = require("./products");
-const EmailLogModel = require("../models/email.model");
+import sgMail from "@sendgrid/mail";
+import _ from "lodash";
+import config from "../config.js";
+import {getProductById, getPromotionalProducts} from "./products.js";
+import EmailLogModel from "../models/email.model.js";
 
 sgMail.setApiKey(config.SENDGRID_API_KEY);
 
@@ -91,4 +91,4 @@ const sendMail = async (data = {}) => {
   }
 };
 
-module.exports = sendMail;
+export default sendMail;

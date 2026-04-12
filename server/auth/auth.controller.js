@@ -1,32 +1,35 @@
-const { OAuth2Client } = require("google-auth-library");
-const _ = require("lodash");
+import { OAuth2Client } from "google-auth-library";
+import _ from "lodash";
+
 // const Joi = require("@hapi/joi");
-const { v4: uuidv4 } = require("uuid");
-const admin = require("firebase-admin");
-const User = require("../api/user/user.model");
-const { signToken, validateToken } = require("../utils/authentication");
-const config = require("../config");
-const {
+import { v4 as uuidv4 } from "uuid";
+
+import admin from "firebase-admin";
+import fusionServiceAccount from "../../secrets/fusion-97e8c-firebase-adminsdk-qjtt8-a6765111ba.json" with { type: "json" };
+import User from "../api/user/user.model.js";
+import { signToken, validateToken } from "../utils/authentication.js";
+import config from "../config.js";
+import {
   extractUserData,
   generateDate,
   lowerCaseAndTrim,
-} = require("../utils/common");
-const sendMail = require("../utils/sendgrid");
-const { google } = require("googleapis");
-const {
+} from "../utils/common.js";
+import sendMail from "../utils/sendgrid.js";
+import { google } from "googleapis";
+import {
   encryptPassword,
   generateDefaultUserState,
   updateAccountStatus,
-} = require("../api/user/user.utils");
-const {
+} from "../api/user/user.utils.js";
+import {
   startSession,
   endSession,
   revokeAllSessions,
-} = require("../utils/session");
-const { verifyAccountStatus } = require("../utils/account");
-const { generateDefaultExpenseTypes } = require("../api/user/user.utils");
-const { createTags } = require("../modules/tags/tags.operations");
-const { createModules } = require("../modules/modules/modules.operations");
+} from "../utils/session.js";
+import { verifyAccountStatus } from "../utils/account.js";
+import { generateDefaultExpenseTypes } from "../api/user/user.utils.js";
+import { createTags } from "../modules/tags/tags.operations.js";
+import { createModules } from "../modules/modules/modules.operations.js";
 
 const oauth2Client = new google.auth.OAuth2(
   config.GOOGLE_OAUTH.CLIENT_ID,
@@ -189,16 +192,13 @@ const register = async (req, res) => {
 const authenticateWithGoogle = async (req, res) => {
   const { name, authToken, photoURL } = req.body;
 
-  const serviceAccountPath = {
-    FUSION:
-      "../../secrets/fusion-97e8c-firebase-adminsdk-qjtt8-a6765111ba.json",
+  const serviceAccounts = {
+    FUSION: fusionServiceAccount,
   };
 
   if (!admin.apps.length) {
     admin.initializeApp({
-      credential: admin.credential.cert(
-        require(serviceAccountPath[req.source]),
-      ),
+      credential: admin.credential.cert(serviceAccounts[req.source]),
     });
   }
   try {
@@ -366,7 +366,7 @@ const generateGoogleOAuthToken = async (req, res) => {
   res.send(tokens);
 };
 
-module.exports = {
+export {
   login,
   register,
   checkAccountStatus,

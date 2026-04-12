@@ -1,8 +1,8 @@
-const router = require("express").Router();
-const errorHandlingWrapper = require("../../middleware/error-handling");
-
-const { temporaryAccess } = require("../../utils/authentication");
-const controller = require("./photos.controller");
+import { Router } from "express";
+const router = Router();
+import errorHandlingWrapper from "../../middleware/error-handling.js";
+import { temporaryAccess } from "../../utils/authentication.js";
+import * as controller from "./photos.controller.js";
 
 router.get("/", errorHandlingWrapper(controller.getAllAlbums));
 router.get(
@@ -55,4 +55,4 @@ router.delete(
   errorHandlingWrapper(controller.deletePost),
 );
 
-module.exports = router;
+export default router;

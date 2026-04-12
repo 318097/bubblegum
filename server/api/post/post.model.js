@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "post";
@@ -89,4 +89,4 @@ PostsSchema.index({ collectionId: 1, index: 1 }, { unique: true });
 PostsSchema.index({ collectionId: 1, liveId: 1 }, { unique: true });
 PostsSchema.index({ collectionId: 1, slug: 1 }, { unique: true });
 
-module.exports = mongoose.model(collectionName, PostsSchema);
+export default mongoose.model(collectionName, PostsSchema);

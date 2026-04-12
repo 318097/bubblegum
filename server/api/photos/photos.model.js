@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "album";
@@ -91,7 +91,7 @@ const FilesSchema = new mongoose.Schema(
   },
 );
 
-module.exports = {
-  AlbumModel: mongoose.model(collectionName, AlbumsSchema),
-  FilesModel: mongoose.model(filesCollectionName, FilesSchema),
-};
+const AlbumModel = mongoose.model(collectionName, AlbumsSchema);
+const FilesModel = mongoose.model(filesCollectionName, FilesSchema);
+
+export { AlbumModel, FilesModel };

@@ -1,6 +1,6 @@
-const bcrypt = require("bcrypt");
-const { generateObjectId, generateDate } = require("../../utils/common");
-const { getProducts } = require("../../utils/products");
+import bcrypt from "bcrypt";
+import { generateObjectId, generateDate } from "../../utils/common.js";
+import { getProducts } from "../../utils/products.js";
 
 const DEFAULT_EXPENSE_TYPES = [
   { key: "EXPENSE", label: "Expense", success: "DOWN", color: "watermelon" },
@@ -69,7 +69,7 @@ const encryptPassword = (plainPassword) => {
 const comparePassword = (plainPassword, hashedPassword) =>
   bcrypt.compareSync(plainPassword, hashedPassword);
 
-module.exports = {
+export {
   encryptPassword,
   comparePassword,
   generateDefaultUserState,

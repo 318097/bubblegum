@@ -1,28 +1,29 @@
-const moment = require("moment");
-const _ = require("lodash");
+import moment from "moment";
+import _ from "lodash";
 
-const { ObjectId } = require("mongoose").Types;
+import mongoose from "mongoose";
+const { ObjectId } = mongoose.Types;
 
-const UserModel = require("../user/user.model");
-const Model = require("./storeq.model");
-const {
+import UserModel from "../user/user.model.js";
+import Model from "./storeq.model.js";
+
+import {
   sendNotificaiton,
   getCurrentDate,
   getWaitingInfo,
   addToCache,
   updateInCache,
-  // getFromCache,
   cache,
   logCache,
   removeFromCache,
-} = require("./storeq.utils");
+} from "./storeq.utils.js";
 
-exports.getAllStores = async (req, res) => {
+async function getAllStores(req, res) {
   const result = await UserModel.find({ type: "SELLER" });
   res.send({ stores: result });
-};
+}
 
-exports.showAllBookingsForStore = async (req, res) => {
+async function showAllBookingsForStore(req, res) {
   const storeId = req.params.id;
   const result = await Model.aggregate([
     { $match: { storeId: ObjectId(storeId) } },
@@ -39,15 +40,15 @@ exports.showAllBookingsForStore = async (req, res) => {
     },
   ]);
   res.send({ bookings: result });
-};
+}
 
-exports.showAllBookingsForBuyer = async (req, res) => {
+async function showAllBookingsForBuyer(req, res) {
   const userId = req.params.id;
   const result = await Model.find({ userId: ObjectId(userId) });
   res.send({ orders: result });
-};
+}
 
-exports.createBooking = async (req, res) => {
+async function createBooking(req, res) {
   const { storeId, userId } = req.body;
   const { waitingNo, avgTime, status, startedOn } = getWaitingInfo(storeId);
 
@@ -67,9 +68,9 @@ exports.createBooking = async (req, res) => {
   addToCache({ booking, storeId });
   logCache();
   res.send({ booking });
-};
+}
 
-exports.updateBooking = async (req, res) => {
+async function updateBooking(req, res) {
   try {
     const { status, storeId } = req.body;
     const bookingId = req.params.id;
@@ -133,4 +134,12 @@ exports.updateBooking = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+}
+
+export {
+  getAllStores,
+  showAllBookingsForStore,
+  showAllBookingsForBuyer,
+  createBooking,
+  updateBooking,
 };

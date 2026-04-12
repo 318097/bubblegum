@@ -1,8 +1,8 @@
-const router = require("express").Router();
-const errorHandlingWrapper = require("../../middleware/error-handling");
-
-const { transparent } = require("../../utils/authentication");
-const controller = require("./notion.controller");
+import { Router } from "express";
+const router = Router();
+import errorHandlingWrapper from "../../middleware/error-handling.js";
+import { transparent } from "../../utils/authentication.js";
+import * as controller from "./notion.controller.js";
 
 router.get(
   "/keybindings",
@@ -16,4 +16,4 @@ router.get(
 );
 router.get("/vocab", transparent, errorHandlingWrapper(controller.getVocab));
 
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { PRODUCT_LIST } = require("../utils/products");
+import mongoose from "mongoose";
+import {PRODUCT_LIST} from "../utils/products.js";
 
 const collectionName = "email-logs";
 
@@ -25,4 +25,4 @@ const EmailLogSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model(collectionName, EmailLogSchema);
+export default mongoose.model(collectionName, EmailLogSchema);

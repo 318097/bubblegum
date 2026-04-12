@@ -1,5 +1,5 @@
-const _ = require("lodash");
-const PRODUCTS_JSON = require("../../PRODUCTS.json");
+import _ from "lodash";
+import PRODUCTS_JSON from "../../PRODUCTS.json" with { type: "json" };
 
 // Keep this function in sync with 'lib'
 const parseProducts = (products) =>
@@ -64,7 +64,7 @@ const getPromotionalProducts = ({ source }) => {
   return promotionalProducts;
 };
 
-module.exports = {
+export {
   getProductById,
   getProducts,
   getPromotionalProducts,

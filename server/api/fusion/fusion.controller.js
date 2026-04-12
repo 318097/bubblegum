@@ -1,8 +1,9 @@
-const _ = require("lodash");
-const mongoose = require("mongoose");
+import _ from "lodash";
+import mongoose from "mongoose";
+
 // const moment = require("moment");
 // const { getKey } = require("../../utils/common");
-const {
+import {
   AlertAndMsgModel,
   ActivitiesModel,
   EditablesModel,
@@ -10,8 +11,9 @@ const {
   LynkCollectionModel,
   LynksModel,
   HabitsModel,
-} = require("./fusion.model");
-const UserModel = require("../user/user.model");
+} from "./fusion.model.js";
+
+import UserModel from "../user/user.model.js";
 
 const modelEntityMap = {
   alerts: AlertAndMsgModel,
@@ -63,7 +65,7 @@ const getAggregationFilters = (entity) => {
   return aggregation;
 };
 
-exports.getAlertsFeed = async (req, res) => {
+async function getAlertsFeed(req, res) {
   const { feedType = "all" } = req.query;
 
   const feed = [];
@@ -122,9 +124,9 @@ exports.getAlertsFeed = async (req, res) => {
   }
 
   res.send(_.orderBy(feed, "createdAt", "desc"));
-};
+}
 
-exports.getAllEntities = async (req, res) => {
+async function getAllEntities(req, res) {
   const { entityType } = req.params;
 
   if (entityType === "alerts") {
@@ -144,9 +146,9 @@ exports.getAllEntities = async (req, res) => {
 
     res.send(entities);
   }
-};
+}
 
-exports.getEntityById = async (req, res) => {
+async function getEntityById(req, res) {
   const { entityId, entityType } = req.params;
 
   const query = {
@@ -168,9 +170,9 @@ exports.getEntityById = async (req, res) => {
   }
 
   res.send(entity);
-};
+}
 
-exports.createEntity = async (req, res) => {
+async function createEntity(req, res) {
   const { _id } = req.user;
   const { entityType } = req.params;
 
@@ -190,9 +192,9 @@ exports.createEntity = async (req, res) => {
   const result = await modelEntityMap[entityType].create(entity);
 
   res.send(result);
-};
+}
 
-exports.updateEntity = async (req, res) => {
+async function updateEntity(req, res) {
   const { entityId, entityType } = req.params;
 
   const { _id: userId } = req.user;
@@ -206,9 +208,9 @@ exports.updateEntity = async (req, res) => {
     { $set: { ..._.omit(req.body, "_id") } },
   );
   res.send({ result });
-};
+}
 
-exports.deleteEntity = async (req, res) => {
+async function deleteEntity(req, res) {
   const { entityId, entityType } = req.params;
   const { _id: userId } = req.user;
 
@@ -222,9 +224,9 @@ exports.deleteEntity = async (req, res) => {
     { $set: { deleted: true } },
   );
   res.send({ result });
-};
+}
 
-exports.getAlertDetailsById = async (req, res) => {
+async function getAlertDetailsById(req, res) {
   const { alertId } = req.params;
   const alert = await AlertAndMsgModel.findById(alertId);
   const aggregation = getAggregationFilters(alert);
@@ -320,9 +322,9 @@ exports.getAlertDetailsById = async (req, res) => {
     activities,
     // meta: { count },
   });
-};
+}
 
-exports.createAlertMessage = async (req, res) => {
+async function createAlertMessage(req, res) {
   const { _id } = req.user;
 
   const msg = {
@@ -333,9 +335,9 @@ exports.createAlertMessage = async (req, res) => {
   const result = await AlertAndMsgModel.create(msg);
 
   res.send(result);
-};
+}
 
-exports.createOrUpdateLink = async (req, res) => {
+async function createOrUpdateLink(req, res) {
   const { _id } = req.user;
 
   const link = {
@@ -359,9 +361,9 @@ exports.createOrUpdateLink = async (req, res) => {
   );
 
   res.send(result);
-};
+}
 
-exports.deleteLink = async (req, res) => {
+async function deleteLink(req, res) {
   const { linkId, collectionId } = req.params;
   const { _id: userId } = req.user;
 
@@ -374,9 +376,9 @@ exports.deleteLink = async (req, res) => {
     { $set: { deleted: true } },
   );
   res.send({ result });
-};
+}
 
-exports.getLynksByCollectionId = async (req, res) => {
+async function getLynksByCollectionId(req, res) {
   const { _id } = req.user;
 
   const result = await LynksModel.aggregate([
@@ -390,9 +392,9 @@ exports.getLynksByCollectionId = async (req, res) => {
   ]);
 
   res.send(result);
-};
+}
 
-exports.resolveShortLink = async (req, res) => {
+async function resolveShortLink(req, res) {
   const { path } = req.params;
 
   const [collection, ...slug] = path.split("::");
@@ -411,4 +413,19 @@ exports.resolveShortLink = async (req, res) => {
 
   // TODO: limit the content that is sent back, and also add analytics for the same
   res.send(result);
+}
+
+export {
+  getAlertsFeed,
+  getAllEntities,
+  getEntityById,
+  createEntity,
+  updateEntity,
+  deleteEntity,
+  getAlertDetailsById,
+  createAlertMessage,
+  createOrUpdateLink,
+  deleteLink,
+  getLynksByCollectionId,
+  resolveShortLink,
 };

@@ -1,9 +1,9 @@
-const _ = require("lodash");
-const { processId } = require("../../utils/common");
+import _ from "lodash";
+import {processId} from "../../utils/common.js";
 
 const KEYS_TO_OMIT = ["_id", "createdAt", "updatedAt", "source", "userId"];
 
-module.exports = (config) => {
+export default (config) => {
   const { Model, _customMiddleware } = config;
   const defaultQuery = {
     deleted: false,

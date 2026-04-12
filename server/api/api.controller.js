@@ -1,16 +1,19 @@
-const Parser = require("rss-parser");
-const config = require("../config");
-const { fileUpload } = require("../utils/file-upload");
-const TransactionModel = require("../models/transaction.model");
-const sendMail = require("../utils/sendgrid");
-const { ACTIVE_PRODUCT_URLS, getProducts } = require("../utils/products");
+import Parser from "rss-parser";
+import config from "../config.js";
+import { fileUpload } from "../utils/file-upload.js";
+import TransactionModel from "../models/transaction.model.js";
+import sendMail from "../utils/sendgrid.js";
+import {
+  ACTIVE_PRODUCT_URLS,
+  getProducts as listProducts,
+} from "../utils/products.js";
 
-exports.test = async (req, res) => {
+async function test(req, res) {
   console.log("host: ", req.get("host"));
   res.send("Working :)");
-};
+}
 
-exports.sendgrid = async (req, res) => {
+async function sendgrid(req, res) {
   sendMail({
     email: "mehullakhanpal@gmail.com",
     type: "VERIFY_ACCOUNT",
@@ -19,9 +22,9 @@ exports.sendgrid = async (req, res) => {
     token: "abc",
   });
   res.send("Done");
-};
+}
 
-exports.fileUploadHandler = async (req, res) => {
+async function fileUploadHandler(req, res) {
   const result = await fileUpload(req, {
     exactFileName: req.body.storeExactFileName === "TRUE",
   });
@@ -39,9 +42,9 @@ exports.fileUploadHandler = async (req, res) => {
       data, // extra info for reference
     });
   }
-};
+}
 
-exports.rssFeedParser = async (req, res) => {
+async function rssFeedParser(req, res) {
   const parser = new Parser({});
   const feed = await parser.parseURL(config.MEDIUM_RSS_FEED);
   const result = feed.items
@@ -53,9 +56,9 @@ exports.rssFeedParser = async (req, res) => {
     }))
     .slice(0, -1);
   res.send(result);
-};
+}
 
-exports.sendEmail = async (req, res) => {
+async function sendEmail(req, res) {
   const { email, name, source, type = "WELCOME" } = req.body;
   const origin = req.get("host");
   console.log("sendEmail:", {
@@ -78,9 +81,18 @@ exports.sendEmail = async (req, res) => {
   });
 
   res.send("ok");
-};
+}
 
-exports.getProducts = async (req, res) => {
-  const products = getProducts();
+async function getProducts(req, res) {
+  const products = listProducts();
   res.send({ products });
+}
+
+export {
+  test,
+  sendgrid,
+  fileUploadHandler,
+  rssFeedParser,
+  sendEmail,
+  getProducts,
 };

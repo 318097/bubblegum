@@ -1,5 +1,5 @@
-const sessionModel = require("../models/session.model");
-const { generateDate } = require("./common");
+import sessionModel from "../models/session.model.js";
+import { generateDate } from "./common.js";
 
 const startSession = ({ userId, source, authMethod, token }) =>
   sessionModel.create({
@@ -25,4 +25,4 @@ const endSession = ({ userId, token }) =>
 const revokeAllSessions = ({ userId }) =>
   sessionModel.updateMany({ userId }, { $set: { status: "REVOKED" } });
 
-module.exports = { startSession, getSession, endSession, revokeAllSessions };
+export { startSession, getSession, endSession, revokeAllSessions };

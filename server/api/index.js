@@ -1,21 +1,22 @@
-const router = require("express").Router();
-const errorHandlingWrapper = require("../middleware/error-handling");
-const fileStorage = require("../utils/storage");
-const { protectedRoute, transparent } = require("../utils/authentication");
+import { Router } from "express";
+const router = Router();
+import errorHandlingWrapper from "../middleware/error-handling.js";
+import fileStorage from "../utils/storage.js";
+import { protectedRoute, transparent } from "../utils/authentication.js";
+import userRoutes from "./user/user.routes.js";
+import postRoutes from "./post/post.routes.js";
 
-const userRoutes = require("./user/user.routes");
-const postRoutes = require("./post/post.routes");
 // const storeqRoutes = require("./storeq/storeq.routes");
-const fireboardRoutes = require("./fireboard/fireboard.routes");
-const photosRoutes = require("./photos/photos.routes");
-const fusionRoutes = require("./fusion/fusion.routes");
-const notionRoutes = require("./notion/notion.routes");
-const TagsModel = require("../modules/tags/tags.model");
-const ModulesModel = require("../modules/modules/modules.model");
-const controller = require("./api.controller");
-const tagsMiddleware = require("../modules/tags/tags.middleware");
+import fireboardRoutes from "./fireboard/fireboard.routes.js";
 
-const dynamicRoutes = require("./dynamic-routes/dynamic-routes.routes");
+import photosRoutes from "./photos/photos.routes.js";
+import fusionRoutes from "./fusion/fusion.routes.js";
+import notionRoutes from "./notion/notion.routes.js";
+import TagsModel from "../modules/tags/tags.model.js";
+import ModulesModel from "../modules/modules/modules.model.js";
+import * as controller from "./api.controller.js";
+import tagsMiddleware from "../modules/tags/tags.middleware.js";
+import dynamicRoutes from "./dynamic-routes/dynamic-routes.routes.js";
 
 const tagRoutes = dynamicRoutes({
   Model: TagsModel,
@@ -50,4 +51,4 @@ router.use("/fusion", fusionRoutes);
 router.use("/tags", protectedRoute, tagRoutes);
 router.use("/modules", protectedRoute, moduleRoutes);
 
-module.exports = router;
+export default router;

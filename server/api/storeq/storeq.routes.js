@@ -1,6 +1,7 @@
-const router = require("express").Router();
-const errorHandlingWrapper = require("../../middleware/error-handling");
-const controller = require("./storeq.controller");
+import { Router } from "express";
+const router = Router();
+import errorHandlingWrapper from "../../middleware/error-handling.js";
+import * as controller from "./storeq.controller.js";
 
 router.get("/stores", errorHandlingWrapper(controller.getAllStores));
 router.get(
@@ -13,6 +14,7 @@ router.get(
 );
 router.post("/booking", errorHandlingWrapper(controller.createBooking));
 router.put("/booking/:id", errorHandlingWrapper(controller.updateBooking));
+
 // router.delete('/:id', errorHandlingWrapper(controller.cancelBooking));
 
-module.exports = router;
+export default router;

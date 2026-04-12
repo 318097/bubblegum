@@ -1,6 +1,7 @@
-const router = require("express").Router();
-const errorHandlingWrapper = require("../../middleware/error-handling");
-const controller = require("./fireboard.controller");
+import { Router } from "express";
+const router = Router();
+import errorHandlingWrapper from "../../middleware/error-handling.js";
+import * as controller from "./fireboard.controller.js";
 
 router.post("/tasks", errorHandlingWrapper(controller.createTask));
 router.get("/tasks", errorHandlingWrapper(controller.getAllTasks));
@@ -14,4 +15,4 @@ router.put("/tasks/:id/stamp", errorHandlingWrapper(controller.stampTask));
 router.delete("/tasks/:id", errorHandlingWrapper(controller.deleteTask));
 router.post("/projects", errorHandlingWrapper(controller.createProject));
 
-module.exports = router;
+export default router;

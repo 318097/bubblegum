@@ -17,7 +17,7 @@ const TAG_MODULE_NAMES = [
 
 const MODULE_TYPES = ["TIMELINE", "COLLECTION"];
 
-module.exports = {
+export default {
   TAG_MODULE_NAMES,
   ACCOUNT_STATUS,
   USER_TYPES,

@@ -1,6 +1,6 @@
-const _ = require("lodash");
-const { generateSlugV2 } = require("../../utils/common");
-const TagsModel = require("./tags.model");
+import _ from "lodash";
+import { generateSlugV2 } from "../../utils/common.js";
+import TagsModel from "./tags.model.js";
 
 const generateDefaultTagInfo = ({
   tagInfo,
@@ -26,4 +26,4 @@ const createTags = (tagsToGenerate, otherInfo) => {
   return TagsModel.create(tags);
 };
 
-module.exports = { generateDefaultTagInfo, createTags };
+export { generateDefaultTagInfo, createTags };
