@@ -3,7 +3,6 @@ const express = require("express");
 const app = express();
 
 const http = require("http").Server(app);
-const io = require("socket.io")(http);
 
 const connectToDb = require("./db");
 const config = require("./config");
@@ -11,7 +10,6 @@ const logger = require("./utils/logger");
 
 const authRoutes = require("./auth/auth.routes");
 const api = require("./api");
-const { startApolloServerExpress } = require("./graphql");
 
 logger.log(
   `Server started in '${config.NODE_ENV}' mode ${config.IS_PROD ? "💀" : ""}`,
@@ -19,12 +17,7 @@ logger.log(
 
 connectToDb();
 
-require("./api/snake/snake.socket")(io);
-require("./api/chat/chat.socket")(io);
-
 require("./middleware/app-middleware")(app);
-
-startApolloServerExpress(app);
 
 app.use("/api/auth", authRoutes);
 app.use("/api", api);

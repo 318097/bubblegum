@@ -4,7 +4,6 @@ const { getKeysBasedOnSource } = require("./products");
 const FireboardProjectsModel = require("../api/fireboard/fireboard.project.model");
 const TagsModel = require("../modules/tags/tags.model");
 const ModulesModel = require("../modules/modules/modules.model");
-const ExpensesModel = require("../api/expenses/expenses.model");
 
 const slug = require("slug");
 
@@ -57,9 +56,6 @@ const getModules = async ({ userId, moduleType, source }) =>
     source,
   }).lean();
 
-const getExpenseAutofillMessages = async ({ userId }) =>
-  ExpensesModel.distinct("message", { message: { $ne: null }, userId });
-
 const generateResourceName = ({
   index,
   liveId,
@@ -92,36 +88,6 @@ const getAppBasedInfo = async ({ user, source }) => {
   switch (source) {
     case "FIREBOARD":
       result["fireboardProjects"] = await FireboardProjectsModel.find({
-        userId: user._id,
-      });
-      break;
-    case "OCTON":
-      result["expenseTypes"] = await getTags({
-        userId: user._id,
-        moduleName: "EXPENSE_TYPES",
-        source,
-      });
-      result["expenseCategories"] = await getTags({
-        userId: user._id,
-        moduleName: "EXPENSE_CATEGORIES",
-        source,
-      });
-      result["expenseGroups"] = await getTags({
-        userId: user._id,
-        moduleName: "EXPENSE_GROUPS",
-        source,
-      });
-      result["expenseSources"] = await getTags({
-        userId: user._id,
-        moduleName: "EXPENSE_SOURCES",
-        source,
-      });
-      result["timeline"] = await getModules({
-        userId: user._id,
-        moduleType: "TIMELINE",
-        source,
-      });
-      result["autofill"] = await getExpenseAutofillMessages({
         userId: user._id,
       });
       break;
