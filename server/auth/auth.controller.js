@@ -1,7 +1,6 @@
 import { OAuth2Client } from "google-auth-library";
 import _ from "lodash";
 
-// const Joi = require("@hapi/joi");
 import { v4 as uuidv4 } from "uuid";
 
 import admin from "firebase-admin";
@@ -58,14 +57,6 @@ const generateDefaultState = async ({ req, user }) => {
     console.error(err);
   }
 };
-
-// const RegisterSchemaValidator = Joi.object().keys({
-//   name: Joi.string(),
-//   username: Joi.string(),
-//   password: Joi.string().required(),
-//   email: Joi.string().email({ minDomainSegments: 2 }).required(),
-//   mobile: Joi.number(),
-// });
 
 const login = async (req, res) => {
   const { username, password, authToken, authMethod = "LOGIN" } = req.body;
@@ -158,8 +149,6 @@ const register = async (req, res) => {
     "email",
     "mobile",
   ]);
-  // const { error } = Joi.validate(data, RegisterSchemaValidator);
-  // if (error) return res.status(400).send(error.details[0].message);
 
   const { email, username, name } = data;
   const userExists = await User.findOne({
