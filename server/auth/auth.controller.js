@@ -1,6 +1,6 @@
 const { OAuth2Client } = require("google-auth-library");
 const _ = require("lodash");
-const Joi = require("@hapi/joi");
+// const Joi = require("@hapi/joi");
 const { v4: uuidv4 } = require("uuid");
 const admin = require("firebase-admin");
 const User = require("../api/user/user.model");
@@ -56,13 +56,13 @@ const generateDefaultState = async ({ req, user }) => {
   }
 };
 
-const RegisterSchemaValidator = Joi.object().keys({
-  name: Joi.string(),
-  username: Joi.string(),
-  password: Joi.string().required(),
-  email: Joi.string().email({ minDomainSegments: 2 }).required(),
-  mobile: Joi.number(),
-});
+// const RegisterSchemaValidator = Joi.object().keys({
+//   name: Joi.string(),
+//   username: Joi.string(),
+//   password: Joi.string().required(),
+//   email: Joi.string().email({ minDomainSegments: 2 }).required(),
+//   mobile: Joi.number(),
+// });
 
 const login = async (req, res) => {
   const { username, password, authToken, authMethod = "LOGIN" } = req.body;
@@ -155,8 +155,8 @@ const register = async (req, res) => {
     "email",
     "mobile",
   ]);
-  const { error } = Joi.validate(data, RegisterSchemaValidator);
-  if (error) return res.status(400).send(error.details[0].message);
+  // const { error } = Joi.validate(data, RegisterSchemaValidator);
+  // if (error) return res.status(400).send(error.details[0].message);
 
   const { email, username, name } = data;
   const userExists = await User.findOne({

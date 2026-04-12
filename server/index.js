@@ -1,22 +1,20 @@
-/* eslint-disable import/newline-after-import */
 const express = require("express");
+
 const app = express();
 
-// eslint-disable-next-line import/order
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
 
 const connectToDb = require("./db");
 const config = require("./config");
 const logger = require("./utils/logger");
+
 const authRoutes = require("./auth/auth.routes");
 const api = require("./api");
 const { startApolloServerExpress } = require("./graphql");
 
 logger.log(
-  `${config.IS_PROD ? "💀💀💀💀💀" : "🆗"} Running in '${
-    config.NODE_ENV
-  }' mode ${config.IS_PROD ? "💀💀💀💀💀" : ""}`,
+  `Server started in '${config.NODE_ENV}' mode ${config.IS_PROD ? "💀" : ""}`,
 );
 
 connectToDb();
@@ -33,12 +31,12 @@ app.use("/api", api);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
+  logger.error("[Middleware] ", err);
   if (err.name === "UnauthorizedError") {
-    console.log("[Middleware] : ", err);
     res.status(401).send("INVALID_JWT_TOKEN");
     return;
   }
   res.status(500).send(err);
 });
 
-http.listen(config.PORT, () => logger.log(`🎤 Listening on ':${config.PORT}'`));
+http.listen(config.PORT, () => logger.log(`Running on port ':${config.PORT}'`));

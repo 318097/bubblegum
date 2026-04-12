@@ -6,7 +6,6 @@ const {
   generateDate,
 } = require("../../utils/common");
 const _ = require("lodash");
-const set = require("set-value");
 
 const getExpensesByMonth = async (__, args, { models, user }) => {
   const {
@@ -151,7 +150,7 @@ const expenseStats = async (parent, args, { models, userId, user }) => {
         [createdKey, expenseTypeLabel],
         0,
       );
-      set(
+      _.set(
         monthlyOverview,
         [createdKey, expenseTypeLabel],
         previousValue + amount,

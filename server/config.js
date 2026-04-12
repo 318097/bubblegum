@@ -6,7 +6,6 @@ const {
   STAGING_DB_URL,
   JWT,
   CLOUDINARY_API_SECRET,
-  EMAIL_PASSWORD,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   SENDGRID_API_KEY,
@@ -32,15 +31,11 @@ const config = {
   DB_URL: DB_CONNECTION_URL,
   CLOUDINARY_API_SECRET,
   MEDIUM_RSS_FEED: "https://medium.com/feed/@ml318097",
-  EMAIL_ID: "codedrops.tech@gmail.com",
-  EMAIL_PASSWORD,
   GOOGLE_OAUTH: {
     CLIENT_ID: GOOGLE_CLIENT_ID,
     CLIENT_SECRET: GOOGLE_CLIENT_SECRET,
     REDIRECT_URL: "http://localhost:3000/login",
   },
-  // ENABLE_EMAIL: IS_PROD,
-  ENABLE_EMAIL: true,
   SENDGRID_API_KEY,
   ALLOWED_PRODUCT_SOURCES: ["QUICK_SWITCH"], // allow sending emails for these sources as they dont have a fixed URL
   NOTION_AUTH_KEY,

@@ -66,9 +66,7 @@ const startApolloServerExpress = async (app) => {
     // path: "/",
   });
 
-  logger.log(
-    `🚀 GraphQL server running at ':${config.PORT}${server.graphqlPath}'`,
-  );
+  logger.log(`GraphQL running on ':${config.PORT}${server.graphqlPath}'`);
 };
 
 module.exports = { startApolloServerLambda, startApolloServerExpress };
