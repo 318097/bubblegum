@@ -1,4 +1,4 @@
-import {generateSlugV2} from "../../utils/common.js";
+import { generateSlugV2 } from "../../utils/common.js";
 
 export default {
   parseInputForCreateEntity: (body) => ({

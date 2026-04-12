@@ -2,8 +2,8 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import _ from "lodash";
-import {PRODUCT_LIST} from "../utils/products.js";
-import {getToken} from "../utils/authentication.js";
+import { PRODUCT_LIST } from "../utils/products.js";
+import { getToken } from "../utils/authentication.js";
 
 const appendSourceInfo = (req, res, next) => {
   const externalSource = _.get(req, "headers.external-source");
@@ -26,4 +26,4 @@ export default function (app) {
   app.use(express.urlencoded({ extended: true }));
   app.use(cors());
   app.use(appendSourceInfo);
-};
+}

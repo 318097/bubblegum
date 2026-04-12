@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {PRODUCT_LIST} from "../utils/products.js";
+import { PRODUCT_LIST } from "../utils/products.js";
 
 const collectionName = "email-logs";
 

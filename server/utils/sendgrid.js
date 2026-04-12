@@ -1,7 +1,7 @@
 import sgMail from "@sendgrid/mail";
 import _ from "lodash";
 import config from "../config.js";
-import {getProductById, getPromotionalProducts} from "./products.js";
+import { getProductById, getPromotionalProducts } from "./products.js";
 import EmailLogModel from "../models/email.model.js";
 
 sgMail.setApiKey(config.SENDGRID_API_KEY);

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {processId} from "../../utils/common.js";
+import { processId } from "../../utils/common.js";
 
 const KEYS_TO_OMIT = ["_id", "createdAt", "updatedAt", "source", "userId"];
 
