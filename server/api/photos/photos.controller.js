@@ -200,7 +200,6 @@ async function addFilesToAlbum(req, res) {
 async function createAlbum(req, res) {
   const { _id } = req.user;
   const { label } = req.body;
-  console.log("req.body::-", req.body);
 
   const album = {
     userId: _id,

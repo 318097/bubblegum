@@ -7,9 +7,10 @@ import {
   ACTIVE_PRODUCT_URLS,
   getProducts as listProducts,
 } from "../utils/products.js";
+import logger from "../utils/logger.js";
 
 async function test(req, res) {
-  console.log("host: ", req.get("host"));
+  logger.log("host: ", req.get("host"));
   res.send("Working :)");
 }
 
@@ -61,7 +62,7 @@ async function rssFeedParser(req, res) {
 async function sendEmail(req, res) {
   const { email, name, source, type = "WELCOME" } = req.body;
   const origin = req.get("host");
-  console.log("sendEmail:", {
+  logger.log("sendEmail:", {
     origin,
     source,
   });

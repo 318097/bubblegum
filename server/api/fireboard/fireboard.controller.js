@@ -78,7 +78,6 @@ async function getCompletedTasks(req, res) {
 
   const total = _.get(dateListObj, "count.0.total", 0);
   const next = (page - 1) * limit + _.size(dateListObj.dateList) < total;
-  // console.log("dateListObj::-", JSON.stringify(dateListObj, undefined, 2));
 
   const { max, min } = getDateEnds(dateListObj.dateList);
 

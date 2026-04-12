@@ -1,4 +1,5 @@
 import { getSession } from "./session.js";
+import logger from "./logger.js";
 
 const isDisabledAccount = (status) => ["SUSPENDED", "DELETED"].includes(status);
 
@@ -6,7 +7,7 @@ const isVerifiedAccount = (verified) => !!verified;
 
 const verifyAccountStatus = async (req, callSource = "NOT_LOGIN") => {
   const { token, status, userId, verified } = req;
-  console.log("token, status, userId::-", token, status, userId);
+  logger.log({ token, status, userId });
 
   if (isDisabledAccount(status)) throw new Error(`ACCOUNT_${status}`);
   // if (!isVerifiedAccount(verified)) throw new Error("ACCOUNT_NOT_VERIFIED");

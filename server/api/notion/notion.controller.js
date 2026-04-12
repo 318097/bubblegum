@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { Client } from "@notionhq/client";
 import config from "../../config.js";
+import logger from "../../utils/logger.js";
 
 const notion = new Client({
   auth: config.NOTION_AUTH_KEY,
@@ -60,7 +61,7 @@ const parseNotionData = (data) => {
             finalValue = _.get(value, "formula.string");
             break;
           default:
-            console.log("Unhandled notion type", type, value);
+            logger.error("Unhandled notion type", type, value);
         }
         result[key] = finalValue;
       });
@@ -155,7 +156,7 @@ async function getLiquidTech(req, res) {
 
     res.send({ data: _.groupBy(_.sortBy(parsedList, "subType"), "type") });
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }
 
@@ -200,7 +201,7 @@ async function getVocab(req, res) {
       },
     });
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }
 
@@ -247,7 +248,7 @@ async function getAllKeyBindings(req, res) {
 
     res.send({ data: parsedList });
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }
 

@@ -403,7 +403,6 @@ async function resolveShortLink(req, res) {
     label: collection.trim().toLowerCase(),
     // collectionId: req.params.collectionId,
   });
-  console.log("lynkCollection::-", lynkCollection._id);
 
   const result = await LynksModel.findOne({
     collectionId: lynkCollection._id,

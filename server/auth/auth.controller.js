@@ -250,7 +250,6 @@ const authenticateWithGoogle = async (req, res) => {
 
     res.send({ token, ...userInfoToSend });
   } catch (err) {
-    console.log("err::-", err);
     res.status(401).json({ success: false, error: "Invalid token" });
   }
 };
