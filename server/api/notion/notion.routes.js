@@ -1,8 +1,9 @@
 import { Router } from "express";
-const router = Router();
 import errorHandlingWrapper from "../../middleware/error-handling.js";
 import { transparent } from "../../utils/authentication.js";
 import * as controller from "./notion.controller.js";
+
+const router = Router();
 
 router.get(
   "/keybindings",

@@ -1,8 +1,9 @@
 import { Router } from "express";
-const router = Router();
 import errorHandlingWrapper from "../../middleware/error-handling.js";
 import { temporaryAccess } from "../../utils/authentication.js";
 import * as controller from "./photos.controller.js";
+
+const router = Router();
 
 router.get("/", errorHandlingWrapper(controller.getAllAlbums));
 router.get(
