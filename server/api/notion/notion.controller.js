@@ -70,28 +70,25 @@ const parseNotionData = (data) => {
     .filter((item) => _.isEmpty(item["Parent item"])); // do not return nested items
 };
 
-// const renameKeys = (list, mapping = {}) => {
-//   return list.map((item) => {
-//     const obj = { ...item };
-//     Object.entries(mapping).forEach(([currentKey, newKey]) => {
-//       obj[newKey] = item[currentKey];
-//       delete obj[currentKey];
-//     })
-//   })
-// };
-
-const fetchAllData = async (params) => {
+const fetchDataFromNotion = async (database_id, params) => {
   const list = [];
   let next_cursor = null;
-  const fetchDetails = async (p = {}) => {
-    const response = await notion.databases.query(p);
+
+  const db = await notion.request({
+    method: "get",
+    path: `databases/${database_id}`,
+  });
+  const data_source_id = db.data_sources[0].id;
+
+  const fetchPage = async (p = {}) => {
+    const response = await notion.dataSources.query(p);
     list.push(...response.results);
     next_cursor = response.next_cursor;
     // if (response.has_more)
-    //   await fetchDetails({ ...p, start_cursor: response.next_cursor });
+    //   await fetchPage({ ...p, start_cursor: response.next_cursor });
   };
 
-  await fetchDetails(params);
+  await fetchPage({ ...params, data_source_id });
 
   return { list, next_cursor };
 };
@@ -99,7 +96,6 @@ const fetchAllData = async (params) => {
 async function getLiquidTech(req, res) {
   try {
     const params = {
-      database_id: config.NOTION_DB.LIQUID_TECH,
       filter: {
         and: [
           {
@@ -142,7 +138,10 @@ async function getLiquidTech(req, res) {
       ],
     };
 
-    const { list } = await fetchAllData(params);
+    const { list } = await fetchDataFromNotion(
+      config.NOTION_DB.LIQUID_TECH,
+      params,
+    );
 
     const parsedList = parseNotionData(list).map((listItem) => {
       // const [, subType] = _.split(_.toLower(listItem["L1"]), ":");
@@ -163,7 +162,6 @@ async function getLiquidTech(req, res) {
 async function getVocab(req, res) {
   try {
     const params = {
-      database_id: config.NOTION_DB.VOCAB,
       filter: {
         and: [
           {
@@ -182,11 +180,14 @@ async function getVocab(req, res) {
       ],
     };
 
-    const { list, next_cursor } = await fetchAllData({
-      ...params,
-      page_size: 1,
-      start_cursor: req.query.cursor || undefined,
-    });
+    const { list, next_cursor } = await fetchDataFromNotion(
+      config.NOTION_DB.VOCAB,
+      {
+        ...params,
+        page_size: 1,
+        start_cursor: req.query.cursor || undefined,
+      },
+    );
 
     const data = parseNotionData(list);
 
@@ -208,7 +209,6 @@ async function getVocab(req, res) {
 async function getAllKeyBindings(req, res) {
   try {
     const params = {
-      database_id: config.NOTION_DB.KEYBINDINGS,
       filter: {
         and: [
           {
@@ -233,7 +233,10 @@ async function getAllKeyBindings(req, res) {
       },
     };
 
-    const { list } = await fetchAllData(params);
+    const { list } = await fetchDataFromNotion(
+      config.NOTION_DB.KEYBINDINGS,
+      params,
+    );
 
     const parsedList = parseNotionData(list).map(
       ({ title, platform, binding, _id }) => {
