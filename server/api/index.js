@@ -1,12 +1,11 @@
 import { Router } from "express";
 import errorHandlingWrapper from "../middleware/error-handling.js";
 import fileStorage from "../utils/storage.js";
-import { protectedRoute, transparent } from "../utils/authentication.js";
+import { protectedRoute } from "../utils/authentication.js";
 import userRoutes from "./user/user.routes.js";
 import postRoutes from "./post/post.routes.js";
 // const storeqRoutes = require("./storeq/storeq.routes");
 import fireboardRoutes from "./fireboard/fireboard.routes.js";
-import photosRoutes from "./photos/photos.routes.js";
 import fusionRoutes from "./fusion/fusion.routes.js";
 import notionRoutes from "./notion/notion.routes.js";
 import dynamicRoutes from "./dynamic-routes/dynamic-routes.routes.js";
@@ -44,7 +43,6 @@ router.use("/posts", postRoutes);
 router.use("/notion", notionRoutes);
 router.use("/fireboard", protectedRoute, fireboardRoutes);
 
-router.use("/photos", photosRoutes);
 router.use("/fusion", fusionRoutes);
 
 router.use("/tags", protectedRoute, tagRoutes);

@@ -1,28 +1,13 @@
 import _ from "lodash";
 import mongoose from "mongoose";
-
-// const moment = require("moment");
-// const { getKey } = require("../../utils/common");
 import {
   AlertAndMsgModel,
   ActivitiesModel,
-  EditablesModel,
-  DynamicModel,
   LynkCollectionModel,
   LynksModel,
-  HabitsModel,
 } from "./fusion.model.js";
-
 import UserModel from "../user/user.model.js";
-
-const modelEntityMap = {
-  alerts: AlertAndMsgModel,
-  activities: ActivitiesModel,
-  editables: EditablesModel,
-  dynamic: DynamicModel,
-  links: LynkCollectionModel,
-  habits: HabitsModel,
-};
+import modelEntityMap from "./models.js";
 
 const USER_PROJECT = {
   _id: 1,
@@ -44,87 +29,6 @@ const USER_UNPROJECT = {
   source: 0,
   appStatus: 0,
 };
-
-const getAggregationFilters = (entity) => {
-  const aggregation = {
-    archived: false,
-    deleted: false,
-  };
-
-  const filters =
-    entity.type === "ALERT" ? ["activities", "days", "slots"] : [];
-
-  filters.forEach(({ key }) => {
-    const keyValue = entity[key];
-    if (!_.isEmpty(keyValue))
-      aggregation[key] = {
-        $in: keyValue,
-      };
-  });
-
-  return aggregation;
-};
-
-async function getAlertsFeed(req, res) {
-  const { feedType = "all" } = req.query;
-
-  const feed = [];
-
-  if (["all", "alerts"].includes(feedType)) {
-    const alerts = await AlertAndMsgModel.aggregate([
-      {
-        $match: {
-          type: "alerts",
-          deleted: false,
-          userId: { $ne: req.user._id },
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "userId",
-          foreignField: "_id",
-          as: "user",
-        },
-      },
-      { $unwind: "$user" },
-      {
-        $project: {
-          user: USER_UNPROJECT,
-        },
-      },
-    ]).sort({ createdAt: -1 });
-    feed.push(...alerts);
-  }
-
-  if (["all", "activities"].includes(feedType)) {
-    const activities = await ActivitiesModel.aggregate([
-      {
-        $match: {
-          deleted: false,
-          userId: { $ne: req.user._id },
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "userId",
-          foreignField: "_id",
-          as: "user",
-        },
-      },
-      { $unwind: "$user" },
-      {
-        $project: {
-          user: USER_UNPROJECT,
-        },
-      },
-    ]).sort({ createdAt: -1 });
-    feed.push(...activities);
-  }
-
-  res.send(_.orderBy(feed, "createdAt", "desc"));
-}
 
 async function getAllEntities(req, res) {
   const { entityType } = req.params;
@@ -224,6 +128,87 @@ async function deleteEntity(req, res) {
     { $set: { deleted: true } },
   );
   res.send({ result });
+}
+
+const getAggregationFilters = (entity) => {
+  const aggregation = {
+    archived: false,
+    deleted: false,
+  };
+
+  const filters =
+    entity.type === "ALERT" ? ["activities", "days", "slots"] : [];
+
+  filters.forEach(({ key }) => {
+    const keyValue = entity[key];
+    if (!_.isEmpty(keyValue))
+      aggregation[key] = {
+        $in: keyValue,
+      };
+  });
+
+  return aggregation;
+};
+
+async function getAlertsFeed(req, res) {
+  const { feedType = "all" } = req.query;
+
+  const feed = [];
+
+  if (["all", "alerts"].includes(feedType)) {
+    const alerts = await AlertAndMsgModel.aggregate([
+      {
+        $match: {
+          type: "alerts",
+          deleted: false,
+          userId: { $ne: req.user._id },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $project: {
+          user: USER_UNPROJECT,
+        },
+      },
+    ]).sort({ createdAt: -1 });
+    feed.push(...alerts);
+  }
+
+  if (["all", "activities"].includes(feedType)) {
+    const activities = await ActivitiesModel.aggregate([
+      {
+        $match: {
+          deleted: false,
+          userId: { $ne: req.user._id },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $project: {
+          user: USER_UNPROJECT,
+        },
+      },
+    ]).sort({ createdAt: -1 });
+    feed.push(...activities);
+  }
+
+  res.send(_.orderBy(feed, "createdAt", "desc"));
 }
 
 async function getAlertDetailsById(req, res) {
@@ -415,12 +400,12 @@ async function resolveShortLink(req, res) {
 }
 
 export {
-  getAlertsFeed,
   getAllEntities,
-  getEntityById,
   createEntity,
+  getEntityById,
   updateEntity,
   deleteEntity,
+  getAlertsFeed,
   getAlertDetailsById,
   createAlertMessage,
   createOrUpdateLink,

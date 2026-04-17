@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const { ObjectId } = mongoose.Schema.Types;
-const collectionName = "album";
 
 const AlbumsSchema = new mongoose.Schema(
   {
@@ -40,8 +39,6 @@ const AlbumsSchema = new mongoose.Schema(
   },
 );
 
-const filesCollectionName = "files";
-
 const FilesSchema = new mongoose.Schema(
   {
     userId: { type: ObjectId, ref: "user", required: true },
@@ -71,18 +68,15 @@ const FilesSchema = new mongoose.Schema(
     },
     state: {
       type: String,
-      enum: ["draft", "live"],
+      enum: ["draft", "published", "archived", "deleted", "private"],
       required: true,
       default: "draft",
     },
-    archived: {
+    pinned: {
       type: Boolean,
       default: false,
     },
-    deleted: {
-      type: Boolean,
-      default: false,
-    },
+
     uploadedAt: Date,
   },
   {
@@ -91,7 +85,7 @@ const FilesSchema = new mongoose.Schema(
   },
 );
 
-const AlbumModel = mongoose.model(collectionName, AlbumsSchema);
-const FilesModel = mongoose.model(filesCollectionName, FilesSchema);
+const AlbumModel = mongoose.model("album", AlbumsSchema);
+const FilesModel = mongoose.model("files", FilesSchema);
 
 export { AlbumModel, FilesModel };

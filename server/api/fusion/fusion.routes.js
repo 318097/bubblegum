@@ -1,8 +1,10 @@
 import { Router } from "express";
-const router = Router();
 import errorHandlingWrapper from "../../middleware/error-handling.js";
 import { transparent, temporaryAccess } from "../../utils/authentication.js";
 import * as controller from "./fusion.controller.js";
+import photosRouter from "./photos/photos.routes.js";
+
+const router = Router();
 
 // Alerts routes
 
@@ -46,6 +48,8 @@ router.delete(
   transparent,
   errorHandlingWrapper(controller.deleteLink),
 );
+
+router.use("/photos", photosRouter);
 
 // Generic entity routes
 
