@@ -1,6 +1,5 @@
 import _ from "lodash";
 import mongoose from "mongoose";
-const { ObjectId } = mongoose.Types;
 import {
   processId,
   generateDate,
@@ -8,6 +7,8 @@ import {
 } from "../../utils/common.js";
 import Model from "./user.model.js";
 import { getKeysBasedOnSource } from "../../utils/products.js";
+
+const { ObjectId } = mongoose.Types;
 
 async function updateSettings(req, res) {
   const { user, query, body } = req;
@@ -93,7 +94,7 @@ async function getProfileById(profileId) {
 async function getProfile(req, res) {
   const { id } = req.params;
   // TODO: return the no of alerts, activites created by the user and last active time
-  const profile = await this.getProfileById(id);
+  const profile = await getProfileById(id);
   res.send(profile);
 }
 
