@@ -29,7 +29,7 @@ const getAggregationFiltersPhotos = (req) => {
 async function getAllPhotosByAlbum(req, res) {
   const { aggregation, sort, page, limit } = getAggregationFiltersPhotos(req);
 
-  const photos = await modelEntityMap.photos.aggregate([
+  const photos = await modelEntityMap["files"].aggregate([
     { $match: aggregation },
     { $sort: sort },
     {
@@ -38,7 +38,7 @@ async function getAllPhotosByAlbum(req, res) {
     { $limit: Number(limit) },
   ]);
 
-  const count = await modelEntityMap.photos.countDocuments(aggregation);
+  const count = await modelEntityMap["files"].countDocuments(aggregation);
 
   res.send({
     photos,
@@ -60,7 +60,7 @@ async function addFilesToAlbum(req, res) {
       // sourceInfo: file.sourceInfo,
     };
   });
-  const result = await modelEntityMap.photos.create(files);
+  const result = await modelEntityMap["files"].create(files);
 
   res.send({ result });
 }
@@ -90,7 +90,7 @@ async function updateFilesInAlbum(req, res) {
       case "cluster": {
         const newClusterId = (album.clusterId || 0) + 1;
         updatedData["cluster"] = newClusterId;
-        modelEntityMap.albums
+        modelEntityMap["albums"]
           .findByIdAndUpdate(albumId, {
             clusterId: newClusterId,
           })
@@ -108,7 +108,7 @@ async function updateFilesInAlbum(req, res) {
     // userId,
   };
 
-  const result = await modelEntityMap.photos.updateMany(
+  const result = await modelEntityMap["files"].updateMany(
     query,
     { $set: updatedData },
     {

@@ -6,7 +6,7 @@ import userRoutes from "./user/user.routes.js";
 import postRoutes from "./post/post.routes.js";
 // const storeqRoutes = require("./storeq/storeq.routes");
 import fireboardRoutes from "./fireboard/fireboard.routes.js";
-import fusionRoutes from "./fusion/fusion.routes.js";
+import liquidRoutes from "./liquid/liquid.routes.js";
 import notionRoutes from "./notion/notion.routes.js";
 import dynamicRoutes from "./dynamic-routes/dynamic-routes.routes.js";
 import ModulesModel from "../modules/modules/modules.model.js";
@@ -43,7 +43,7 @@ router.use("/posts", postRoutes);
 router.use("/notion", notionRoutes);
 router.use("/fireboard", protectedRoute, fireboardRoutes);
 
-router.use("/fusion", fusionRoutes);
+router.use("/liquid", liquidRoutes);
 
 router.use("/tags", protectedRoute, tagRoutes);
 router.use("/modules", protectedRoute, moduleRoutes);

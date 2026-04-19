@@ -4,11 +4,7 @@ import * as controller from "./photos.controller.js";
 
 const router = Router();
 
-router.get(
-  "/:albumId",
-  // temporaryAccess,
-  errorHandlingWrapper(controller.getAllPhotosByAlbum),
-);
+router.get("/:albumId", errorHandlingWrapper(controller.getAllPhotosByAlbum));
 
 router.post(
   "/files/:albumId",
