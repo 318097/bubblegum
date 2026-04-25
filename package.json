@@ -18,6 +18,7 @@
   "dependencies": {
     "@notionhq/client": "^5.17.0",
     "@sendgrid/mail": "^8.1.6",
+    "@sentry/node": "^10.50.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.9.0",
     "cors": "^2.8.6",

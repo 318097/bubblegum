@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import _ from "lodash";
+import * as Sentry from "@sentry/node";
 import logger from "../utils/logger.js";
 import { PRODUCT_LIST } from "../utils/products.js";
 import { getToken } from "../utils/authentication.js";
@@ -50,6 +51,17 @@ export default function (app) {
   //   }),
   // );
   app.use(morgan("dev"));
+  app.use((req, res, next) => {
+    const start = Date.now();
+    res.on("finish", () => {
+      const responseTimeMs = Date.now() - start;
+      Sentry.metrics.distribution("api.latency", responseTimeMs, {
+        unit: "millisecond",
+        attributes: { endpoint: req.path, method: req.method },
+      });
+    });
+    next();
+  });
   // setting limit for toby/bookmark upload, as the default value is 100kb
   app.use(express.json({ limit: "1mb" })); // for parsing application/json
   app.use(express.urlencoded({ extended: true }));
