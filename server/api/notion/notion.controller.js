@@ -12,7 +12,7 @@ const generateHtml = (data) => {
 
   data.forEach((item) => {
     output += `
-      <div class="vocab-item">
+      <div class="vocab-item" style="width: 100%;">
       <div style="margin-top: 0.8rem; color: #9b9b9bff; font-size: 0.75rem;">Word of the day</div>
       <div style="font-size: 1.875rem; line-height: normal; font-weight: 700;">${item["name"]}</div>
       <div style="margin-top: 0.8rem; color: #9b9b9bff; font-size: 0.75rem;">Definition</div>
@@ -170,12 +170,28 @@ async function getVocab(req, res) {
               contains: "Posted",
             },
           },
+          {
+            property: "status",
+            multi_select: {
+              contains: "Ready to post",
+            },
+          },
+          {
+            property: "status",
+            multi_select: {
+              contains: "Up Next",
+            },
+          },
         ],
       },
       sorts: [
         {
-          property: "createdAt",
-          direction: "descending",
+          property: "posted on social media",
+          direction: "ascending",
+        },
+        {
+          property: "name",
+          direction: "ascending",
         },
       ],
     };

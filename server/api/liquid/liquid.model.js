@@ -122,7 +122,6 @@ const HabitsSchema = new mongoose.Schema(
 
 const EditablesModel = mongoose.model("editables", EditablesSchema);
 const DynamicModel = mongoose.model("dynamic-ui", DynamicSchema);
-
 const HabitsModel = mongoose.model("habits", HabitsSchema);
 
 export { EditablesModel, DynamicModel, HabitsModel };
