@@ -12,6 +12,7 @@ const {
   GOOGLE_CLIENT_SECRET,
   SENDGRID_API_KEY,
   NOTION_AUTH_KEY,
+  MIXPANEL_TOKEN,
 } = process.env;
 
 let { NODE_ENV } = process.env;
@@ -32,6 +33,7 @@ const config = {
   JWT: JWT || "bubblegum-server",
   DB_URL: DB_CONNECTION_URL,
   CLOUDINARY_API_SECRET,
+  MIXPANEL_TOKEN,
   MEDIUM_RSS_FEED: "https://medium.com/feed/@ml318097",
   GOOGLE_OAUTH: {
     CLIENT_ID: GOOGLE_CLIENT_ID,

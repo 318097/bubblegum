@@ -6,6 +6,13 @@ import * as Sentry from "@sentry/node";
 import logger from "../utils/logger.js";
 import { PRODUCT_LIST } from "../utils/products.js";
 import { getToken } from "../utils/authentication.js";
+import Mixpanel from "mixpanel";
+import config from "../config.js";
+
+const mp = Mixpanel.init(config.MIXPANEL_TOKEN, {
+  verbose: true,
+  environment: config.NODE_ENV,
+});
 
 const appendSourceInfo = (req, res, next) => {
   const externalSource = _.get(req, "headers.external-source");
@@ -51,20 +58,34 @@ export default function (app) {
   //   }),
   // );
   app.use(morgan("dev"));
-  app.use((req, res, next) => {
-    const start = Date.now();
-    res.on("finish", () => {
-      const responseTimeMs = Date.now() - start;
-      Sentry.metrics.distribution("api.latency", responseTimeMs, {
-        unit: "millisecond",
-        attributes: { endpoint: req.path, method: req.method },
-      });
-    });
-    next();
-  });
+
   // setting limit for toby/bookmark upload, as the default value is 100kb
   app.use(express.json({ limit: "1mb" })); // for parsing application/json
   app.use(express.urlencoded({ extended: true }));
   app.use(cors());
   app.use(appendSourceInfo);
+  app.use((req, res, next) => {
+    const start = Date.now();
+    res.on("finish", () => {
+      // track Sentry API latency
+      const responseTimeMs = Date.now() - start;
+      Sentry.metrics.distribution("api.latency", responseTimeMs, {
+        unit: "millisecond",
+        attributes: { endpoint: req.path, method: req.method },
+      });
+
+      // Track Mixpanel event
+      const track = {
+        endpoint: req.originalUrl,
+        method: req.method,
+        source: req.source || "NA",
+        distinct_id: req.user?.email,
+      };
+
+      mp.track("api_request", track, (err) => {
+        if (err) console.error("[Mixpanel] ", err);
+      });
+    });
+    next();
+  });
 }
