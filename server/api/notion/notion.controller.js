@@ -61,7 +61,7 @@ const parseNotionData = (data) => {
             finalValue = _.get(value, "formula.string");
             break;
           default:
-            logger.error("Unhandled notion type", type, value);
+            logger.info("Unhandled notion type", type, value);
         }
         result[key] = finalValue;
       });

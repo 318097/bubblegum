@@ -11,6 +11,7 @@ const logger = {
   log: (...args) => console.log(logStyle("[log]:", ...args)),
   error: (...error) => console.error(errorStyle("[error]:", ...error)),
   test: (...test) => console.info(testStyle("[test]:", ...test)),
+  info: (...info) => console.info(logStyle("[info]:", ...info)),
 };
 
 export default logger;
