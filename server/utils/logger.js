@@ -1,4 +1,5 @@
 import { inspect } from "node:util";
+import config from "../config.js";
 
 const formatArg = (arg) => {
   if (typeof arg === "string") {
@@ -25,9 +26,11 @@ const formatArg = (arg) => {
 const colorize =
   (open, close) =>
   (...args) =>
-    `${open}${args.map((arg) => formatArg(arg)).join(" ")}${close}`;
+    config.COLOR_LOGS && open
+      ? `${open}${args.map((arg) => formatArg(arg)).join(" ")}${close}`
+      : args.map((arg) => formatArg(arg)).join(" ");
 
-const logStyle = colorize("\u001b[0m", "\u001b[0m"); // Default color for logs
+const logStyle = colorize("", ""); // Default color for logs
 const errorStyle = colorize("\u001b[31m", "\u001b[0m"); // Red color for errors
 const infoStyle = colorize("\u001b[34m", "\u001b[0m"); // Blue color for info
 const systemStyle = colorize("\u001b[32m", "\u001b[0m"); // Green color for system messages

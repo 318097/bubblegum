@@ -48,6 +48,9 @@ const config = {
     KEYBINDINGS: "afacc590c45e46b58c0582fa1abfb2f4",
     VOCAB: "18e39cb7c16b819faa66df8d0c199045",
   },
+  COLOR_LOGS:
+    !process.env.VERCEL &&
+    Boolean(process.stdout?.isTTY || process.stderr?.isTTY),
 };
 
 export default config;
