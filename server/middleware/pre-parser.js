@@ -80,15 +80,17 @@ export default function (app) {
 
       // Track Mixpanel event
       if (mp && !["/favicon.ico"].includes(req.originalUrl)) {
+        const [endpoint] = req.originalUrl.split("?");
         const track = {
-          endpoint: req.originalUrl,
+          endpoint,
+          status: res.statusCode,
           method: req.method,
           source: req.source || "NA",
           distinct_id: req.user?.email,
         };
-        console.log("track::-", track);
+        logger.info("Mixpanel track event:", track);
         mp.track("api_request", track, (err) => {
-          if (err) console.error("[Mixpanel] ", err);
+          if (err) logger.error("[Mixpanel] ", err);
         });
       }
     });
