@@ -33,7 +33,13 @@ const appendSourceInfo = (req, res, next) => {
 };
 
 export default function (app) {
-  app.use(morgan("dev"));
+  app.use(
+    morgan(
+      config.COLOR_LOGS
+        ? "dev"
+        : ":method :url :status :response-time ms - :res[content-length]",
+    ),
+  );
   // setting limit for toby/bookmark upload, as the default value is 100kb
   app.use(express.json({ limit: "1mb" })); // for parsing application/json
   app.use(express.urlencoded({ extended: true }));
