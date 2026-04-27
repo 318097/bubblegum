@@ -6,10 +6,9 @@ export default (handler) => {
     try {
       await handler(req, res, next);
     } catch (err) {
-      const errMsg = err.message;
-      logger.error(errMsg);
-      logger.error(err);
-      next(errMsg);
+      // const errMsg = err.message;
+      // logger.error("[CONTROLLER]", errMsg, err);
+      next(err);
     }
   };
 };

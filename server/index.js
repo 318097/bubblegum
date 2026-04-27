@@ -31,12 +31,12 @@ if (config.IS_PROD) Sentry.setupExpressErrorHandler(app);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  logger.error("[Middleware] ", err);
+  logger.error("[CATCH ALL]", err);
   if (err.name === "UnauthorizedError") {
     res.status(401).send("INVALID_JWT_TOKEN");
     return;
   }
-  res.status(500).send(err);
+  res.status(500).send(err.message);
 });
 
 http.listen(config.PORT, () =>

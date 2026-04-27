@@ -18,6 +18,10 @@ async function test(req, res) {
   });
 }
 
+async function testError(req, res) {
+  throw new Error("This is a test error for verifying error handling!");
+}
+
 async function sendgrid(req, res) {
   sendMail({
     email: "mehullakhanpal@gmail.com",
@@ -100,4 +104,5 @@ export {
   rssFeedParser,
   sendEmail,
   getProducts,
+  testError,
 };

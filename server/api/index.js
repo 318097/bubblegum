@@ -26,6 +26,7 @@ const moduleRoutes = dynamicRoutes({
 });
 
 router.get("/test", controller.test);
+router.get("/error", errorHandlingWrapper(controller.testError));
 router.get("/sendgrid", controller.sendgrid);
 
 router.post("/send-email", errorHandlingWrapper(controller.sendEmail));
