@@ -9,10 +9,14 @@ import { getToken } from "../utils/authentication.js";
 import Mixpanel from "mixpanel";
 import config from "../config.js";
 
-const mp = Mixpanel.init(config.MIXPANEL_TOKEN, {
-  verbose: true,
-  environment: config.NODE_ENV,
-});
+let mp = null;
+
+if (config.MIXPANEL_TOKEN) {
+  mp = Mixpanel.init(config.MIXPANEL_TOKEN, {
+    verbose: true,
+  });
+  logger.log(`Mixpanel initialized`);
+}
 
 const appendSourceInfo = (req, res, next) => {
   const externalSource = _.get(req, "headers.external-source");
@@ -75,16 +79,18 @@ export default function (app) {
       });
 
       // Track Mixpanel event
-      const track = {
-        endpoint: req.originalUrl,
-        method: req.method,
-        source: req.source || "NA",
-        distinct_id: req.user?.email,
-      };
-
-      mp.track("api_request", track, (err) => {
-        if (err) console.error("[Mixpanel] ", err);
-      });
+      if (mp && !["/favicon.ico"].includes(req.originalUrl)) {
+        const track = {
+          endpoint: req.originalUrl,
+          method: req.method,
+          source: req.source || "NA",
+          distinct_id: req.user?.email,
+        };
+        console.log("track::-", track);
+        mp.track("api_request", track, (err) => {
+          if (err) console.error("[Mixpanel] ", err);
+        });
+      }
     });
     next();
   });
