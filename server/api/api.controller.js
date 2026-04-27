@@ -10,8 +10,12 @@ import {
 import logger from "../utils/logger.js";
 
 async function test(req, res) {
-  logger.log("host: ", req.get("host"));
-  res.send("Working :)");
+  logger.system("System up and running"); // Log a system message
+  res.send({
+    message: `System up and running!`,
+    host: req.get("host"),
+    environment: config.NODE_ENV,
+  });
 }
 
 async function sendgrid(req, res) {

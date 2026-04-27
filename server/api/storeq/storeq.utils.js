@@ -16,7 +16,7 @@ const cache = {};
 setTimeout(initializeCache, 1000);
 
 const logCache = () =>
-  logger.test("[CACHE]: ", JSON.stringify(cache, undefined, 2));
+  logger.log("[CACHE]: ", JSON.stringify(cache, undefined, 2));
 
 const initializeStore = (storeId) => {
   if (!cache[storeId])

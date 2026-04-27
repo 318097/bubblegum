@@ -15,7 +15,7 @@ if (config.MIXPANEL_TOKEN) {
   mp = Mixpanel.init(config.MIXPANEL_TOKEN, {
     verbose: true,
   });
-  logger.log(`Mixpanel initialized`);
+  logger.system(`Mixpanel initialized`);
 }
 
 const appendSourceInfo = (req, res, next) => {
@@ -32,37 +32,8 @@ const appendSourceInfo = (req, res, next) => {
   next();
 };
 
-const requestLogFormat = (tokens, req, res) => {
-  const status = tokens.status(req, res);
-  const method = tokens.method(req, res);
-  const url = tokens.url(req, res);
-
-  const request = {};
-
-  if (req.params) request.params = req.params;
-
-  if (req.query) request.query = req.query;
-
-  if (req.body) request.body = req.body;
-
-  const response = [`${method} ${url} ${status}`];
-
-  if (Object.keys(request).length > 0)
-    response.push(`Request: ${JSON.stringify(request, undefined, 2)}`);
-
-  return response.join("\n");
-};
-
 export default function (app) {
-  // app.use(
-  //   morgan(requestLogFormat, {
-  //     stream: {
-  //       write: (message) => logger.log(message.trim()),
-  //     },
-  //   }),
-  // );
   app.use(morgan("dev"));
-
   // setting limit for toby/bookmark upload, as the default value is 100kb
   app.use(express.json({ limit: "1mb" })); // for parsing application/json
   app.use(express.urlencoded({ extended: true }));
@@ -88,9 +59,9 @@ export default function (app) {
           source: req.source || "NA",
           distinct_id: req.user?.email,
         };
-        logger.info("Mixpanel track event:", track);
+        // logger.info("Mixpanel track event:", track);
         mp.track("api_request", track, (err) => {
-          if (err) logger.error("[Mixpanel] ", err);
+          if (err) logger.system("[Mixpanel]", err);
         });
       }
     });

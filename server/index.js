@@ -12,7 +12,7 @@ import applyPreParserMiddleware from "./middleware/pre-parser.js";
 const app = express();
 const http = new HttpServer(app);
 
-logger.log(
+logger.system(
   `Server started in '${config.NODE_ENV}' mode ${config.IS_PROD ? "💀" : ""}`,
 );
 
@@ -23,13 +23,11 @@ applyPreParserMiddleware(app);
 app.use("/api/auth", authRoutes);
 app.use("/api", api);
 
-app.get("/debug-sentry", function mainHandler(req, res) {
-  throw new Error("[Test] Sentry error!");
-});
+// app.get("/debug-sentry", function mainHandler(req, res) {
+//   throw new Error("[Test] Sentry error!");
+// });
 
-if (config.IS_PROD) {
-  Sentry.setupExpressErrorHandler(app);
-}
+if (config.IS_PROD) Sentry.setupExpressErrorHandler(app);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
@@ -41,4 +39,6 @@ app.use((err, req, res, next) => {
   res.status(500).send(err);
 });
 
-http.listen(config.PORT, () => logger.log(`Running on port ':${config.PORT}'`));
+http.listen(config.PORT, () =>
+  logger.system(`Running on port ':${config.PORT}'`),
+);
