@@ -1,3 +1,16 @@
+### Bubblegum v2
+
+- [ ] Debug Mixpanel tracking for Vercel
+- [ ] Auth
+  - [ ] Google
+  - [ ] OTP
+- [ ] Setup system down or API crashes alerts
+- [ ] Implement Redis caching
+  - [ ] Notion data
+  - [ ] Fusion data
+
+---
+
 ### Bubblegum Server
 
 #### Todo
@@ -17,29 +30,23 @@
   - [x] Welcome
   - [x] Login
   - [x] Reset password
-  - [ ] Password updated
+  - [x] Password updated
 - [x] Refactor protectedRoutes, transparent, externalAccess
 - [x] Append userId to req
 - [x] Integrate account statuses. Return proper error message on failure
 - [x] Logout api (expire token)
 - [x] All sessions should logout after password change/reset
-- [ ] Send Welcome mail when registered from Google
 - [x] Access products from an API
 - [x] Expose email trigger from other services
-- [ ] Advance search for posts
-- [ ] Wrap all controllers in try..catch
-- [ ] Single command to deploy to heroku and netlify
-- [ ] Generate documentation for apis
-- [ ] Soft delete everything
-- [ ] Authentication for resolvers
-- [ ] Sentry
-- [ ] Lead generation data from landing pages (mail chimp)
-- [ ] Bulk query for notebase upload - transaction
-- [ ] Separate out tags into a different collection (tags from notebase, timeline, etc) All tags from all the projects should be in a single collection
-  - [x] Remove previous default values
-  - [ ] Remove keys from PRODUCTS.json
+- [x] Soft delete everything
+- [x] Send Welcome mail when registered from Google
+- [x] Sentry
+- [x] Separate out tags into a different collection (tags from notebase, timeline, etc) All tags from all the projects should be in a single collection
+- [x] Remove previous default values
 - [x] Separate timeline, collections from user model
 - [x] Setting operations should work independent of model
+- [ ] Advance search for posts
+- [ ] Remove keys from PRODUCTS.json
 
 #### Bugs
 
@@ -50,7 +57,3 @@
 - [ ] General - Feedback (Intercom), About, Emailing (Sendgrid), Forgot/Reset password page
 - [ ] Others - Analytics, Sentry, Mixpanel, Landing pages, Hotjar, Adsense, Sponsers, Buy me a coffee
 - [ ] Promotions - Linkedin, fb, insta, twitter, product hunt, hackernews, reddit, quora, youtube, medium, dev, indiehacker
-
-#### Problems with Notion as DB
-
--
