@@ -189,10 +189,6 @@ async function getVocab(req, res) {
           property: "posted on social media",
           direction: "ascending",
         },
-        {
-          property: "name",
-          direction: "ascending",
-        },
       ],
     };
 
