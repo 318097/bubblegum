@@ -56,6 +56,82 @@ const generateDefaultState = async ({ req, user }) => {
   }
 };
 
+const authenticateWithGoogle = async (req, res) => {
+  const { name, authToken, photoURL } = req.body;
+
+  const serviceAccounts = {
+    FUSION: fusionServiceAccount,
+  };
+
+  if (!admin.apps.length) {
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccounts[req.source]),
+    });
+  }
+  try {
+    const decoded = await admin.auth().verifyIdToken(authToken);
+
+    let { uid, email } = decoded;
+    if (!email) {
+      // anonymous user
+      email = `${uid}@google.uid`;
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      const defaultState = generateDefaultUserState(req, {});
+      const newUser = {
+        name: name || "Anonymous",
+        uid,
+        email,
+        username: email,
+        password: uuidv4(), // random password
+        photoURL,
+        ...defaultState,
+      };
+      user = await User.create(newUser);
+    }
+
+    //  const requireVerification = false;
+    //  sendMail({
+    //    name,
+    //    email,
+    //    type: requireVerification ? "VERIFY_ACCOUNT" : "WELCOME",
+    //    source,
+    //    token,
+    //  });
+    const userInfoToSend = await extractUserData({
+      user,
+      source: req.source,
+    });
+
+    const token = signToken(user._id, user.email);
+
+    await startSession({
+      userId: user._id,
+      source: req.source,
+      authMethod: "GOOGLE",
+      token,
+    });
+
+    res.send({ token, ...userInfoToSend });
+  } catch (err) {
+    res.status(401).json({ success: false, error: "Invalid token" });
+  }
+};
+
+const checkAccountStatus = async (req, res) => {
+  await verifyAccountStatus(req);
+  const user = await extractUserData(req);
+  res.send({ ...user, token: req.token });
+};
+
+const logout = async (req, res) => {
+  await endSession(req);
+  res.send("ok");
+};
+
 const login = async (req, res) => {
   const { username, password, authToken, authMethod = "LOGIN" } = req.body;
   const matchQuery = {};
@@ -133,11 +209,6 @@ const login = async (req, res) => {
   });
 };
 
-const logout = async (req, res) => {
-  await endSession(req);
-  res.send("ok");
-};
-
 const register = async (req, res) => {
   const { source } = req;
   const data = _.pick(req.body, [
@@ -174,77 +245,6 @@ const register = async (req, res) => {
   });
   const userInfoToSend = await extractUserData({ user, source: req.source });
   res.send({ ...userInfoToSend });
-};
-
-const authenticateWithGoogle = async (req, res) => {
-  const { name, authToken, photoURL } = req.body;
-
-  const serviceAccounts = {
-    FUSION: fusionServiceAccount,
-  };
-
-  if (!admin.apps.length) {
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccounts[req.source]),
-    });
-  }
-  try {
-    const decoded = await admin.auth().verifyIdToken(authToken);
-
-    let { uid, email } = decoded;
-    if (!email) {
-      // anonymous user
-      email = `${uid}@google.uid`;
-    }
-
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      const defaultState = generateDefaultUserState(req, {});
-      const newUser = {
-        name: name || "Anonymous",
-        uid,
-        email,
-        username: email,
-        password: uuidv4(), // random password
-        photoURL,
-        ...defaultState,
-      };
-      user = await User.create(newUser);
-    }
-
-    //  const requireVerification = false;
-    //  sendMail({
-    //    name,
-    //    email,
-    //    type: requireVerification ? "VERIFY_ACCOUNT" : "WELCOME",
-    //    source,
-    //    token,
-    //  });
-    const userInfoToSend = await extractUserData({
-      user,
-      source: req.source,
-    });
-
-    const token = signToken(user._id, user.email);
-
-    await startSession({
-      userId: user._id,
-      source: req.source,
-      authMethod: "GOOGLE",
-      token,
-    });
-
-    res.send({ token, ...userInfoToSend });
-  } catch (err) {
-    res.status(401).json({ success: false, error: "Invalid token" });
-  }
-};
-
-const checkAccountStatus = async (req, res) => {
-  await verifyAccountStatus(req);
-  const user = await extractUserData(req);
-  res.send({ ...user, token: req.token });
 };
 
 const forgotPassword = async (req, res) => {
