@@ -1,50 +1,30 @@
 import { Router } from "express";
-const router = Router();
-import errorHandlingWrapper from "../middleware/error-handling.js";
 import { protectedRoute } from "../utils/authentication.js";
 import * as controller from "./auth.controller.js";
 
-router.post("/login", errorHandlingWrapper(controller.login));
-router.post(
-  "/google-authentication",
-  errorHandlingWrapper(controller.authenticateWithGoogle),
-);
-router.post("/logout", errorHandlingWrapper(controller.logout));
-router.post("/register", errorHandlingWrapper(controller.register));
-router.post(
-  "/forgot-password",
-  errorHandlingWrapper(controller.forgotPassword),
-);
-router.post("/reset-password", errorHandlingWrapper(controller.resetPassword));
-router.post(
-  "/change-password",
-  errorHandlingWrapper(controller.changePassword),
-);
-router.post("/verify-account", errorHandlingWrapper(controller.verifyAccount));
+const router = Router();
+
+router.post("/login", controller.login);
+router.post("/google-authentication", controller.authenticateWithGoogle);
+router.post("/logout", controller.logout);
+router.post("/register", controller.register);
+router.post("/forgot-password", controller.forgotPassword);
+router.post("/reset-password", controller.resetPassword);
+router.post("/change-password", controller.changePassword);
+router.post("/verify-account", controller.verifyAccount);
 
 // Deprecated this
-router.post(
-  "/account-status",
-  protectedRoute,
-  errorHandlingWrapper(controller.checkAccountStatus),
-);
+router.post("/account-status", protectedRoute, controller.checkAccountStatus);
 
-router.get(
-  "/account-status",
-  protectedRoute,
-  errorHandlingWrapper(controller.checkAccountStatus),
-);
+router.get("/account-status", protectedRoute, controller.checkAccountStatus);
 
 // Step 1. Generate the URL for the popup
-router.get(
-  "/generate-google-oauth-url",
-  errorHandlingWrapper(controller.generateGoogleOAuthURL),
-);
+router.get("/generate-google-oauth-url", controller.generateGoogleOAuthURL);
 
 // Step 2. Send the code after confirming with the popup & get the access & refresh token
 router.post(
   "/generate-google-oauth-token",
-  errorHandlingWrapper(controller.generateGoogleOAuthToken),
+  controller.generateGoogleOAuthToken,
 );
 
 export default router;

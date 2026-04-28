@@ -7,7 +7,7 @@ import config from "./config.js";
 import logger from "./utils/logger.js";
 import authRoutes from "./auth/auth.routes.js";
 import api from "./api/index.js";
-import applyPreParserMiddleware from "./middleware/pre-parser.js";
+import middlewares from "./middleware.js";
 
 const app = express();
 const http = new HttpServer(app);
@@ -18,7 +18,7 @@ logger.system(
 
 connectToDb();
 
-applyPreParserMiddleware(app);
+middlewares(app);
 
 app.use("/api/auth", authRoutes);
 app.use("/api", api);
@@ -31,7 +31,7 @@ if (config.IS_PROD) Sentry.setupExpressErrorHandler(app);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  logger.error("[CATCH ALL]", err);
+  logger.error("[CATCH ALL]", req.originalUrl, "\n", err);
   if (err.name === "UnauthorizedError") {
     res.status(401).send("INVALID_JWT_TOKEN");
     return;

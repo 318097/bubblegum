@@ -1,22 +1,12 @@
 import { Router } from "express";
-import errorHandlingWrapper from "../../../middleware/error-handling.js";
 import * as controller from "./links.controller.js";
 
 const router = Router();
 
-router.get(
-  "/:collectionId",
-  errorHandlingWrapper(controller.getLynksByCollectionId),
-);
+router.get("/:collectionId", controller.getLynksByCollectionId);
 
-router.post(
-  "/:collectionId",
-  errorHandlingWrapper(controller.createOrUpdateLink),
-);
+router.post("/:collectionId", controller.createOrUpdateLink);
 
-router.delete(
-  "/:collectionId/:linkId",
-  errorHandlingWrapper(controller.deleteLink),
-);
+router.delete("/:collectionId/:linkId", controller.deleteLink);
 
 export default router;

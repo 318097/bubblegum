@@ -3,11 +3,11 @@ import cors from "cors";
 import morgan from "morgan";
 import _ from "lodash";
 import * as Sentry from "@sentry/node";
-import logger from "../utils/logger.js";
-import { PRODUCT_LIST } from "../utils/products.js";
-import { getToken } from "../utils/authentication.js";
+import logger from "./utils/logger.js";
+import { PRODUCT_LIST } from "./utils/products.js";
+import { getToken } from "./utils/authentication.js";
 import Mixpanel from "mixpanel";
-import config from "../config.js";
+import config from "./config.js";
 
 let mp = null;
 

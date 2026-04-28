@@ -22,17 +22,6 @@ async function testError(req, res) {
   throw new Error("This is a test error for verifying error handling!");
 }
 
-async function sendgrid(req, res) {
-  sendMail({
-    email: "mehullakhanpal@gmail.com",
-    type: "VERIFY_ACCOUNT",
-    name: "ML",
-    source: "FIREBOARD",
-    token: "abc",
-  });
-  res.send("Done");
-}
-
 async function fileUploadHandler(req, res) {
   const result = await fileUpload(req, {
     exactFileName: req.body.storeExactFileName === "TRUE",
@@ -70,9 +59,12 @@ async function rssFeedParser(req, res) {
 async function sendEmail(req, res) {
   const { email, name, source, type = "WELCOME" } = req.body;
   const origin = req.get("host");
-  logger.log("sendEmail:", {
+  logger.log("[SEND MAIL]", {
     origin,
     source,
+    type,
+    name,
+    email,
   });
   const validSource = config.IS_PROD
     ? ACTIVE_PRODUCT_URLS.some((host) => host.includes(origin)) ||
@@ -99,7 +91,6 @@ async function getProducts(req, res) {
 
 export {
   test,
-  sendgrid,
   fileUploadHandler,
   rssFeedParser,
   sendEmail,

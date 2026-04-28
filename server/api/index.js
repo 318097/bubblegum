@@ -1,5 +1,4 @@
 import { Router } from "express";
-import errorHandlingWrapper from "../middleware/error-handling.js";
 import fileStorage from "../utils/storage.js";
 import { protectedRoute } from "../utils/authentication.js";
 import userRoutes from "./user/user.routes.js";
@@ -26,26 +25,23 @@ const moduleRoutes = dynamicRoutes({
 });
 
 router.get("/test", controller.test);
-router.get("/error", errorHandlingWrapper(controller.testError));
-router.get("/sendgrid", controller.sendgrid);
+router.get("/error", controller.testError);
 
-router.post("/send-email", errorHandlingWrapper(controller.sendEmail));
-router.get("/products", errorHandlingWrapper(controller.getProducts));
-router.get("/rssfeed", errorHandlingWrapper(controller.rssFeedParser));
+router.post("/send-email", controller.sendEmail);
+router.get("/products", controller.getProducts);
+router.get("/rssfeed", controller.rssFeedParser);
 router.post(
   "/upload",
   protectedRoute,
   fileStorage,
-  errorHandlingWrapper(controller.fileUploadHandler),
+  controller.fileUploadHandler,
 );
 
 router.use("/user", protectedRoute, userRoutes);
 router.use("/posts", postRoutes);
 router.use("/notion", notionRoutes);
 router.use("/fireboard", protectedRoute, fireboardRoutes);
-
 router.use("/liquid", liquidRoutes);
-
 router.use("/tags", protectedRoute, tagRoutes);
 router.use("/modules", protectedRoute, moduleRoutes);
 

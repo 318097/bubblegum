@@ -1,20 +1,14 @@
 import { Router } from "express";
-const router = Router();
-import errorHandlingWrapper from "../../middleware/error-handling.js";
 import * as controller from "./storeq.controller.js";
 
-router.get("/stores", errorHandlingWrapper(controller.getAllStores));
-router.get(
-  "/booking/store/:id",
-  errorHandlingWrapper(controller.showAllBookingsForStore),
-);
-router.get(
-  "/booking/buyer/:id",
-  errorHandlingWrapper(controller.showAllBookingsForBuyer),
-);
-router.post("/booking", errorHandlingWrapper(controller.createBooking));
-router.put("/booking/:id", errorHandlingWrapper(controller.updateBooking));
+const router = Router();
 
-// router.delete('/:id', errorHandlingWrapper(controller.cancelBooking));
+router.get("/stores", controller.getAllStores);
+router.get("/booking/store/:id", controller.showAllBookingsForStore);
+router.get("/booking/buyer/:id", controller.showAllBookingsForBuyer);
+router.post("/booking", controller.createBooking);
+router.put("/booking/:id", controller.updateBooking);
+
+// router.delete('/:id', (controller.cancelBooking));
 
 export default router;

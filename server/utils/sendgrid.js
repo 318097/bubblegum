@@ -9,7 +9,6 @@ sgMail.setApiKey(config.SENDGRID_API_KEY);
 const from = {
   name: "Mehul Lakhanpal",
   email: "mehullakhanpal@gmail.com",
-  // email: "codedrops.tech@gmail.com",
 };
 
 const getContent = ({ type, token, name, source } = {}) => {

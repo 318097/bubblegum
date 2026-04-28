@@ -1,18 +1,15 @@
 import { Router } from "express";
-const router = Router();
-import errorHandlingWrapper from "../../middleware/error-handling.js";
 import * as controller from "./fireboard.controller.js";
 
-router.post("/tasks", errorHandlingWrapper(controller.createTask));
-router.get("/tasks", errorHandlingWrapper(controller.getAllTasks));
-router.get(
-  "/tasks/completed",
-  errorHandlingWrapper(controller.getCompletedTasks),
-);
-router.get("/tasks/:id", errorHandlingWrapper(controller.getTaskById));
-router.put("/tasks/:id", errorHandlingWrapper(controller.updateTask));
-router.put("/tasks/:id/stamp", errorHandlingWrapper(controller.stampTask));
-router.delete("/tasks/:id", errorHandlingWrapper(controller.deleteTask));
-router.post("/projects", errorHandlingWrapper(controller.createProject));
+const router = Router();
+
+router.post("/tasks", controller.createTask);
+router.get("/tasks", controller.getAllTasks);
+router.get("/tasks/completed", controller.getCompletedTasks);
+router.get("/tasks/:id", controller.getTaskById);
+router.put("/tasks/:id", controller.updateTask);
+router.put("/tasks/:id/stamp", controller.stampTask);
+router.delete("/tasks/:id", controller.deleteTask);
+router.post("/projects", controller.createProject);
 
 export default router;

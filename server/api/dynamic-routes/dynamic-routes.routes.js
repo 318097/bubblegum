@@ -1,5 +1,4 @@
 import express from "express";
-import errorHandlingWrapper from "../../middleware/error-handling.js";
 import controllerHOC from "./dynamic-routes.controller.js";
 
 const dynamicRoutes = function (config) {
@@ -11,21 +10,18 @@ const dynamicRoutes = function (config) {
   routes.forEach((route) => {
     switch (route) {
       case "GET":
-        router.get("/", errorHandlingWrapper(controller.getAllEntities));
-        router.get("/:id", errorHandlingWrapper(controller.getEntityById));
+        router.get("/", controller.getAllEntities);
+        router.get("/:id", controller.getEntityById);
         break;
       case "POST":
-        router.post("/", errorHandlingWrapper(controller.createEntity));
-        router.post(
-          "/operations",
-          errorHandlingWrapper(controller.entityOperations),
-        );
+        router.post("/", controller.createEntity);
+        router.post("/operations", controller.entityOperations);
         break;
       case "PUT":
-        router.put("/:id", errorHandlingWrapper(controller.updateEntity));
+        router.put("/:id", controller.updateEntity);
         break;
       case "DELETE":
-        router.delete("/:id", errorHandlingWrapper(controller.deleteEntity));
+        router.delete("/:id", controller.deleteEntity);
         break;
     }
   });
