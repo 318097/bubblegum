@@ -8,6 +8,7 @@ import logger from "./utils/logger.js";
 import authRoutes from "./auth/auth.routes.js";
 import api from "./api/index.js";
 import middlewares from "./middleware.js";
+import { connectToRedis } from "./redis.js";
 
 const app = express();
 const http = new HttpServer(app);
@@ -16,7 +17,8 @@ logger.system(
   `Server started in '${config.NODE_ENV}' mode ${config.IS_PROD ? "💀" : ""}`,
 );
 
-connectToDb();
+await connectToDb();
+await connectToRedis();
 
 middlewares(app);
 

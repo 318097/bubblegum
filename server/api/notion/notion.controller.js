@@ -2,6 +2,7 @@ import _ from "lodash";
 import { Client } from "@notionhq/client";
 import config from "../../config.js";
 import logger from "../../utils/logger.js";
+import { addToRedis, getFromRedis } from "../../redis.js";
 
 const notion = new Client({
   auth: config.NOTION_AUTH_KEY,
@@ -161,6 +162,14 @@ async function getLiquidTech(req, res) {
 
 async function getVocab(req, res) {
   try {
+    const cacheKey = `vocab:${req.query.cursor || "default"}`;
+    const cachedData = await getFromRedis(cacheKey, req);
+    if (cachedData) {
+      _.set(cachedData, "apiParams.lastUpdatedAt", new Date().toISOString());
+      res.send(cachedData);
+      return;
+    }
+
     const params = {
       filter: {
         and: [
@@ -205,14 +214,17 @@ async function getVocab(req, res) {
 
     const html = generateHtml(data);
 
-    res.send({
+    const response = {
       data,
       html,
       apiParams: {
         cursor: next_cursor,
         lastUpdatedAt: new Date().toISOString(),
       },
-    });
+    };
+
+    await addToRedis(cacheKey, response);
+    res.send(response);
   } catch (err) {
     logger.error(err);
   }
