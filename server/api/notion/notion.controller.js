@@ -8,23 +8,37 @@ const notion = new Client({
   auth: config.NOTION_AUTH_KEY,
 });
 
-const generateHtml = (data) => {
-  let output = "";
+const generateContent = (data) => {
+  let htmlOutput = "";
+  let markdownOutput = "";
 
   data.forEach((item) => {
-    output += `
-      <div class="vocab-item" style="width: 100%;">
-      <div style="margin-top: 0.8rem; color: #9b9b9bff; font-size: 0.75rem;">Word of the day</div>
-      <div style="font-size: 1.875rem; line-height: normal; font-weight: 700;">${_.capitalize(item["name"])}</div>
-      <div style="margin-top: 0.8rem; color: #9b9b9bff; font-size: 0.75rem;">Definition</div>
-      <div>${item["description"]}</div>
-      <div style="margin-top: 0.8rem; color: #9b9b9bff; font-size: 0.75rem;">Example</div>
-      <div>${item["ex"]}</div>
+    htmlOutput += `
+      <div class="card" style="width: 100%;">
+        <div class="title" style="color: #9b9b9bff; font-size: 0.75em;">Word of the day</div>
+        <div style="font-size: 1.875em; line-height: normal; font-weight: 700;">${_.capitalize(item["name"])}</div>
+        <div style="margin-top: 0.8em; color: #9b9b9bff; font-size: 0.75em;">Definition</div>
+        <div>${item["description"]}</div>
+        <div style="margin-top: 0.8em; color: #9b9b9bff; font-size: 0.75em;">Example</div>
+        <div>${item["ex"]}</div>
       </div>
+    `;
+    markdownOutput += `
+###### Word of the day
+## ${_.capitalize(item["name"])}
+---
+###### Definition
+### ${item["description"]}
+---
+###### Example
+### ${item["ex"]}
     `;
   });
 
-  return `<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; max-width: 480px; margin: 0 auto;">${output}</div>`;
+  return {
+    html: htmlOutput,
+    markdown: markdownOutput,
+  };
 };
 
 const parseNotionData = (data) => {
@@ -212,11 +226,12 @@ async function getVocab(req, res) {
 
     const data = parseNotionData(list);
 
-    const html = generateHtml(data);
+    const { html, markdown } = generateContent(data);
 
     const response = {
       data,
       html,
+      markdown,
       apiParams: {
         cursor: next_cursor,
         lastUpdatedAt: new Date().toISOString(),
