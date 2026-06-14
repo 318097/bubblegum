@@ -52,6 +52,7 @@ async function getLiquidTech(req, res) {
     const { parsed } = await fetchDataFromNotion(
       config.NOTION_DB.LIQUID_TECH,
       query,
+      true,
     );
 
     const parsedContent = parsed.map(
@@ -60,8 +61,8 @@ async function getLiquidTech(req, res) {
           _id,
           title,
           url,
-          tags,
           description,
+          tags,
           type: L0.toLowerCase(),
           subType: L1,
           priority: rank,
@@ -70,6 +71,54 @@ async function getLiquidTech(req, res) {
     );
 
     res.send({ data: _.groupBy(_.sortBy(parsedContent, "subType"), "type") });
+  } catch (err) {
+    logger.error(err);
+  }
+}
+
+async function getKeybindings(req, res) {
+  try {
+    const query = {
+      filter: {
+        and: [
+          {
+            property: "void",
+            multi_select: {
+              is_empty: true,
+            },
+          },
+        ],
+      },
+      sorts: [
+        {
+          property: "_id",
+          direction: "ascending",
+        },
+      ],
+    };
+
+    const { parsed, next_cursor } = await fetchDataFromNotion(
+      config.NOTION_DB.KEYBINDINGS,
+      {
+        ...query,
+        page_size: 1,
+        start_cursor: req.query.cursor || undefined,
+      },
+    );
+
+    const { html, markdown } = generateContent(parsed, "keybindings");
+
+    const response = {
+      parsed,
+      html,
+      markdown: req.query.markdown ? markdown : undefined,
+      apiParams: {
+        cursor: next_cursor,
+        lastUpdatedAt: new Date().toISOString(),
+      },
+    };
+
+    res.send(response);
   } catch (err) {
     logger.error(err);
   }
@@ -125,7 +174,7 @@ async function getVocab(req, res) {
       },
     );
 
-    const { html, markdown } = generateContent(parsed);
+    const { html, markdown } = generateContent(parsed, "vocab");
 
     const response = {
       parsed,
@@ -144,11 +193,17 @@ async function getVocab(req, res) {
   }
 }
 
-async function getAllKeyBindings(req, res) {
+async function getTechSnippets(req, res) {
   try {
     const query = {
       filter: {
         and: [
+          {
+            property: "status",
+            multi_select: {
+              contains: "Reviewed",
+            },
+          },
           {
             property: "status",
             multi_select: {
@@ -167,28 +222,60 @@ async function getAllKeyBindings(req, res) {
               is_empty: true,
             },
           },
+          {
+            property: "social media status",
+            multi_select: {
+              contains: "Posted",
+            },
+          },
         ],
+      },
+      sorts: [
+        {
+          property: "posted on social media",
+          direction: "ascending",
+        },
+      ],
+    };
+
+    const { parsed, next_cursor } = await fetchDataFromNotion(
+      config.NOTION_DB.LIQUID_TECH,
+      {
+        ...query,
+        page_size: 1,
+        start_cursor: req.query.cursor || undefined,
+      },
+    );
+
+    const { html, markdown } = generateContent(parsed, "tech-snippet");
+
+    const cleanedData = parsed.map((item) => {
+      return _.pick(item, [
+        "title",
+        "url",
+        "description",
+        "L0",
+        "L1",
+        "tags",
+        "social media id",
+        "rank",
+      ]);
+    });
+
+    const response = {
+      parsed: cleanedData,
+      html,
+      markdown: req.query.markdown ? markdown : undefined,
+      apiParams: {
+        cursor: next_cursor,
+        lastUpdatedAt: new Date().toISOString(),
       },
     };
 
-    const { parsed } = await fetchDataFromNotion(
-      config.NOTION_DB.KEYBINDINGS,
-      query,
-    );
-
-    const parsedList = parsed.map(({ title, platform, binding, _id }) => {
-      return {
-        _id,
-        title,
-        platform,
-        binding: JSON.parse(binding),
-      };
-    });
-
-    res.send({ data: parsedList });
+    res.send(response);
   } catch (err) {
     logger.error(err);
   }
 }
 
-export { getLiquidTech, getVocab, getAllKeyBindings };
+export { getLiquidTech, getVocab, getKeybindings, getTechSnippets };

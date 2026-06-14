@@ -7,22 +7,24 @@ const notion = new Client({
   auth: config.NOTION_AUTH_KEY,
 });
 
-const generateContent = (data) => {
+const generateContent = (data, contentType) => {
   let htmlOutput = "";
   let markdownOutput = "";
 
   data.forEach((item) => {
-    htmlOutput += `
-      <div class="card" style="width: 100%;">
-        <div class="title" style="color: #9b9b9bff; font-size: 0.75em;">Word of the day</div>
-        <div style="font-size: 1.875em; line-height: normal; font-weight: 700;">${_.capitalize(item["name"])}</div>
-        <div style="margin-top: 0.8em; color: #9b9b9bff; font-size: 0.75em;">Definition</div>
-        <div>${item["description"]}</div>
-        <div style="margin-top: 0.8em; color: #9b9b9bff; font-size: 0.75em;">Example</div>
-        <div>${item["ex"]}</div>
+    switch (contentType) {
+      case "vocab": {
+        htmlOutput += `
+      <div class="card">
+        <h6>Word of the day</h6>
+        <h4>${_.capitalize(item["name"])}</h4>
+        <h6 style="margin-top: 0.8em;">Definition</h6>
+        <p>${item["description"]}</p>
+        <h6 style="margin-top: 0.8em;">Example</h6>
+        <p>${item["ex"]}</p>
       </div>
     `;
-    markdownOutput += `
+        markdownOutput += `
 ###### Word of the day
 ## ${_.capitalize(item["name"])}
 ---
@@ -32,6 +34,35 @@ const generateContent = (data) => {
 ###### Example
 ### ${item["ex"]}
     `;
+        break;
+      }
+      case "tech-snippet": {
+        htmlOutput += `
+          <div class="card">
+            <h4>${_.capitalize(item["title"])}</h4>
+            ${item["description"] ? `<p>${item["description"]}</p>` : ""}
+            <a href="${item["url"]}" target="_blank">${item["url"]}</a>
+          </div>
+        `;
+        break;
+      }
+      case "keybindings": {
+        htmlOutput += `
+          <div class="card">
+            <h4>${_.capitalize(item["platform"])}: ${_.capitalize(item["title"])}</h4>
+            <div class='flex gap-2'>
+            ${item["mac"] ? `<code>${item["mac"]}</code>` : ""}
+            ${item["mac"] && item["windows"] ? "|" : ""}
+            ${item["windows"] ? `<code>${item["windows"]}</code>` : ""}
+            </div>
+          </div>
+        `;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   });
 
   return {
