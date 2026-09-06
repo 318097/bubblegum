@@ -94,10 +94,9 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.index({ geoCoordinates: "2dsphere" });
 
-UserSchema.pre("save", function (next) {
-  if (!this.isModified("password")) return next();
+UserSchema.pre("save", function () {
+  if (!this.isModified("password")) return;
   this.password = this.encryptPassword(this.password);
-  next();
 });
 
 UserSchema.methods = {
