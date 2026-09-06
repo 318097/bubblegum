@@ -39,7 +39,7 @@ const AlertsAndMsgesSchema = new mongoose.Schema(
     },
     type: {
       required: false,
-      default: "ALERT",
+      default: "alerts",
       type: String,
     },
     archived: {

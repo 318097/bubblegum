@@ -30,9 +30,9 @@ const getAggregationFilters = (entity) => {
   };
 
   const filters =
-    entity.type === "ALERT" ? ["activities", "days", "slots"] : [];
+    entity.type === "alerts" ? ["activities", "days", "slots"] : [];
 
-  filters.forEach(({ key }) => {
+  filters.forEach((key) => {
     const keyValue = entity[key];
     if (!_.isEmpty(keyValue))
       aggregation[key] = {
@@ -113,7 +113,7 @@ async function getAlertDetailsById(req, res) {
   const alert = await modelEntityMap["alerts"].findById(alertId);
   const aggregation = getAggregationFilters(alert);
 
-  const users = await modelEntityMap["users"].aggregate([
+  const users = await modelEntityMap["user"].aggregate([
     {
       $geoNear: {
         near: req.user.geoCoordinates,
