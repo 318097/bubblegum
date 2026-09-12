@@ -1,6 +1,7 @@
 import { AlbumModel, FilesModel } from "./photos/photos.model.js";
 import { LynkCollectionModel, LynksModel } from "./links/links.model.js";
 import { AlertAndMsgModel, ActivitiesModel } from "./alerts/alerts.model.js";
+import { CircleModel } from "./circle/circle.model.js";
 import UserModel from "../user/user.model.js";
 import { EditablesModel, DynamicModel, HabitsModel } from "./liquid.model.js";
 
@@ -15,6 +16,7 @@ const modelEntityMap = {
   user: UserModel,
   files: FilesModel,
   lynks: LynksModel,
+  circle: CircleModel,
 };
 
 export default modelEntityMap;

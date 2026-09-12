@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { transparent } from "../../utils/authentication.js";
+import { transparent, temporaryAccess } from "../../utils/authentication.js";
 import * as controller from "./liquid.controller.js";
 import photosRouter from "./photos/photos.routes.js";
 import linksRouter from "./links/links.routes.js";
 import alertRouter from "./alerts/alerts.routes.js";
+import circleRouter from "./circle/circle.routes.js";
 
 const router = Router();
 
@@ -13,6 +14,7 @@ const router = Router();
 router.get("/sh/:path", controller.resolveShortLink);
 
 router.use("/alerts", transparent, alertRouter);
+router.use("/circle", temporaryAccess, circleRouter);
 router.use("/links", transparent, linksRouter);
 router.use("/photos", transparent, photosRouter);
 
