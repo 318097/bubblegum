@@ -77,11 +77,11 @@ async function getMyBusinessProfile(req, res) {
 
 // public single business view, resolvable by _id or slug
 async function getBusinessById(req, res) {
-  const { circleId } = req.params;
-  const key = getKey(circleId);
+  const { businessId } = req.params;
+  const key = getKey(businessId);
 
   const circle = await CircleModel.findOne({
-    [key]: processId(circleId),
+    [key]: processId(businessId),
     deleted: false,
   })
     .populate("userId", USER_PROJECT)
@@ -92,25 +92,25 @@ async function getBusinessById(req, res) {
   res.send(circle);
 }
 
-async function createBusinessEntity(req, res) {
-  const { _id: userId } = req.user;
-  const { name } = req.body;
+// async function createBusiness(req, res) {
+//   const { _id: userId } = req.user;
+//   const { name } = req.body;
 
-  const circle = await CircleModel.create({
-    ..._.omit(req.body, ["_id", "userId", "deleted", "archived"]),
-    userId,
-    slug: generateSlug({ title: name }),
-  });
+//   const circle = await CircleModel.create({
+//     ..._.omit(req.body, ["_id", "userId", "deleted", "archived"]),
+//     userId,
+//     slug: generateSlug({ title: name }),
+//   });
 
-  res.send(circle);
-}
+//   res.send(circle);
+// }
 
-async function updateBusinessEntity(req, res) {
-  const { circleId } = req.params;
+async function updateBusiness(req, res) {
+  const { businessId } = req.params;
   const { _id: userId } = req.user;
 
   const circle = await CircleModel.findOne({
-    _id: circleId,
+    _id: businessId,
     userId,
   });
   if (!circle) return res.status(404).send({ error: "CIRCLE_NOT_FOUND" });
@@ -120,7 +120,7 @@ async function updateBusinessEntity(req, res) {
     updates.slug = generateSlug({ title: updates.name, prevSlug: circle.slug });
 
   const result = await CircleModel.findOneAndUpdate(
-    { _id: circleId, userId },
+    { _id: businessId, userId },
     { $set: updates },
     { new: true },
   );
@@ -128,12 +128,12 @@ async function updateBusinessEntity(req, res) {
   res.send(result);
 }
 
-async function deleteBusinessEntity(req, res) {
-  const { circleId } = req.params;
+async function deleteBusiness(req, res) {
+  const { businessId } = req.params;
   const { _id: userId } = req.user;
 
   const result = await CircleModel.findOneAndUpdate(
-    { _id: circleId, userId },
+    { _id: businessId, userId },
     { $set: { deleted: true } },
     { new: true },
   );
@@ -147,7 +147,7 @@ export {
   getExploreFeed,
   getMyBusinessProfile,
   getBusinessById,
-  createBusinessEntity,
-  updateBusinessEntity,
-  deleteBusinessEntity,
+  // createBusiness,
+  updateBusiness,
+  deleteBusiness,
 };

@@ -1,32 +1,53 @@
 import { Router } from "express";
 import * as controller from "./circle.controller.js";
+import * as businessController from "./business.controller.js";
 
 const router = Router();
-
-/* 
-  /feed - Fetches the feed for updates, posts, etc for the consumer
-  /explore - Fetches the business profile feed for the consumer
-  
-  /me - Fetches the profile details for my business
-  /me/posts - Fetches the posts of my business for the consumer
-  /me/services
-  /me/offers
-  /me/faqs
-
-  Business Profiles
-  /profile/:id - Fetches the business profile by ID for the consumer
-  /profile/:id/posts - Fetches the posts of the business profile by ID for the consumer
-  /profile/:id/services - Fetches the services of the business profile by ID for the consumer
-  /profile/:id/offers - Fetches the offers of the business profile by ID for the consumer
-  /profile/:id/faqs - Fetches the FAQs of the business profile by ID for the consumer
-*/
+const businessRouter = Router();
 
 router.get("/explore", controller.getExploreFeed);
-router.get("/me", controller.getMyBusinessProfile);
-router.get("/profile/:circleId", controller.getBusinessById);
 
-router.post("/", controller.createBusinessEntity);
-router.put("/:circleId", controller.updateBusinessEntity);
-router.delete("/:circleId", controller.deleteBusinessEntity);
+router.get("/me/business", controller.getMyBusinessProfile);
+
+router.get("/businesses/:businessId", controller.getBusinessById);
+router.put("/businesses/:businessId", controller.updateBusiness);
+router.delete("/businesses/:businessId", controller.deleteBusiness);
+
+const registerContentRoutes = (resourceType) => {
+  businessRouter.get(`/:businessId/${resourceType}`, (req, res) => {
+    req.params.resourceType = resourceType;
+    return businessController.listContent(req, res);
+  });
+  businessRouter.post(`/:businessId/${resourceType}`, (req, res) => {
+    req.params.resourceType = resourceType;
+    return businessController.createContent(req, res);
+  });
+  businessRouter.get(`/:businessId/${resourceType}/:contentId`, (req, res) => {
+    req.params.resourceType = resourceType;
+    return businessController.getContent(req, res);
+  });
+  businessRouter.patch(
+    `/:businessId/${resourceType}/:contentId`,
+    (req, res) => {
+      req.params.resourceType = resourceType;
+      return businessController.updateContent(req, res);
+    },
+  );
+  businessRouter.put(`/:businessId/${resourceType}/:contentId`, (req, res) => {
+    req.params.resourceType = resourceType;
+    return businessController.updateContent(req, res);
+  });
+  businessRouter.delete(
+    `/:businessId/${resourceType}/:contentId`,
+    (req, res) => {
+      req.params.resourceType = resourceType;
+      return businessController.deleteContent(req, res);
+    },
+  );
+};
+
+["posts", "services", "offers", "faqs"].forEach(registerContentRoutes);
+
+router.use("/businesses", businessRouter);
 
 export default router;
