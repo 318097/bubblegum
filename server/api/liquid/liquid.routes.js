@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { transparent, temporaryAccess } from "../../utils/authentication.js";
+import {
+  transparent,
+  temporaryAccess,
+  protectedRoute,
+} from "../../utils/authentication.js";
 import * as controller from "./liquid.controller.js";
 import photosRouter from "./photos/photos.routes.js";
 import linksRouter from "./links/links.routes.js";
@@ -14,7 +18,7 @@ const router = Router();
 router.get("/sh/:path", controller.resolveShortLink);
 
 router.use("/alerts", transparent, alertRouter);
-router.use("/circle", temporaryAccess, circleRouter);
+router.use("/circle", protectedRoute, circleRouter);
 router.use("/links", transparent, linksRouter);
 router.use("/photos", transparent, photosRouter);
 

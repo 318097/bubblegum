@@ -10,6 +10,7 @@ router.get("/explore", controller.getExploreFeed);
 router.get("/me/business", controller.getMyBusinessProfile);
 
 router.get("/businesses/:businessId", controller.getBusinessById);
+router.post("/businesses/:businessId", controller.createBusiness);
 router.put("/businesses/:businessId", controller.updateBusiness);
 router.delete("/businesses/:businessId", controller.deleteBusiness);
 

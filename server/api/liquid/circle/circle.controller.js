@@ -68,11 +68,11 @@ async function getExploreFeed(req, res) {
 }
 
 async function getMyBusinessProfile(req, res) {
-  const circles = await CircleModel.findOne({
+  const myBusinessProfiles = await CircleModel.findOne({
     userId: req.user._id,
   }).lean();
 
-  res.send(circles);
+  res.send(myBusinessProfiles ?? {});
 }
 
 // public single business view, resolvable by _id or slug
@@ -92,18 +92,18 @@ async function getBusinessById(req, res) {
   res.send(circle);
 }
 
-// async function createBusiness(req, res) {
-//   const { _id: userId } = req.user;
-//   const { name } = req.body;
+async function createBusiness(req, res) {
+  const { _id: userId } = req.user;
+  const { name } = req.body;
 
-//   const circle = await CircleModel.create({
-//     ..._.omit(req.body, ["_id", "userId", "deleted", "archived"]),
-//     userId,
-//     slug: generateSlug({ title: name }),
-//   });
+  const circle = await CircleModel.create({
+    ..._.omit(req.body, ["_id", "userId", "deleted", "archived"]),
+    userId,
+    slug: generateSlug({ title: name }),
+  });
 
-//   res.send(circle);
-// }
+  res.send(circle);
+}
 
 async function updateBusiness(req, res) {
   const { businessId } = req.params;
@@ -147,7 +147,7 @@ export {
   getExploreFeed,
   getMyBusinessProfile,
   getBusinessById,
-  // createBusiness,
+  createBusiness,
   updateBusiness,
   deleteBusiness,
 };
