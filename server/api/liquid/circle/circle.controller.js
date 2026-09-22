@@ -52,7 +52,7 @@ const getAggregationFilters = (req) => {
 async function getExploreFeed(req, res) {
   const { aggregation, sort, page, limit } = getAggregationFilters(req);
 
-  if (req.userId) aggregation.userId = { $ne: req.userId };
+  // if (req.userId) aggregation.userId = { $ne: req.userId };
 
   const [circles, count] = await Promise.all([
     CircleModel.find(aggregation)
@@ -68,11 +68,21 @@ async function getExploreFeed(req, res) {
 }
 
 async function getMyBusinessProfile(req, res) {
-  const myBusinessProfiles = await CircleModel.findOne({
+  const myBusinessProfiles = await CircleModel.find({
     userId: req.user._id,
   }).lean();
 
-  res.send(myBusinessProfiles ?? {});
+  res.send(myBusinessProfiles ?? []);
+}
+
+async function getMyBusinessProfileById(req, res) {
+  const { id } = req.params;
+  const business = await CircleModel.findOne({
+    userId: req.user._id,
+    _id: id,
+  }).lean();
+
+  res.send(business);
 }
 
 // public single business view, resolvable by _id or slug
@@ -146,6 +156,7 @@ async function deleteBusiness(req, res) {
 export {
   getExploreFeed,
   getMyBusinessProfile,
+  getMyBusinessProfileById,
   getBusinessById,
   createBusiness,
   updateBusiness,

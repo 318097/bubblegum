@@ -7,7 +7,8 @@ const businessRouter = Router();
 
 router.get("/explore", controller.getExploreFeed);
 
-router.get("/me/business", controller.getMyBusinessProfile);
+router.get("/me/businesses", controller.getMyBusinessProfile);
+router.get("/me/businesses/:id", controller.getMyBusinessProfileById);
 
 router.get("/businesses/:businessId", controller.getBusinessById);
 router.post("/businesses/:businessId", controller.createBusiness);

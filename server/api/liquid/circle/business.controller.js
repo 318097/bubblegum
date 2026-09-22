@@ -66,6 +66,7 @@ async function getContent(req, res) {
       businessId: business._id,
       deleted: false,
     })
+    .populate("businessId")
     .lean();
   if (!data) return res.status(404).send({ error: "CONTENT_NOT_FOUND" });
   res.send({ data });
