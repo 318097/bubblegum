@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
-import { generateObjectId, generateDate } from "../../utils/common.js";
-import { getProducts } from "../../utils/products.js";
+import { generateObjectId, generateDate } from "../../../utils/common.js";
+import { getProducts } from "../../../utils/products.js";
 
 const DEFAULT_EXPENSE_TYPES = [
   { key: "EXPENSE", label: "Expense", success: "DOWN", color: "watermelon" },

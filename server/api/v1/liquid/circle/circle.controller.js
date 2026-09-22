@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { CircleModel } from "./circle.model.js";
-import { getKey, processId, generateSlug } from "../../../utils/common.js";
+import { getKey, processId, generateSlug } from "../../../../utils/common.js";
 
 const USER_PROJECT = {
   _id: 1,

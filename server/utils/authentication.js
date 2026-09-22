@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { expressjwt } from "express-jwt";
 import _ from "lodash";
 import config from "../config.js";
-import User from "../api/user/user.model.js";
+import User from "../api/v1/user/user.model.js";
 import { getAppBasedInfo } from "./common.js";
 
 const checkToken = expressjwt({

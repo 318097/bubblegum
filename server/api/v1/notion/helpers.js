@@ -1,6 +1,6 @@
 import { Client } from "@notionhq/client";
-import config from "../../config.js";
-import logger from "../../utils/logger.js";
+import config from "../../../config.js";
+import logger from "../../../utils/logger.js";
 import _ from "lodash";
 
 const notion = new Client({

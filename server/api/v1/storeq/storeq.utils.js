@@ -3,8 +3,8 @@ import admin from "firebase-admin";
 
 import moment from "moment";
 import _ from "lodash";
-import logger from "../../utils/logger.js";
-import serviceAccount from "../../../secrets/storeq-d518c-firebase-adminsdk-cv2ze-0b870f5cf0.json" with { type: "json" };
+import logger from "../../../utils/logger.js";
+import serviceAccount from "../../../../secrets/storeq-d518c-firebase-adminsdk-cv2ze-0b870f5cf0.json" with { type: "json" };
 import Model from "./storeq.model.js";
 
 admin.initializeApp({

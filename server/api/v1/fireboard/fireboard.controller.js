@@ -1,6 +1,6 @@
 import _ from "lodash";
 import moment from "moment";
-import { processId, generateDate } from "../../utils/common.js";
+import { processId, generateDate } from "../../../utils/common.js";
 import TaskModel from "./fireboard.task.model.js";
 import ProjectModel from "./fireboard.project.model.js";
 

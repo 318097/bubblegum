@@ -1,13 +1,13 @@
 import Parser from "rss-parser";
-import config from "../config.js";
-import { fileUpload } from "../utils/file-upload.js";
-import TransactionModel from "../models/transaction.model.js";
-import sendMail from "../utils/sendgrid.js";
+import config from "../../config.js";
+import { fileUpload } from "../../utils/file-upload.js";
+import TransactionModel from "../../models/transaction.model.js";
+import sendMail from "../../utils/sendgrid.js";
 import {
   ACTIVE_PRODUCT_URLS,
   getProducts as listProducts,
-} from "../utils/products.js";
-import logger from "../utils/logger.js";
+} from "../../utils/products.js";
+import logger from "../../utils/logger.js";
 
 async function test(req, res) {
   logger.system("System up and running"); // Log a system message

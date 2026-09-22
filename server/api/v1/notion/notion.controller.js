@@ -1,7 +1,7 @@
 import _ from "lodash";
-import config from "../../config.js";
-import logger from "../../utils/logger.js";
-import { addToRedis, getFromRedis } from "../../redis.js";
+import config from "../../../config.js";
+import logger from "../../../utils/logger.js";
+import { addToRedis, getFromRedis } from "../../../redis.js";
 import { fetchDataFromNotion, generateContent } from "./helpers.js";
 
 async function getLiquidTech(req, res) {

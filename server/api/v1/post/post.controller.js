@@ -8,7 +8,7 @@ import {
   generateSlug,
   isSearchId,
   processId,
-} from "../../utils/common.js";
+} from "../../../utils/common.js";
 import Model from "./post.model.js";
 
 const { ObjectId } = mongoose.Types;

@@ -1,4 +1,4 @@
-import { processId } from "../../../utils/common.js";
+import { processId } from "../../../../utils/common.js";
 import modelEntityMap from "../models.js";
 
 const getAggregationFiltersPhotos = (req) => {

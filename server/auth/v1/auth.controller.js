@@ -2,31 +2,31 @@ import { OAuth2Client } from "google-auth-library";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import admin from "firebase-admin";
-import fusionServiceAccount from "../../secrets/fusion-97e8c-firebase-adminsdk-qjtt8-a6765111ba.json" with { type: "json" };
-import User from "../api/user/user.model.js";
-import { signToken, validateToken } from "../utils/authentication.js";
-import config from "../config.js";
+import fusionServiceAccount from "../../../secrets/fusion-97e8c-firebase-adminsdk-qjtt8-a6765111ba.json" with { type: "json" };
+import User from "../../api/v1/user/user.model.js";
+import { signToken, validateToken } from "../../utils/authentication.js";
+import config from "../../config.js";
 import {
   extractUserData,
   generateDate,
   lowerCaseAndTrim,
-} from "../utils/common.js";
-import sendMail from "../utils/sendgrid.js";
+} from "../../utils/common.js";
+import sendMail from "../../utils/sendgrid.js";
 import { google } from "googleapis";
 import {
   encryptPassword,
   generateDefaultUserState,
   updateAccountStatus,
   generateDefaultExpenseTypes,
-} from "../api/user/user.utils.js";
+} from "../../api/v1/user/user.utils.js";
 import {
   startSession,
   endSession,
   revokeAllSessions,
-} from "../utils/session.js";
-import { verifyAccountStatus } from "../utils/account.js";
-import { createTags } from "../modules/tags/tags.operations.js";
-import { createModules } from "../modules/modules/modules.operations.js";
+} from "../../utils/session.js";
+import { verifyAccountStatus } from "../../utils/account.js";
+import { createTags } from "../../modules/tags/tags.operations.js";
+import { createModules } from "../../modules/modules/modules.operations.js";
 
 const oauth2Client = new google.auth.OAuth2(
   config.GOOGLE_OAUTH.CLIENT_ID,

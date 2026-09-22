@@ -1,6 +1,6 @@
 import { Router } from "express";
-import fileStorage from "../utils/storage.js";
-import { protectedRoute } from "../utils/authentication.js";
+import fileStorage from "../../utils/storage.js";
+import { protectedRoute } from "../../utils/authentication.js";
 import userRoutes from "./user/user.routes.js";
 import postRoutes from "./post/post.routes.js";
 // const storeqRoutes = require("./storeq/storeq.routes");
@@ -8,9 +8,9 @@ import fireboardRoutes from "./fireboard/fireboard.routes.js";
 import liquidRoutes from "./liquid/liquid.routes.js";
 import notionRoutes from "./notion/notion.routes.js";
 import dynamicRoutes from "./dynamic-routes/dynamic-routes.routes.js";
-import ModulesModel from "../modules/modules/modules.model.js";
-import TagsModel from "../modules/tags/tags.model.js";
-import tagsMiddleware from "../modules/tags/tags.middleware.js";
+import ModulesModel from "../../modules/modules/modules.model.js";
+import TagsModel from "../../modules/tags/tags.model.js";
+import tagsMiddleware from "../../modules/tags/tags.middleware.js";
 import * as controller from "./api.controller.js";
 
 const router = Router();

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import _ from "lodash";
 import { getKeysBasedOnSource } from "./products.js";
-import FireboardProjectsModel from "../api/fireboard/fireboard.project.model.js";
+import FireboardProjectsModel from "../api/v1/fireboard/fireboard.project.model.js";
 import TagsModel from "../modules/tags/tags.model.js";
 import ModulesModel from "../modules/modules/modules.model.js";
 

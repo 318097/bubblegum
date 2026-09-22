@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { transparent, protectedRoute } from "../../utils/authentication.js";
+import { transparent, protectedRoute } from "../../../utils/authentication.js";
 import * as controller from "./post.controller.js";
 
 const router = Router();

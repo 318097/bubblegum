@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { protectedRoute } from "../utils/authentication.js";
+import { protectedRoute } from "../../utils/authentication.js";
 import * as controller from "./auth.controller.js";
 
 const router = Router();

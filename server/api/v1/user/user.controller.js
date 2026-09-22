@@ -4,9 +4,9 @@ import {
   processId,
   generateDate,
   extractUserData,
-} from "../../utils/common.js";
+} from "../../../utils/common.js";
 import Model from "./user.model.js";
-import { getKeysBasedOnSource } from "../../utils/products.js";
+import { getKeysBasedOnSource } from "../../../utils/products.js";
 
 const { ObjectId } = mongoose.Types;
 

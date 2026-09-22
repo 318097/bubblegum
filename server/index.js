@@ -5,8 +5,8 @@ import { Server as HttpServer } from "http";
 import connectToDb from "./db.js";
 import config from "./config.js";
 import logger from "./utils/logger.js";
-import authRoutes from "./auth/auth.routes.js";
-import api from "./api/index.js";
+import authRoutes from "./auth/v1/auth.routes.js";
+import api from "./api/v1/index.js";
 import middlewares from "./middleware.js";
 import { connectToRedis } from "./redis.js";
 

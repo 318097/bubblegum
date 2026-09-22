@@ -3,7 +3,7 @@ import {
   transparent,
   temporaryAccess,
   protectedRoute,
-} from "../../utils/authentication.js";
+} from "../../../utils/authentication.js";
 import * as controller from "./liquid.controller.js";
 import photosRouter from "./photos/photos.routes.js";
 import linksRouter from "./links/links.routes.js";

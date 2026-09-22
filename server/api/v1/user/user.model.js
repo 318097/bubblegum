@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { PRODUCT_LIST } from "../../utils/products.js";
-import constants from "../../constants.js";
+import { PRODUCT_LIST } from "../../../utils/products.js";
+import constants from "../../../constants.js";
 import { encryptPassword, comparePassword } from "./user.utils.js";
 
 const UserSchema = new mongoose.Schema(
