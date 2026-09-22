@@ -7,6 +7,8 @@
   "scripts": {
     "start": "node server/index.js",
     "serve": "nodemon server/index.js",
+    "serve:bubblegum": "nodemon server/index.js",
+    "serve:circle": "SOURCE=CIRCLE nodemon server/index.js",
     "lint": "eslint",
     "lint:err": "eslint --quiet",
     "format": "prettier --write .",

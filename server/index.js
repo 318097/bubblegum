@@ -6,12 +6,16 @@ import connectToDb from "./db.js";
 import config from "./config.js";
 import logger from "./utils/logger.js";
 import authRoutes from "./auth/v1/auth.routes.js";
+import authRoutesV2 from "./auth/v2/auth.routes.js";
 import api from "./api/v1/index.js";
+import apiV2 from "./api/v2/index.js";
 import middlewares from "./middleware.js";
 import { connectToRedis } from "./redis.js";
 
 const app = express();
 const http = new HttpServer(app);
+
+console.log("Source:", process.env.SOURCE);
 
 logger.system(
   `Server started in '${config.NODE_ENV}' mode ${config.IS_PROD ? "💀" : ""}`,
@@ -24,6 +28,10 @@ middlewares(app);
 
 app.use("/api/auth", authRoutes);
 app.use("/api", api);
+
+// v2 routes - Circle, Liquid, Fusion
+app.use("/api/auth/v2", authRoutesV2);
+app.use("/api/v2", apiV2);
 
 // app.get("/debug-sentry", function mainHandler(req, res) {
 //   throw new Error("[Test] Sentry error!");

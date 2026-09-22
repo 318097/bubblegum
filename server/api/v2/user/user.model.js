@@ -1,0 +1,71 @@
+import mongoose from "mongoose";
+import { PRODUCT_LIST } from "../../../utils/products.js";
+
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+      required: false,
+      unique: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    source: {
+      type: String,
+      enum: PRODUCT_LIST,
+      required: true,
+    },
+    // settings: Object,
+    uid: {
+      // Google UID
+      type: String,
+      default: "",
+      required: false,
+    },
+    photoURL: {
+      // Google Photo URL
+      type: String,
+      default: "",
+      required: false,
+    },
+    isAnonymous: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    location: {
+      type: Object,
+      default: {},
+      required: false,
+    },
+    geoCoordinates: {
+      type: Object,
+      default: {},
+      required: false,
+    },
+    displayLocation: {
+      type: String,
+      default: "",
+      required: false,
+    },
+    interests: {
+      type: [String],
+      default: [],
+    },
+  },
+  {
+    timestamps: true,
+    strict: true,
+  },
+);
+
+UserSchema.index({ geoCoordinates: "2dsphere" });
+
+export default mongoose.model("user", UserSchema);

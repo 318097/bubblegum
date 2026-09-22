@@ -1,0 +1,21 @@
+import { AlbumModel, FilesModel } from "./photos/photos.model.js";
+import { LynkCollectionModel, LynksModel } from "./links/links.model.js";
+import { AlertAndMsgModel, ActivitiesModel } from "./alerts/alerts.model.js";
+import { CircleModel } from "./circle/circle.model.js";
+import UserModel from "./user/user.model.js";
+import { EditablesModel, HabitsModel } from "./liquid.model.js";
+
+const modelEntityMap = {
+  alerts: AlertAndMsgModel,
+  activities: ActivitiesModel,
+  editables: EditablesModel,
+  links: LynkCollectionModel,
+  habits: HabitsModel,
+  photos: AlbumModel,
+  user: UserModel,
+  files: FilesModel,
+  lynks: LynksModel,
+  circle: CircleModel,
+};
+
+export default modelEntityMap;
