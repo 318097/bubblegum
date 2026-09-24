@@ -5,17 +5,13 @@ import { Server as HttpServer } from "http";
 import connectToDb from "./db.js";
 import config from "./config.js";
 import logger from "./utils/logger.js";
-import authRoutes from "./auth/v1/auth.routes.js";
-import authRoutesV2 from "./auth/v2/auth.routes.js";
-import api from "./api/v1/index.js";
-import apiV2 from "./api/v2/index.js";
 import middlewares from "./middleware.js";
 import { connectToRedis } from "./redis.js";
 
 const app = express();
 const http = new HttpServer(app);
 
-console.log("Source:", process.env.SOURCE);
+logger.system("Connecting to DB Source:", config.DB_SOURCE);
 
 logger.system(
   `Server started in '${config.NODE_ENV}' mode ${config.IS_PROD ? "💀" : ""}`,
@@ -26,12 +22,18 @@ await connectToRedis();
 
 middlewares(app);
 
-app.use("/api/auth", authRoutes);
-app.use("/api", api);
-
-// v2 routes - Circle, Liquid, Fusion
-app.use("/api/auth/v2", authRoutesV2);
-app.use("/api/v2", apiV2);
+if (config.DB_SOURCE === "CIRCLE") {
+  // v2 routes - Circle, Liquid, Fusion
+  const { default: authRoutesV2 } = await import("./auth/v2/auth.routes.js");
+  const { default: apiV2 } = await import("./api/v2/index.js");
+  app.use("/api/v2/auth", authRoutesV2);
+  app.use("/api/v2", apiV2);
+} else {
+  const { default: authRoutes } = await import("./auth/v1/auth.routes.js");
+  const { default: api } = await import("./api/v1/index.js");
+  app.use("/api/auth", authRoutes);
+  app.use("/api", api);
+}
 
 // app.get("/debug-sentry", function mainHandler(req, res) {
 //   throw new Error("[Test] Sentry error!");

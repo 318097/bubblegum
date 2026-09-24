@@ -2,8 +2,8 @@ import jwt from "jsonwebtoken";
 import { expressjwt } from "express-jwt";
 import _ from "lodash";
 import config from "../config.js";
-import User from "../api/v1/user/user.model.js";
 import { getAppBasedInfo } from "./common.js";
+import modelEntityMap from "../api/v2/models.js";
 
 const checkToken = expressjwt({
   secret: config.JWT,
@@ -37,7 +37,7 @@ const validateToken = (token) => {
   }
 };
 
-const getUser = (_id) => User.findById(_id).lean();
+const getUser = (_id) => modelEntityMap.user.findById(_id).lean();
 
 const getUserFromToken = async (token) => {
   const { _id } = validateToken(token) || {};
@@ -72,7 +72,9 @@ const transparent = async (req, res, next) => {
 };
 
 const temporaryAccess = async (req, res, next) => {
-  req.user = await User.findOne({ email: "318097@gmail.com" }).lean();
+  req.user = await modelEntityMap.user
+    .findOne({ email: "318097@gmail.com" })
+    .lean();
   next();
 };
 

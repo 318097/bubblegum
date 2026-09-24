@@ -40,6 +40,16 @@ const UserSchema = new mongoose.Schema(
       default: false,
       required: false,
     },
+    isProfileComplete: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    radiusKm: {
+      type: Number,
+      default: 10,
+      required: false,
+    },
     location: {
       type: Object,
       default: {},
@@ -68,4 +78,4 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.index({ geoCoordinates: "2dsphere" });
 
-export default mongoose.model("user", UserSchema);
+export default mongoose.model("user_v2", UserSchema);

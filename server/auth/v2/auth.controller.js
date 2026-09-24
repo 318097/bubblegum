@@ -1,6 +1,6 @@
 import admin from "firebase-admin";
 import fusionServiceAccount from "../../../secrets/fusion-97e8c-firebase-adminsdk-qjtt8-a6765111ba.json" with { type: "json" };
-import User from "../../api/v1/user/user.model.js";
+import User from "../../api/v2/user/user.model.js";
 import { signToken } from "../../utils/authentication.js";
 import { extractUserData } from "../../utils/common.js";
 import { startSession, endSession } from "../../utils/session.js";
@@ -41,6 +41,7 @@ const authenticateWithGoogle = async (req, res) => {
         username: email,
         photoURL,
         isAnonymous,
+        source: req.source,
       };
       user = await User.create(newUser);
     }
@@ -56,14 +57,18 @@ const authenticateWithGoogle = async (req, res) => {
 
     res.send({ token, ...user });
   } catch (err) {
-    res.status(401).json({ success: false, error: "Invalid token" });
+    console.log(err);
+    res.status(401).json({ success: false, error: err.message });
   }
 };
 
 const checkAccountStatus = async (req, res) => {
-  await verifyAccountStatus(req);
-  const user = await extractUserData(req);
-  res.send({ ...user, token: req.token });
+  // await verifyAccountStatus(req);
+  try {
+    res.send({ ...req.user, token: req.token });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const logout = async (req, res) => {

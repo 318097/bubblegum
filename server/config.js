@@ -28,12 +28,18 @@ const DB_CONNECTION_URL = IS_PROD
     ? STAGING_DB_URL
     : "mongodb://localhost/bubblegum";
 
+const DB_SOURCE = process.env.SOURCE || "BUBBLEGUM";
+
 const config = {
   NODE_ENV,
   IS_PROD,
   PORT: PORT || 7000,
   JWT: JWT || "bubblegum-server",
-  DB_URL: DB_CONNECTION_URL,
+  DB_URL:
+    DB_SOURCE === "CIRCLE"
+      ? DB_CONNECTION_URL.replace("/bubblegum", "/circle")
+      : DB_CONNECTION_URL,
+  DB_SOURCE,
   CLOUDINARY_API_SECRET,
   MIXPANEL_TOKEN,
   MEDIUM_RSS_FEED: "https://medium.com/feed/@ml318097",
