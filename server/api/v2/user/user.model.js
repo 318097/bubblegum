@@ -51,16 +51,18 @@ const UserSchema = new mongoose.Schema(
       required: false,
     },
     location: {
+      // browser location object & geocode (reverse geocoding)
       type: Object,
       default: {},
       required: false,
     },
     geoCoordinates: {
+      // mongodb geospatial coordinates (longitude, latitude)
       type: Object,
       default: {},
       required: false,
     },
-    displayLocation: {
+    locationLabel: {
       type: String,
       default: "",
       required: false,

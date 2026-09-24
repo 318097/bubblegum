@@ -9,7 +9,7 @@ const USER_PROJECT = {
   email: 1,
   username: 1,
   photoURL: 1,
-  displayLocation: 1,
+  locationLabel: 1,
   contact: 1,
   interests: 1,
 };
