@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import constants from "../../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
 
 const AlbumsSchema = new mongoose.Schema(
   {
-    userId: { type: ObjectId, ref: "user", required: true },
+    userId: { type: ObjectId, ref: constants.V2_MODELS.USER, required: true },
     label: {
       type: String,
       required: true,
@@ -41,8 +42,8 @@ const AlbumsSchema = new mongoose.Schema(
 
 const FilesSchema = new mongoose.Schema(
   {
-    userId: { type: ObjectId, ref: "user", required: true },
-    albumId: { type: ObjectId, ref: "album", required: true },
+    userId: { type: ObjectId, ref: constants.V2_MODELS.USER, required: true },
+    albumId: { type: ObjectId, ref: constants.V2_MODELS.ALBUM, required: true },
     filename: {
       type: String,
       required: true,
@@ -85,7 +86,7 @@ const FilesSchema = new mongoose.Schema(
   },
 );
 
-const AlbumModel = mongoose.model("album", AlbumsSchema);
-const FilesModel = mongoose.model("files", FilesSchema);
+const AlbumModel = mongoose.model(constants.V2_MODELS.ALBUM, AlbumsSchema);
+const FilesModel = mongoose.model(constants.V2_MODELS.FILES, FilesSchema);
 
 export { AlbumModel, FilesModel };

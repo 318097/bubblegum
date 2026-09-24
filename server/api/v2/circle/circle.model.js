@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import constants from "../../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
 
 const CircleSchema = new mongoose.Schema(
   {
-    userId: { type: ObjectId, ref: "user", required: true },
+    userId: { type: ObjectId, ref: constants.V2_MODELS.USER, required: true },
     name: {
       type: String,
       required: true,
@@ -179,6 +180,6 @@ const CircleSchema = new mongoose.Schema(
   },
 );
 
-const CircleModel = mongoose.model("circle", CircleSchema);
+const CircleModel = mongoose.model(constants.V2_MODELS.CIRCLE, CircleSchema);
 
 export { CircleModel };

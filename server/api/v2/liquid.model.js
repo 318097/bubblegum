@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import constants from "../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
 
 const EditablesSchema = new mongoose.Schema(
   {
-    userId: { type: ObjectId, ref: "user", required: true },
+    userId: { type: ObjectId, ref: constants.V2_MODELS.USER, required: true },
     label: {
       type: String,
       // required: true,
@@ -38,7 +39,7 @@ const EditablesSchema = new mongoose.Schema(
 
 const DynamicSchema = new mongoose.Schema(
   {
-    userId: { type: ObjectId, ref: "user", required: true },
+    userId: { type: ObjectId, ref: constants.V2_MODELS.USER, required: true },
     label: {
       type: String,
       // required: true,
@@ -80,7 +81,7 @@ const DynamicSchema = new mongoose.Schema(
 
 const HabitsSchema = new mongoose.Schema(
   {
-    userId: { type: ObjectId, ref: "user", required: true },
+    userId: { type: ObjectId, ref: constants.V2_MODELS.USER, required: true },
     label: {
       type: String,
       // required: true,
@@ -120,7 +121,10 @@ const HabitsSchema = new mongoose.Schema(
   },
 );
 
-const EditablesModel = mongoose.model("editables", EditablesSchema);
-const HabitsModel = mongoose.model("habits", HabitsSchema);
+const EditablesModel = mongoose.model(
+  constants.V2_MODELS.EDITABLES,
+  EditablesSchema,
+);
+const HabitsModel = mongoose.model(constants.V2_MODELS.HABITS, HabitsSchema);
 
 export { EditablesModel, HabitsModel };

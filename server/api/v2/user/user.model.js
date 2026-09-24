@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import constants from "../../../constants.js";
 import { PRODUCT_LIST } from "../../../utils/products.js";
 
 const UserSchema = new mongoose.Schema(
@@ -80,4 +81,4 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.index({ geoCoordinates: "2dsphere" });
 
-export default mongoose.model("user_v2", UserSchema);
+export default mongoose.model(constants.V2_MODELS.USER, UserSchema);

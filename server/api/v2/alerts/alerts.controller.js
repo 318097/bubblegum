@@ -1,6 +1,5 @@
 import modelEntityMap from "../models.js";
 import _ from "lodash";
-import mongoose from "mongoose";
 
 const USER_PROJECT = {
   _id: 1,
@@ -60,7 +59,7 @@ async function getAlertsFeed(req, res) {
         },
         {
           $lookup: {
-            from: "users",
+            from: modelEntityMap["user"].collection.name,
             localField: "userId",
             foreignField: "_id",
             as: "user",
@@ -88,7 +87,7 @@ async function getAlertsFeed(req, res) {
         },
         {
           $lookup: {
-            from: "users",
+            from: modelEntityMap["user"].collection.name,
             localField: "userId",
             foreignField: "_id",
             as: "user",
@@ -124,7 +123,7 @@ async function getAlertDetailsById(req, res) {
     },
     {
       $lookup: {
-        from: "alert-and-msges",
+        from: modelEntityMap["alerts"].collection.name,
         let: { userId: "$_id" },
         pipeline: [
           {
@@ -154,7 +153,7 @@ async function getAlertDetailsById(req, res) {
     { $match: { ...aggregation, type: "message" } },
     {
       $lookup: {
-        from: "users",
+        from: modelEntityMap["user"].collection.name,
         localField: "userId",
         foreignField: "_id",
         as: "user",
@@ -187,7 +186,7 @@ async function getAlertDetailsById(req, res) {
     },
     {
       $lookup: {
-        from: "users",
+        from: modelEntityMap["user"].collection.name,
         localField: "userId",
         foreignField: "_id",
         as: "user",

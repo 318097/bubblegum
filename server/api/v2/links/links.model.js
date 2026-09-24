@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import constants from "../../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
 
 const LynkCollectionSchema = new mongoose.Schema(
   {
-    userId: { type: ObjectId, ref: "user", required: true },
+    userId: { type: ObjectId, ref: constants.V2_MODELS.USER, required: true },
     label: {
       type: String,
       unique: true,
@@ -31,8 +32,12 @@ const LynkCollectionSchema = new mongoose.Schema(
 
 const LynksSchema = new mongoose.Schema(
   {
-    userId: { type: ObjectId, ref: "user", required: true },
-    collectionId: { type: ObjectId, ref: "lynk", required: true },
+    userId: { type: ObjectId, ref: constants.V2_MODELS.USER, required: true },
+    collectionId: {
+      type: ObjectId,
+      ref: constants.V2_MODELS.LYNK_COLLECTION,
+      required: true,
+    },
     slug: {
       type: String,
       required: true,
@@ -60,7 +65,10 @@ const LynksSchema = new mongoose.Schema(
   },
 );
 
-const LynkCollectionModel = mongoose.model("lynk", LynkCollectionSchema);
-const LynksModel = mongoose.model("links", LynksSchema);
+const LynkCollectionModel = mongoose.model(
+  constants.V2_MODELS.LYNK_COLLECTION,
+  LynkCollectionSchema,
+);
+const LynksModel = mongoose.model(constants.V2_MODELS.LYNKS, LynksSchema);
 
 export { LynkCollectionModel, LynksModel };

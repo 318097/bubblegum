@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import constants from "../../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
 
 const AlertsAndMsgesSchema = new mongoose.Schema(
   {
-    userId: { type: ObjectId, ref: "user", required: true },
+    userId: { type: ObjectId, ref: constants.V2_MODELS.USER, required: true },
     label: {
       type: String,
       // required: true,
@@ -59,7 +60,7 @@ const AlertsAndMsgesSchema = new mongoose.Schema(
 
 const ActivitiesSchema = new mongoose.Schema(
   {
-    userId: { type: ObjectId, ref: "user", required: true },
+    userId: { type: ObjectId, ref: constants.V2_MODELS.USER, required: true },
     label: {
       type: String,
       // required: true,
@@ -113,9 +114,12 @@ const ActivitiesSchema = new mongoose.Schema(
 );
 
 const AlertAndMsgModel = mongoose.model(
-  "alert-and-msges",
+  constants.V2_MODELS.ALERTS,
   AlertsAndMsgesSchema,
 );
-const ActivitiesModel = mongoose.model("activities", ActivitiesSchema);
+const ActivitiesModel = mongoose.model(
+  constants.V2_MODELS.ACTIVITIES,
+  ActivitiesSchema,
+);
 
 export { AlertAndMsgModel, ActivitiesModel };
