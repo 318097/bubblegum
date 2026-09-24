@@ -1,17 +1,6 @@
 import _ from "lodash";
 import mongoose from "mongoose";
-import { CircleModel } from "./circle.model.js";
-import BusinessPostModel from "./business-post.model.js";
-import BusinessServiceModel from "./business-service.model.js";
-import BusinessOfferModel from "./business-offer.model.js";
-import BusinessFaqModel from "./business-faq.model.js";
-
-const CONTENT_MODELS = {
-  posts: BusinessPostModel,
-  services: BusinessServiceModel,
-  offers: BusinessOfferModel,
-  faqs: BusinessFaqModel,
-};
+import modelEntityMap from "../models.js";
 
 const isId = (value) => mongoose.Types.ObjectId.isValid(value);
 const toId = (value) => new mongoose.Types.ObjectId(value);
@@ -23,7 +12,7 @@ const getBusinessQuery = (businessId, extra = {}) => ({
 });
 
 const getContentModel = (req, res) => {
-  const model = CONTENT_MODELS[req.params.resourceType];
+  const model = modelEntityMap["businessContent"][req.params.resourceType];
   if (!model) {
     res.status(404).send({ error: "BUSINESS_RESOURCE_NOT_FOUND" });
     return null;
@@ -32,9 +21,9 @@ const getContentModel = (req, res) => {
 };
 
 const getBusinessOr404 = async (req, res, extra = {}) => {
-  const business = await CircleModel.findOne(
-    getBusinessQuery(req.params.businessId, extra),
-  ).lean();
+  const business = await modelEntityMap["circle"]
+    .findOne(getBusinessQuery(req.params.businessId, extra))
+    .lean();
   if (!business) res.status(404).send({ error: "BUSINESS_NOT_FOUND" });
   return business;
 };

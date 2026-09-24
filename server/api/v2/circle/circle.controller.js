@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { CircleModel } from "./circle.model.js";
+import modelEntityMap from "../models.js";
 import { getKey, processId, generateSlug } from "../../../utils/common.js";
 
 const USER_PROJECT = {
@@ -55,32 +55,37 @@ async function getExploreFeed(req, res) {
   // if (req.userId) aggregation.userId = { $ne: req.userId };
 
   const [circles, count] = await Promise.all([
-    CircleModel.find(aggregation)
+    modelEntityMap["circle"]
+      .find(aggregation)
       .sort(sort)
       .skip((page - 1) * limit)
       .limit(limit)
       .populate("userId", USER_PROJECT)
       .lean(),
-    CircleModel.countDocuments(aggregation),
+    modelEntityMap["circle"].countDocuments(aggregation),
   ]);
 
   res.send(circles);
 }
 
 async function getMyBusinessProfile(req, res) {
-  const myBusinessProfiles = await CircleModel.find({
-    userId: req.user._id,
-  }).lean();
+  const myBusinessProfiles = await modelEntityMap["circle"]
+    .find({
+      userId: req.user._id,
+    })
+    .lean();
 
   res.send(myBusinessProfiles ?? []);
 }
 
 async function getMyBusinessProfileById(req, res) {
   const { id } = req.params;
-  const business = await CircleModel.findOne({
-    userId: req.user._id,
-    _id: id,
-  }).lean();
+  const business = await modelEntityMap["circle"]
+    .findOne({
+      userId: req.user._id,
+      _id: id,
+    })
+    .lean();
 
   res.send(business);
 }
@@ -90,10 +95,11 @@ async function getBusinessById(req, res) {
   const { businessId } = req.params;
   const key = getKey(businessId);
 
-  const circle = await CircleModel.findOne({
-    [key]: processId(businessId),
-    deleted: false,
-  })
+  const circle = await modelEntityMap["circle"]
+    .findOne({
+      [key]: processId(businessId),
+      deleted: false,
+    })
     .populate("userId", USER_PROJECT)
     .lean();
 
@@ -106,7 +112,7 @@ async function createBusiness(req, res) {
   const { _id: userId } = req.user;
   const { name } = req.body;
 
-  const circle = await CircleModel.create({
+  const circle = await modelEntityMap["circle"].create({
     ..._.omit(req.body, ["_id", "userId", "deleted", "archived"]),
     userId,
     slug: generateSlug({ title: name }),
@@ -119,7 +125,7 @@ async function updateBusiness(req, res) {
   const { businessId } = req.params;
   const { _id: userId } = req.user;
 
-  const circle = await CircleModel.findOne({
+  const circle = await modelEntityMap["circle"].findOne({
     _id: businessId,
     userId,
   });
@@ -129,7 +135,7 @@ async function updateBusiness(req, res) {
   if (updates.name && updates.name !== circle.name)
     updates.slug = generateSlug({ title: updates.name, prevSlug: circle.slug });
 
-  const result = await CircleModel.findOneAndUpdate(
+  const result = await modelEntityMap["circle"].findOneAndUpdate(
     { _id: businessId, userId },
     { $set: updates },
     { new: true },
@@ -142,7 +148,7 @@ async function deleteBusiness(req, res) {
   const { businessId } = req.params;
   const { _id: userId } = req.user;
 
-  const result = await CircleModel.findOneAndUpdate(
+  const result = await modelEntityMap["circle"].findOneAndUpdate(
     { _id: businessId, userId },
     { $set: { deleted: true } },
     { new: true },
