@@ -3,6 +3,11 @@ import constants from "../../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
 
+const OpeningRangeSchema = new mongoose.Schema(
+  { open: String, close: String },
+  { _id: false },
+);
+
 const CircleSchema = new mongoose.Schema(
   {
     userId: { type: ObjectId, ref: constants.V2_MODELS.USER, required: true },
@@ -20,22 +25,6 @@ const CircleSchema = new mongoose.Schema(
     description: {
       type: String,
       default: "",
-    },
-    businessType: {
-      type: String,
-      enum: [
-        "restaurant",
-        "cafe",
-        "retail",
-        "salon",
-        "spa",
-        "clinic",
-        "gym",
-        "service",
-        "hotel",
-        "other",
-      ],
-      default: "other",
     },
     tags: {
       type: [String],
@@ -55,7 +44,7 @@ const CircleSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    socialLinks: {
+    links: {
       instagram: { type: String, default: "" },
       facebook: { type: String, default: "" },
       linkedin: { type: String, default: "" },
@@ -71,29 +60,25 @@ const CircleSchema = new mongoose.Schema(
       postalCode: { type: String, default: "" },
       formattedAddress: { type: String, default: "" },
     },
-    location: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        default: "Point",
-      },
-      coordinates: {
-        type: [Number],
-        default: [0, 0],
-      },
-    },
-    logo: {
-      type: String,
-      default: "",
-    },
-    coverImage: {
-      type: String,
-      default: "",
-    },
-    verified: {
-      type: Boolean,
-      default: false,
-    },
+    // location: {
+    //   type: {
+    //     type: String,
+    //     enum: ["Point"],
+    //     default: "Point",
+    //   },
+    //   coordinates: {
+    //     type: [Number],
+    //     default: [0, 0],
+    //   },
+    // },
+    // logo: {
+    //   type: String,
+    //   default: "",
+    // },
+    // coverImage: {
+    //   type: String,
+    //   default: "",
+    // },
     archived: {
       type: Boolean,
       default: false,
@@ -102,7 +87,6 @@ const CircleSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
     // later
     rating: {
       type: Number,
@@ -110,68 +94,21 @@ const CircleSchema = new mongoose.Schema(
       min: 0,
       max: 5,
     },
-    reviewCount: {
-      type: Number,
-      default: 0,
-      min: 0,
+    // Per day, one or more { open, close } "HH:mm" ranges (split shifts);
+    // an empty array means closed. Matches circle's DEFAULT_OPENING_HOURS.
+    hours: {
+      monday: { type: [OpeningRangeSchema], default: undefined },
+      tuesday: { type: [OpeningRangeSchema], default: undefined },
+      wednesday: { type: [OpeningRangeSchema], default: undefined },
+      thursday: { type: [OpeningRangeSchema], default: undefined },
+      friday: { type: [OpeningRangeSchema], default: undefined },
+      saturday: { type: [OpeningRangeSchema], default: undefined },
+      sunday: { type: [OpeningRangeSchema], default: undefined },
     },
-    likes: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    followers: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    featured: {
-      type: Boolean,
-      default: false,
-    },
-    images: {
-      type: [String],
-      default: [],
-    },
-    workingHours: {
-      monday: {
-        opening: { type: String, default: "" },
-        closing: { type: String, default: "" },
-      },
-      tuesday: {
-        opening: { type: String, default: "" },
-        closing: { type: String, default: "" },
-      },
-      wednesday: {
-        opening: { type: String, default: "" },
-        closing: { type: String, default: "" },
-      },
-      thursday: {
-        opening: { type: String, default: "" },
-        closing: { type: String, default: "" },
-      },
-      friday: {
-        opening: { type: String, default: "" },
-        closing: { type: String, default: "" },
-      },
-      saturday: {
-        opening: { type: String, default: "" },
-        closing: { type: String, default: "" },
-      },
-      sunday: {
-        opening: { type: String, default: "" },
-        closing: { type: String, default: "" },
-      },
-    },
-    currentStatus: {
+    status: {
       type: String,
-      enum: ["open", "closed", "busy", "unknown", "unavailable"],
+      // enum: ["open", "closed", "busy", "unknown", "unavailable"],
       default: "unknown",
-    },
-    category: {
-      type: String,
-      trim: true,
-      default: "",
     },
   },
   {

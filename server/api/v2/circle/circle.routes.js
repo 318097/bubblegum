@@ -11,7 +11,7 @@ router.get("/me/businesses", controller.getMyBusinessProfile);
 router.get("/me/businesses/:id", controller.getMyBusinessProfileById);
 
 router.get("/businesses/:businessId", controller.getBusinessById);
-router.post("/businesses/:businessId", controller.createBusiness);
+router.post("/businesses/me", controller.createBusiness);
 router.put("/businesses/:businessId", controller.updateBusiness);
 router.delete("/businesses/:businessId", controller.deleteBusiness);
 
