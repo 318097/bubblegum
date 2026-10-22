@@ -33,6 +33,7 @@ const colorize =
 const logStyle = colorize("", ""); // Default color for logs
 const errorStyle = colorize("\u001b[31m", "\u001b[0m"); // Red color for errors
 const infoStyle = colorize("\u001b[34m", "\u001b[0m"); // Blue color for info
+const warnStyle = colorize("\u001b[33m", "\u001b[0m"); // Yellow color for warnings
 const systemStyle = colorize("\u001b[32m", "\u001b[0m"); // Green color for system messages
 const errorPrefix = errorStyle("[ERROR] ");
 const fatalPrefix = errorStyle("[FATAL] ");
@@ -41,6 +42,7 @@ const logger = {
   log: (...args) => console.log(logStyle("[LOG] ", ...args)),
   error: (...error) => console.error(errorPrefix, ...error),
   info: (...info) => console.info(infoStyle("[INFO] ", ...info)),
+  warn: (...warn) => console.warn(warnStyle("[WARN] ", ...warn)),
   system: (...args) => console.log(systemStyle("[SYSTEM] ", ...args, "✅")),
   fatal: (...error) => console.error(fatalPrefix, ...error, "❌"),
 };

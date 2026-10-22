@@ -3,6 +3,7 @@ import config from "../../../config.js";
 import logger from "../../../utils/logger.js";
 import { addToRedis, getFromRedis } from "../../../redis.js";
 import { fetchDataFromNotion, generateContent } from "./helpers.js";
+import unfurl from "../../../utils/unfurl.js";
 
 async function getLiquidTech(req, res) {
   try {
@@ -247,9 +248,16 @@ async function getTechSnippets(req, res) {
       },
     );
 
-    const { html, markdown } = generateContent(parsed, "tech-snippet");
+    const withPreviews = await Promise.all(
+      parsed.map(async (item) => ({
+        ...item,
+        preview: item.url ? await unfurl(item.url) : null,
+      })),
+    );
 
-    const cleanedData = parsed.map((item) => {
+    const { html, markdown } = generateContent(withPreviews, "tech-snippet");
+
+    const cleanedData = withPreviews.map((item) => {
       return _.pick(item, [
         "title",
         "url",
@@ -259,6 +267,7 @@ async function getTechSnippets(req, res) {
         "tags",
         "social media id",
         "rank",
+        "preview",
       ]);
     });
 

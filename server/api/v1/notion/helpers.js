@@ -1,4 +1,5 @@
 import { Client } from "@notionhq/client";
+import normalizeUrl from "normalize-url";
 import config from "../../../config.js";
 import logger from "../../../utils/logger.js";
 import _ from "lodash";
@@ -6,6 +7,26 @@ import _ from "lodash";
 const notion = new Client({
   auth: config.NOTION_AUTH_KEY,
 });
+
+// Link card for an unfurled URL. Everything in `preview` comes from a third-party
+// page and ends up in innerHTML, so all of it is escaped.
+const generateLinkPreview = (url, preview) => {
+  const { title, description, image, favicon, domain } = preview;
+  const e = _.escape;
+
+  return `
+    <a class="link-preview" href="${e(url)}" target="_blank" rel="noopener noreferrer">
+      ${image ? `<img class="link-preview-image" src="${e(image)}" alt="" />` : ""}
+      <div class="link-preview-body">
+        <div class="link-preview-site">
+          ${favicon ? `<img src="${e(favicon)}" alt="" />` : ""}
+          <span>${e(domain)}</span>
+        </div>
+        <div class="link-preview-title">${e(title)}</div>
+        ${description ? `<div class="link-preview-description">${e(description)}</div>` : ""}
+      </div>
+    </a>`;
+};
 
 const generateContent = (data, contentType) => {
   let htmlOutput = "";
@@ -16,7 +37,7 @@ const generateContent = (data, contentType) => {
       case "vocab": {
         htmlOutput += `
       <div class="card">
-        <h6>Word of the day</h6>
+        <h6>Word</h6>
         <h4>${_.capitalize(item["name"])}</h4>
         <h6 style="margin-top: 0.8em;">Definition</h6>
         <p>${item["description"]}</p>
@@ -25,7 +46,7 @@ const generateContent = (data, contentType) => {
       </div>
     `;
         markdownOutput += `
-###### Word of the day
+###### Word
 ## ${_.capitalize(item["name"])}
 ---
 ###### Definition
@@ -37,11 +58,21 @@ const generateContent = (data, contentType) => {
         break;
       }
       case "tech-snippet": {
+        const displayUrl = normalizeUrl(item["url"], {
+          stripProtocol: true,
+          stripWWW: true,
+        });
+        const items = [item["L0"], ...(item["tags"] || [])].filter(Boolean);
         htmlOutput += `
           <div class="card">
+            <div class='header'>${items.map((tag) => `<span class='tag'>${tag}</span>`).join(" · ")}</div>
             <h4>${_.capitalize(item["title"])}</h4>
             ${item["description"] ? `<p>${item["description"]}</p>` : ""}
-            <a href="${item["url"]}" target="_blank">${item["url"]}</a>
+            ${
+              item["preview"]
+                ? generateLinkPreview(item["url"], item["preview"])
+                : `<a href="${item["url"]}" target="_blank">${displayUrl}</a>`
+            }
           </div>
         `;
         break;
