@@ -1,11 +1,13 @@
 import { Router } from "express";
 import userRoutes from "./user/user.routes.js";
 import * as controller from "./api.controller.js";
-import { transparent, protectedRoute } from "../../utils/authentication.js";
+import { authV2 } from "../../utils/authentication.js";
 import photosRouter from "./photos/photos.routes.js";
 import linksRouter from "./links/links.routes.js";
 import alertRouter from "./alerts/alerts.routes.js";
 import circleRouter from "./circle/circle.routes.js";
+
+const { transparent, protectedRoute } = authV2;
 
 const router = Router();
 

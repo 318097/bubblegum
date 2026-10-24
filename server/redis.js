@@ -13,37 +13,61 @@ const connectToRedis = async () => {
   }
   if (redis) return;
 
-  try {
-    redis = createClient(config.REDIS_CONFIG);
-    await redis.connect();
-  } catch (err) {
-    logger.error("[Redis]", err);
-    redis = null; // Reset on connection failure
-  }
+  const client = createClient({
+    ...config.REDIS_CONFIG,
+    // fail commands while disconnected instead of queueing them until a
+    // reconnect, which would hold the request until the function times out
+    disableOfflineQueue: true,
+    socket: {
+      ...config.REDIS_CONFIG.socket,
+      // first connect failed: give up (otherwise `connect` retries forever and
+      // startup never finishes) and run without cache. Once connected, keep
+      // reconnecting with backoff.
+      reconnectStrategy: (retries) =>
+        redis ? Math.min(2 ** retries * 50, 2000) : false,
+    },
+  });
+  client.on("error", (err) => logger.error("[Redis]", err.message));
 
-  redis.on("error", (err) => logger.error("[Redis]", err));
+  try {
+    await client.connect();
+    redis = client;
+  } catch (err) {
+    logger.error("[Redis] unavailable, running without cache", err.message);
+  }
 };
 
+// Cache is best-effort: when Redis is down or a command fails, reads are a
+// cache miss and writes are skipped.
 const addToRedis = async (key, value, req, expiryInSeconds = REDIS_EXPIRY) => {
-  if (!redis) {
+  if (!redis?.isReady) {
     logger.warn("Redis not connected, skipping addToRedis");
     return;
   }
   const finalKey = generateKey(key, req);
   const finalValue = typeof value === "string" ? value : JSON.stringify(value);
-  await redis.set(finalKey, finalValue, {
-    EX: expiryInSeconds,
-  });
+  try {
+    await redis.set(finalKey, finalValue, {
+      EX: expiryInSeconds,
+    });
+  } catch (err) {
+    logger.error("[Redis] addToRedis", err.message);
+  }
 };
 
 const getFromRedis = async (key, req) => {
-  if (!redis) {
+  if (!redis?.isReady) {
     logger.warn("Redis not connected, skipping getFromRedis");
     return null;
   }
   const finalKey = generateKey(key, req);
-  const value = await redis.get(finalKey);
-  return value ? JSON.parse(value) : null;
+  try {
+    const value = await redis.get(finalKey);
+    return value ? JSON.parse(value) : null;
+  } catch (err) {
+    logger.error("[Redis] getFromRedis", err.message);
+    return null;
+  }
 };
 
 const generateKey = (key, req) => {

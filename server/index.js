@@ -5,13 +5,15 @@ import { Server as HttpServer } from "http";
 import connectToDb from "./db.js";
 import config from "./config.js";
 import logger from "./utils/logger.js";
+import authRoutes from "./auth/v1/auth.routes.js";
+import api from "./api/v1/index.js";
+import authRoutesV2 from "./auth/v2/auth.routes.js";
+import apiV2 from "./api/v2/index.js";
 import middlewares from "./middleware.js";
 import { connectToRedis } from "./redis.js";
 
 const app = express();
 const http = new HttpServer(app);
-
-logger.system("Connecting to DB Source:", config.DB_SOURCE);
 
 logger.system(
   `Server started in '${config.NODE_ENV}' mode ${config.IS_PROD ? "💀" : ""}`,
@@ -22,18 +24,12 @@ await connectToRedis();
 
 middlewares(app);
 
-if (config.DB_SOURCE === "CIRCLE") {
-  // v2 routes - Circle, Liquid, Fusion
-  const { default: authRoutesV2 } = await import("./auth/v2/auth.routes.js");
-  const { default: apiV2 } = await import("./api/v2/index.js");
-  app.use("/api/v2/auth", authRoutesV2);
-  app.use("/api/v2", apiV2);
-} else {
-  const { default: authRoutes } = await import("./auth/v1/auth.routes.js");
-  const { default: api } = await import("./api/v1/index.js");
-  app.use("/api/auth", authRoutes);
-  app.use("/api", api);
-}
+// v2 (Circle, Liquid, Fusion - circle db) is mounted before v1 so `/api/v2/*`
+// never reaches the v1 `/api` router.
+app.use("/api/v2/auth", authRoutesV2);
+app.use("/api/v2", apiV2);
+app.use("/api/auth", authRoutes);
+app.use("/api", api);
 
 // app.get("/debug-sentry", function mainHandler(req, res) {
 //   throw new Error("[Test] Sentry error!");

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { circleDb } from "../../../db.js";
 import constants from "../../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
@@ -117,6 +118,6 @@ const CircleSchema = new mongoose.Schema(
   },
 );
 
-const CircleModel = mongoose.model(constants.V2_MODELS.CIRCLE, CircleSchema);
+const CircleModel = circleDb.model(constants.V2_MODELS.CIRCLE, CircleSchema);
 
 export { CircleModel };

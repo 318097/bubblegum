@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { circleDb } from "../../../db.js";
 import constants from "../../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
@@ -65,10 +66,10 @@ const LynksSchema = new mongoose.Schema(
   },
 );
 
-const LynkCollectionModel = mongoose.model(
+const LynkCollectionModel = circleDb.model(
   constants.V2_MODELS.LYNK_COLLECTION,
   LynkCollectionSchema,
 );
-const LynksModel = mongoose.model(constants.V2_MODELS.LYNKS, LynksSchema);
+const LynksModel = circleDb.model(constants.V2_MODELS.LYNKS, LynksSchema);
 
 export { LynkCollectionModel, LynksModel };

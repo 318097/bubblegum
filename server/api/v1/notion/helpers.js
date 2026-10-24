@@ -28,6 +28,15 @@ const generateLinkPreview = (url, preview) => {
     </a>`;
 };
 
+// Notion rows can have an empty or malformed url, which normalize-url throws on
+const toDisplayUrl = (url) => {
+  try {
+    return normalizeUrl(url, { stripProtocol: true, stripWWW: true });
+  } catch {
+    return url || "";
+  }
+};
+
 const generateContent = (data, contentType) => {
   let htmlOutput = "";
   let markdownOutput = "";
@@ -58,10 +67,7 @@ const generateContent = (data, contentType) => {
         break;
       }
       case "tech-snippet": {
-        const displayUrl = normalizeUrl(item["url"], {
-          stripProtocol: true,
-          stripWWW: true,
-        });
+        const displayUrl = toDisplayUrl(item["url"]);
         const items = [item["L0"], ...(item["tags"] || [])].filter(Boolean);
         htmlOutput += `
           <div class="card">

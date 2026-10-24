@@ -74,6 +74,7 @@ async function getLiquidTech(req, res) {
     res.send({ data: _.groupBy(_.sortBy(parsedContent, "subType"), "type") });
   } catch (err) {
     logger.error(err);
+    res.status(500).send(err.message);
   }
 }
 
@@ -122,6 +123,7 @@ async function getKeybindings(req, res) {
     res.send(response);
   } catch (err) {
     logger.error(err);
+    res.status(500).send(err.message);
   }
 }
 
@@ -191,6 +193,7 @@ async function getVocab(req, res) {
     res.send(response);
   } catch (err) {
     logger.error(err);
+    res.status(500).send(err.message);
   }
 }
 
@@ -284,6 +287,7 @@ async function getTechSnippets(req, res) {
     res.send(response);
   } catch (err) {
     logger.error(err);
+    res.status(500).send(err.message);
   }
 }
 

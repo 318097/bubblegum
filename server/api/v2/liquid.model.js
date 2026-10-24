@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { circleDb } from "../../db.js";
 import constants from "../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
@@ -121,10 +122,10 @@ const HabitsSchema = new mongoose.Schema(
   },
 );
 
-const EditablesModel = mongoose.model(
+const EditablesModel = circleDb.model(
   constants.V2_MODELS.EDITABLES,
   EditablesSchema,
 );
-const HabitsModel = mongoose.model(constants.V2_MODELS.HABITS, HabitsSchema);
+const HabitsModel = circleDb.model(constants.V2_MODELS.HABITS, HabitsSchema);
 
 export { EditablesModel, HabitsModel };

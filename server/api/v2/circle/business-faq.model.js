@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { circleDb } from "../../../db.js";
 import constants from "../../../constants.js";
 
 const BusinessFaqSchema = new mongoose.Schema(
@@ -18,7 +19,7 @@ const BusinessFaqSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export default mongoose.model(
+export default circleDb.model(
   constants.V2_MODELS.BUSINESS_FAQ,
   BusinessFaqSchema,
 );

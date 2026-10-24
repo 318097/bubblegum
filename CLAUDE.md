@@ -26,14 +26,15 @@ The server needs `DB_URL`/`STAGING_DB_URL` (MongoDB) and reads config from a `.e
 
 ### Routing layout
 
-- `server/index.js` is the entrypoint: connects to Mongo and Redis, wires global middleware, then mounts `server/auth/v1/auth.routes.js` at `/api/auth` and `server/api/v1/index.js` at `/api`.
-- Routes are versioned by directory (`server/auth/v1`, `server/api/v1`). Per the [CHANGELOG](CHANGELOG.md), existing endpoints stay on `v1`; any new product/endpoint should be added under a new `v2` folder rather than modified in place, so `v1` behavior stays stable for existing clients.
-- Each feature area under `server/api/v1/<feature>/` follows a consistent trio: `*.routes.js` (Router + `protectedRoute` where auth is required), `*.controller.js` (handlers), `*.model.js` (Mongoose schema). Some areas nest further (e.g. `liquid/` contains `circle/`, `links/`, `photos/`, `alerts/` as sub-products under the Liquid umbrella).
+- `server/index.js` is the entrypoint: connects to Mongo and Redis, wires global middleware, then mounts v2 (`server/auth/v2/auth.routes.js` at `/api/v2/auth`, `server/api/v2/index.js` at `/api/v2`) followed by v1 (`server/auth/v1/auth.routes.js` at `/api/auth`, `server/api/v1/index.js` at `/api`). One deployment serves both versions.
+- Routes are versioned by directory (`server/auth/v1`, `server/api/v1`, `server/auth/v2`, `server/api/v2`). Per the [CHANGELOG](CHANGELOG.md), existing endpoints stay on `v1`; next-gen products (Circle, Liquid, Fusion) are built under `v2` rather than modifying `v1` in place, so `v1` behavior stays stable for existing clients.
+- Each feature area under `server/api/<version>/<feature>/` follows a consistent trio: `*.routes.js` (Router + `protectedRoute` where auth is required), `*.controller.js` (handlers), `*.model.js` (Mongoose schema). v2 sub-products (`circle/`, `links/`, `photos/`, `alerts/`, `user/`) sit directly under `server/api/v2/`, with [server/api/v2/models.js](server/api/v2/models.js) mapping entity names to models for the generic `/:entityType` routes.
 
 ### Auth
 
 - JWT-based, via [server/utils/authentication.js](server/utils/authentication.js). `protectedRoute` = `[decodeToken, extractUser]`: `decodeToken` verifies the JWT (using `express-jwt`) into `req.user`, then `extractUser` loads the real user document from Mongo and re-populates `req.user`/`req.userId`/`req.status`/`req.verified` — route handlers should rely on the post-`extractUser` shape, not the raw decoded token.
 - `transparent` is a soft variant: attaches user info if a token is present but doesn't reject the request if not.
+- The middlewares come from `createAuth({ UserModel, audience })`, one set per user collection. The plain exports (`protectedRoute`, `transparent`, `signToken`, ...) are v1, bound to the bubblegum `user` model. v2 routes must use `authV2` instead: it's bound to the circle-db v2 user model and signs/requires the `v2` JWT audience, so v1 tokens aren't accepted on v2 routes.
 - Global middleware ([server/middleware.js](server/middleware.js)) always runs `appendSourceInfo`, which sets `req.source` (from the `external-source` header) and `req.validSource` (whether it's a known product id) ahead of any auth check.
 
 ### Dynamic/generic CRUD routes
@@ -46,6 +47,7 @@ The server needs `DB_URL`/`STAGING_DB_URL` (MongoDB) and reads config from a `.e
 
 ### Data conventions
 
+- Two databases, one connection pool ([server/db.js](server/db.js)): models registered with `mongoose.model` go to the default `bubblegum` database. v2 models (`server/api/v2/**`) register with `circleDb.model(...)` and live in the `circle` database. Anything shared (`server/models/`, `server/modules/`) stays in `bubblegum`, except sessions: the session schema is registered on both connections, so v1 sessions are in `bubblegum` and v2 sessions in `circle` (v2 auth uses `sessionV2` from [server/utils/session.js](server/utils/session.js)). `autoIndex`/`autoCreate` are off globally, so indexes (e.g. the v2 user `2dsphere` index used by `$geoNear`) must be created manually.
 - Soft delete: documents used with `dynamicRoutes` carry `deleted`/`visible` flags instead of being removed; queries must include `deleted: false` (see `defaultQuery` in `dynamic-routes.controller.js`).
 - Most user-owned documents are scoped by `userId` and `source`.
 - `server/utils/common.js` has the shared id/slug helpers (`processId` for safe `ObjectId` casting, `generateSlug`/`generateSlugV2`) — use these instead of ad hoc slug/id logic.

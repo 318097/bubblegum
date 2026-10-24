@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { circleDb } from "../db.js";
 
 const { ObjectId } = mongoose.Schema.Types;
 const collectionName = "session";
@@ -37,4 +38,9 @@ const SessionSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.model(collectionName, SessionSchema);
+// Same schema in both databases: v1 sessions live in bubblegum, v2 sessions in circle
+const SessionModel = mongoose.model(collectionName, SessionSchema);
+const SessionModelV2 = circleDb.model(collectionName, SessionSchema);
+
+export { SessionModelV2 };
+export default SessionModel;

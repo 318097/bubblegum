@@ -1,10 +1,13 @@
 import admin from "firebase-admin";
 import fusionServiceAccount from "../../../secrets/fusion-97e8c-firebase-adminsdk-qjtt8-a6765111ba.json" with { type: "json" };
 import User from "../../api/v2/user/user.model.js";
-import { signToken } from "../../utils/authentication.js";
+import { authV2 } from "../../utils/authentication.js";
 import { extractUserData } from "../../utils/common.js";
-import { startSession, endSession } from "../../utils/session.js";
-import { verifyAccountStatus } from "../../utils/account.js";
+import { sessionV2 } from "../../utils/session.js";
+import { verifyAccountStatusV2 } from "../../utils/account.js";
+
+const { signToken } = authV2;
+const { startSession, endSession } = sessionV2;
 
 const authenticateWithGoogle = async (req, res) => {
   const { name, authToken, photoURL } = req.body;
@@ -55,7 +58,7 @@ const authenticateWithGoogle = async (req, res) => {
       token,
     });
 
-    res.send({ token, ...user });
+    res.send({ token, ...user.toObject() });
   } catch (err) {
     console.log(err);
     res.status(401).json({ success: false, error: err.message });
@@ -63,7 +66,7 @@ const authenticateWithGoogle = async (req, res) => {
 };
 
 const checkAccountStatus = async (req, res) => {
-  // await verifyAccountStatus(req);
+  // await verifyAccountStatusV2(req);
   try {
     res.send({ ...req.user, token: req.token });
   } catch (err) {

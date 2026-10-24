@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { circleDb } from "../../../db.js";
 import constants from "../../../constants.js";
 import { PRODUCT_LIST } from "../../../utils/products.js";
 
@@ -81,4 +82,4 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.index({ geoCoordinates: "2dsphere" });
 
-export default mongoose.model(constants.V2_MODELS.USER, UserSchema);
+export default circleDb.model(constants.V2_MODELS.USER, UserSchema);

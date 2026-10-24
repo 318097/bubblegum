@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { protectedRoute } from "../../utils/authentication.js";
+import { authV2 } from "../../utils/authentication.js";
 import * as controller from "./auth.controller.js";
+
+const { protectedRoute } = authV2;
 
 const router = Router();
 

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { circleDb } from "../../../db.js";
 import constants from "../../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
@@ -113,11 +114,11 @@ const ActivitiesSchema = new mongoose.Schema(
   },
 );
 
-const AlertAndMsgModel = mongoose.model(
+const AlertAndMsgModel = circleDb.model(
   constants.V2_MODELS.ALERTS,
   AlertsAndMsgesSchema,
 );
-const ActivitiesModel = mongoose.model(
+const ActivitiesModel = circleDb.model(
   constants.V2_MODELS.ACTIVITIES,
   ActivitiesSchema,
 );

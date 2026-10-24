@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { circleDb } from "../../../db.js";
 import constants from "../../../constants.js";
 
 const { ObjectId } = mongoose.Schema.Types;
@@ -86,7 +87,7 @@ const FilesSchema = new mongoose.Schema(
   },
 );
 
-const AlbumModel = mongoose.model(constants.V2_MODELS.ALBUM, AlbumsSchema);
-const FilesModel = mongoose.model(constants.V2_MODELS.FILES, FilesSchema);
+const AlbumModel = circleDb.model(constants.V2_MODELS.ALBUM, AlbumsSchema);
+const FilesModel = circleDb.model(constants.V2_MODELS.FILES, FilesSchema);
 
 export { AlbumModel, FilesModel };
