@@ -34,12 +34,30 @@ const generateTagHeader = (tags) =>
     .map((tag) => `<span class='tag'>${tag}</span>`)
     .join(" • ")}</div>`;
 
+// `⌘ + Shift + M` -> <span>⌘</span> + <span>Shift</span> + <span>M</span>
+const generateShortcut = (shortcut) =>
+  shortcut
+    .split("+")
+    .map((key) => `<span class='key'>${key.trim()}</span>`)
+    .join(" + ");
+
 // Notion rows can have an empty or malformed url, which normalize-url throws on.
 const toDisplayUrl = (url) => {
   try {
     return normalizeUrl(url, { stripProtocol: true, stripWWW: true });
   } catch {
     return url || "";
+  }
+};
+
+// Same caveat as above: anything `URL` can't parse is passed through untouched.
+const withUtmSource = (url) => {
+  try {
+    const parsed = new URL(url);
+    parsed.searchParams.set("utm_source", "pulse_extension");
+    return parsed.toString();
+  } catch {
+    return url;
   }
 };
 
@@ -77,6 +95,7 @@ const generateContent = (data, key) => {
       case "code404": {
         const { url, L0, tags, title, description, preview } = item;
         const displayUrl = toDisplayUrl(url);
+        const trackedUrl = withUtmSource(url);
         const tagHeaders = generateTagHeader([L0, ...(tags || [])]);
         const finalName = _.capitalize(title);
         htmlOutput += `
@@ -86,8 +105,8 @@ const generateContent = (data, key) => {
             ${description ? `<p>${description}</p>` : ""}
             ${
               preview
-                ? generateLinkPreview(url, preview)
-                : `<a href="${url}" target="_blank">${displayUrl}</a>`
+                ? generateLinkPreview(trackedUrl, preview)
+                : `<a href="${trackedUrl}" target="_blank">${displayUrl}</a>`
             }
           </div>
         `;
@@ -102,11 +121,8 @@ const generateContent = (data, key) => {
             ${tagHeaders}
             <h4>${finalName}</h4>
             ${description ? `<p>${description}</p>` : ""}
-            <div class='flex gap-2' style='margin-top: 0.8em;'>
-            ${mac ? `<code>${mac}</code>` : ""}
-            ${mac && windows ? "•" : ""}
-            ${windows ? `<code>${windows}</code>` : ""}
-            </div>
+            ${mac ? `<div class="shortcut-container"><div class='platform'>MACOS</div> ${generateShortcut(mac)} </div>` : ""}
+            ${windows ? `<div class="shortcut-container"><div class='platform'>WINDOWS</div> ${generateShortcut(windows)} </div>` : ""}
           </div>
         `;
         break;
