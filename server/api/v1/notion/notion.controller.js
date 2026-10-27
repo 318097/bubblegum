@@ -5,42 +5,14 @@ import { addToRedis, getFromRedis } from "../../../redis.js";
 import { fetchDataFromNotion, generateContent } from "./helpers.js";
 import unfurl from "../../../utils/unfurl.js";
 
-async function getLiquidTech(req, res) {
+async function getCode404SiteDump(req, res) {
   try {
     const query = {
       filter: {
-        and: [
-          {
-            property: "status",
-            multi_select: {
-              contains: "Reviewed",
-            },
-          },
-          {
-            property: "status",
-            multi_select: {
-              contains: "DB",
-            },
-          },
-          {
-            property: "status",
-            multi_select: {
-              contains: "Live",
-            },
-          },
-          {
-            property: "void",
-            multi_select: {
-              is_empty: true,
-            },
-          },
-          {
-            property: "rank",
-            select: {
-              does_not_equal: "Low",
-            },
-          },
-        ],
+        property: "is live",
+        formula: {
+          checkbox: { equals: true },
+        },
       },
       sorts: [
         {
@@ -51,13 +23,13 @@ async function getLiquidTech(req, res) {
     };
 
     const { parsed } = await fetchDataFromNotion(
-      config.NOTION_DB.LIQUID_TECH,
+      config.NOTION_DB.CODE404,
       query,
       true,
     );
 
     const parsedContent = parsed.map(
-      ({ _id, title, url, tags, description, L0, L1, rank }) => {
+      ({ _id, title, url, tags, description, L0, L1, favourite }) => {
         return {
           _id,
           title,
@@ -66,7 +38,7 @@ async function getLiquidTech(req, res) {
           tags,
           type: L0.toLowerCase(),
           subType: L1,
-          priority: rank,
+          priority: favourite ? "high" : "normal",
         };
       },
     );
@@ -78,47 +50,81 @@ async function getLiquidTech(req, res) {
   }
 }
 
-async function getKeybindings(req, res) {
-  try {
-    const query = {
-      filter: {
-        and: [
-          {
-            property: "void",
-            multi_select: {
-              is_empty: true,
-            },
-          },
-        ],
-      },
-      sorts: [
-        {
-          property: "_id",
-          direction: "ascending",
-        },
-      ],
-    };
+// Fetches one cursor-paginated page of a Notion db and renders it via generateContent.
+// `notionKey` is a key of config.NOTION_DB and `params` is req.query ({ cursor, markdown }).
+// Pass `cacheKey` to cache each page in Redis. The cache is shared across users.
+// `transform` can enrich rows before rendering, and `fields` limits what `parsed` returns.
+async function getNotionPage({
+  notionKey,
+  query,
+  key,
+  params = {},
+  pageSize = 1,
+  transform = (parsed) => parsed,
+  fields,
+}) {
+  const { cursor, markdown } = params;
+  const pageCacheKey = `${key}:${cursor || "default"}`;
 
+  let response = pageCacheKey && (await getFromRedis(pageCacheKey));
+  if (!response) {
     const { parsed, next_cursor } = await fetchDataFromNotion(
-      config.NOTION_DB.KEYBINDINGS,
+      config.NOTION_DB[notionKey],
       {
         ...query,
-        page_size: 1,
-        start_cursor: req.query.cursor || undefined,
+        page_size: pageSize,
+        start_cursor: cursor || undefined,
       },
     );
 
-    const { html, markdown } = generateContent(parsed, "keybindings");
+    const items = await transform(parsed);
+    const content = generateContent(items, key);
 
-    const response = {
-      parsed,
-      html,
-      markdown: req.query.markdown ? markdown : undefined,
-      apiParams: {
-        cursor: next_cursor,
-        lastUpdatedAt: new Date().toISOString(),
-      },
+    response = {
+      parsed: fields ? items.map((item) => _.pick(item, fields)) : items,
+      html: content.html,
+      markdown: content.markdown,
+      apiParams: { cursor: next_cursor },
     };
+
+    if (pageCacheKey) await addToRedis(pageCacheKey, response);
+  }
+
+  return {
+    ...response,
+    markdown: markdown ? response.markdown : undefined,
+    apiParams: {
+      ...response.apiParams,
+      lastUpdatedAt: new Date().toISOString(),
+    },
+  };
+}
+
+async function getKeybindings(req, res) {
+  try {
+    const response = await getNotionPage({
+      notionKey: "KEYBINDINGS",
+      key: "keybindings",
+      params: req.query,
+      query: {
+        filter: {
+          and: [
+            {
+              property: "void",
+              multi_select: {
+                is_empty: true,
+              },
+            },
+          ],
+        },
+        sorts: [
+          {
+            property: "group",
+            direction: "ascending",
+          },
+        ],
+      },
+    });
 
     res.send(response);
   } catch (err) {
@@ -129,67 +135,26 @@ async function getKeybindings(req, res) {
 
 async function getVocab(req, res) {
   try {
-    const cacheKey = `vocab:${req.query.cursor || "default"}`;
-    const cachedData = await getFromRedis(cacheKey, req);
-    if (cachedData) {
-      _.set(cachedData, "apiParams.lastUpdatedAt", new Date().toISOString());
-      res.send(cachedData);
-      return;
-    }
-
-    const query = {
-      filter: {
-        and: [
-          {
-            property: "status",
-            multi_select: {
-              contains: "Posted",
-            },
+    const response = await getNotionPage({
+      notionKey: "VOCAB",
+      key: "vocab",
+      params: req.query,
+      query: {
+        filter: {
+          property: "is live",
+          formula: {
+            checkbox: { equals: true },
           },
+        },
+        sorts: [
           {
-            property: "status",
-            multi_select: {
-              contains: "Ready to post",
-            },
-          },
-          {
-            property: "status",
-            multi_select: {
-              contains: "Up Next",
-            },
+            property: "posted on social media",
+            direction: "ascending",
           },
         ],
       },
-      sorts: [
-        {
-          property: "posted on social media",
-          direction: "ascending",
-        },
-      ],
-    };
+    });
 
-    const { parsed, next_cursor } = await fetchDataFromNotion(
-      config.NOTION_DB.VOCAB,
-      {
-        ...query,
-        page_size: 1,
-        start_cursor: req.query.cursor || undefined,
-      },
-    );
-
-    const { html, markdown } = generateContent(parsed, "vocab");
-
-    const response = {
-      parsed,
-      html,
-      markdown: req.query.markdown ? markdown : undefined,
-      apiParams: {
-        cursor: next_cursor,
-        lastUpdatedAt: new Date().toISOString(),
-      },
-    };
-
-    await addToRedis(cacheKey, response);
     res.send(response);
   } catch (err) {
     logger.error(err);
@@ -197,71 +162,34 @@ async function getVocab(req, res) {
   }
 }
 
-async function getTechSnippets(req, res) {
+async function getCode404(req, res) {
   try {
-    const query = {
-      filter: {
-        and: [
-          {
-            property: "status",
-            multi_select: {
-              contains: "Reviewed",
-            },
+    const response = await getNotionPage({
+      notionKey: "CODE404",
+      key: "code404",
+      params: req.query,
+      query: {
+        filter: {
+          property: "is db",
+          formula: {
+            checkbox: { equals: true },
           },
+        },
+        sorts: [
           {
-            property: "status",
-            multi_select: {
-              contains: "DB",
-            },
-          },
-          {
-            property: "status",
-            multi_select: {
-              contains: "Live",
-            },
-          },
-          {
-            property: "void",
-            multi_select: {
-              is_empty: true,
-            },
-          },
-          {
-            property: "social media status",
-            multi_select: {
-              contains: "Posted",
-            },
+            property: "posted on social media",
+            direction: "ascending",
           },
         ],
       },
-      sorts: [
-        {
-          property: "posted on social media",
-          direction: "ascending",
-        },
-      ],
-    };
-
-    const { parsed, next_cursor } = await fetchDataFromNotion(
-      config.NOTION_DB.LIQUID_TECH,
-      {
-        ...query,
-        page_size: 1,
-        start_cursor: req.query.cursor || undefined,
-      },
-    );
-
-    const withPreviews = await Promise.all(
-      parsed.map(async (item) => ({
-        ...item,
-        preview: item.url ? await unfurl(item.url) : null,
-      })),
-    );
-
-    const { html, markdown } = generateContent(withPreviews, "tech-snippet");
-
-    const cleanedData = withPreviews.map((item) => {
-      return _.pick(item, [
+      transform: (parsed) =>
+        Promise.all(
+          parsed.map(async (item) => ({
+            ...item,
+            preview: item.url ? await unfurl(item.url) : null,
+          })),
+        ),
+      fields: [
         "title",
         "url",
         "description",
@@ -271,18 +199,8 @@ async function getTechSnippets(req, res) {
         "social media id",
         "rank",
         "preview",
-      ]);
+      ],
     });
-
-    const response = {
-      parsed: cleanedData,
-      html,
-      markdown: req.query.markdown ? markdown : undefined,
-      apiParams: {
-        cursor: next_cursor,
-        lastUpdatedAt: new Date().toISOString(),
-      },
-    };
 
     res.send(response);
   } catch (err) {
@@ -291,4 +209,4 @@ async function getTechSnippets(req, res) {
   }
 }
 
-export { getLiquidTech, getVocab, getKeybindings, getTechSnippets };
+export { getCode404SiteDump, getVocab, getKeybindings, getCode404 };

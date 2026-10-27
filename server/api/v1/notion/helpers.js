@@ -28,7 +28,13 @@ const generateLinkPreview = (url, preview) => {
     </a>`;
 };
 
-// Notion rows can have an empty or malformed url, which normalize-url throws on
+const generateTagHeader = (tags) =>
+  `<div class='header'>${tags
+    .filter(Boolean)
+    .map((tag) => `<span class='tag'>${tag}</span>`)
+    .join(" • ")}</div>`;
+
+// Notion rows can have an empty or malformed url, which normalize-url throws on.
 const toDisplayUrl = (url) => {
   try {
     return normalizeUrl(url, { stripProtocol: true, stripWWW: true });
@@ -37,60 +43,69 @@ const toDisplayUrl = (url) => {
   }
 };
 
-const generateContent = (data, contentType) => {
+const generateContent = (data, key) => {
   let htmlOutput = "";
   let markdownOutput = "";
 
   data.forEach((item) => {
-    switch (contentType) {
+    switch (key) {
       case "vocab": {
+        const { name, description, ex } = item;
+        const finalName = _.capitalize(name);
         htmlOutput += `
-      <div class="card">
-        <h6>Word</h6>
-        <h4>${_.capitalize(item["name"])}</h4>
-        <h6 style="margin-top: 0.8em;">Definition</h6>
-        <p>${item["description"]}</p>
-        <h6 style="margin-top: 0.8em;">Example</h6>
-        <p>${item["ex"]}</p>
-      </div>
+          <div class="card">
+            <h6>Word</h6>
+            <h4>${finalName}</h4>
+            <h6 style="margin-top: 0.8em;">Definition</h6>
+            <p>${description}</p>
+            <h6 style="margin-top: 0.8em;">Example</h6>
+            <p>${ex}</p>
+          </div>
     `;
         markdownOutput += `
 ###### Word
-## ${_.capitalize(item["name"])}
+## ${finalName}
 ---
 ###### Definition
-### ${item["description"]}
+### ${description}
 ---
 ###### Example
-### ${item["ex"]}
+### ${ex}
     `;
         break;
       }
-      case "tech-snippet": {
-        const displayUrl = toDisplayUrl(item["url"]);
-        const items = [item["L0"], ...(item["tags"] || [])].filter(Boolean);
+      case "code404": {
+        const { url, L0, tags, title, description, preview } = item;
+        const displayUrl = toDisplayUrl(url);
+        const tagHeaders = generateTagHeader([L0, ...(tags || [])]);
+        const finalName = _.capitalize(title);
         htmlOutput += `
           <div class="card">
-            <div class='header'>${items.map((tag) => `<span class='tag'>${tag}</span>`).join(" · ")}</div>
-            <h4>${_.capitalize(item["title"])}</h4>
-            ${item["description"] ? `<p>${item["description"]}</p>` : ""}
+            ${tagHeaders}
+            <h4>${finalName}</h4>
+            ${description ? `<p>${description}</p>` : ""}
             ${
-              item["preview"]
-                ? generateLinkPreview(item["url"], item["preview"])
-                : `<a href="${item["url"]}" target="_blank">${displayUrl}</a>`
+              preview
+                ? generateLinkPreview(url, preview)
+                : `<a href="${url}" target="_blank">${displayUrl}</a>`
             }
           </div>
         `;
         break;
       }
       case "keybindings": {
+        const { mac, windows, title, description, platform, group } = item;
+        const finalName = _.capitalize(title);
+        const tagHeaders = generateTagHeader([group]);
         htmlOutput += `
           <div class="card">
-            <h4>${_.capitalize(item["platform"])}: ${_.capitalize(item["title"])}</h4>
-            <div class='flex gap-2'>
-            ${item["mac"] ? `<code>${item["mac"]}</code>` : ""}
-            ${item["mac"] && item["windows"] ? "|" : ""}
-            ${item["windows"] ? `<code>${item["windows"]}</code>` : ""}
+            ${tagHeaders}
+            <h4>${finalName}</h4>
+            ${description ? `<p>${description}</p>` : ""}
+            <div class='flex gap-2' style='margin-top: 0.8em;'>
+            ${mac ? `<code>${mac}</code>` : ""}
+            ${mac && windows ? "•" : ""}
+            ${windows ? `<code>${windows}</code>` : ""}
             </div>
           </div>
         `;
