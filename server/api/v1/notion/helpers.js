@@ -35,11 +35,19 @@ const generateTagHeader = (tags) =>
     .join(" • ")}</div>`;
 
 // `⌘ + Shift + M` -> <span>⌘</span> + <span>Shift</span> + <span>M</span>
+// Alternatives are separated by `//`: `⌘ + 1–8 // ⌘ + 9` renders as two shortcuts.
 const generateShortcut = (shortcut) =>
   shortcut
-    .split("+")
-    .map((key) => `<span class='key'>${key.trim()}</span>`)
-    .join(" + ");
+    .split("//")
+    .map((combo) => combo.trim())
+    .filter(Boolean)
+    .map((combo) =>
+      combo
+        .split("+")
+        .map((key) => `<span class='key'>${key.trim()}</span>`)
+        .join(" + "),
+    )
+    .join(" <span class='shortcut-separator'>or</span> ");
 
 // Notion rows can have an empty or malformed url, which normalize-url throws on.
 const toDisplayUrl = (url) => {
